@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    // The generated client writes `./runtime.js` on every relative import —
+    // the sdks.yaml row asks the generator for the extension — so this half is
+    // loadable by Node's ESM loader and not only by a bundler. It is what
+    // `exports.import` points at, beside a `dist/esm/package.json` the build
+    // writes to mark it.
+    "moduleResolution": "Bundler",
+    "outDir": "dist/esm"
+  }
+}

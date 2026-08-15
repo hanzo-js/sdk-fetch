@@ -1,0 +1,49 @@
+# Hanzo CI — the ONE way this repo is gated, read by hanzoai/ci.
+#
+# No `images:` and no `deploy:`: this is a client library. A consumer installs
+# it from npm at a tag, so what CI owes is a gate, not an artifact.
+
+test:
+  - name: build
+    # `npm ci`, not `npm install`: the lockfile is committed and a gate that
+    # silently resolves a different toolchain than the release does is not a
+    # gate.
+    #
+    # `npm run build` is both halves — CJS and the ESM Node's own loader reads —
+    # and it is the only thing that type-checks the whole generated tree.
+    run: |
+      set -e
+      npm ci --no-audit --no-fund
+      npm run build
+
+  - name: esm loads
+    # THE GATE WITH TEETH, and it exists because `tsc` cannot answer the
+    # question this package is for. A tree can compile and still be unloadable:
+    # the generator writes relative imports bare by default, which a bundler
+    # resolves and Node's ESM loader refuses with ERR_MODULE_NOT_FOUND. That is
+    # exactly the failure mode of the runtime this client targets, so a build
+    # that never imports the built client proves nothing about it.
+    #
+    # Both halves, because both are published: `exports.import` points at
+    # dist/esm and `exports.require` at dist.
+    run: |
+      set -e
+      node -e "import('./dist/esm/index.js').then(m => { if (!m.Configuration) throw new Error('esm export missing'); console.log('esm ok'); })"
+      node -e "const m = require('./dist/index.js'); if (!m.Configuration) throw new Error('cjs export missing'); console.log('cjs ok')"
+
+# THE CLIENT LANE — this repo is a PROJECTION of one API document at one
+# version.
+#
+# hanzoai/cloud's release sends the document's ref and sha256; hanzoai/ci
+# fetches openapi.yaml AT THAT SHA, REFUSES if the bytes hash to anything else,
+# runs `generate:`, writes `.spec-lock` beside the code, and — only after the
+# `test:` block above has passed over exactly those bytes — commits and cuts a
+# patch.
+#
+# The input is hanzoai/cloud `openapi.yaml`, emitted from the code by each app's
+# own router and gated on every cloud release. `.spec-lock` records which one
+# this tree projects, so `hanzoai`, `hanzoai-fetch` and `hanzoai-angular` are
+# always three projections of ONE release.
+client:
+  generate: ./scripts/generate.sh
+  version: 'package.json:jq -r .version package.json'

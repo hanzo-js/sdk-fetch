@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "target": "ES2020",
+    // `DOM` is here for the shapes fetch itself is made of — Response,
+    // RequestInit, Headers, ReadableStream, FormData, Blob. They are not
+    // browser-only: a Worker, Deno, Bun and Node 18+ all define them, and
+    // `lib.dom` is where TypeScript keeps their types. Nothing in this client
+    // touches `document` or `window`.
+    "lib": ["ES2020", "DOM"],
+    "module": "node16",
+    "moduleResolution": "node16",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "outDir": "dist",
+    "rootDir": "src",
+    "typeRoots": ["node_modules/@types"]
+  },
+  "include": ["src/**/*"],
+  "exclude": ["dist", "node_modules", "examples"]
+}
