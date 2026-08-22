@@ -8,23 +8,28 @@ on:
     branches: [main]
     tags: ['v*']
   pull_request:
-  # THE RELEASE POKES THE PROJECTION, and workflow_dispatch is how, because it
-  # is the dispatch verb this forge HAS. Two shapes were tried and neither could
-  # work: cloud posted `repository_dispatch: spec-update` at api.github.com,
-  # where these callers ask for a label github.com has no runner for, so twelve
-  # accepted events ran nothing; then this file grew a nightly `schedule:`,
-  # which does move the projection but decides WHEN by a clock rather than by a
-  # release, so a client is a day stale on average and nothing anywhere records
-  # which release it is a projection of.
-  #
-  # Measured instead of assumed: POST /v1/repos/<o>/<r>/actions/workflows/
-  # cicd.yml/dispatches on git.hanzo.ai answers 204, a git-runner picks the run
-  # up in seconds, and it reaches its first step. So the release dispatches this
-  # directly, on the side that has the runners, and the lane's no-payload path
-  # takes cloud's NEWEST TAG — which exists only after that commit built, smoked
-  # and rolled out. One trigger, fired by the thing that changed.
+  # A release dispatches this and hands it the document it shipped. With no
+  # inputs the run re-reads the locked ref and writes nothing, so the projection
+  # moves only by hand.
   workflow_dispatch:
+    inputs:
+      spec-ref:
+        description: "cloud commit to move .spec-lock to. Empty = check the locked ref, write nothing."
+        required: false
+        default: ''
+      spec-version:
+        description: "Version to cut this projection at. Empty = derive the next patch."
+        required: false
+        default: ''
+      spec-sha256:
+        description: "Expected sha256 of openapi.yaml at that ref. Empty = do not verify."
+        required: false
+        default: ''
 jobs:
   cicd:
-    uses: hanzoai/ci/.hanzo/workflows/build.yml@v1.0.54
+    uses: hanzoai/ci/.hanzo/workflows/build.yml@v1
+    with:
+      spec-ref: ${{ github.event.inputs.spec-ref || '' }}
+      spec-version: ${{ github.event.inputs.spec-version || '' }}
+      spec-sha256: ${{ github.event.inputs.spec-sha256 || '' }}
     secrets: inherit
