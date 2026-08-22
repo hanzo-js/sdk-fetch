@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -17,10 +17,23 @@ import * as runtime from '../runtime.js';
 import type {
   ActivationReq,
   ActivationSet,
+  AuthoredPluginList,
+  AuthoredSkillList,
+  BuildOut,
+  BuildRequest,
+  CreateServerReq,
   CurateReq,
   MCPListing,
+  MCPServer,
   McpCatalog,
   McpCatalogSync,
+  McpServerList,
+  PluginDeleted,
+  PluginMountList,
+  SkillDeleted,
+  SkillIn,
+  SkillWritten,
+  SourceToolList,
   ToolCall,
   ToolList,
   ToolResult,
@@ -30,14 +43,40 @@ import {
     ActivationReqToJSON,
     ActivationSetFromJSON,
     ActivationSetToJSON,
+    AuthoredPluginListFromJSON,
+    AuthoredPluginListToJSON,
+    AuthoredSkillListFromJSON,
+    AuthoredSkillListToJSON,
+    BuildOutFromJSON,
+    BuildOutToJSON,
+    BuildRequestFromJSON,
+    BuildRequestToJSON,
+    CreateServerReqFromJSON,
+    CreateServerReqToJSON,
     CurateReqFromJSON,
     CurateReqToJSON,
     MCPListingFromJSON,
     MCPListingToJSON,
+    MCPServerFromJSON,
+    MCPServerToJSON,
     McpCatalogFromJSON,
     McpCatalogToJSON,
     McpCatalogSyncFromJSON,
     McpCatalogSyncToJSON,
+    McpServerListFromJSON,
+    McpServerListToJSON,
+    PluginDeletedFromJSON,
+    PluginDeletedToJSON,
+    PluginMountListFromJSON,
+    PluginMountListToJSON,
+    SkillDeletedFromJSON,
+    SkillDeletedToJSON,
+    SkillInFromJSON,
+    SkillInToJSON,
+    SkillWrittenFromJSON,
+    SkillWrittenToJSON,
+    SourceToolListFromJSON,
+    SourceToolListToJSON,
     ToolCallFromJSON,
     ToolCallToJSON,
     ToolListFromJSON,
@@ -45,6 +84,18 @@ import {
     ToolResultFromJSON,
     ToolResultToJSON,
 } from '../models/index.js';
+
+export interface ToolsApiDeleteToolsMcpServersByIdRequest {
+    id: string;
+}
+
+export interface ToolsApiDeleteToolsPluginsAuthoredByIdRequest {
+    id: string;
+}
+
+export interface ToolsApiDeleteToolsSkillsByIdRequest {
+    id: string;
+}
 
 export interface ToolsApiGetToolsRequest {
     source?: string;
@@ -63,6 +114,14 @@ export interface ToolsApiGetToolsCatalogByIdRequest {
     id: string;
 }
 
+export interface ToolsApiGetToolsPluginsRequest {
+    all?: string;
+}
+
+export interface ToolsApiGetToolsSkillsRequest {
+    activated?: string;
+}
+
 export interface ToolsApiPatchToolsCatalogByIdRequest {
     id: string;
     curateReq: CurateReq;
@@ -70,6 +129,18 @@ export interface ToolsApiPatchToolsCatalogByIdRequest {
 
 export interface ToolsApiPostToolsCallRequest {
     toolCall: ToolCall;
+}
+
+export interface ToolsApiPostToolsMcpServersRequest {
+    createServerReq: CreateServerReq;
+}
+
+export interface ToolsApiPostToolsPluginsBuildRequest {
+    buildRequest: BuildRequest;
+}
+
+export interface ToolsApiPostToolsSkillsRequest {
+    skillIn: SkillIn;
 }
 
 export interface ToolsApiPutToolsActivationRequest {
@@ -80,6 +151,146 @@ export interface ToolsApiPutToolsActivationRequest {
  * 
  */
 export class ToolsApi extends runtime.BaseAPI {
+
+    /**
+     * Deregisters one of the caller org\'s external MCP servers, so its tools leave the registry. Scoped to the caller\'s org, so an id belonging to another tenant is a 404 and not a delete. Answers 204 with no body; a server this org does not have is 404.
+     * Deregisters one of the caller org\'s external MCP servers, so its tools leave the registry.
+     */
+    async deleteToolsMcpServersByIdRaw(requestParameters: ToolsApiDeleteToolsMcpServersByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteToolsMcpServersById().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/tools/mcp/servers/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Deregisters one of the caller org\'s external MCP servers, so its tools leave the registry. Scoped to the caller\'s org, so an id belonging to another tenant is a 404 and not a delete. Answers 204 with no body; a server this org does not have is 404.
+     * Deregisters one of the caller org\'s external MCP servers, so its tools leave the registry.
+     */
+    async deleteToolsMcpServersById(requestParameters: ToolsApiDeleteToolsMcpServersByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteToolsMcpServersByIdRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Removes one of the caller org\'s built plugins, so the runtime can no longer load it. Scoped to the caller\'s org, so an id belonging to another tenant answers 404 and is not deleted.
+     * Removes one of the caller org\'s built plugins, so the runtime can no longer load it.
+     */
+    async deleteToolsPluginsAuthoredByIdRaw(requestParameters: ToolsApiDeleteToolsPluginsAuthoredByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PluginDeleted>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteToolsPluginsAuthoredById().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/tools/plugins/authored/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => PluginDeletedFromJSON(jsonValue));
+    }
+
+    /**
+     * Removes one of the caller org\'s built plugins, so the runtime can no longer load it. Scoped to the caller\'s org, so an id belonging to another tenant answers 404 and is not deleted.
+     * Removes one of the caller org\'s built plugins, so the runtime can no longer load it.
+     */
+    async deleteToolsPluginsAuthoredById(requestParameters: ToolsApiDeleteToolsPluginsAuthoredByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PluginDeleted> {
+        const response = await this.deleteToolsPluginsAuthoredByIdRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Removes one of the caller org\'s authored skills. Scoped to the caller\'s org, so an id belonging to another tenant is never reached. Removing what is not there is not an error — the caller\'s intent is \"gone\", and it is.
+     * Removes one of the caller org\'s authored skills.
+     */
+    async deleteToolsSkillsByIdRaw(requestParameters: ToolsApiDeleteToolsSkillsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SkillDeleted>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteToolsSkillsById().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/tools/skills/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => SkillDeletedFromJSON(jsonValue));
+    }
+
+    /**
+     * Removes one of the caller org\'s authored skills. Scoped to the caller\'s org, so an id belonging to another tenant is never reached. Removing what is not there is not an error — the caller\'s intent is \"gone\", and it is.
+     * Removes one of the caller org\'s authored skills.
+     */
+    async deleteToolsSkillsById(requestParameters: ToolsApiDeleteToolsSkillsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SkillDeleted> {
+        const response = await this.deleteToolsSkillsByIdRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * Lists every tool the caller\'s org and project can reach, from every source, each flagged with whether it is activated. This is the discovery surface: one flat set of names spanning connector actions, user functions, zap-service routes, agents, skills and the org\'s own external MCP servers, deduplicated by name so the highest-precedence source wins a collision. It lists; it does not call — dispatch is POST /v1/tools/call.
@@ -168,7 +379,7 @@ export class ToolsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Lists the MCP servers the public registries publish, as we hold them: our canonical copy of registry.modelcontextprotocol.io, plus what we decided about each entry.  This is the SHELF an org picks from. A listing with a streamable-http endpoint can be enabled as-is — POST /v1/mcp/servers with its id — and its tools then join the org\'s tool plane and the fleet\'s MCP door. A listing that only ships a stdio package needs a process to run it, which is why the transports are on every entry rather than implied.  Hidden entries are absent: they are the ones we took off the shelf. A platform SuperAdmin sees them, because the same query answers \"what is on the shelf\" and \"what is in the catalog\" and two queries would drift apart.  It is PAGED — 50 by default, 200 at most. The public registry publishes tens of thousands of servers, so an unbounded answer is a twenty-megabyte response and a storefront that renders in a minute. total is the whole match, not the page.
+     * Lists the MCP servers the public registries publish, as we hold them: our canonical copy of registry.modelcontextprotocol.io, plus what we decided about each entry.  This is the SHELF an org picks from. A listing with a streamable-http endpoint can be enabled as-is — POST /v1/tools/mcp/servers with its id — and its tools then join the org\'s tool plane and the fleet\'s MCP door. A listing that only ships a stdio package needs a process to run it, which is why the transports are on every entry rather than implied.  Hidden entries are absent: they are the ones we took off the shelf. A platform SuperAdmin sees them, because the same query answers \"what is on the shelf\" and \"what is in the catalog\" and two queries would drift apart.  It is PAGED — 50 by default, 200 at most. The public registry publishes tens of thousands of servers, so an unbounded answer is a twenty-megabyte response and a storefront that renders in a minute. total is the whole match, not the page.
      * Lists the MCP servers the public registries publish, as we hold them: our canonical copy of registry.modelcontextprotocol.io, plus what we decided about each entry.
      */
     async getToolsCatalogRaw(requestParameters: ToolsApiGetToolsCatalogRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<McpCatalog>> {
@@ -218,7 +429,7 @@ export class ToolsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Lists the MCP servers the public registries publish, as we hold them: our canonical copy of registry.modelcontextprotocol.io, plus what we decided about each entry.  This is the SHELF an org picks from. A listing with a streamable-http endpoint can be enabled as-is — POST /v1/mcp/servers with its id — and its tools then join the org\'s tool plane and the fleet\'s MCP door. A listing that only ships a stdio package needs a process to run it, which is why the transports are on every entry rather than implied.  Hidden entries are absent: they are the ones we took off the shelf. A platform SuperAdmin sees them, because the same query answers \"what is on the shelf\" and \"what is in the catalog\" and two queries would drift apart.  It is PAGED — 50 by default, 200 at most. The public registry publishes tens of thousands of servers, so an unbounded answer is a twenty-megabyte response and a storefront that renders in a minute. total is the whole match, not the page.
+     * Lists the MCP servers the public registries publish, as we hold them: our canonical copy of registry.modelcontextprotocol.io, plus what we decided about each entry.  This is the SHELF an org picks from. A listing with a streamable-http endpoint can be enabled as-is — POST /v1/tools/mcp/servers with its id — and its tools then join the org\'s tool plane and the fleet\'s MCP door. A listing that only ships a stdio package needs a process to run it, which is why the transports are on every entry rather than implied.  Hidden entries are absent: they are the ones we took off the shelf. A platform SuperAdmin sees them, because the same query answers \"what is on the shelf\" and \"what is in the catalog\" and two queries would drift apart.  It is PAGED — 50 by default, 200 at most. The public registry publishes tens of thousands of servers, so an unbounded answer is a twenty-megabyte response and a storefront that renders in a minute. total is the whole match, not the page.
      * Lists the MCP servers the public registries publish, as we hold them: our canonical copy of registry.modelcontextprotocol.io, plus what we decided about each entry.
      */
     async getToolsCatalog(requestParameters: ToolsApiGetToolsCatalogRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<McpCatalog> {
@@ -270,6 +481,209 @@ export class ToolsApi extends runtime.BaseAPI {
      */
     async getToolsCatalogById(requestParameters: ToolsApiGetToolsCatalogByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MCPListing> {
         const response = await this.getToolsCatalogByIdRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Lists the external MCP servers the caller\'s org has registered. Each record carries the URL and the name of the header its credential is injected into; the credential VALUE lives only in KMS and is never returned, so hasSecret is the whole of what this surface says about it.
+     * Lists the external MCP servers the caller\'s org has registered.
+     */
+    async getToolsMcpServersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<McpServerList>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/tools/mcp/servers`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => McpServerListFromJSON(jsonValue));
+    }
+
+    /**
+     * Lists the external MCP servers the caller\'s org has registered. Each record carries the URL and the name of the header its credential is injected into; the credential VALUE lives only in KMS and is never returned, so hasSecret is the whole of what this surface says about it.
+     * Lists the external MCP servers the caller\'s org has registered.
+     */
+    async getToolsMcpServers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<McpServerList> {
+        const response = await this.getToolsMcpServersRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Reports what this deployment actually mounted: every subsystem the composition root declared and whether it is switched on. A plugin here is MOUNTED CODE that extends the deployment\'s own surface — not a tool an agent calls — so this is an inventory and not a tool source. It is read off the same boot snapshot every traced request resolves its subsystem label against, so it cannot drift from what is serving. Enabled-only by default, because a caller asking what this deployment can do wants what is running; ?all=true adds the configured-but-off ones.
+     * Reports what this deployment actually mounted: every subsystem the composition root declared and whether it is switched on.
+     */
+    async getToolsPluginsRaw(requestParameters: ToolsApiGetToolsPluginsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PluginMountList>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['all'] != null) {
+            queryParameters['all'] = requestParameters['all'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/tools/plugins`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => PluginMountListFromJSON(jsonValue));
+    }
+
+    /**
+     * Reports what this deployment actually mounted: every subsystem the composition root declared and whether it is switched on. A plugin here is MOUNTED CODE that extends the deployment\'s own surface — not a tool an agent calls — so this is an inventory and not a tool source. It is read off the same boot snapshot every traced request resolves its subsystem label against, so it cannot drift from what is serving. Enabled-only by default, because a caller asking what this deployment can do wants what is running; ?all=true adds the configured-but-off ones.
+     * Reports what this deployment actually mounted: every subsystem the composition root declared and whether it is switched on.
+     */
+    async getToolsPlugins(requestParameters: ToolsApiGetToolsPluginsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PluginMountList> {
+        const response = await this.getToolsPluginsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Lists the plugins the caller\'s org BUILT, newest first, each with the TypeScript as authored. That is a different set with a different lifecycle from GET /v1/tools/plugins, which reports the subsystems this deployment mounted. The bundled CommonJS the runtime executes is never included, and neither is any credential — a plugin names the connectors provider it needs and reads the credential from ctx.auth at run time.
+     * Lists the plugins the caller\'s org BUILT, newest first, each with the TypeScript as authored.
+     */
+    async getToolsPluginsAuthoredRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AuthoredPluginList>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/tools/plugins/authored`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AuthoredPluginListFromJSON(jsonValue));
+    }
+
+    /**
+     * Lists the plugins the caller\'s org BUILT, newest first, each with the TypeScript as authored. That is a different set with a different lifecycle from GET /v1/tools/plugins, which reports the subsystems this deployment mounted. The bundled CommonJS the runtime executes is never included, and neither is any credential — a plugin names the connectors provider it needs and reads the credential from ctx.auth at run time.
+     * Lists the plugins the caller\'s org BUILT, newest first, each with the TypeScript as authored.
+     */
+    async getToolsPluginsAuthored(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AuthoredPluginList> {
+        const response = await this.getToolsPluginsAuthoredRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Lists the skills the caller\'s org can reach — the brand\'s embedded catalogue plus the org\'s own authored ones — with each one\'s activation flag. A skill is discovery and activation metadata attached to an agent, never called directly, so every entry here is non-dispatchable. It is GET /v1/tools narrowed to one source, not a second store: a name a caller sees here is the same entry, with the same activation state, that discovery reports.
+     * Lists the skills the caller\'s org can reach — the brand\'s embedded catalogue plus the org\'s own authored ones — with each one\'s activation flag.
+     */
+    async getToolsSkillsRaw(requestParameters: ToolsApiGetToolsSkillsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SourceToolList>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['activated'] != null) {
+            queryParameters['activated'] = requestParameters['activated'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/tools/skills`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => SourceToolListFromJSON(jsonValue));
+    }
+
+    /**
+     * Lists the skills the caller\'s org can reach — the brand\'s embedded catalogue plus the org\'s own authored ones — with each one\'s activation flag. A skill is discovery and activation metadata attached to an agent, never called directly, so every entry here is non-dispatchable. It is GET /v1/tools narrowed to one source, not a second store: a name a caller sees here is the same entry, with the same activation state, that discovery reports.
+     * Lists the skills the caller\'s org can reach — the brand\'s embedded catalogue plus the org\'s own authored ones — with each one\'s activation flag.
+     */
+    async getToolsSkills(requestParameters: ToolsApiGetToolsSkillsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SourceToolList> {
+        const response = await this.getToolsSkillsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Lists the caller org\'s OWN skills with their SKILL.md bodies. GET /v1/tools/skills is the registry view — the brand\'s catalogue plus this org\'s, with activation flags and no bodies; this is the EDITABLE set, so it carries the content that view omits and nothing the org did not write.
+     * Lists the caller org\'s OWN skills with their SKILL.md bodies.
+     */
+    async getToolsSkillsAuthoredRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AuthoredSkillList>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/tools/skills/authored`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AuthoredSkillListFromJSON(jsonValue));
+    }
+
+    /**
+     * Lists the caller org\'s OWN skills with their SKILL.md bodies. GET /v1/tools/skills is the registry view — the brand\'s catalogue plus this org\'s, with activation flags and no bodies; this is the EDITABLE set, so it carries the content that view omits and nothing the org did not write.
+     * Lists the caller org\'s OWN skills with their SKILL.md bodies.
+     */
+    async getToolsSkillsAuthored(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AuthoredSkillList> {
+        const response = await this.getToolsSkillsAuthoredRaw(initOverrides);
         return await response.value();
     }
 
@@ -415,6 +829,153 @@ export class ToolsApi extends runtime.BaseAPI {
      */
     async postToolsCatalogSync(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<McpCatalogSync> {
         const response = await this.postToolsCatalogSyncRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Gives the caller\'s org one more external MCP server, so its tools join the org\'s tool plane and the fleet\'s MCP door. It is the ONE way an org gains a server, whether it typed the URL in or enabled a catalog listing: both write the SAME record, and `source` says which it was. A second registration path would be a second place for a server to exist, and then a second place to forget to check the credential.  The credential VALUE is sealed in KMS under a per-org ref; the row keeps only the URL, the header name to inject it into, and a has-secret flag — so a secret with no KMS configured is refused 503 rather than stored in the clear. The URL is SSRF-validated here and re-checked by the dialer at connect time, which is the DNS-rebinding defense.  Enabling a listing the org already enabled REVISES that server rather than adding a near-duplicate beside it, so a retried enable is the same one server. Answers 201 with the stored record.
+     * Gives the caller\'s org one more external MCP server, so its tools join the org\'s tool plane and the fleet\'s MCP door.
+     */
+    async postToolsMcpServersRaw(requestParameters: ToolsApiPostToolsMcpServersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MCPServer>> {
+        if (requestParameters['createServerReq'] == null) {
+            throw new runtime.RequiredError(
+                'createServerReq',
+                'Required parameter "createServerReq" was null or undefined when calling postToolsMcpServers().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/tools/mcp/servers`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: CreateServerReqToJSON(requestParameters['createServerReq']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => MCPServerFromJSON(jsonValue));
+    }
+
+    /**
+     * Gives the caller\'s org one more external MCP server, so its tools join the org\'s tool plane and the fleet\'s MCP door. It is the ONE way an org gains a server, whether it typed the URL in or enabled a catalog listing: both write the SAME record, and `source` says which it was. A second registration path would be a second place for a server to exist, and then a second place to forget to check the credential.  The credential VALUE is sealed in KMS under a per-org ref; the row keeps only the URL, the header name to inject it into, and a has-secret flag — so a secret with no KMS configured is refused 503 rather than stored in the clear. The URL is SSRF-validated here and re-checked by the dialer at connect time, which is the DNS-rebinding defense.  Enabling a listing the org already enabled REVISES that server rather than adding a near-duplicate beside it, so a retried enable is the same one server. Answers 201 with the stored record.
+     * Gives the caller\'s org one more external MCP server, so its tools join the org\'s tool plane and the fleet\'s MCP door.
+     */
+    async postToolsMcpServers(requestParameters: ToolsApiPostToolsMcpServersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MCPServer> {
+        const response = await this.postToolsMcpServersRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Builds and stores one plugin for the caller\'s org. The 201 carries the bundle\'s size, whether a model wrote the source, and the plugin as stored.  Post `source` to build TypeScript as-is, or `spec` — an OpenAPI document or plain prose describing the endpoints — to have one generated; the generated source comes back in the answer, so a caller reads what will run before it runs. Exactly one of the two, and `name` must be one lowercase path segment; both or neither is 400.  COMPILING IS THE GATE. The source goes through the same pipeline the committed connectors do — esbuild to one CommonJS program, then compiled in the goja runtime that will actually execute it — and anything that fails is rejected and NEVER stored. So a plugin in the store is one this deployment has already loaded once, not one a model claimed was fine. A failed build answers 422 carrying the diagnostics a caller needs to fix it: the bundler\'s error (`detail`), the source that failed, and whether the model wrote it.  CREDENTIALS ARE NOT PART OF A PLUGIN. A plugin names the connectors `provider` it needs and reads that credential from `ctx.auth` at run time, under KMS custody. Source that carries something key-shaped is REFUSED rather than silently persisted — a scrubbed key looks like it worked.
+     * Builds and stores one plugin for the caller\'s org.
+     */
+    async postToolsPluginsBuildRaw(requestParameters: ToolsApiPostToolsPluginsBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BuildOut>> {
+        if (requestParameters['buildRequest'] == null) {
+            throw new runtime.RequiredError(
+                'buildRequest',
+                'Required parameter "buildRequest" was null or undefined when calling postToolsPluginsBuild().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/tools/plugins/build`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: BuildRequestToJSON(requestParameters['buildRequest']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => BuildOutFromJSON(jsonValue));
+    }
+
+    /**
+     * Builds and stores one plugin for the caller\'s org. The 201 carries the bundle\'s size, whether a model wrote the source, and the plugin as stored.  Post `source` to build TypeScript as-is, or `spec` — an OpenAPI document or plain prose describing the endpoints — to have one generated; the generated source comes back in the answer, so a caller reads what will run before it runs. Exactly one of the two, and `name` must be one lowercase path segment; both or neither is 400.  COMPILING IS THE GATE. The source goes through the same pipeline the committed connectors do — esbuild to one CommonJS program, then compiled in the goja runtime that will actually execute it — and anything that fails is rejected and NEVER stored. So a plugin in the store is one this deployment has already loaded once, not one a model claimed was fine. A failed build answers 422 carrying the diagnostics a caller needs to fix it: the bundler\'s error (`detail`), the source that failed, and whether the model wrote it.  CREDENTIALS ARE NOT PART OF A PLUGIN. A plugin names the connectors `provider` it needs and reads that credential from `ctx.auth` at run time, under KMS custody. Source that carries something key-shaped is REFUSED rather than silently persisted — a scrubbed key looks like it worked.
+     * Builds and stores one plugin for the caller\'s org.
+     */
+    async postToolsPluginsBuild(requestParameters: ToolsApiPostToolsPluginsBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BuildOut> {
+        const response = await this.postToolsPluginsBuildRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Adds or revises one of the caller org\'s own skills, and answers 201 with the stored record. The id is derived from the name, so writing the same name again REVISES that skill rather than accumulating near-duplicates that would then collide in the registry. An org\'s skills are private to it by construction — they live in a different store from the brand\'s embedded catalogue and have no path into the public gallery — and a brand skill always wins a name collision against an org\'s.
+     * Adds or revises one of the caller org\'s own skills, and answers 201 with the stored record.
+     */
+    async postToolsSkillsRaw(requestParameters: ToolsApiPostToolsSkillsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SkillWritten>> {
+        if (requestParameters['skillIn'] == null) {
+            throw new runtime.RequiredError(
+                'skillIn',
+                'Required parameter "skillIn" was null or undefined when calling postToolsSkills().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/tools/skills`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: SkillInToJSON(requestParameters['skillIn']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => SkillWrittenFromJSON(jsonValue));
+    }
+
+    /**
+     * Adds or revises one of the caller org\'s own skills, and answers 201 with the stored record. The id is derived from the name, so writing the same name again REVISES that skill rather than accumulating near-duplicates that would then collide in the registry. An org\'s skills are private to it by construction — they live in a different store from the brand\'s embedded catalogue and have no path into the public gallery — and a brand skill always wins a name collision against an org\'s.
+     * Adds or revises one of the caller org\'s own skills, and answers 201 with the stored record.
+     */
+    async postToolsSkills(requestParameters: ToolsApiPostToolsSkillsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SkillWritten> {
+        const response = await this.postToolsSkillsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

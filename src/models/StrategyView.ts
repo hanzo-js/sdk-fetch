@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,31 +20,36 @@ import { mapValues } from '../runtime.js';
  */
 export interface StrategyView {
     /**
-     * 
+     * Action is the tactic itself: the thing to go and do.
      * @type {string}
      * @memberof StrategyView
      */
     action?: string;
     /**
-     * 
+     * Category is the growth discipline the tactic belongs to — the axis
+     * `?category=` narrows on.
      * @type {string}
      * @memberof StrategyView
      */
     category?: string;
     /**
-     * 
+     * ID is the tactic's stable slug in the corpus.
      * @type {string}
      * @memberof StrategyView
      */
     id?: string;
     /**
-     * 
+     * Tags are the PRECONDITIONS this tactic already satisfied to appear in the
+     * answer — `stage:<name>` and `has:<capability>` predicates over the org's
+     * observed profile. They are carried back so a caller can show why a tactic
+     * surfaced, not so it can filter again.
      * @type {Array<string>}
      * @memberof StrategyView
      */
     tags?: Array<string>;
     /**
-     * 
+     * Workload is how much effort running the tactic costs, so a corpus can be cut
+     * to what the org has the hands for.
      * @type {string}
      * @memberof StrategyView
      */

@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -13,14 +13,6 @@
  */
 
 import { mapValues } from '../runtime.js';
-import type { FormItem } from './FormItem.js';
-import {
-    FormItemFromJSON,
-    FormItemFromJSONTyped,
-    FormItemToJSON,
-    FormItemToJSONTyped,
-} from './FormItem.js';
-
 /**
  * 
  * @export
@@ -28,65 +20,30 @@ import {
  */
 export interface Form {
     /**
-     * 
+     * Code is the IRS designation, e.g. "SS-4".
      * @type {string}
      * @memberof Form
      */
-    category?: string;
+    code?: string;
     /**
-     * 
-     * @type {string}
-     * @memberof Form
-     */
-    createdTime?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Form
-     */
-    displayName?: string;
-    /**
-     * 
-     * @type {Array<FormItem>}
-     * @memberof Form
-     */
-    formItems?: Array<FormItem>;
-    /**
-     * 
+     * Name is the form's own title, so a reader need not already know the code.
      * @type {string}
      * @memberof Form
      */
     name?: string;
     /**
-     * 
-     * @type {string}
+     * Signed reports whether we hold the signature.
+     * @type {boolean}
      * @memberof Form
      */
-    owner?: string;
+    signed?: boolean;
     /**
-     * 
+     * Why states what this form is for in this application — the same form is
+     * owed for different reasons on different paths.
      * @type {string}
      * @memberof Form
      */
-    position?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Form
-     */
-    tag?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Form
-     */
-    type?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Form
-     */
-    url?: string;
+    why?: string;
 }
 
 /**
@@ -106,16 +63,10 @@ export function FormFromJSONTyped(json: any, ignoreDiscriminator: boolean): Form
     }
     return {
         
-        'category': json['category'] == null ? undefined : json['category'],
-        'createdTime': json['createdTime'] == null ? undefined : json['createdTime'],
-        'displayName': json['displayName'] == null ? undefined : json['displayName'],
-        'formItems': json['formItems'] == null ? undefined : ((json['formItems'] as Array<any>).map(FormItemFromJSON)),
+        'code': json['code'] == null ? undefined : json['code'],
         'name': json['name'] == null ? undefined : json['name'],
-        'owner': json['owner'] == null ? undefined : json['owner'],
-        'position': json['position'] == null ? undefined : json['position'],
-        'tag': json['tag'] == null ? undefined : json['tag'],
-        'type': json['type'] == null ? undefined : json['type'],
-        'url': json['url'] == null ? undefined : json['url'],
+        'signed': json['signed'] == null ? undefined : json['signed'],
+        'why': json['why'] == null ? undefined : json['why'],
     };
 }
 
@@ -130,16 +81,10 @@ export function FormToJSONTyped(value?: Form | null, ignoreDiscriminator: boolea
 
     return {
         
-        'category': value['category'],
-        'createdTime': value['createdTime'],
-        'displayName': value['displayName'],
-        'formItems': value['formItems'] == null ? undefined : ((value['formItems'] as Array<any>).map(FormItemToJSON)),
+        'code': value['code'],
         'name': value['name'],
-        'owner': value['owner'],
-        'position': value['position'],
-        'tag': value['tag'],
-        'type': value['type'],
-        'url': value['url'],
+        'signed': value['signed'],
+        'why': value['why'],
     };
 }
 

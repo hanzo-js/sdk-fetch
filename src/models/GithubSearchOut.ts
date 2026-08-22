@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -28,13 +28,16 @@ import {
  */
 export interface GithubSearchOut {
     /**
-     * 
+     * Count is how many hits Repos carries. It is that array's length, NOT
+     * GitHub's total_count, so it never exceeds limit and says nothing about how
+     * many more repositories matched.
      * @type {number}
      * @memberof GithubSearchOut
      */
     count?: number;
     /**
-     * 
+     * Repos are the matching repositories in GitHub's own relevance order, capped
+     * at limit. Always an array, never null.
      * @type {Array<GithubSearchHit>}
      * @memberof GithubSearchOut
      */

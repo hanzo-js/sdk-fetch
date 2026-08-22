@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -48,13 +48,20 @@ export interface PatchSessionIn {
      */
     project?: string;
     /**
-     * 
+     * Published opens the session's story to the public build route; false withdraws
+     * it, and withdrawing is always allowed. PUBLISHING is refused unless the
+     * session names a Project — the one set in this same request, or the one already
+     * stored — because that route is keyed on (org, project). It widens READ access
+     * to what is already there and grants nothing else.
      * @type {boolean}
      * @memberof PatchSessionIn
      */
     published?: boolean;
     /**
-     * 
+     * Status moves the session to running, paused, done or error. A session that has
+     * already finished refuses any change with 409 — done and error are monotonic —
+     * and moving INTO one stamps the end time. This is the surface REPORTING what
+     * happened; a control command never writes it.
      * @type {string}
      * @memberof PatchSessionIn
      */
@@ -74,7 +81,8 @@ export interface PatchSessionIn {
      */
     terminal?: string;
     /**
-     * 
+     * Title rewrites the human line, up to 512 characters — usually because the work
+     * turned out to be something other than what it was opened as.
      * @type {string}
      * @memberof PatchSessionIn
      */

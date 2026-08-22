@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,13 +20,21 @@ import { mapValues } from '../runtime.js';
  */
 export interface Entry {
     /**
-     * 
+     * Archetype is WHAT KIND OF THING this is, from a closed and ordered list —
+     * model | contract | chain | sdk | template | infra | site | app — derived from
+     * the repository's own topics, name and description, first match winning, and
+     * always `site` for a deployed site. It is DERIVED, never guessed by a model,
+     * because a wrong archetype hides a row from the browse rail more thoroughly
+     * than a missing one does. Empty when no topic matched: unclassified, not
+     * uncategorisable.
      * @type {string}
      * @memberof Entry
      */
     archetype?: string;
     /**
-     * 
+     * Description is the repository's own one-line GitHub description, carried
+     * verbatim. It comes from the SOURCE half of a row, so a site that was never
+     * matched to a repository has none, and nothing here is written by us.
      * @type {string}
      * @memberof Entry
      */
@@ -39,7 +47,10 @@ export interface Entry {
      */
     forkable?: boolean;
     /**
-     * 
+     * ID is "<org>/<name>" and is the corpus's primary key: a re-published entry
+     * updates in place under it rather than accumulating duplicates, so it is the
+     * one handle stable enough to link to or to name in a `template` filter. Two
+     * orgs can spell the same id, and `canonical` picks which one keeps it.
      * @type {string}
      * @memberof Entry
      */
@@ -51,19 +62,28 @@ export interface Entry {
      */
     kind?: string;
     /**
-     * 
+     * Language is the repository's primary implementation language as GitHub
+     * computes it ("Go", "TypeScript"), and the case is GitHub's. Empty for a site
+     * with no source half and for a repository GitHub could not classify.
      * @type {string}
      * @memberof Entry
      */
     language?: string;
     /**
-     * 
+     * License is the terms that upstream work carries, in whichever form the half
+     * that credited it had: an SPDX id ("MIT", "Apache-2.0") on a GitHub fork,
+     * free text on a site whose publisher declared it. GitHub's NOASSERTION — "we
+     * could not identify it" — reads as none rather than as a licence by that name.
+     * So empty means UNDECLARED and never unencumbered, and Upstream is what says
+     * whether the question applies at all.
      * @type {string}
      * @memberof Entry
      */
     license?: string;
     /**
-     * 
+     * Name is the short identifier inside the org — the repository's name, or the
+     * site's slug — and is the half of ID after the slash. Not a display name;
+     * Title is.
      * @type {string}
      * @memberof Entry
      */
@@ -107,7 +127,10 @@ export interface Entry {
      */
     scope?: string;
     /**
-     * 
+     * Stars is GitHub's stargazer count for the source repository, read at the last
+     * sync and never accumulated here. It is not a ranking — the page sorts on
+     * Updated — but it is the tiebreak when two orgs claim one ID. Absent for a
+     * site with no repository behind it, and for a repository nobody has starred.
      * @type {number}
      * @memberof Entry
      */
@@ -119,13 +142,18 @@ export interface Entry {
      */
     template?: string;
     /**
-     * 
+     * Title is what to SHOW. A site's human name wins where it has one; a repo row
+     * falls back to the repository name, so on a repo this usually just repeats
+     * Name. Absent only for a site whose project was never named — render Name.
      * @type {string}
      * @memberof Entry
      */
     title?: string;
     /**
-     * 
+     * Updated is when the thing last MOVED, as RFC 3339 in UTC: a repository's last
+     * push, or a site's last deploy. The page is ordered on it, most recent first,
+     * by comparing these strings — so the format is load-bearing and not cosmetic.
+     * Absent means the source reported no timestamp, and such a row sorts last.
      * @type {string}
      * @memberof Entry
      */

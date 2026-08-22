@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,25 +20,28 @@ import { mapValues } from '../runtime.js';
  */
 export interface Page {
     /**
-     * 
+     * Body is the reusable prompt or snippet itself. It may carry {placeholder}
+     * tokens for the client-specific bits — {client_name}, {domain}, {product} —
+     * which are substituted where the template is used, not here.
      * @type {string}
      * @memberof Page
      */
     body?: string;
     /**
-     * 
+     * Enabled is the admin lever. Absent reads as ON; an explicit false withdraws
+     * the template from org-facing reads.
      * @type {boolean}
      * @memberof Page
      */
     enabled?: boolean;
     /**
-     * 
+     * ID is the slug a step references to pull this template in.
      * @type {string}
      * @memberof Page
      */
     id?: string;
     /**
-     * 
+     * Title names the template in the authoring plane and in a picker.
      * @type {string}
      * @memberof Page
      */

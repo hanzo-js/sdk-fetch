@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -49,49 +49,53 @@ import {
  */
 export interface FinancialPackage {
     /**
-     * 
+     * BalanceSheet is struck as of the period END, not the start.
      * @type {BalanceSheet}
      * @memberof FinancialPackage
      */
     balanceSheet?: BalanceSheet;
     /**
-     * 
+     * From opens the reporting period. Absent means from the beginning of the ledger.
      * @type {string}
      * @memberof FinancialPackage
      */
     from?: string;
     /**
-     * 
+     * GeneratedAt is when the bundle was assembled — the moment the statements were
+     * struck, which is what makes two exports of the same period comparable.
      * @type {string}
      * @memberof FinancialPackage
      */
     generatedAt?: string;
     /**
-     * 
+     * GL is the newest slice of ledger detail, as the audit trail behind the
+     * statements. It is CAPPED, so on a busy ledger it is a sample rather than the
+     * full support for the figures above.
      * @type {Array<GLRow>}
      * @memberof FinancialPackage
      */
     gl?: Array<GLRow>;
     /**
-     * 
+     * Org is the organisation whose books these are — the validated caller's own,
+     * stamped so a downloaded bundle still says whose it is.
      * @type {string}
      * @memberof FinancialPackage
      */
     org?: string;
     /**
-     * 
+     * PnL is the income statement for the period, on an accrual basis.
      * @type {PnL}
      * @memberof FinancialPackage
      */
     pnl?: PnL;
     /**
-     * 
+     * To closes it. Absent means up to now.
      * @type {string}
      * @memberof FinancialPackage
      */
     to?: string;
     /**
-     * 
+     * TrialBalance is the proof the ledger balances over the period.
      * @type {TrialBalance}
      * @memberof FinancialPackage
      */

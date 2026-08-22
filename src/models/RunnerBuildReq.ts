@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -92,14 +92,6 @@ export interface RunnerBuildReq {
      */
     image?: string;
     /**
-     * OrgID attributes the build to an org. On the IAM path it defaults to the
-     * caller's own validated org, and a foreign one is refused unless the caller
-     * is a platform SuperAdmin.
-     * @type {string}
-     * @memberof RunnerBuildReq
-     */
-    organizationId?: string;
-    /**
      * OS is the target operating system for the artifact lane.
      * @type {string}
      * @memberof RunnerBuildReq
@@ -111,15 +103,6 @@ export interface RunnerBuildReq {
      * @memberof RunnerBuildReq
      */
     ref?: string;
-    /**
-     * Release requests native release semantics for cloud's self-publish: compute
-     * the next version, build+push ghcr.io/hanzoai/cloud, smoke it, then tag (the
-     * receipt) and notify universe. It owns its output image (release.go), and it
-     * takes SuperAdmin.
-     * @type {boolean}
-     * @memberof RunnerBuildReq
-     */
-    release?: boolean;
     /**
      * Repo is the repository clone URL to build. Required on the image lane.
      * @type {string}
@@ -168,10 +151,8 @@ export function RunnerBuildReqFromJSONTyped(json: any, ignoreDiscriminator: bool
         'dockerTarget': json['dockerTarget'] == null ? undefined : json['dockerTarget'],
         'dockerfile': json['dockerfile'] == null ? undefined : json['dockerfile'],
         'image': json['image'] == null ? undefined : json['image'],
-        'organizationId': json['organizationId'] == null ? undefined : json['organizationId'],
         'os': json['os'] == null ? undefined : json['os'],
         'ref': json['ref'] == null ? undefined : json['ref'],
-        'release': json['release'] == null ? undefined : json['release'],
         'repo': json['repo'] == null ? undefined : json['repo'],
         'sha': json['sha'] == null ? undefined : json['sha'],
         'tag': json['tag'] == null ? undefined : json['tag'],
@@ -198,10 +179,8 @@ export function RunnerBuildReqToJSONTyped(value?: RunnerBuildReq | null, ignoreD
         'dockerTarget': value['dockerTarget'],
         'dockerfile': value['dockerfile'],
         'image': value['image'],
-        'organizationId': value['organizationId'],
         'os': value['os'],
         'ref': value['ref'],
-        'release': value['release'],
         'repo': value['repo'],
         'sha': value['sha'],
         'tag': value['tag'],

@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -15,21 +15,19 @@
 
 import * as runtime from '../runtime.js';
 import type {
+  IamAccountBody,
   IamAnswer,
   IamApplication,
   IamApplicationListResult,
-  IamApplicationRef,
+  IamAssumeBody,
   IamAuditLog,
-  IamAuditlogsInput,
   IamCert,
   IamCertsDeleteOutput,
   IamCertsListOutput,
-  IamCertsRef,
   IamConfig,
   IamCreateInput,
   IamCreateOrganizationInput,
   IamCreateSessionIn,
-  IamDeleteOrganizationInput,
   IamDeleteOrganizationOutput,
   IamDeleteOutput,
   IamDeleteResponse,
@@ -40,14 +38,11 @@ import type {
   IamInvitationsDeleteOutput,
   IamInvitationsInput,
   IamInvitationsListOutput,
-  IamInvitationsRef,
   IamKey,
-  IamKeysRef,
   IamListOrganizationsOutput,
   IamListOutput,
   IamListProvidersOut,
   IamListResponse,
-  IamListSessionsIn,
   IamListSessionsOut,
   IamListTokensOut,
   IamListWebauthnCredentialsOut,
@@ -57,69 +52,57 @@ import type {
   IamPermission,
   IamPermissionDeleteResponse,
   IamPermissionListResponse,
-  IamPermissionRef,
   IamPerson,
   IamProject,
   IamProjectsDeleteOutput,
+  IamProjectsInput,
   IamProjectsListOutput,
-  IamProjectsRef,
   IamProvider,
-  IamProviderKey,
   IamProviderResult,
-  IamRef,
   IamRegistration,
   IamReply,
-  IamResponse,
   IamRole,
   IamRolesDeleteOutput,
   IamRolesInput,
   IamRolesListOutput,
-  IamRolesRef,
   IamSession,
-  IamSessionRef,
+  IamSetAvatarInput,
   IamToken,
-  IamTokenKey,
   IamTokenMutation,
   IamTokenResult,
   IamUpdateInput,
   IamUpdateOrganizationInput,
   IamUpdateSessionIn,
   IamUser,
-  IamUserBody,
   IamUsersDeleteOutput,
   IamUsersListOutput,
-  IamUsersRef,
   IamWebauthnCredential,
-  IamWebauthnCredentialKey,
   IamWebauthnCredentialMutationResult,
   IamWebauthnCredentialResult,
   IamWorkspace,
   IamWorkspacesDeleteOutput,
   IamWorkspacesInput,
   IamWorkspacesListOutput,
-  IamWorkspacesRef,
 } from '../models/index.js';
 import {
+    IamAccountBodyFromJSON,
+    IamAccountBodyToJSON,
     IamAnswerFromJSON,
     IamAnswerToJSON,
     IamApplicationFromJSON,
     IamApplicationToJSON,
     IamApplicationListResultFromJSON,
     IamApplicationListResultToJSON,
-    IamApplicationRefFromJSON,
-    IamApplicationRefToJSON,
+    IamAssumeBodyFromJSON,
+    IamAssumeBodyToJSON,
     IamAuditLogFromJSON,
     IamAuditLogToJSON,
-    IamAuditlogsInputFromJSON,
-    IamAuditlogsInputToJSON,
     IamCertFromJSON,
     IamCertToJSON,
     IamCertsDeleteOutputFromJSON,
     IamCertsDeleteOutputToJSON,
     IamCertsListOutputFromJSON,
     IamCertsListOutputToJSON,
-    IamCertsRefFromJSON,
-    IamCertsRefToJSON,
     IamConfigFromJSON,
     IamConfigToJSON,
     IamCreateInputFromJSON,
@@ -128,8 +111,6 @@ import {
     IamCreateOrganizationInputToJSON,
     IamCreateSessionInFromJSON,
     IamCreateSessionInToJSON,
-    IamDeleteOrganizationInputFromJSON,
-    IamDeleteOrganizationInputToJSON,
     IamDeleteOrganizationOutputFromJSON,
     IamDeleteOrganizationOutputToJSON,
     IamDeleteOutputFromJSON,
@@ -150,12 +131,8 @@ import {
     IamInvitationsInputToJSON,
     IamInvitationsListOutputFromJSON,
     IamInvitationsListOutputToJSON,
-    IamInvitationsRefFromJSON,
-    IamInvitationsRefToJSON,
     IamKeyFromJSON,
     IamKeyToJSON,
-    IamKeysRefFromJSON,
-    IamKeysRefToJSON,
     IamListOrganizationsOutputFromJSON,
     IamListOrganizationsOutputToJSON,
     IamListOutputFromJSON,
@@ -164,8 +141,6 @@ import {
     IamListProvidersOutToJSON,
     IamListResponseFromJSON,
     IamListResponseToJSON,
-    IamListSessionsInFromJSON,
-    IamListSessionsInToJSON,
     IamListSessionsOutFromJSON,
     IamListSessionsOutToJSON,
     IamListTokensOutFromJSON,
@@ -184,32 +159,24 @@ import {
     IamPermissionDeleteResponseToJSON,
     IamPermissionListResponseFromJSON,
     IamPermissionListResponseToJSON,
-    IamPermissionRefFromJSON,
-    IamPermissionRefToJSON,
     IamPersonFromJSON,
     IamPersonToJSON,
     IamProjectFromJSON,
     IamProjectToJSON,
     IamProjectsDeleteOutputFromJSON,
     IamProjectsDeleteOutputToJSON,
+    IamProjectsInputFromJSON,
+    IamProjectsInputToJSON,
     IamProjectsListOutputFromJSON,
     IamProjectsListOutputToJSON,
-    IamProjectsRefFromJSON,
-    IamProjectsRefToJSON,
     IamProviderFromJSON,
     IamProviderToJSON,
-    IamProviderKeyFromJSON,
-    IamProviderKeyToJSON,
     IamProviderResultFromJSON,
     IamProviderResultToJSON,
-    IamRefFromJSON,
-    IamRefToJSON,
     IamRegistrationFromJSON,
     IamRegistrationToJSON,
     IamReplyFromJSON,
     IamReplyToJSON,
-    IamResponseFromJSON,
-    IamResponseToJSON,
     IamRoleFromJSON,
     IamRoleToJSON,
     IamRolesDeleteOutputFromJSON,
@@ -218,16 +185,12 @@ import {
     IamRolesInputToJSON,
     IamRolesListOutputFromJSON,
     IamRolesListOutputToJSON,
-    IamRolesRefFromJSON,
-    IamRolesRefToJSON,
     IamSessionFromJSON,
     IamSessionToJSON,
-    IamSessionRefFromJSON,
-    IamSessionRefToJSON,
+    IamSetAvatarInputFromJSON,
+    IamSetAvatarInputToJSON,
     IamTokenFromJSON,
     IamTokenToJSON,
-    IamTokenKeyFromJSON,
-    IamTokenKeyToJSON,
     IamTokenMutationFromJSON,
     IamTokenMutationToJSON,
     IamTokenResultFromJSON,
@@ -240,18 +203,12 @@ import {
     IamUpdateSessionInToJSON,
     IamUserFromJSON,
     IamUserToJSON,
-    IamUserBodyFromJSON,
-    IamUserBodyToJSON,
     IamUsersDeleteOutputFromJSON,
     IamUsersDeleteOutputToJSON,
     IamUsersListOutputFromJSON,
     IamUsersListOutputToJSON,
-    IamUsersRefFromJSON,
-    IamUsersRefToJSON,
     IamWebauthnCredentialFromJSON,
     IamWebauthnCredentialToJSON,
-    IamWebauthnCredentialKeyFromJSON,
-    IamWebauthnCredentialKeyToJSON,
     IamWebauthnCredentialMutationResultFromJSON,
     IamWebauthnCredentialMutationResultToJSON,
     IamWebauthnCredentialResultFromJSON,
@@ -264,8 +221,6 @@ import {
     IamWorkspacesInputToJSON,
     IamWorkspacesListOutputFromJSON,
     IamWorkspacesListOutputToJSON,
-    IamWorkspacesRefFromJSON,
-    IamWorkspacesRefToJSON,
 } from '../models/index.js';
 
 export interface IamApiAddProviderRequest {
@@ -288,7 +243,42 @@ export interface IamApiCreateSessionRequest {
     iamCreateSessionIn: IamCreateSessionIn;
 }
 
-export interface IamApiDeleteIamApplicationRequest {
+export interface IamApiDeleteIamApplicationsByOwnerByNameRequest {
+    owner: string;
+    name: string;
+}
+
+export interface IamApiDeleteIamAuditLogsByOwnerByNameRequest {
+    owner: string;
+    name: string;
+}
+
+export interface IamApiDeleteIamCertsByOwnerByNameRequest {
+    owner: string;
+    name: string;
+}
+
+export interface IamApiDeleteIamInvitationsByOwnerByNameRequest {
+    owner: string;
+    name: string;
+}
+
+export interface IamApiDeleteIamKeysByOwnerByNameRequest {
+    owner: string;
+    name: string;
+}
+
+export interface IamApiDeleteIamPermissionsByOwnerByNameRequest {
+    owner: string;
+    name: string;
+}
+
+export interface IamApiDeleteIamProjectsByOwnerByNameRequest {
+    owner: string;
+    name: string;
+}
+
+export interface IamApiDeleteIamRolesByOwnerByNameRequest {
     owner: string;
     name: string;
 }
@@ -302,27 +292,43 @@ export interface IamApiDeleteIamServiceAccountsByNameRequest {
     name: string;
 }
 
+export interface IamApiDeleteIamUsersByOwnerByNameRequest {
+    owner: string;
+    name: string;
+}
+
+export interface IamApiDeleteIamUsersByOwnerByNameKeysRequest {
+    owner: string;
+    name: string;
+}
+
+export interface IamApiDeleteIamWorkspacesByOwnerByNameRequest {
+    owner: string;
+    name: string;
+}
+
 export interface IamApiDeleteOrganizationRequest {
-    iamDeleteOrganizationInput: IamDeleteOrganizationInput;
+    owner: string;
+    name: string;
 }
 
 export interface IamApiDeleteProviderRequest {
-    iamProviderKey: IamProviderKey;
+    owner: string;
+    name: string;
 }
 
 export interface IamApiDeleteSessionRequest {
-    iamSessionRef: IamSessionRef;
+    owner: string;
+    name: string;
+    application: string;
 }
 
 export interface IamApiDeleteTokenRequest {
-    iamTokenKey: IamTokenKey;
+    owner: string;
+    name: string;
 }
 
 export interface IamApiDeleteWebauthnCredentialRequest {
-    iamWebauthnCredentialKey: IamWebauthnCredentialKey;
-}
-
-export interface IamApiGetIamApplicationRequest {
     owner: string;
     name: string;
 }
@@ -331,13 +337,18 @@ export interface IamApiGetIamApplicationsRequest {
     owner: string;
 }
 
-export interface IamApiGetIamApplicationsGetRequest {
+export interface IamApiGetIamApplicationsByOwnerByNameRequest {
     owner: string;
     name: string;
 }
 
 export interface IamApiGetIamAuditLogsRequest {
     owner?: string;
+}
+
+export interface IamApiGetIamAuditLogsByOwnerByNameRequest {
+    owner: string;
+    name: string;
 }
 
 export interface IamApiGetIamAuthApplicationRequest {
@@ -353,27 +364,32 @@ export interface IamApiGetIamCertsRequest {
     owner?: string;
 }
 
+export interface IamApiGetIamCertsByOwnerByNameRequest {
+    owner: string;
+    name: string;
+}
+
 export interface IamApiGetIamGetAppLoginRequest {
     clientId?: string;
     responseType?: string;
-}
-
-export interface IamApiGetIamGetMembershipsRequest {
-    user?: string;
-    org?: string;
 }
 
 export interface IamApiGetIamInvitationsRequest {
     owner?: string;
 }
 
+export interface IamApiGetIamInvitationsByOwnerByNameRequest {
+    owner: string;
+    name: string;
+}
+
 export interface IamApiGetIamKeysRequest {
     owner?: string;
 }
 
-export interface IamApiGetIamKeysGetRequest {
-    owner?: string;
-    name?: string;
+export interface IamApiGetIamKeysByOwnerByNameRequest {
+    owner: string;
+    name: string;
 }
 
 export interface IamApiGetIamMembershipsRequest {
@@ -385,17 +401,27 @@ export interface IamApiGetIamPermissionsRequest {
     owner?: string;
 }
 
-export interface IamApiGetIamPermissionsGetRequest {
-    owner?: string;
-    name?: string;
+export interface IamApiGetIamPermissionsByOwnerByNameRequest {
+    owner: string;
+    name: string;
 }
 
 export interface IamApiGetIamProjectsRequest {
     owner?: string;
 }
 
+export interface IamApiGetIamProjectsByOwnerByNameRequest {
+    owner: string;
+    name: string;
+}
+
 export interface IamApiGetIamRolesRequest {
     owner?: string;
+}
+
+export interface IamApiGetIamRolesByOwnerByNameRequest {
+    owner: string;
+    name: string;
 }
 
 export interface IamApiGetIamScimV2ResourcetypesByNameRequest {
@@ -419,13 +445,14 @@ export interface IamApiGetIamServiceAccountsRequest {
 
 export interface IamApiGetIamUsersRequest {
     owner: string;
+    email?: string;
     limit?: number;
     offset?: number;
 }
 
-export interface IamApiGetIamUsersGetRequest {
+export interface IamApiGetIamUsersByOwnerByNameRequest {
     owner: string;
-    name?: string;
+    name: string;
     email?: string;
 }
 
@@ -433,31 +460,42 @@ export interface IamApiGetIamWorkspacesRequest {
     owner?: string;
 }
 
+export interface IamApiGetIamWorkspacesByOwnerByNameRequest {
+    owner: string;
+    name: string;
+}
+
 export interface IamApiGetOrganizationRequest {
-    owner?: string;
-    name?: string;
+    owner: string;
+    name: string;
 }
 
 export interface IamApiGetProviderRequest {
-    iamProviderKey: IamProviderKey;
+    owner: string;
+    name: string;
 }
 
 export interface IamApiGetSessionRequest {
-    iamSessionRef: IamSessionRef;
+    owner: string;
+    name: string;
+    application: string;
 }
 
 export interface IamApiGetTokenRequest {
-    iamTokenKey: IamTokenKey;
+    owner: string;
+    name: string;
 }
 
 export interface IamApiGetWebauthnCredentialRequest {
-    iamWebauthnCredentialKey: IamWebauthnCredentialKey;
+    owner: string;
+    name: string;
 }
 
 export interface IamApiListOrganizationsRequest {
-    owner?: string;
+    xForwardedFor?: string;
+    q?: string;
     limit?: number;
-    offset?: number;
+    cursor?: string;
 }
 
 export interface IamApiListProvidersRequest {
@@ -465,7 +503,9 @@ export interface IamApiListProvidersRequest {
 }
 
 export interface IamApiListSessionsRequest {
-    iamListSessionsIn: IamListSessionsIn;
+    owner: string;
+    name?: string;
+    application?: string;
 }
 
 export interface IamApiListTokensRequest {
@@ -474,7 +514,7 @@ export interface IamApiListTokensRequest {
 }
 
 export interface IamApiListWebauthnCredentialsRequest {
-    owner?: string;
+    user?: string;
 }
 
 export interface IamApiPatchIamScimV2UsersByOwnerByNameRequest {
@@ -482,123 +522,25 @@ export interface IamApiPatchIamScimV2UsersByOwnerByNameRequest {
     name: string;
 }
 
-export interface IamApiPostIamAddApplicationRequest {
-    iamApplication: IamApplication;
-}
-
-export interface IamApiPostIamAddOrganizationRequest {
-    iamCreateOrganizationInput: IamCreateOrganizationInput;
-}
-
-export interface IamApiPostIamAddProjectRequest {
-    iamInput: IamInput;
-}
-
-export interface IamApiPostIamAddProviderRequest {
-    iamProvider: IamProvider;
-}
-
-export interface IamApiPostIamAddRoleRequest {
-    iamRolesInput: IamRolesInput;
-}
-
-export interface IamApiPostIamAddUserRequest {
-    iamUserBody: IamUserBody;
-}
-
-export interface IamApiPostIamAddWorkspaceRequest {
-    iamWorkspacesInput: IamWorkspacesInput;
-}
-
-export interface IamApiPostIamApplicationRequest {
-    iamApplication: IamApplication;
-}
-
 export interface IamApiPostIamApplicationsRequest {
     iamApplication: IamApplication;
 }
 
-export interface IamApiPostIamApplicationsDeleteRequest {
-    iamApplicationRef: IamApplicationRef;
-}
-
-export interface IamApiPostIamApplicationsUpdateRequest {
-    iamApplication: IamApplication;
+export interface IamApiPostIamAssumeRequest {
+    iamAssumeBody: IamAssumeBody;
+    authorization?: string;
+    xForwardedFor?: string;
 }
 
 export interface IamApiPostIamAuditLogsRequest {
-    iamAuditlogsInput: IamAuditlogsInput;
-}
-
-export interface IamApiPostIamAuditLogsDeleteRequest {
-    iamRef: IamRef;
-}
-
-export interface IamApiPostIamAuditLogsGetRequest {
-    iamRef: IamRef;
-}
-
-export interface IamApiPostIamAuditLogsUpdateRequest {
-    iamAuditlogsInput: IamAuditlogsInput;
+    iamInput: IamInput;
 }
 
 export interface IamApiPostIamCertsRequest {
     iamCert: IamCert;
 }
 
-export interface IamApiPostIamCertsDeleteRequest {
-    iamCertsRef: IamCertsRef;
-}
-
-export interface IamApiPostIamCertsGetRequest {
-    iamCertsRef: IamCertsRef;
-}
-
-export interface IamApiPostIamCertsUpdateRequest {
-    iamCert: IamCert;
-}
-
-export interface IamApiPostIamDeleteApplicationRequest {
-    iamApplication: IamApplication;
-}
-
-export interface IamApiPostIamDeleteOrganizationRequest {
-    iamDeleteOrganizationInput: IamDeleteOrganizationInput;
-}
-
-export interface IamApiPostIamDeleteProjectRequest {
-    iamProjectsRef: IamProjectsRef;
-}
-
-export interface IamApiPostIamDeleteProviderRequest {
-    iamProvider: IamProvider;
-}
-
-export interface IamApiPostIamDeleteRoleRequest {
-    iamRolesRef: IamRolesRef;
-}
-
-export interface IamApiPostIamDeleteUserRequest {
-    iamUserBody: IamUserBody;
-}
-
-export interface IamApiPostIamDeleteWorkspaceRequest {
-    iamWorkspacesRef: IamWorkspacesRef;
-}
-
 export interface IamApiPostIamInvitationsRequest {
-    iamInvitationsInput: IamInvitationsInput;
-}
-
-export interface IamApiPostIamInvitationsDeleteRequest {
-    iamInvitationsRef: IamInvitationsRef;
-}
-
-export interface IamApiPostIamInvitationsGetRequest {
-    iamInvitationsRef: IamInvitationsRef;
-}
-
-export interface IamApiPostIamInvitationsUpdateRequest {
     iamInvitationsInput: IamInvitationsInput;
 }
 
@@ -606,55 +548,21 @@ export interface IamApiPostIamKeysRequest {
     iamKey: IamKey;
 }
 
-export interface IamApiPostIamKeysDeleteRequest {
-    iamKeysRef: IamKeysRef;
-}
-
-export interface IamApiPostIamKeysUpdateRequest {
-    iamKey: IamKey;
-}
-
 export interface IamApiPostIamPermissionsRequest {
     iamPermission: IamPermission;
 }
 
-export interface IamApiPostIamPermissionsDeleteRequest {
-    iamPermissionRef: IamPermissionRef;
-}
-
-export interface IamApiPostIamPermissionsUpdateRequest {
-    iamPermission: IamPermission;
-}
-
 export interface IamApiPostIamProjectsRequest {
-    iamInput: IamInput;
+    iamProjectsInput: IamProjectsInput;
 }
 
-export interface IamApiPostIamProjectsDeleteRequest {
-    iamProjectsRef: IamProjectsRef;
-}
-
-export interface IamApiPostIamProjectsGetRequest {
-    iamProjectsRef: IamProjectsRef;
-}
-
-export interface IamApiPostIamProjectsUpdateRequest {
-    iamInput: IamInput;
+export interface IamApiPostIamReleaseRequest {
+    iamAssumeBody: IamAssumeBody;
+    authorization?: string;
+    xForwardedFor?: string;
 }
 
 export interface IamApiPostIamRolesRequest {
-    iamRolesInput: IamRolesInput;
-}
-
-export interface IamApiPostIamRolesDeleteRequest {
-    iamRolesRef: IamRolesRef;
-}
-
-export interface IamApiPostIamRolesGetRequest {
-    iamRolesRef: IamRolesRef;
-}
-
-export interface IamApiPostIamRolesUpdateRequest {
     iamRolesInput: IamRolesInput;
 }
 
@@ -662,56 +570,53 @@ export interface IamApiPostIamServiceAccountsByNameKeysRequest {
     name: string;
 }
 
-export interface IamApiPostIamUpdateApplicationRequest {
-    iamApplication: IamApplication;
-}
-
-export interface IamApiPostIamUpdateOrganizationRequest {
-    iamUpdateOrganizationInput: IamUpdateOrganizationInput;
-}
-
-export interface IamApiPostIamUpdateProviderRequest {
-    iamProvider: IamProvider;
-}
-
-export interface IamApiPostIamUpdateRoleRequest {
-    iamRolesInput: IamRolesInput;
-}
-
-export interface IamApiPostIamUpdateUserRequest {
-    iamUserBody: IamUserBody;
-}
-
 export interface IamApiPostIamUsersRequest {
     iamCreateInput: IamCreateInput;
 }
 
-export interface IamApiPostIamUsersDeleteRequest {
-    iamUsersRef: IamUsersRef;
-}
-
-export interface IamApiPostIamUsersUpdateRequest {
-    iamUpdateInput: IamUpdateInput;
+export interface IamApiPostIamUsersByOwnerByNameKeysRequest {
+    owner: string;
+    name: string;
 }
 
 export interface IamApiPostIamWorkspacesRequest {
     iamWorkspacesInput: IamWorkspacesInput;
 }
 
-export interface IamApiPostIamWorkspacesDeleteRequest {
-    iamWorkspacesRef: IamWorkspacesRef;
+export interface IamApiPutIamAccountRequest {
+    iamAccountBody: IamAccountBody;
+    cookie?: string;
+    authorization?: string;
 }
 
-export interface IamApiPostIamWorkspacesGetRequest {
-    iamWorkspacesRef: IamWorkspacesRef;
-}
-
-export interface IamApiPostIamWorkspacesUpdateRequest {
-    iamWorkspacesInput: IamWorkspacesInput;
-}
-
-export interface IamApiPutIamApplicationRequest {
+export interface IamApiPutIamApplicationsByOwnerByNameRequest {
+    owner: string;
+    name: string;
     iamApplication: IamApplication;
+}
+
+export interface IamApiPutIamAuditLogsByOwnerByNameRequest {
+    owner: string;
+    name: string;
+    iamInput: IamInput;
+}
+
+export interface IamApiPutIamCertsByOwnerByNameRequest {
+    owner: string;
+    name: string;
+    iamCert: IamCert;
+}
+
+export interface IamApiPutIamInvitationsByOwnerByNameRequest {
+    owner: string;
+    name: string;
+    iamInvitationsInput: IamInvitationsInput;
+}
+
+export interface IamApiPutIamKeysByOwnerByNameRequest {
+    owner: string;
+    name: string;
+    iamKey: IamKey;
 }
 
 export interface IamApiPutIamPasswordRequest {
@@ -720,28 +625,73 @@ export interface IamApiPutIamPasswordRequest {
     authorization?: string;
 }
 
+export interface IamApiPutIamPermissionsByOwnerByNameRequest {
+    owner: string;
+    name: string;
+    iamPermission: IamPermission;
+}
+
+export interface IamApiPutIamProjectsByOwnerByNameRequest {
+    owner: string;
+    name: string;
+    iamProjectsInput: IamProjectsInput;
+}
+
+export interface IamApiPutIamRolesByOwnerByNameRequest {
+    owner: string;
+    name: string;
+    iamRolesInput: IamRolesInput;
+}
+
 export interface IamApiPutIamScimV2UsersByOwnerByNameRequest {
     owner: string;
     name: string;
 }
 
+export interface IamApiPutIamUsersByOwnerByNameRequest {
+    owner: string;
+    name: string;
+    iamUpdateInput: IamUpdateInput;
+}
+
+export interface IamApiPutIamWorkspacesByOwnerByNameRequest {
+    owner: string;
+    name: string;
+    iamWorkspacesInput: IamWorkspacesInput;
+}
+
+export interface IamApiSetOrganizationAvatarRequest {
+    iamSetAvatarInput: IamSetAvatarInput;
+}
+
 export interface IamApiUpdateOrganizationRequest {
+    owner: string;
+    name: string;
     iamUpdateOrganizationInput: IamUpdateOrganizationInput;
 }
 
 export interface IamApiUpdateProviderRequest {
+    owner: string;
+    name: string;
     iamProvider: IamProvider;
 }
 
 export interface IamApiUpdateSessionRequest {
+    owner: string;
+    name: string;
+    application: string;
     iamUpdateSessionIn: IamUpdateSessionIn;
 }
 
 export interface IamApiUpdateTokenRequest {
+    owner: string;
+    name: string;
     iamToken: IamToken;
 }
 
 export interface IamApiUpdateWebauthnCredentialRequest {
+    owner: string;
+    name: string;
     iamWebauthnCredential: IamWebauthnCredential;
 }
 
@@ -983,7 +933,7 @@ export class IamApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/iam/sessions/create`;
+        let urlPath = `/v1/iam/sessions`;
 
         const response = await this.request({
             path: urlPath,
@@ -1009,30 +959,22 @@ export class IamApi extends runtime.BaseAPI {
      * Removes an application. Anyone mid-sign-in through it is turned away and its client credentials stop working, so retire the integration before deleting it.
      * Removes an application.
      */
-    async deleteIamApplicationRaw(requestParameters: IamApiDeleteIamApplicationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamDeleteResult>> {
+    async deleteIamApplicationsByOwnerByNameRaw(requestParameters: IamApiDeleteIamApplicationsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamDeleteResult>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
-                'Required parameter "owner" was null or undefined when calling deleteIamApplication().'
+                'Required parameter "owner" was null or undefined when calling deleteIamApplicationsByOwnerByName().'
             );
         }
 
         if (requestParameters['name'] == null) {
             throw new runtime.RequiredError(
                 'name',
-                'Required parameter "name" was null or undefined when calling deleteIamApplication().'
+                'Required parameter "name" was null or undefined when calling deleteIamApplicationsByOwnerByName().'
             );
         }
 
         const queryParameters: any = {};
-
-        if (requestParameters['owner'] != null) {
-            queryParameters['owner'] = requestParameters['owner'];
-        }
-
-        if (requestParameters['name'] != null) {
-            queryParameters['name'] = requestParameters['name'];
-        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -1045,7 +987,9 @@ export class IamApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/iam/application`;
+        let urlPath = `/v1/iam/applications/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
 
         const response = await this.request({
             path: urlPath,
@@ -1061,8 +1005,431 @@ export class IamApi extends runtime.BaseAPI {
      * Removes an application. Anyone mid-sign-in through it is turned away and its client credentials stop working, so retire the integration before deleting it.
      * Removes an application.
      */
-    async deleteIamApplication(requestParameters: IamApiDeleteIamApplicationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamDeleteResult> {
-        const response = await this.deleteIamApplicationRaw(requestParameters, initOverrides);
+    async deleteIamApplicationsByOwnerByName(requestParameters: IamApiDeleteIamApplicationsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamDeleteResult> {
+        const response = await this.deleteIamApplicationsByOwnerByNameRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Removes an audit entry. Retention policy is normally what should expire a trail; deleting by hand leaves a gap a reviewer will notice.
+     * Removes an audit entry.
+     */
+    async deleteIamAuditLogsByOwnerByNameRaw(requestParameters: IamApiDeleteIamAuditLogsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamDeleteOutput>> {
+        if (requestParameters['owner'] == null) {
+            throw new runtime.RequiredError(
+                'owner',
+                'Required parameter "owner" was null or undefined when calling deleteIamAuditLogsByOwnerByName().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling deleteIamAuditLogsByOwnerByName().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/iam/audit-logs/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IamDeleteOutputFromJSON(jsonValue));
+    }
+
+    /**
+     * Removes an audit entry. Retention policy is normally what should expire a trail; deleting by hand leaves a gap a reviewer will notice.
+     * Removes an audit entry.
+     */
+    async deleteIamAuditLogsByOwnerByName(requestParameters: IamApiDeleteIamAuditLogsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamDeleteOutput> {
+        const response = await this.deleteIamAuditLogsByOwnerByNameRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Removes a signing certificate. Tokens signed with it can no longer be verified, so retire it only once nothing is still presenting them.
+     * Removes a signing certificate.
+     */
+    async deleteIamCertsByOwnerByNameRaw(requestParameters: IamApiDeleteIamCertsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamCertsDeleteOutput>> {
+        if (requestParameters['owner'] == null) {
+            throw new runtime.RequiredError(
+                'owner',
+                'Required parameter "owner" was null or undefined when calling deleteIamCertsByOwnerByName().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling deleteIamCertsByOwnerByName().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/iam/certs/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IamCertsDeleteOutputFromJSON(jsonValue));
+    }
+
+    /**
+     * Removes a signing certificate. Tokens signed with it can no longer be verified, so retire it only once nothing is still presenting them.
+     * Removes a signing certificate.
+     */
+    async deleteIamCertsByOwnerByName(requestParameters: IamApiDeleteIamCertsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamCertsDeleteOutput> {
+        const response = await this.deleteIamCertsByOwnerByNameRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Withdraws an invitation. It stops being redeemable at once; anyone who already joined through it keeps their account.
+     * Withdraws an invitation.
+     */
+    async deleteIamInvitationsByOwnerByNameRaw(requestParameters: IamApiDeleteIamInvitationsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamInvitationsDeleteOutput>> {
+        if (requestParameters['owner'] == null) {
+            throw new runtime.RequiredError(
+                'owner',
+                'Required parameter "owner" was null or undefined when calling deleteIamInvitationsByOwnerByName().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling deleteIamInvitationsByOwnerByName().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/iam/invitations/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IamInvitationsDeleteOutputFromJSON(jsonValue));
+    }
+
+    /**
+     * Withdraws an invitation. It stops being redeemable at once; anyone who already joined through it keeps their account.
+     * Withdraws an invitation.
+     */
+    async deleteIamInvitationsByOwnerByName(requestParameters: IamApiDeleteIamInvitationsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamInvitationsDeleteOutput> {
+        const response = await this.deleteIamInvitationsByOwnerByNameRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Revokes an API key. Anything still presenting it stops being authorized at once, so roll the replacement out before you revoke.
+     * Revokes an API key.
+     */
+    async deleteIamKeysByOwnerByNameRaw(requestParameters: IamApiDeleteIamKeysByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamDeleteResponse>> {
+        if (requestParameters['owner'] == null) {
+            throw new runtime.RequiredError(
+                'owner',
+                'Required parameter "owner" was null or undefined when calling deleteIamKeysByOwnerByName().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling deleteIamKeysByOwnerByName().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/iam/keys/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IamDeleteResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Revokes an API key. Anything still presenting it stops being authorized at once, so roll the replacement out before you revoke.
+     * Revokes an API key.
+     */
+    async deleteIamKeysByOwnerByName(requestParameters: IamApiDeleteIamKeysByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamDeleteResponse> {
+        const response = await this.deleteIamKeysByOwnerByNameRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Turns a factor off, so sign-in stops asking for it. Naming no factor turns off ALL of them — the reset path. People may do this for themselves; doing it for somebody else takes an administrator, which is what makes it the way back in when a phone is lost.  The recovery codes go with the last factor: they are the way past a challenge, so keeping them alive for an account with nothing to challenge would leave a standing credential behind.
+     * Turns a factor off, so sign-in stops asking for it.
+     */
+    async deleteIamMfaRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/iam/mfa`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Turns a factor off, so sign-in stops asking for it. Naming no factor turns off ALL of them — the reset path. People may do this for themselves; doing it for somebody else takes an administrator, which is what makes it the way back in when a phone is lost.  The recovery codes go with the last factor: they are the way past a challenge, so keeping them alive for an account with nothing to challenge would leave a standing credential behind.
+     * Turns a factor off, so sign-in stops asking for it.
+     */
+    async deleteIamMfa(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteIamMfaRaw(initOverrides);
+    }
+
+    /**
+     * Revokes a permission. Everyone who held access only through it loses that access immediately; grants they hold by another route are untouched.
+     * Revokes a permission.
+     */
+    async deleteIamPermissionsByOwnerByNameRaw(requestParameters: IamApiDeleteIamPermissionsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamPermissionDeleteResponse>> {
+        if (requestParameters['owner'] == null) {
+            throw new runtime.RequiredError(
+                'owner',
+                'Required parameter "owner" was null or undefined when calling deleteIamPermissionsByOwnerByName().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling deleteIamPermissionsByOwnerByName().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/iam/permissions/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IamPermissionDeleteResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Revokes a permission. Everyone who held access only through it loses that access immediately; grants they hold by another route are untouched.
+     * Revokes a permission.
+     */
+    async deleteIamPermissionsByOwnerByName(requestParameters: IamApiDeleteIamPermissionsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamPermissionDeleteResponse> {
+        const response = await this.deleteIamPermissionsByOwnerByNameRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Removes a project. The people and roles in your organization are unchanged; what goes is the scope itself, so move anything addressed by it first.
+     * Removes a project.
+     */
+    async deleteIamProjectsByOwnerByNameRaw(requestParameters: IamApiDeleteIamProjectsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamProjectsDeleteOutput>> {
+        if (requestParameters['owner'] == null) {
+            throw new runtime.RequiredError(
+                'owner',
+                'Required parameter "owner" was null or undefined when calling deleteIamProjectsByOwnerByName().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling deleteIamProjectsByOwnerByName().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/iam/projects/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IamProjectsDeleteOutputFromJSON(jsonValue));
+    }
+
+    /**
+     * Removes a project. The people and roles in your organization are unchanged; what goes is the scope itself, so move anything addressed by it first.
+     * Removes a project.
+     */
+    async deleteIamProjectsByOwnerByName(requestParameters: IamApiDeleteIamProjectsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamProjectsDeleteOutput> {
+        const response = await this.deleteIamProjectsByOwnerByNameRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Removes a role. Everyone in it loses the access it carried; their accounts, and any other role they hold, are untouched.
+     * Removes a role.
+     */
+    async deleteIamRolesByOwnerByNameRaw(requestParameters: IamApiDeleteIamRolesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamRolesDeleteOutput>> {
+        if (requestParameters['owner'] == null) {
+            throw new runtime.RequiredError(
+                'owner',
+                'Required parameter "owner" was null or undefined when calling deleteIamRolesByOwnerByName().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling deleteIamRolesByOwnerByName().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/iam/roles/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IamRolesDeleteOutputFromJSON(jsonValue));
+    }
+
+    /**
+     * Removes a role. Everyone in it loses the access it carried; their accounts, and any other role they hold, are untouched.
+     * Removes a role.
+     */
+    async deleteIamRolesByOwnerByName(requestParameters: IamApiDeleteIamRolesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamRolesDeleteOutput> {
+        const response = await this.deleteIamRolesByOwnerByNameRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1167,22 +1534,27 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Removes an organization and everything named inside it. There is no undo, and every session issued under it stops working.  The built-in admin organization cannot be deleted — losing it would leave the account with no way back in.
-     * Removes an organization and everything named inside it.
+     * Removes a person from your organization. Their sessions stop working immediately and the account is gone rather than suspended — to keep the record and only stop sign-in, update the user instead.
+     * Removes a person from your organization.
      */
-    async deleteOrganizationRaw(requestParameters: IamApiDeleteOrganizationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamDeleteOrganizationOutput>> {
-        if (requestParameters['iamDeleteOrganizationInput'] == null) {
+    async deleteIamUsersByOwnerByNameRaw(requestParameters: IamApiDeleteIamUsersByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamUsersDeleteOutput>> {
+        if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
-                'iamDeleteOrganizationInput',
-                'Required parameter "iamDeleteOrganizationInput" was null or undefined when calling deleteOrganization().'
+                'owner',
+                'Required parameter "owner" was null or undefined when calling deleteIamUsersByOwnerByName().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling deleteIamUsersByOwnerByName().'
             );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -1193,14 +1565,179 @@ export class IamApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/iam/organizations/delete`;
+        let urlPath = `/v1/iam/users/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
 
         const response = await this.request({
             path: urlPath,
-            method: 'POST',
+            method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
-            body: IamDeleteOrganizationInputToJSON(requestParameters['iamDeleteOrganizationInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IamUsersDeleteOutputFromJSON(jsonValue));
+    }
+
+    /**
+     * Removes a person from your organization. Their sessions stop working immediately and the account is gone rather than suspended — to keep the record and only stop sign-in, update the user instead.
+     * Removes a person from your organization.
+     */
+    async deleteIamUsersByOwnerByName(requestParameters: IamApiDeleteIamUsersByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamUsersDeleteOutput> {
+        const response = await this.deleteIamUsersByOwnerByNameRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Clears the target user\'s key of the requested TYPE (immediate revoke). Scoped by the same `?type` field mint takes, so revoking the browser key leaves the server key working. A secret key\'s stored value is the sk- in its schema.Key row.
+     * Clears the target user\'s key of the requested TYPE (immediate revoke).
+     */
+    async deleteIamUsersByOwnerByNameKeysRaw(requestParameters: IamApiDeleteIamUsersByOwnerByNameKeysRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['owner'] == null) {
+            throw new runtime.RequiredError(
+                'owner',
+                'Required parameter "owner" was null or undefined when calling deleteIamUsersByOwnerByNameKeys().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling deleteIamUsersByOwnerByNameKeys().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/iam/users/{owner}/{name}/keys`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Clears the target user\'s key of the requested TYPE (immediate revoke). Scoped by the same `?type` field mint takes, so revoking the browser key leaves the server key working. A secret key\'s stored value is the sk- in its schema.Key row.
+     * Clears the target user\'s key of the requested TYPE (immediate revoke).
+     */
+    async deleteIamUsersByOwnerByNameKeys(requestParameters: IamApiDeleteIamUsersByOwnerByNameKeysRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteIamUsersByOwnerByNameKeysRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Removes a workspace. The people and roles in your organization are unchanged; what goes is the scope itself.
+     * Removes a workspace.
+     */
+    async deleteIamWorkspacesByOwnerByNameRaw(requestParameters: IamApiDeleteIamWorkspacesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamWorkspacesDeleteOutput>> {
+        if (requestParameters['owner'] == null) {
+            throw new runtime.RequiredError(
+                'owner',
+                'Required parameter "owner" was null or undefined when calling deleteIamWorkspacesByOwnerByName().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling deleteIamWorkspacesByOwnerByName().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/iam/workspaces/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IamWorkspacesDeleteOutputFromJSON(jsonValue));
+    }
+
+    /**
+     * Removes a workspace. The people and roles in your organization are unchanged; what goes is the scope itself.
+     * Removes a workspace.
+     */
+    async deleteIamWorkspacesByOwnerByName(requestParameters: IamApiDeleteIamWorkspacesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamWorkspacesDeleteOutput> {
+        const response = await this.deleteIamWorkspacesByOwnerByNameRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Removes an organization and everything named inside it. There is no undo, and every session issued under it stops working.  The built-in admin organization cannot be deleted — losing it would leave the account with no way back in.
+     * Removes an organization and everything named inside it.
+     */
+    async deleteOrganizationRaw(requestParameters: IamApiDeleteOrganizationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamDeleteOrganizationOutput>> {
+        if (requestParameters['owner'] == null) {
+            throw new runtime.RequiredError(
+                'owner',
+                'Required parameter "owner" was null or undefined when calling deleteOrganization().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling deleteOrganization().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/iam/organizations/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => IamDeleteOrganizationOutputFromJSON(jsonValue));
@@ -1220,18 +1757,23 @@ export class IamApi extends runtime.BaseAPI {
      * Removes a provider.
      */
     async deleteProviderRaw(requestParameters: IamApiDeleteProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamMutationResult>> {
-        if (requestParameters['iamProviderKey'] == null) {
+        if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
-                'iamProviderKey',
-                'Required parameter "iamProviderKey" was null or undefined when calling deleteProvider().'
+                'owner',
+                'Required parameter "owner" was null or undefined when calling deleteProvider().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling deleteProvider().'
             );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -1242,14 +1784,15 @@ export class IamApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/iam/providers/delete`;
+        let urlPath = `/v1/iam/providers/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
 
         const response = await this.request({
             path: urlPath,
-            method: 'POST',
+            method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
-            body: IamProviderKeyToJSON(requestParameters['iamProviderKey']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => IamMutationResultFromJSON(jsonValue));
@@ -1269,18 +1812,30 @@ export class IamApi extends runtime.BaseAPI {
      * Signs a person out of one application — the session ends and every browser carrying it stops being authenticated.
      */
     async deleteSessionRaw(requestParameters: IamApiDeleteSessionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamDeleteSessionOut>> {
-        if (requestParameters['iamSessionRef'] == null) {
+        if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
-                'iamSessionRef',
-                'Required parameter "iamSessionRef" was null or undefined when calling deleteSession().'
+                'owner',
+                'Required parameter "owner" was null or undefined when calling deleteSession().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling deleteSession().'
+            );
+        }
+
+        if (requestParameters['application'] == null) {
+            throw new runtime.RequiredError(
+                'application',
+                'Required parameter "application" was null or undefined when calling deleteSession().'
             );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -1291,14 +1846,16 @@ export class IamApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/iam/sessions/delete`;
+        let urlPath = `/v1/iam/sessions/{owner}/{name}/{application}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
+        urlPath = urlPath.replace(`{${"application"}}`, encodeURIComponent(String(requestParameters['application'])));
 
         const response = await this.request({
             path: urlPath,
-            method: 'POST',
+            method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
-            body: IamSessionRefToJSON(requestParameters['iamSessionRef']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => IamDeleteSessionOutFromJSON(jsonValue));
@@ -1318,18 +1875,23 @@ export class IamApi extends runtime.BaseAPI {
      * Revokes an access token.
      */
     async deleteTokenRaw(requestParameters: IamApiDeleteTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamTokenMutation>> {
-        if (requestParameters['iamTokenKey'] == null) {
+        if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
-                'iamTokenKey',
-                'Required parameter "iamTokenKey" was null or undefined when calling deleteToken().'
+                'owner',
+                'Required parameter "owner" was null or undefined when calling deleteToken().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling deleteToken().'
             );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -1340,14 +1902,15 @@ export class IamApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/iam/tokens/delete`;
+        let urlPath = `/v1/iam/tokens/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
 
         const response = await this.request({
             path: urlPath,
-            method: 'POST',
+            method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
-            body: IamTokenKeyToJSON(requestParameters['iamTokenKey']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => IamTokenMutationFromJSON(jsonValue));
@@ -1367,18 +1930,23 @@ export class IamApi extends runtime.BaseAPI {
      * Removes a passkey or security key — what you call when a device is lost.
      */
     async deleteWebauthnCredentialRaw(requestParameters: IamApiDeleteWebauthnCredentialRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamWebauthnCredentialMutationResult>> {
-        if (requestParameters['iamWebauthnCredentialKey'] == null) {
+        if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
-                'iamWebauthnCredentialKey',
-                'Required parameter "iamWebauthnCredentialKey" was null or undefined when calling deleteWebauthnCredential().'
+                'owner',
+                'Required parameter "owner" was null or undefined when calling deleteWebauthnCredential().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling deleteWebauthnCredential().'
             );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -1389,14 +1957,15 @@ export class IamApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/iam/webauthn-credentials/delete`;
+        let urlPath = `/v1/iam/webauthn-credentials/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
 
         const response = await this.request({
             path: urlPath,
-            method: 'POST',
+            method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
-            body: IamWebauthnCredentialKeyToJSON(requestParameters['iamWebauthnCredentialKey']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => IamWebauthnCredentialMutationResultFromJSON(jsonValue));
@@ -1447,67 +2016,6 @@ export class IamApi extends runtime.BaseAPI {
      */
     async getIamAccount(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.getIamAccountRaw(initOverrides);
-    }
-
-    /**
-     * Returns one application: its sign-in methods, its allowed redirect URIs and the client credentials your integration authenticates with.
-     * Returns one application: its sign-in methods, its allowed redirect URIs and the client credentials your integration authenticates with.
-     */
-    async getIamApplicationRaw(requestParameters: IamApiGetIamApplicationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamApplication>> {
-        if (requestParameters['owner'] == null) {
-            throw new runtime.RequiredError(
-                'owner',
-                'Required parameter "owner" was null or undefined when calling getIamApplication().'
-            );
-        }
-
-        if (requestParameters['name'] == null) {
-            throw new runtime.RequiredError(
-                'name',
-                'Required parameter "name" was null or undefined when calling getIamApplication().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        if (requestParameters['owner'] != null) {
-            queryParameters['owner'] = requestParameters['owner'];
-        }
-
-        if (requestParameters['name'] != null) {
-            queryParameters['name'] = requestParameters['name'];
-        }
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/application`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamApplicationFromJSON(jsonValue));
-    }
-
-    /**
-     * Returns one application: its sign-in methods, its allowed redirect URIs and the client credentials your integration authenticates with.
-     * Returns one application: its sign-in methods, its allowed redirect URIs and the client credentials your integration authenticates with.
-     */
-    async getIamApplication(requestParameters: IamApiGetIamApplicationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamApplication> {
-        const response = await this.getIamApplicationRaw(requestParameters, initOverrides);
-        return await response.value();
     }
 
     /**
@@ -1564,30 +2072,22 @@ export class IamApi extends runtime.BaseAPI {
      * Returns one application: its sign-in methods, its allowed redirect URIs and the client credentials your integration authenticates with.
      * Returns one application: its sign-in methods, its allowed redirect URIs and the client credentials your integration authenticates with.
      */
-    async getIamApplicationsGetRaw(requestParameters: IamApiGetIamApplicationsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamApplication>> {
+    async getIamApplicationsByOwnerByNameRaw(requestParameters: IamApiGetIamApplicationsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamApplication>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
-                'Required parameter "owner" was null or undefined when calling getIamApplicationsGet().'
+                'Required parameter "owner" was null or undefined when calling getIamApplicationsByOwnerByName().'
             );
         }
 
         if (requestParameters['name'] == null) {
             throw new runtime.RequiredError(
                 'name',
-                'Required parameter "name" was null or undefined when calling getIamApplicationsGet().'
+                'Required parameter "name" was null or undefined when calling getIamApplicationsByOwnerByName().'
             );
         }
 
         const queryParameters: any = {};
-
-        if (requestParameters['owner'] != null) {
-            queryParameters['owner'] = requestParameters['owner'];
-        }
-
-        if (requestParameters['name'] != null) {
-            queryParameters['name'] = requestParameters['name'];
-        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -1600,7 +2100,9 @@ export class IamApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/iam/applications/get`;
+        let urlPath = `/v1/iam/applications/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
 
         const response = await this.request({
             path: urlPath,
@@ -1616,8 +2118,8 @@ export class IamApi extends runtime.BaseAPI {
      * Returns one application: its sign-in methods, its allowed redirect URIs and the client credentials your integration authenticates with.
      * Returns one application: its sign-in methods, its allowed redirect URIs and the client credentials your integration authenticates with.
      */
-    async getIamApplicationsGet(requestParameters: IamApiGetIamApplicationsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamApplication> {
-        const response = await this.getIamApplicationsGetRaw(requestParameters, initOverrides);
+    async getIamApplicationsByOwnerByName(requestParameters: IamApiGetIamApplicationsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamApplication> {
+        const response = await this.getIamApplicationsByOwnerByNameRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1661,6 +2163,61 @@ export class IamApi extends runtime.BaseAPI {
      */
     async getIamAuditLogs(requestParameters: IamApiGetIamAuditLogsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamListOutput> {
         const response = await this.getIamAuditLogsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns one audit entry in full: the action, the person or key behind it, and the request it came in on.
+     * Returns one audit entry in full: the action, the person or key behind it, and the request it came in on.
+     */
+    async getIamAuditLogsByOwnerByNameRaw(requestParameters: IamApiGetIamAuditLogsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamAuditLog>> {
+        if (requestParameters['owner'] == null) {
+            throw new runtime.RequiredError(
+                'owner',
+                'Required parameter "owner" was null or undefined when calling getIamAuditLogsByOwnerByName().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling getIamAuditLogsByOwnerByName().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/iam/audit-logs/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IamAuditLogFromJSON(jsonValue));
+    }
+
+    /**
+     * Returns one audit entry in full: the action, the person or key behind it, and the request it came in on.
+     * Returns one audit entry in full: the action, the person or key behind it, and the request it came in on.
+     */
+    async getIamAuditLogsByOwnerByName(requestParameters: IamApiGetIamAuditLogsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamAuditLog> {
+        const response = await this.getIamAuditLogsByOwnerByNameRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1798,6 +2355,61 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
+     * Returns one signing certificate — its algorithm, its validity window and its public half. The private key is masked.
+     * Returns one signing certificate — its algorithm, its validity window and its public half.
+     */
+    async getIamCertsByOwnerByNameRaw(requestParameters: IamApiGetIamCertsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamCert>> {
+        if (requestParameters['owner'] == null) {
+            throw new runtime.RequiredError(
+                'owner',
+                'Required parameter "owner" was null or undefined when calling getIamCertsByOwnerByName().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling getIamCertsByOwnerByName().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/iam/certs/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IamCertFromJSON(jsonValue));
+    }
+
+    /**
+     * Returns one signing certificate — its algorithm, its validity window and its public half. The private key is masked.
+     * Returns one signing certificate — its algorithm, its validity window and its public half.
+     */
+    async getIamCertsByOwnerByName(requestParameters: IamApiGetIamCertsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamCert> {
+        const response = await this.getIamCertsByOwnerByNameRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Returns the calling person\'s own privacy and communication choices. Somebody who has never set them gets the defaults rather than nothing, so a consent screen always has something to show — insights on, and training UNANSWERED, which is the state that means the screen still has to ask.
      * Returns the calling person\'s own privacy and communication choices.
      */
@@ -1921,775 +2533,6 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Reads one record — the older spelling of the single reads on the REST surface, over the same data and the same permissions.  Secrets are stripped. Naming a record in another organization does not reach it, however the request spells it.
-     * Reads one record — the older spelling of the single reads on the REST surface, over the same data and the same permissions.
-     */
-    async getIamGetApplicationRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/get-application`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Reads one record — the older spelling of the single reads on the REST surface, over the same data and the same permissions.  Secrets are stripped. Naming a record in another organization does not reach it, however the request spells it.
-     * Reads one record — the older spelling of the single reads on the REST surface, over the same data and the same permissions.
-     */
-    async getIamGetApplication(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getIamGetApplicationRaw(initOverrides);
-    }
-
-    /**
-     * Lists one kind of record in your organization — the older spelling of the collection reads on the REST surface, over the same data and the same permissions.  Secrets are stripped from every row. Send both a page number and a page size to page, and the total comes back alongside; send neither and you get the whole set. You see your own organization and no other, whatever the request asks for.  Scoping note (intentional, fail-closed): iam\'s ownership model is mixed — users/roles/permissions are owned by their tenant org, while organizations/ applications/providers/certs are platform-owned (Owner \"admin\"). A SuperAdmin (Scope → the requested owner, empty = all) therefore lists every entity, which is the console-admin path. A non-super is pinned by Scope to its own org, so it lists its tenant-owned entities correctly and is refused the platform-owned lists at the Guard (owner \"\" or \"admin\" both deny) — a safe 403, never another tenant\'s rows. Non-super, membership-scoped views of the platform-owned entities (e.g. an org console\'s own app list keyed on Application.Organization) are a separate, additive surface, not a silent behavior of this generic lister.
-     * Lists one kind of record in your organization — the older spelling of the collection reads on the REST surface, over the same data and the same permissions.
-     */
-    async getIamGetApplicationsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/get-applications`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Lists one kind of record in your organization — the older spelling of the collection reads on the REST surface, over the same data and the same permissions.  Secrets are stripped from every row. Send both a page number and a page size to page, and the total comes back alongside; send neither and you get the whole set. You see your own organization and no other, whatever the request asks for.  Scoping note (intentional, fail-closed): iam\'s ownership model is mixed — users/roles/permissions are owned by their tenant org, while organizations/ applications/providers/certs are platform-owned (Owner \"admin\"). A SuperAdmin (Scope → the requested owner, empty = all) therefore lists every entity, which is the console-admin path. A non-super is pinned by Scope to its own org, so it lists its tenant-owned entities correctly and is refused the platform-owned lists at the Guard (owner \"\" or \"admin\" both deny) — a safe 403, never another tenant\'s rows. Non-super, membership-scoped views of the platform-owned entities (e.g. an org console\'s own app list keyed on Application.Organization) are a separate, additive surface, not a silent behavior of this generic lister.
-     * Lists one kind of record in your organization — the older spelling of the collection reads on the REST surface, over the same data and the same permissions.
-     */
-    async getIamGetApplications(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getIamGetApplicationsRaw(initOverrides);
-    }
-
-    /**
-     * Reads one record — the older spelling of the single reads on the REST surface, over the same data and the same permissions.  Secrets are stripped. Naming a record in another organization does not reach it, however the request spells it.
-     * Reads one record — the older spelling of the single reads on the REST surface, over the same data and the same permissions.
-     */
-    async getIamGetCertRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/get-cert`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Reads one record — the older spelling of the single reads on the REST surface, over the same data and the same permissions.  Secrets are stripped. Naming a record in another organization does not reach it, however the request spells it.
-     * Reads one record — the older spelling of the single reads on the REST surface, over the same data and the same permissions.
-     */
-    async getIamGetCert(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getIamGetCertRaw(initOverrides);
-    }
-
-    /**
-     * Lists one kind of record in your organization — the older spelling of the collection reads on the REST surface, over the same data and the same permissions.  Secrets are stripped from every row. Send both a page number and a page size to page, and the total comes back alongside; send neither and you get the whole set. You see your own organization and no other, whatever the request asks for.  Scoping note (intentional, fail-closed): iam\'s ownership model is mixed — users/roles/permissions are owned by their tenant org, while organizations/ applications/providers/certs are platform-owned (Owner \"admin\"). A SuperAdmin (Scope → the requested owner, empty = all) therefore lists every entity, which is the console-admin path. A non-super is pinned by Scope to its own org, so it lists its tenant-owned entities correctly and is refused the platform-owned lists at the Guard (owner \"\" or \"admin\" both deny) — a safe 403, never another tenant\'s rows. Non-super, membership-scoped views of the platform-owned entities (e.g. an org console\'s own app list keyed on Application.Organization) are a separate, additive surface, not a silent behavior of this generic lister.
-     * Lists one kind of record in your organization — the older spelling of the collection reads on the REST surface, over the same data and the same permissions.
-     */
-    async getIamGetCertsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/get-certs`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Lists one kind of record in your organization — the older spelling of the collection reads on the REST surface, over the same data and the same permissions.  Secrets are stripped from every row. Send both a page number and a page size to page, and the total comes back alongside; send neither and you get the whole set. You see your own organization and no other, whatever the request asks for.  Scoping note (intentional, fail-closed): iam\'s ownership model is mixed — users/roles/permissions are owned by their tenant org, while organizations/ applications/providers/certs are platform-owned (Owner \"admin\"). A SuperAdmin (Scope → the requested owner, empty = all) therefore lists every entity, which is the console-admin path. A non-super is pinned by Scope to its own org, so it lists its tenant-owned entities correctly and is refused the platform-owned lists at the Guard (owner \"\" or \"admin\" both deny) — a safe 403, never another tenant\'s rows. Non-super, membership-scoped views of the platform-owned entities (e.g. an org console\'s own app list keyed on Application.Organization) are a separate, additive surface, not a silent behavior of this generic lister.
-     * Lists one kind of record in your organization — the older spelling of the collection reads on the REST surface, over the same data and the same permissions.
-     */
-    async getIamGetCerts(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getIamGetCertsRaw(initOverrides);
-    }
-
-    /**
-     * Lists one kind of record in your organization — the older spelling of the collection reads on the REST surface, over the same data and the same permissions.  Secrets are stripped from every row. Send both a page number and a page size to page, and the total comes back alongside; send neither and you get the whole set. You see your own organization and no other, whatever the request asks for.  Scoping note (intentional, fail-closed): iam\'s ownership model is mixed — users/roles/permissions are owned by their tenant org, while organizations/ applications/providers/certs are platform-owned (Owner \"admin\"). A SuperAdmin (Scope → the requested owner, empty = all) therefore lists every entity, which is the console-admin path. A non-super is pinned by Scope to its own org, so it lists its tenant-owned entities correctly and is refused the platform-owned lists at the Guard (owner \"\" or \"admin\" both deny) — a safe 403, never another tenant\'s rows. Non-super, membership-scoped views of the platform-owned entities (e.g. an org console\'s own app list keyed on Application.Organization) are a separate, additive surface, not a silent behavior of this generic lister.
-     * Lists one kind of record in your organization — the older spelling of the collection reads on the REST surface, over the same data and the same permissions.
-     */
-    async getIamGetGlobalUsersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/get-global-users`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Lists one kind of record in your organization — the older spelling of the collection reads on the REST surface, over the same data and the same permissions.  Secrets are stripped from every row. Send both a page number and a page size to page, and the total comes back alongside; send neither and you get the whole set. You see your own organization and no other, whatever the request asks for.  Scoping note (intentional, fail-closed): iam\'s ownership model is mixed — users/roles/permissions are owned by their tenant org, while organizations/ applications/providers/certs are platform-owned (Owner \"admin\"). A SuperAdmin (Scope → the requested owner, empty = all) therefore lists every entity, which is the console-admin path. A non-super is pinned by Scope to its own org, so it lists its tenant-owned entities correctly and is refused the platform-owned lists at the Guard (owner \"\" or \"admin\" both deny) — a safe 403, never another tenant\'s rows. Non-super, membership-scoped views of the platform-owned entities (e.g. an org console\'s own app list keyed on Application.Organization) are a separate, additive surface, not a silent behavior of this generic lister.
-     * Lists one kind of record in your organization — the older spelling of the collection reads on the REST surface, over the same data and the same permissions.
-     */
-    async getIamGetGlobalUsers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getIamGetGlobalUsersRaw(initOverrides);
-    }
-
-    /**
-     * Lists one kind of record in your organization — the older spelling of the collection reads on the REST surface, over the same data and the same permissions.  Secrets are stripped from every row. Send both a page number and a page size to page, and the total comes back alongside; send neither and you get the whole set. You see your own organization and no other, whatever the request asks for.  Scoping note (intentional, fail-closed): iam\'s ownership model is mixed — users/roles/permissions are owned by their tenant org, while organizations/ applications/providers/certs are platform-owned (Owner \"admin\"). A SuperAdmin (Scope → the requested owner, empty = all) therefore lists every entity, which is the console-admin path. A non-super is pinned by Scope to its own org, so it lists its tenant-owned entities correctly and is refused the platform-owned lists at the Guard (owner \"\" or \"admin\" both deny) — a safe 403, never another tenant\'s rows. Non-super, membership-scoped views of the platform-owned entities (e.g. an org console\'s own app list keyed on Application.Organization) are a separate, additive surface, not a silent behavior of this generic lister.
-     * Lists one kind of record in your organization — the older spelling of the collection reads on the REST surface, over the same data and the same permissions.
-     */
-    async getIamGetInvitationsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/get-invitations`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Lists one kind of record in your organization — the older spelling of the collection reads on the REST surface, over the same data and the same permissions.  Secrets are stripped from every row. Send both a page number and a page size to page, and the total comes back alongside; send neither and you get the whole set. You see your own organization and no other, whatever the request asks for.  Scoping note (intentional, fail-closed): iam\'s ownership model is mixed — users/roles/permissions are owned by their tenant org, while organizations/ applications/providers/certs are platform-owned (Owner \"admin\"). A SuperAdmin (Scope → the requested owner, empty = all) therefore lists every entity, which is the console-admin path. A non-super is pinned by Scope to its own org, so it lists its tenant-owned entities correctly and is refused the platform-owned lists at the Guard (owner \"\" or \"admin\" both deny) — a safe 403, never another tenant\'s rows. Non-super, membership-scoped views of the platform-owned entities (e.g. an org console\'s own app list keyed on Application.Organization) are a separate, additive surface, not a silent behavior of this generic lister.
-     * Lists one kind of record in your organization — the older spelling of the collection reads on the REST surface, over the same data and the same permissions.
-     */
-    async getIamGetInvitations(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getIamGetInvitationsRaw(initOverrides);
-    }
-
-    /**
-     * Answers either question about who belongs where: which organizations one person can act in, or who can act in one organization.  Both are org-scoped: a non-SuperAdmin may ask about ITS OWN org\'s roster, or about a user whose home org is its own, and nothing else. The bound comes from the verified credential via authz.Scope, so a request parameter can never widen it — a membership row names who may act and spend in an org, so a cross-tenant read is a customer roster leak.
-     * Answers either question about who belongs where: which organizations one person can act in, or who can act in one organization.
-     */
-    async getIamGetMembershipsRaw(requestParameters: IamApiGetIamGetMembershipsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamAnswer>> {
-        const queryParameters: any = {};
-
-        if (requestParameters['user'] != null) {
-            queryParameters['user'] = requestParameters['user'];
-        }
-
-        if (requestParameters['org'] != null) {
-            queryParameters['org'] = requestParameters['org'];
-        }
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/get-memberships`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamAnswerFromJSON(jsonValue));
-    }
-
-    /**
-     * Answers either question about who belongs where: which organizations one person can act in, or who can act in one organization.  Both are org-scoped: a non-SuperAdmin may ask about ITS OWN org\'s roster, or about a user whose home org is its own, and nothing else. The bound comes from the verified credential via authz.Scope, so a request parameter can never widen it — a membership row names who may act and spend in an org, so a cross-tenant read is a customer roster leak.
-     * Answers either question about who belongs where: which organizations one person can act in, or who can act in one organization.
-     */
-    async getIamGetMemberships(requestParameters: IamApiGetIamGetMembershipsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamAnswer> {
-        const response = await this.getIamGetMembershipsRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Reads one record — the older spelling of the single reads on the REST surface, over the same data and the same permissions.  Secrets are stripped. Naming a record in another organization does not reach it, however the request spells it.
-     * Reads one record — the older spelling of the single reads on the REST surface, over the same data and the same permissions.
-     */
-    async getIamGetOrganizationRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/get-organization`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Reads one record — the older spelling of the single reads on the REST surface, over the same data and the same permissions.  Secrets are stripped. Naming a record in another organization does not reach it, however the request spells it.
-     * Reads one record — the older spelling of the single reads on the REST surface, over the same data and the same permissions.
-     */
-    async getIamGetOrganization(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getIamGetOrganizationRaw(initOverrides);
-    }
-
-    /**
-     * Returns one organization\'s projects — what a scope switcher lists so somebody can move between them.  You see your own organization and no other, whatever the request asks for.
-     * Returns one organization\'s projects — what a scope switcher lists so somebody can move between them.
-     */
-    async getIamGetOrganizationProjectsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/get-organization-projects`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Returns one organization\'s projects — what a scope switcher lists so somebody can move between them.  You see your own organization and no other, whatever the request asks for.
-     * Returns one organization\'s projects — what a scope switcher lists so somebody can move between them.
-     */
-    async getIamGetOrganizationProjects(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getIamGetOrganizationProjectsRaw(initOverrides);
-    }
-
-    /**
-     * Returns one organization\'s workspaces — what a scope switcher lists so somebody can move between them.  You see your own organization and no other, whatever the request asks for.
-     * Returns one organization\'s workspaces — what a scope switcher lists so somebody can move between them.
-     */
-    async getIamGetOrganizationWorkspacesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/get-organization-workspaces`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Returns one organization\'s workspaces — what a scope switcher lists so somebody can move between them.  You see your own organization and no other, whatever the request asks for.
-     * Returns one organization\'s workspaces — what a scope switcher lists so somebody can move between them.
-     */
-    async getIamGetOrganizationWorkspaces(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getIamGetOrganizationWorkspacesRaw(initOverrides);
-    }
-
-    /**
-     * Lists one kind of record in your organization — the older spelling of the collection reads on the REST surface, over the same data and the same permissions.  Secrets are stripped from every row. Send both a page number and a page size to page, and the total comes back alongside; send neither and you get the whole set. You see your own organization and no other, whatever the request asks for.  Scoping note (intentional, fail-closed): iam\'s ownership model is mixed — users/roles/permissions are owned by their tenant org, while organizations/ applications/providers/certs are platform-owned (Owner \"admin\"). A SuperAdmin (Scope → the requested owner, empty = all) therefore lists every entity, which is the console-admin path. A non-super is pinned by Scope to its own org, so it lists its tenant-owned entities correctly and is refused the platform-owned lists at the Guard (owner \"\" or \"admin\" both deny) — a safe 403, never another tenant\'s rows. Non-super, membership-scoped views of the platform-owned entities (e.g. an org console\'s own app list keyed on Application.Organization) are a separate, additive surface, not a silent behavior of this generic lister.
-     * Lists one kind of record in your organization — the older spelling of the collection reads on the REST surface, over the same data and the same permissions.
-     */
-    async getIamGetOrganizationsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/get-organizations`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Lists one kind of record in your organization — the older spelling of the collection reads on the REST surface, over the same data and the same permissions.  Secrets are stripped from every row. Send both a page number and a page size to page, and the total comes back alongside; send neither and you get the whole set. You see your own organization and no other, whatever the request asks for.  Scoping note (intentional, fail-closed): iam\'s ownership model is mixed — users/roles/permissions are owned by their tenant org, while organizations/ applications/providers/certs are platform-owned (Owner \"admin\"). A SuperAdmin (Scope → the requested owner, empty = all) therefore lists every entity, which is the console-admin path. A non-super is pinned by Scope to its own org, so it lists its tenant-owned entities correctly and is refused the platform-owned lists at the Guard (owner \"\" or \"admin\" both deny) — a safe 403, never another tenant\'s rows. Non-super, membership-scoped views of the platform-owned entities (e.g. an org console\'s own app list keyed on Application.Organization) are a separate, additive surface, not a silent behavior of this generic lister.
-     * Lists one kind of record in your organization — the older spelling of the collection reads on the REST surface, over the same data and the same permissions.
-     */
-    async getIamGetOrganizations(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getIamGetOrganizationsRaw(initOverrides);
-    }
-
-    /**
-     * Reads one record — the older spelling of the single reads on the REST surface, over the same data and the same permissions.  Secrets are stripped. Naming a record in another organization does not reach it, however the request spells it.
-     * Reads one record — the older spelling of the single reads on the REST surface, over the same data and the same permissions.
-     */
-    async getIamGetPermissionRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/get-permission`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Reads one record — the older spelling of the single reads on the REST surface, over the same data and the same permissions.  Secrets are stripped. Naming a record in another organization does not reach it, however the request spells it.
-     * Reads one record — the older spelling of the single reads on the REST surface, over the same data and the same permissions.
-     */
-    async getIamGetPermission(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getIamGetPermissionRaw(initOverrides);
-    }
-
-    /**
-     * Lists one kind of record in your organization — the older spelling of the collection reads on the REST surface, over the same data and the same permissions.  Secrets are stripped from every row. Send both a page number and a page size to page, and the total comes back alongside; send neither and you get the whole set. You see your own organization and no other, whatever the request asks for.  Scoping note (intentional, fail-closed): iam\'s ownership model is mixed — users/roles/permissions are owned by their tenant org, while organizations/ applications/providers/certs are platform-owned (Owner \"admin\"). A SuperAdmin (Scope → the requested owner, empty = all) therefore lists every entity, which is the console-admin path. A non-super is pinned by Scope to its own org, so it lists its tenant-owned entities correctly and is refused the platform-owned lists at the Guard (owner \"\" or \"admin\" both deny) — a safe 403, never another tenant\'s rows. Non-super, membership-scoped views of the platform-owned entities (e.g. an org console\'s own app list keyed on Application.Organization) are a separate, additive surface, not a silent behavior of this generic lister.
-     * Lists one kind of record in your organization — the older spelling of the collection reads on the REST surface, over the same data and the same permissions.
-     */
-    async getIamGetPermissionsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/get-permissions`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Lists one kind of record in your organization — the older spelling of the collection reads on the REST surface, over the same data and the same permissions.  Secrets are stripped from every row. Send both a page number and a page size to page, and the total comes back alongside; send neither and you get the whole set. You see your own organization and no other, whatever the request asks for.  Scoping note (intentional, fail-closed): iam\'s ownership model is mixed — users/roles/permissions are owned by their tenant org, while organizations/ applications/providers/certs are platform-owned (Owner \"admin\"). A SuperAdmin (Scope → the requested owner, empty = all) therefore lists every entity, which is the console-admin path. A non-super is pinned by Scope to its own org, so it lists its tenant-owned entities correctly and is refused the platform-owned lists at the Guard (owner \"\" or \"admin\" both deny) — a safe 403, never another tenant\'s rows. Non-super, membership-scoped views of the platform-owned entities (e.g. an org console\'s own app list keyed on Application.Organization) are a separate, additive surface, not a silent behavior of this generic lister.
-     * Lists one kind of record in your organization — the older spelling of the collection reads on the REST surface, over the same data and the same permissions.
-     */
-    async getIamGetPermissions(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getIamGetPermissionsRaw(initOverrides);
-    }
-
-    /**
-     * Reads one record — the older spelling of the single reads on the REST surface, over the same data and the same permissions.  Secrets are stripped. Naming a record in another organization does not reach it, however the request spells it.
-     * Reads one record — the older spelling of the single reads on the REST surface, over the same data and the same permissions.
-     */
-    async getIamGetProviderRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/get-provider`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Reads one record — the older spelling of the single reads on the REST surface, over the same data and the same permissions.  Secrets are stripped. Naming a record in another organization does not reach it, however the request spells it.
-     * Reads one record — the older spelling of the single reads on the REST surface, over the same data and the same permissions.
-     */
-    async getIamGetProvider(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getIamGetProviderRaw(initOverrides);
-    }
-
-    /**
-     * Lists one kind of record in your organization — the older spelling of the collection reads on the REST surface, over the same data and the same permissions.  Secrets are stripped from every row. Send both a page number and a page size to page, and the total comes back alongside; send neither and you get the whole set. You see your own organization and no other, whatever the request asks for.  Scoping note (intentional, fail-closed): iam\'s ownership model is mixed — users/roles/permissions are owned by their tenant org, while organizations/ applications/providers/certs are platform-owned (Owner \"admin\"). A SuperAdmin (Scope → the requested owner, empty = all) therefore lists every entity, which is the console-admin path. A non-super is pinned by Scope to its own org, so it lists its tenant-owned entities correctly and is refused the platform-owned lists at the Guard (owner \"\" or \"admin\" both deny) — a safe 403, never another tenant\'s rows. Non-super, membership-scoped views of the platform-owned entities (e.g. an org console\'s own app list keyed on Application.Organization) are a separate, additive surface, not a silent behavior of this generic lister.
-     * Lists one kind of record in your organization — the older spelling of the collection reads on the REST surface, over the same data and the same permissions.
-     */
-    async getIamGetProvidersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/get-providers`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Lists one kind of record in your organization — the older spelling of the collection reads on the REST surface, over the same data and the same permissions.  Secrets are stripped from every row. Send both a page number and a page size to page, and the total comes back alongside; send neither and you get the whole set. You see your own organization and no other, whatever the request asks for.  Scoping note (intentional, fail-closed): iam\'s ownership model is mixed — users/roles/permissions are owned by their tenant org, while organizations/ applications/providers/certs are platform-owned (Owner \"admin\"). A SuperAdmin (Scope → the requested owner, empty = all) therefore lists every entity, which is the console-admin path. A non-super is pinned by Scope to its own org, so it lists its tenant-owned entities correctly and is refused the platform-owned lists at the Guard (owner \"\" or \"admin\" both deny) — a safe 403, never another tenant\'s rows. Non-super, membership-scoped views of the platform-owned entities (e.g. an org console\'s own app list keyed on Application.Organization) are a separate, additive surface, not a silent behavior of this generic lister.
-     * Lists one kind of record in your organization — the older spelling of the collection reads on the REST surface, over the same data and the same permissions.
-     */
-    async getIamGetProviders(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getIamGetProvidersRaw(initOverrides);
-    }
-
-    /**
-     * Lists one kind of record in your organization — the older spelling of the collection reads on the REST surface, over the same data and the same permissions.  Secrets are stripped from every row. Send both a page number and a page size to page, and the total comes back alongside; send neither and you get the whole set. You see your own organization and no other, whatever the request asks for.  Scoping note (intentional, fail-closed): iam\'s ownership model is mixed — users/roles/permissions are owned by their tenant org, while organizations/ applications/providers/certs are platform-owned (Owner \"admin\"). A SuperAdmin (Scope → the requested owner, empty = all) therefore lists every entity, which is the console-admin path. A non-super is pinned by Scope to its own org, so it lists its tenant-owned entities correctly and is refused the platform-owned lists at the Guard (owner \"\" or \"admin\" both deny) — a safe 403, never another tenant\'s rows. Non-super, membership-scoped views of the platform-owned entities (e.g. an org console\'s own app list keyed on Application.Organization) are a separate, additive surface, not a silent behavior of this generic lister.
-     * Lists one kind of record in your organization — the older spelling of the collection reads on the REST surface, over the same data and the same permissions.
-     */
-    async getIamGetRecordsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/get-records`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Lists one kind of record in your organization — the older spelling of the collection reads on the REST surface, over the same data and the same permissions.  Secrets are stripped from every row. Send both a page number and a page size to page, and the total comes back alongside; send neither and you get the whole set. You see your own organization and no other, whatever the request asks for.  Scoping note (intentional, fail-closed): iam\'s ownership model is mixed — users/roles/permissions are owned by their tenant org, while organizations/ applications/providers/certs are platform-owned (Owner \"admin\"). A SuperAdmin (Scope → the requested owner, empty = all) therefore lists every entity, which is the console-admin path. A non-super is pinned by Scope to its own org, so it lists its tenant-owned entities correctly and is refused the platform-owned lists at the Guard (owner \"\" or \"admin\" both deny) — a safe 403, never another tenant\'s rows. Non-super, membership-scoped views of the platform-owned entities (e.g. an org console\'s own app list keyed on Application.Organization) are a separate, additive surface, not a silent behavior of this generic lister.
-     * Lists one kind of record in your organization — the older spelling of the collection reads on the REST surface, over the same data and the same permissions.
-     */
-    async getIamGetRecords(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getIamGetRecordsRaw(initOverrides);
-    }
-
-    /**
-     * Reads one record — the older spelling of the single reads on the REST surface, over the same data and the same permissions.  Secrets are stripped. Naming a record in another organization does not reach it, however the request spells it.
-     * Reads one record — the older spelling of the single reads on the REST surface, over the same data and the same permissions.
-     */
-    async getIamGetRoleRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/get-role`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Reads one record — the older spelling of the single reads on the REST surface, over the same data and the same permissions.  Secrets are stripped. Naming a record in another organization does not reach it, however the request spells it.
-     * Reads one record — the older spelling of the single reads on the REST surface, over the same data and the same permissions.
-     */
-    async getIamGetRole(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getIamGetRoleRaw(initOverrides);
-    }
-
-    /**
-     * Lists one kind of record in your organization — the older spelling of the collection reads on the REST surface, over the same data and the same permissions.  Secrets are stripped from every row. Send both a page number and a page size to page, and the total comes back alongside; send neither and you get the whole set. You see your own organization and no other, whatever the request asks for.  Scoping note (intentional, fail-closed): iam\'s ownership model is mixed — users/roles/permissions are owned by their tenant org, while organizations/ applications/providers/certs are platform-owned (Owner \"admin\"). A SuperAdmin (Scope → the requested owner, empty = all) therefore lists every entity, which is the console-admin path. A non-super is pinned by Scope to its own org, so it lists its tenant-owned entities correctly and is refused the platform-owned lists at the Guard (owner \"\" or \"admin\" both deny) — a safe 403, never another tenant\'s rows. Non-super, membership-scoped views of the platform-owned entities (e.g. an org console\'s own app list keyed on Application.Organization) are a separate, additive surface, not a silent behavior of this generic lister.
-     * Lists one kind of record in your organization — the older spelling of the collection reads on the REST surface, over the same data and the same permissions.
-     */
-    async getIamGetRolesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/get-roles`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Lists one kind of record in your organization — the older spelling of the collection reads on the REST surface, over the same data and the same permissions.  Secrets are stripped from every row. Send both a page number and a page size to page, and the total comes back alongside; send neither and you get the whole set. You see your own organization and no other, whatever the request asks for.  Scoping note (intentional, fail-closed): iam\'s ownership model is mixed — users/roles/permissions are owned by their tenant org, while organizations/ applications/providers/certs are platform-owned (Owner \"admin\"). A SuperAdmin (Scope → the requested owner, empty = all) therefore lists every entity, which is the console-admin path. A non-super is pinned by Scope to its own org, so it lists its tenant-owned entities correctly and is refused the platform-owned lists at the Guard (owner \"\" or \"admin\" both deny) — a safe 403, never another tenant\'s rows. Non-super, membership-scoped views of the platform-owned entities (e.g. an org console\'s own app list keyed on Application.Organization) are a separate, additive surface, not a silent behavior of this generic lister.
-     * Lists one kind of record in your organization — the older spelling of the collection reads on the REST surface, over the same data and the same permissions.
-     */
-    async getIamGetRoles(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getIamGetRolesRaw(initOverrides);
-    }
-
-    /**
-     * Reads one person, two ways.  Name them and it is an ordinary read, with secrets stripped. Or hand it a SECRET API key and it answers with the person that key belongs to — how a service of yours turns a credential on an incoming request into an identity.  A publishable key resolves to nobody here, deliberately: it is safe to ship in a browser precisely because it names an organization and never a person.  get-user is handler-authorized (authz.handlerAuthorizedExact) because the key variant carries no owner/name for the Guard to authorize; so the owner/name variant reinstates the SAME read authorization the Guard applies, through the ONE policy function (authz.Can) — identical behavior, a cross-tenant or non-self read still refused 403 — then reuses the generic getHandler verbatim for resolution and redaction. No authz and no CRUD is reimplemented.
-     * Reads one person, two ways.
-     */
-    async getIamGetUserRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/get-user`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Reads one person, two ways.  Name them and it is an ordinary read, with secrets stripped. Or hand it a SECRET API key and it answers with the person that key belongs to — how a service of yours turns a credential on an incoming request into an identity.  A publishable key resolves to nobody here, deliberately: it is safe to ship in a browser precisely because it names an organization and never a person.  get-user is handler-authorized (authz.handlerAuthorizedExact) because the key variant carries no owner/name for the Guard to authorize; so the owner/name variant reinstates the SAME read authorization the Guard applies, through the ONE policy function (authz.Can) — identical behavior, a cross-tenant or non-self read still refused 403 — then reuses the generic getHandler verbatim for resolution and redaction. No authz and no CRUD is reimplemented.
-     * Reads one person, two ways.
-     */
-    async getIamGetUser(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getIamGetUserRaw(initOverrides);
-    }
-
-    /**
-     * Lists one kind of record in your organization — the older spelling of the collection reads on the REST surface, over the same data and the same permissions.  Secrets are stripped from every row. Send both a page number and a page size to page, and the total comes back alongside; send neither and you get the whole set. You see your own organization and no other, whatever the request asks for.  Scoping note (intentional, fail-closed): iam\'s ownership model is mixed — users/roles/permissions are owned by their tenant org, while organizations/ applications/providers/certs are platform-owned (Owner \"admin\"). A SuperAdmin (Scope → the requested owner, empty = all) therefore lists every entity, which is the console-admin path. A non-super is pinned by Scope to its own org, so it lists its tenant-owned entities correctly and is refused the platform-owned lists at the Guard (owner \"\" or \"admin\" both deny) — a safe 403, never another tenant\'s rows. Non-super, membership-scoped views of the platform-owned entities (e.g. an org console\'s own app list keyed on Application.Organization) are a separate, additive surface, not a silent behavior of this generic lister.
-     * Lists one kind of record in your organization — the older spelling of the collection reads on the REST surface, over the same data and the same permissions.
-     */
-    async getIamGetUsersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/get-users`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Lists one kind of record in your organization — the older spelling of the collection reads on the REST surface, over the same data and the same permissions.  Secrets are stripped from every row. Send both a page number and a page size to page, and the total comes back alongside; send neither and you get the whole set. You see your own organization and no other, whatever the request asks for.  Scoping note (intentional, fail-closed): iam\'s ownership model is mixed — users/roles/permissions are owned by their tenant org, while organizations/ applications/providers/certs are platform-owned (Owner \"admin\"). A SuperAdmin (Scope → the requested owner, empty = all) therefore lists every entity, which is the console-admin path. A non-super is pinned by Scope to its own org, so it lists its tenant-owned entities correctly and is refused the platform-owned lists at the Guard (owner \"\" or \"admin\" both deny) — a safe 403, never another tenant\'s rows. Non-super, membership-scoped views of the platform-owned entities (e.g. an org console\'s own app list keyed on Application.Organization) are a separate, additive surface, not a silent behavior of this generic lister.
-     * Lists one kind of record in your organization — the older spelling of the collection reads on the REST surface, over the same data and the same permissions.
-     */
-    async getIamGetUsers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getIamGetUsersRaw(initOverrides);
-    }
-
-    /**
      * Returns your organization\'s invitations, newest first — who has been asked to join, on what terms, and how many seats each invitation still has left.  You see your own organization\'s invitations and no one else\'s; which organization that is comes from your credentials, not from the request.
      * Returns your organization\'s invitations, newest first — who has been asked to join, on what terms, and how many seats each invitation still has left.
      */
@@ -2729,6 +2572,61 @@ export class IamApi extends runtime.BaseAPI {
      */
     async getIamInvitations(requestParameters: IamApiGetIamInvitationsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamInvitationsListOutput> {
         const response = await this.getIamInvitationsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns one invitation: who it is for, what it grants on acceptance, and when it expires.
+     * Returns one invitation: who it is for, what it grants on acceptance, and when it expires.
+     */
+    async getIamInvitationsByOwnerByNameRaw(requestParameters: IamApiGetIamInvitationsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamInvitation>> {
+        if (requestParameters['owner'] == null) {
+            throw new runtime.RequiredError(
+                'owner',
+                'Required parameter "owner" was null or undefined when calling getIamInvitationsByOwnerByName().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling getIamInvitationsByOwnerByName().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/iam/invitations/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IamInvitationFromJSON(jsonValue));
+    }
+
+    /**
+     * Returns one invitation: who it is for, what it grants on acceptance, and when it expires.
+     * Returns one invitation: who it is for, what it grants on acceptance, and when it expires.
+     */
+    async getIamInvitationsByOwnerByName(requestParameters: IamApiGetIamInvitationsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamInvitation> {
+        const response = await this.getIamInvitationsByOwnerByNameRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -2779,16 +2677,22 @@ export class IamApi extends runtime.BaseAPI {
      * Returns one API key: what it is called, what it may reach, and when it was issued.
      * Returns one API key: what it is called, what it may reach, and when it was issued.
      */
-    async getIamKeysGetRaw(requestParameters: IamApiGetIamKeysGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamKey>> {
+    async getIamKeysByOwnerByNameRaw(requestParameters: IamApiGetIamKeysByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamKey>> {
+        if (requestParameters['owner'] == null) {
+            throw new runtime.RequiredError(
+                'owner',
+                'Required parameter "owner" was null or undefined when calling getIamKeysByOwnerByName().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling getIamKeysByOwnerByName().'
+            );
+        }
+
         const queryParameters: any = {};
-
-        if (requestParameters['owner'] != null) {
-            queryParameters['owner'] = requestParameters['owner'];
-        }
-
-        if (requestParameters['name'] != null) {
-            queryParameters['name'] = requestParameters['name'];
-        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -2801,7 +2705,9 @@ export class IamApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/iam/keys/get`;
+        let urlPath = `/v1/iam/keys/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
 
         const response = await this.request({
             path: urlPath,
@@ -2817,9 +2723,85 @@ export class IamApi extends runtime.BaseAPI {
      * Returns one API key: what it is called, what it may reach, and when it was issued.
      * Returns one API key: what it is called, what it may reach, and when it was issued.
      */
-    async getIamKeysGet(requestParameters: IamApiGetIamKeysGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamKey> {
-        const response = await this.getIamKeysGetRaw(requestParameters, initOverrides);
+    async getIamKeysByOwnerByName(requestParameters: IamApiGetIamKeysByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamKey> {
+        const response = await this.getIamKeysByOwnerByNameRaw(requestParameters, initOverrides);
         return await response.value();
+    }
+
+    /**
+     * Answers which organization a publishable key belongs to — what a service calls to attribute a request that arrived carrying a key shipped in a browser. This is the noun spelling of `/v1/iam/resolve-key`, the same handler at the address that replaces it; both answer while callers migrate.  It names an ORGANIZATION and never a person. No path through it loads or returns a user, so a key placed in client code cannot become a way to learn who anyone is — which is the whole reason this is a separate door from the one below.  A key that is expired, secret rather than publishable, or simply unknown all answer with the same sentence and a `code` saying which it was. Only a confidential service that has already proved it may resolve keys reads that code — there is no anonymous caller here to probe which keys exist — and telling those apart is what lets a holder be told to re-mint an expired key instead of hunting a configuration error.
+     * Resolve a PUBLISHABLE key to the organization that owns it
+     */
+    async getIamKeysOrgRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/iam/keys/org`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Answers which organization a publishable key belongs to — what a service calls to attribute a request that arrived carrying a key shipped in a browser. This is the noun spelling of `/v1/iam/resolve-key`, the same handler at the address that replaces it; both answer while callers migrate.  It names an ORGANIZATION and never a person. No path through it loads or returns a user, so a key placed in client code cannot become a way to learn who anyone is — which is the whole reason this is a separate door from the one below.  A key that is expired, secret rather than publishable, or simply unknown all answer with the same sentence and a `code` saying which it was. Only a confidential service that has already proved it may resolve keys reads that code — there is no anonymous caller here to probe which keys exist — and telling those apart is what lets a holder be told to re-mint an expired key instead of hunting a configuration error.
+     * Resolve a PUBLISHABLE key to the organization that owns it
+     */
+    async getIamKeysOrg(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getIamKeysOrgRaw(initOverrides);
+    }
+
+    /**
+     * Answers who a secret key belongs to — the owner and name a gateway needs to attribute and bill a request that arrived carrying an `sk-`. This is the noun spelling of `/v1/iam/get-user?accessKey=`, the same handler at the address that replaces it; both answer while callers migrate.  It resolves a KEY and nothing else. The verb it replaces also reads a user by `?id=`, and carrying that here would make this a second address for the user read — the exact thing being retired. Ask for a person by name at the user read; ask here only what a credential resolves to.  Requires a confidential caller: the resolver authenticates as an app, so a request without that credential resolves nothing rather than falling back to an anonymous lookup. An unresolvable key answers with a `code` distinguishing expired from wrong-door from unknown, so the holder can be told which one cure applies.
+     * Resolve a SECRET key to the principal it authenticates
+     */
+    async getIamKeysPrincipalRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/iam/keys/principal`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Answers who a secret key belongs to — the owner and name a gateway needs to attribute and bill a request that arrived carrying an `sk-`. This is the noun spelling of `/v1/iam/get-user?accessKey=`, the same handler at the address that replaces it; both answer while callers migrate.  It resolves a KEY and nothing else. The verb it replaces also reads a user by `?id=`, and carrying that here would make this a second address for the user read — the exact thing being retired. Ask for a person by name at the user read; ask here only what a credential resolves to.  Requires a confidential caller: the resolver authenticates as an app, so a request without that credential resolves nothing rather than falling back to an anonymous lookup. An unresolvable key answers with a `code` distinguishing expired from wrong-door from unknown, so the holder can be told which one cure applies.
+     * Resolve a SECRET key to the principal it authenticates
+     */
+    async getIamKeysPrincipal(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getIamKeysPrincipalRaw(initOverrides);
     }
 
     /**
@@ -2984,7 +2966,7 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Ends a sign-in and sends the browser somewhere sensible. Accepts GET or POST, so it works as a plain link.  It ACTUALLY signs you out, which is worth stating because the endpoint spent a release not doing it: the whole body computed a redirect and answered {\"status\":\"ok\"} unconditionally — no session ended, no token revoked. A logout that reports success while leaving the session live is worse than no logout at all, because the person on the shared machine believes it worked. Three things happen here now, in this order:   1. The browser session dies — sid revoked server-side AND the cookie expired     (sessions.Clear). Server-side revocation is the load-bearing half: a copy     of the cookie taken before logout must not still resolve.  2. The relying party\'s tokens are revoked when an id_token_hint names it, so     the refresh token cannot mint a fresh access token after the human left.     Revocation state is authoritative — a JWT\'s `exp` still reads valid for     days, so expiry is necessary but never sufficient.  3. Only then is a redirect considered, and only to a REGISTERED uri.  The open-redirect guard is unchanged: a redirect happens only when a VERIFIED id_token_hint identifies the application and that application has registered the target. Anything else refuses to redirect — nobody can turn your logout link into a redirect to a site of their choosing.
+     * Ends a sign-in and sends the browser somewhere sensible. Accepts GET or POST, so it works as a plain link.  It ACTUALLY signs you out — worth stating, because a logout that computes a redirect and answers {\"status\":\"ok\"} while ending no session and revoking no token is worse than none: the person on the shared machine believes it worked. Three things happen here, in this order:   1. The browser session dies — sid revoked server-side AND the cookie expired     (sessions.Clear). Server-side revocation is the load-bearing half: a copy     of the cookie taken before logout must not still resolve.  2. The relying party\'s tokens are revoked when an id_token_hint names it, so     the refresh token cannot mint a fresh access token after the human left.     Revocation state is authoritative — a JWT\'s `exp` still reads valid for     days, so expiry is necessary but never sufficient.  3. Only then is a redirect considered, and only to a REGISTERED uri.  The open-redirect guard is unchanged: a redirect happens only when a VERIFIED id_token_hint identifies the application and that application has registered the target. Anything else refuses to redirect — nobody can turn your logout link into a redirect to a site of their choosing.
      * Ends a sign-in and sends the browser somewhere sensible.
      */
     async getIamOauthLogoutRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -3014,7 +2996,7 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Ends a sign-in and sends the browser somewhere sensible. Accepts GET or POST, so it works as a plain link.  It ACTUALLY signs you out, which is worth stating because the endpoint spent a release not doing it: the whole body computed a redirect and answered {\"status\":\"ok\"} unconditionally — no session ended, no token revoked. A logout that reports success while leaving the session live is worse than no logout at all, because the person on the shared machine believes it worked. Three things happen here now, in this order:   1. The browser session dies — sid revoked server-side AND the cookie expired     (sessions.Clear). Server-side revocation is the load-bearing half: a copy     of the cookie taken before logout must not still resolve.  2. The relying party\'s tokens are revoked when an id_token_hint names it, so     the refresh token cannot mint a fresh access token after the human left.     Revocation state is authoritative — a JWT\'s `exp` still reads valid for     days, so expiry is necessary but never sufficient.  3. Only then is a redirect considered, and only to a REGISTERED uri.  The open-redirect guard is unchanged: a redirect happens only when a VERIFIED id_token_hint identifies the application and that application has registered the target. Anything else refuses to redirect — nobody can turn your logout link into a redirect to a site of their choosing.
+     * Ends a sign-in and sends the browser somewhere sensible. Accepts GET or POST, so it works as a plain link.  It ACTUALLY signs you out — worth stating, because a logout that computes a redirect and answers {\"status\":\"ok\"} while ending no session and revoking no token is worse than none: the person on the shared machine believes it worked. Three things happen here, in this order:   1. The browser session dies — sid revoked server-side AND the cookie expired     (sessions.Clear). Server-side revocation is the load-bearing half: a copy     of the cookie taken before logout must not still resolve.  2. The relying party\'s tokens are revoked when an id_token_hint names it, so     the refresh token cannot mint a fresh access token after the human left.     Revocation state is authoritative — a JWT\'s `exp` still reads valid for     days, so expiry is necessary but never sufficient.  3. Only then is a redirect considered, and only to a REGISTERED uri.  The open-redirect guard is unchanged: a redirect happens only when a VERIFIED id_token_hint identifies the application and that application has registered the target. Anything else refuses to redirect — nobody can turn your logout link into a redirect to a site of their choosing.
      * Ends a sign-in and sends the browser somewhere sensible.
      */
     async getIamOauthLogout(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
@@ -3106,16 +3088,22 @@ export class IamApi extends runtime.BaseAPI {
      * Returns one permission: who it grants to, what it allows, and the resources it covers.
      * Returns one permission: who it grants to, what it allows, and the resources it covers.
      */
-    async getIamPermissionsGetRaw(requestParameters: IamApiGetIamPermissionsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamPermission>> {
+    async getIamPermissionsByOwnerByNameRaw(requestParameters: IamApiGetIamPermissionsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamPermission>> {
+        if (requestParameters['owner'] == null) {
+            throw new runtime.RequiredError(
+                'owner',
+                'Required parameter "owner" was null or undefined when calling getIamPermissionsByOwnerByName().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling getIamPermissionsByOwnerByName().'
+            );
+        }
+
         const queryParameters: any = {};
-
-        if (requestParameters['owner'] != null) {
-            queryParameters['owner'] = requestParameters['owner'];
-        }
-
-        if (requestParameters['name'] != null) {
-            queryParameters['name'] = requestParameters['name'];
-        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -3128,7 +3116,9 @@ export class IamApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/iam/permissions/get`;
+        let urlPath = `/v1/iam/permissions/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
 
         const response = await this.request({
             path: urlPath,
@@ -3144,8 +3134,8 @@ export class IamApi extends runtime.BaseAPI {
      * Returns one permission: who it grants to, what it allows, and the resources it covers.
      * Returns one permission: who it grants to, what it allows, and the resources it covers.
      */
-    async getIamPermissionsGet(requestParameters: IamApiGetIamPermissionsGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamPermission> {
-        const response = await this.getIamPermissionsGetRaw(requestParameters, initOverrides);
+    async getIamPermissionsByOwnerByName(requestParameters: IamApiGetIamPermissionsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamPermission> {
+        const response = await this.getIamPermissionsByOwnerByNameRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -3189,6 +3179,61 @@ export class IamApi extends runtime.BaseAPI {
      */
     async getIamProjects(requestParameters: IamApiGetIamProjectsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamProjectsListOutput> {
         const response = await this.getIamProjectsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns one project: what it is called and how it is set up.
+     * Returns one project: what it is called and how it is set up.
+     */
+    async getIamProjectsByOwnerByNameRaw(requestParameters: IamApiGetIamProjectsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamProject>> {
+        if (requestParameters['owner'] == null) {
+            throw new runtime.RequiredError(
+                'owner',
+                'Required parameter "owner" was null or undefined when calling getIamProjectsByOwnerByName().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling getIamProjectsByOwnerByName().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/iam/projects/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IamProjectFromJSON(jsonValue));
+    }
+
+    /**
+     * Returns one project: what it is called and how it is set up.
+     * Returns one project: what it is called and how it is set up.
+     */
+    async getIamProjectsByOwnerByName(requestParameters: IamApiGetIamProjectsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamProject> {
+        const response = await this.getIamProjectsByOwnerByNameRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -3269,44 +3314,6 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Answers which organization a PUBLISHABLE key belongs to — what a service of yours calls to attribute a request that arrived carrying a key shipped in a browser.  It names an organization and never a person: no path through it can load or return a user, so a key you put in client code cannot become a way to learn who anyone is. A key that is expired, secret rather than publishable, or simply unknown all answer with the same sentence, and with a `code` saying which of those it was. Only a confidential service that already proved it may resolve keys at all ever reads that code — there is no anonymous caller here to probe for which keys exist — and telling it apart is what lets the holder be told to re-mint an expired key instead of hunting a configuration error.
-     * Answers which organization a PUBLISHABLE key belongs to — what a service of yours calls to attribute a request that arrived carrying a key shipped in a browser.
-     */
-    async getIamResolveKeyRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/resolve-key`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Answers which organization a PUBLISHABLE key belongs to — what a service of yours calls to attribute a request that arrived carrying a key shipped in a browser.  It names an organization and never a person: no path through it can load or return a user, so a key you put in client code cannot become a way to learn who anyone is. A key that is expired, secret rather than publishable, or simply unknown all answer with the same sentence, and with a `code` saying which of those it was. Only a confidential service that already proved it may resolve keys at all ever reads that code — there is no anonymous caller here to probe for which keys exist — and telling it apart is what lets the holder be told to re-mint an expired key instead of hunting a configuration error.
-     * Answers which organization a PUBLISHABLE key belongs to — what a service of yours calls to attribute a request that arrived carrying a key shipped in a browser.
-     */
-    async getIamResolveKey(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getIamResolveKeyRaw(initOverrides);
-    }
-
-    /**
      * Returns your organization\'s roles, newest first — each a named group of people that permissions are granted to.  You see your own organization\'s roles and no one else\'s; which organization that is comes from your credentials, not from the request.
      * Returns your organization\'s roles, newest first — each a named group of people that permissions are granted to.
      */
@@ -3346,6 +3353,61 @@ export class IamApi extends runtime.BaseAPI {
      */
     async getIamRoles(requestParameters: IamApiGetIamRolesRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamRolesListOutput> {
         const response = await this.getIamRolesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns one role: who is in it, and the roles it includes.
+     * Returns one role: who is in it, and the roles it includes.
+     */
+    async getIamRolesByOwnerByNameRaw(requestParameters: IamApiGetIamRolesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamRole>> {
+        if (requestParameters['owner'] == null) {
+            throw new runtime.RequiredError(
+                'owner',
+                'Required parameter "owner" was null or undefined when calling getIamRolesByOwnerByName().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling getIamRolesByOwnerByName().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/iam/roles/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IamRoleFromJSON(jsonValue));
+    }
+
+    /**
+     * Returns one role: who is in it, and the roles it includes.
+     * Returns one role: who is in it, and the roles it includes.
+     */
+    async getIamRolesByOwnerByName(requestParameters: IamApiGetIamRolesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamRole> {
+        const response = await this.getIamRolesByOwnerByNameRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -3729,6 +3791,10 @@ export class IamApi extends runtime.BaseAPI {
             queryParameters['owner'] = requestParameters['owner'];
         }
 
+        if (requestParameters['email'] != null) {
+            queryParameters['email'] = requestParameters['email'];
+        }
+
         if (requestParameters['limit'] != null) {
             queryParameters['limit'] = requestParameters['limit'];
         }
@@ -3773,23 +3839,22 @@ export class IamApi extends runtime.BaseAPI {
      * Returns one person in your organization, addressed by their username or by their email address. Passwords, API secrets and MFA material are stripped from the response.  An address that names two accounts names none: the read refuses rather than picking one, and says so instead of reporting \"no such user\". Handing back an arbitrary one of two rows is how somebody gets added to a team under a colleague\'s identity.
      * Returns one person in your organization, addressed by their username or by their email address.
      */
-    async getIamUsersGetRaw(requestParameters: IamApiGetIamUsersGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamUser>> {
+    async getIamUsersByOwnerByNameRaw(requestParameters: IamApiGetIamUsersByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamUser>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
-                'Required parameter "owner" was null or undefined when calling getIamUsersGet().'
+                'Required parameter "owner" was null or undefined when calling getIamUsersByOwnerByName().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling getIamUsersByOwnerByName().'
             );
         }
 
         const queryParameters: any = {};
-
-        if (requestParameters['owner'] != null) {
-            queryParameters['owner'] = requestParameters['owner'];
-        }
-
-        if (requestParameters['name'] != null) {
-            queryParameters['name'] = requestParameters['name'];
-        }
 
         if (requestParameters['email'] != null) {
             queryParameters['email'] = requestParameters['email'];
@@ -3806,7 +3871,9 @@ export class IamApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/iam/users/get`;
+        let urlPath = `/v1/iam/users/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
 
         const response = await this.request({
             path: urlPath,
@@ -3822,8 +3889,8 @@ export class IamApi extends runtime.BaseAPI {
      * Returns one person in your organization, addressed by their username or by their email address. Passwords, API secrets and MFA material are stripped from the response.  An address that names two accounts names none: the read refuses rather than picking one, and says so instead of reporting \"no such user\". Handing back an arbitrary one of two rows is how somebody gets added to a team under a colleague\'s identity.
      * Returns one person in your organization, addressed by their username or by their email address.
      */
-    async getIamUsersGet(requestParameters: IamApiGetIamUsersGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamUser> {
-        const response = await this.getIamUsersGetRaw(requestParameters, initOverrides);
+    async getIamUsersByOwnerByName(requestParameters: IamApiGetIamUsersByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamUser> {
+        const response = await this.getIamUsersByOwnerByNameRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -3863,6 +3930,82 @@ export class IamApi extends runtime.BaseAPI {
      */
     async getIamWeb3Nonce(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.getIamWeb3NonceRaw(initOverrides);
+    }
+
+    /**
+     * Starts a passkey sign-in: it returns the challenge the person\'s authenticator signs.  The account is named in the query, and the challenge is bound to it, so what may answer is decided here — by the server, from the row — and the finish checks the answer against that decision rather than recomputing it.
+     * Starts a passkey sign-in: it returns the challenge the person\'s authenticator signs.
+     */
+    async getIamWebauthnSigninBeginRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/iam/webauthn/signin/begin`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Starts a passkey sign-in: it returns the challenge the person\'s authenticator signs.  The account is named in the query, and the challenge is bound to it, so what may answer is decided here — by the server, from the row — and the finish checks the answer against that decision rather than recomputing it.
+     * Starts a passkey sign-in: it returns the challenge the person\'s authenticator signs.
+     */
+    async getIamWebauthnSigninBegin(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getIamWebauthnSigninBeginRaw(initOverrides);
+    }
+
+    /**
+     * Starts enrolling a passkey for the signed-in person: it returns the options their browser hands to the authenticator.  Passkeys already on the account are EXCLUDED, so a second enrollment on a device that already holds one is refused by the authenticator itself rather than silently producing a duplicate the person cannot tell apart.
+     * Starts enrolling a passkey for the signed-in person: it returns the options their browser hands to the authenticator.
+     */
+    async getIamWebauthnSignupBeginRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/iam/webauthn/signup/begin`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Starts enrolling a passkey for the signed-in person: it returns the options their browser hands to the authenticator.  Passkeys already on the account are EXCLUDED, so a second enrollment on a device that already holds one is refused by the authenticator itself rather than silently producing a duplicate the person cannot tell apart.
+     * Starts enrolling a passkey for the signed-in person: it returns the options their browser hands to the authenticator.
+     */
+    async getIamWebauthnSignupBegin(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getIamWebauthnSignupBeginRaw(initOverrides);
     }
 
     /**
@@ -4061,19 +4204,25 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Returns one organization: its display, its defaults and the sign-in rules everyone in it inherits.
-     * Returns one organization: its display, its defaults and the sign-in rules everyone in it inherits.
+     * Returns one workspace: what it is called and how it is set up.
+     * Returns one workspace: what it is called and how it is set up.
      */
-    async getOrganizationRaw(requestParameters: IamApiGetOrganizationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamOrganization>> {
+    async getIamWorkspacesByOwnerByNameRaw(requestParameters: IamApiGetIamWorkspacesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamWorkspace>> {
+        if (requestParameters['owner'] == null) {
+            throw new runtime.RequiredError(
+                'owner',
+                'Required parameter "owner" was null or undefined when calling getIamWorkspacesByOwnerByName().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling getIamWorkspacesByOwnerByName().'
+            );
+        }
+
         const queryParameters: any = {};
-
-        if (requestParameters['owner'] != null) {
-            queryParameters['owner'] = requestParameters['owner'];
-        }
-
-        if (requestParameters['name'] != null) {
-            queryParameters['name'] = requestParameters['name'];
-        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -4086,7 +4235,64 @@ export class IamApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/iam/organizations/get`;
+        let urlPath = `/v1/iam/workspaces/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IamWorkspaceFromJSON(jsonValue));
+    }
+
+    /**
+     * Returns one workspace: what it is called and how it is set up.
+     * Returns one workspace: what it is called and how it is set up.
+     */
+    async getIamWorkspacesByOwnerByName(requestParameters: IamApiGetIamWorkspacesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamWorkspace> {
+        const response = await this.getIamWorkspacesByOwnerByNameRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns one organization: its display, its defaults and the sign-in rules everyone in it inherits.
+     * Returns one organization: its display, its defaults and the sign-in rules everyone in it inherits.
+     */
+    async getOrganizationRaw(requestParameters: IamApiGetOrganizationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamOrganization>> {
+        if (requestParameters['owner'] == null) {
+            throw new runtime.RequiredError(
+                'owner',
+                'Required parameter "owner" was null or undefined when calling getOrganization().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling getOrganization().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/iam/organizations/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
 
         const response = await this.request({
             path: urlPath,
@@ -4102,7 +4308,7 @@ export class IamApi extends runtime.BaseAPI {
      * Returns one organization: its display, its defaults and the sign-in rules everyone in it inherits.
      * Returns one organization: its display, its defaults and the sign-in rules everyone in it inherits.
      */
-    async getOrganization(requestParameters: IamApiGetOrganizationRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamOrganization> {
+    async getOrganization(requestParameters: IamApiGetOrganizationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamOrganization> {
         const response = await this.getOrganizationRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -4112,18 +4318,23 @@ export class IamApi extends runtime.BaseAPI {
      * Returns one provider: what it connects to and how it is configured.
      */
     async getProviderRaw(requestParameters: IamApiGetProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamProviderResult>> {
-        if (requestParameters['iamProviderKey'] == null) {
+        if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
-                'iamProviderKey',
-                'Required parameter "iamProviderKey" was null or undefined when calling getProvider().'
+                'owner',
+                'Required parameter "owner" was null or undefined when calling getProvider().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling getProvider().'
             );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -4134,14 +4345,15 @@ export class IamApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/iam/providers/get`;
+        let urlPath = `/v1/iam/providers/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
 
         const response = await this.request({
             path: urlPath,
-            method: 'POST',
+            method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-            body: IamProviderKeyToJSON(requestParameters['iamProviderKey']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => IamProviderResultFromJSON(jsonValue));
@@ -4161,18 +4373,30 @@ export class IamApi extends runtime.BaseAPI {
      * Returns one person\'s session in one application — when it began and which browsers or devices are still carrying it.
      */
     async getSessionRaw(requestParameters: IamApiGetSessionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamSession>> {
-        if (requestParameters['iamSessionRef'] == null) {
+        if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
-                'iamSessionRef',
-                'Required parameter "iamSessionRef" was null or undefined when calling getSession().'
+                'owner',
+                'Required parameter "owner" was null or undefined when calling getSession().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling getSession().'
+            );
+        }
+
+        if (requestParameters['application'] == null) {
+            throw new runtime.RequiredError(
+                'application',
+                'Required parameter "application" was null or undefined when calling getSession().'
             );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -4183,14 +4407,16 @@ export class IamApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/iam/sessions/get`;
+        let urlPath = `/v1/iam/sessions/{owner}/{name}/{application}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
+        urlPath = urlPath.replace(`{${"application"}}`, encodeURIComponent(String(requestParameters['application'])));
 
         const response = await this.request({
             path: urlPath,
-            method: 'POST',
+            method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-            body: IamSessionRefToJSON(requestParameters['iamSessionRef']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => IamSessionFromJSON(jsonValue));
@@ -4210,18 +4436,23 @@ export class IamApi extends runtime.BaseAPI {
      * Returns one access token: who and what it was issued to, and when it expires.
      */
     async getTokenRaw(requestParameters: IamApiGetTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamTokenResult>> {
-        if (requestParameters['iamTokenKey'] == null) {
+        if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
-                'iamTokenKey',
-                'Required parameter "iamTokenKey" was null or undefined when calling getToken().'
+                'owner',
+                'Required parameter "owner" was null or undefined when calling getToken().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling getToken().'
             );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -4232,14 +4463,15 @@ export class IamApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/iam/tokens/get`;
+        let urlPath = `/v1/iam/tokens/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
 
         const response = await this.request({
             path: urlPath,
-            method: 'POST',
+            method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-            body: IamTokenKeyToJSON(requestParameters['iamTokenKey']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => IamTokenResultFromJSON(jsonValue));
@@ -4259,18 +4491,23 @@ export class IamApi extends runtime.BaseAPI {
      * Returns one passkey or security key: whose it is, what device it lives on, and when it was registered.
      */
     async getWebauthnCredentialRaw(requestParameters: IamApiGetWebauthnCredentialRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamWebauthnCredentialResult>> {
-        if (requestParameters['iamWebauthnCredentialKey'] == null) {
+        if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
-                'iamWebauthnCredentialKey',
-                'Required parameter "iamWebauthnCredentialKey" was null or undefined when calling getWebauthnCredential().'
+                'owner',
+                'Required parameter "owner" was null or undefined when calling getWebauthnCredential().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling getWebauthnCredential().'
             );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -4281,14 +4518,15 @@ export class IamApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/iam/webauthn-credentials/get`;
+        let urlPath = `/v1/iam/webauthn-credentials/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
 
         const response = await this.request({
             path: urlPath,
-            method: 'POST',
+            method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-            body: IamWebauthnCredentialKeyToJSON(requestParameters['iamWebauthnCredentialKey']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => IamWebauthnCredentialResultFromJSON(jsonValue));
@@ -4304,25 +4542,29 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Returns the organizations you can see, newest first. Narrow it to one parent account, and set a limit and offset to page through the rest.
-     * Returns the organizations you can see, newest first.
+     * Returns the organizations you can act in, the ones you belong to first and the rest after, newest first, narrowed by an optional query against the name or the display name.  Platform operators see every organization; everyone else sees their own. Pass the cursor from the previous page to continue; an empty cursor in the answer means there is nothing more.  THE SCOPE IS THE HANDLER\'S OWN, so it holds at every door. The Guard refuses a bearerless request before this runs, but the agent door carries a typed op to its handler with no middleware in front of it — a handler that read no principal would answer such a caller with the whole registry. Reading the principal here is what makes the answer the same one over both.
+     * Returns the organizations you can act in, the ones you belong to first and the rest after, newest first, narrowed by an optional query against the name or the display name.
      */
     async listOrganizationsRaw(requestParameters: IamApiListOrganizationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamListOrganizationsOutput>> {
         const queryParameters: any = {};
 
-        if (requestParameters['owner'] != null) {
-            queryParameters['owner'] = requestParameters['owner'];
+        if (requestParameters['q'] != null) {
+            queryParameters['q'] = requestParameters['q'];
         }
 
         if (requestParameters['limit'] != null) {
             queryParameters['limit'] = requestParameters['limit'];
         }
 
-        if (requestParameters['offset'] != null) {
-            queryParameters['offset'] = requestParameters['offset'];
+        if (requestParameters['cursor'] != null) {
+            queryParameters['cursor'] = requestParameters['cursor'];
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['xForwardedFor'] != null) {
+            headerParameters['X-Forwarded-For'] = String(requestParameters['xForwardedFor']);
+        }
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -4346,8 +4588,8 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Returns the organizations you can see, newest first. Narrow it to one parent account, and set a limit and offset to page through the rest.
-     * Returns the organizations you can see, newest first.
+     * Returns the organizations you can act in, the ones you belong to first and the rest after, newest first, narrowed by an optional query against the name or the display name.  Platform operators see every organization; everyone else sees their own. Pass the cursor from the previous page to continue; an empty cursor in the answer means there is nothing more.  THE SCOPE IS THE HANDLER\'S OWN, so it holds at every door. The Guard refuses a bearerless request before this runs, but the agent door carries a typed op to its handler with no middleware in front of it — a handler that read no principal would answer such a caller with the whole registry. Reading the principal here is what makes the answer the same one over both.
+     * Returns the organizations you can act in, the ones you belong to first and the rest after, newest first, narrowed by an optional query against the name or the display name.
      */
     async listOrganizations(requestParameters: IamApiListOrganizationsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamListOrganizationsOutput> {
         const response = await this.listOrganizationsRaw(requestParameters, initOverrides);
@@ -4402,18 +4644,28 @@ export class IamApi extends runtime.BaseAPI {
      * Returns who is currently signed in to your organization, newest first, and can be narrowed to one person or one application.
      */
     async listSessionsRaw(requestParameters: IamApiListSessionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamListSessionsOut>> {
-        if (requestParameters['iamListSessionsIn'] == null) {
+        if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
-                'iamListSessionsIn',
-                'Required parameter "iamListSessionsIn" was null or undefined when calling listSessions().'
+                'owner',
+                'Required parameter "owner" was null or undefined when calling listSessions().'
             );
         }
 
         const queryParameters: any = {};
 
-        const headerParameters: runtime.HTTPHeaders = {};
+        if (requestParameters['owner'] != null) {
+            queryParameters['owner'] = requestParameters['owner'];
+        }
 
-        headerParameters['Content-Type'] = 'application/json';
+        if (requestParameters['name'] != null) {
+            queryParameters['name'] = requestParameters['name'];
+        }
+
+        if (requestParameters['application'] != null) {
+            queryParameters['application'] = requestParameters['application'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -4424,14 +4676,13 @@ export class IamApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/iam/sessions/list`;
+        let urlPath = `/v1/iam/sessions`;
 
         const response = await this.request({
             path: urlPath,
-            method: 'POST',
+            method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-            body: IamListSessionsInToJSON(requestParameters['iamListSessionsIn']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => IamListSessionsOutFromJSON(jsonValue));
@@ -4494,14 +4745,14 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Returns the passkeys and security keys registered in your organization, newest first — which device each belongs to and when it was last used.
-     * Returns the passkeys and security keys registered in your organization, newest first — which device each belongs to and when it was last used.
+     * Returns the passkeys and security keys registered to one person, newest first — which device each lives on and when it was registered.  Yours by default. Name somebody else and you get them only if you already administer their account, which is the same authority that governs reading their user record — so this list can never show more people than the surface beside it already does.  There is no organization-wide list, by design. Scoping to the ORG would hand an org admin every member\'s credential rows in one answer and a SuperAdmin every tenant\'s, while a plain member could not read even their own (an unnamed target fails the Guard\'s tenant rule). One scope answers both halves cleanly: the answer is a person\'s, and the caller is that person unless they say otherwise and may.
+     * Returns the passkeys and security keys registered to one person, newest first — which device each lives on and when it was registered.
      */
     async listWebauthnCredentialsRaw(requestParameters: IamApiListWebauthnCredentialsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamListWebauthnCredentialsOut>> {
         const queryParameters: any = {};
 
-        if (requestParameters['owner'] != null) {
-            queryParameters['owner'] = requestParameters['owner'];
+        if (requestParameters['user'] != null) {
+            queryParameters['user'] = requestParameters['user'];
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -4528,8 +4779,8 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Returns the passkeys and security keys registered in your organization, newest first — which device each belongs to and when it was last used.
-     * Returns the passkeys and security keys registered in your organization, newest first — which device each belongs to and when it was last used.
+     * Returns the passkeys and security keys registered to one person, newest first — which device each lives on and when it was registered.  Yours by default. Name somebody else and you get them only if you already administer their account, which is the same authority that governs reading their user record — so this list can never show more people than the surface beside it already does.  There is no organization-wide list, by design. Scoping to the ORG would hand an org admin every member\'s credential rows in one answer and a SuperAdmin every tenant\'s, while a plain member could not read even their own (an unnamed target fails the Guard\'s tenant rule). One scope answers both halves cleanly: the answer is a person\'s, and the caller is that person unless they say otherwise and may.
+     * Returns the passkeys and security keys registered to one person, newest first — which device each lives on and when it was registered.
      */
     async listWebauthnCredentials(requestParameters: IamApiListWebauthnCredentialsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamListWebauthnCredentialsOut> {
         const response = await this.listWebauthnCredentialsRaw(requestParameters, initOverrides);
@@ -4591,387 +4842,6 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Registers an application in your organization — one product or site your people sign in to, with its own client credentials, sign-in methods and allowed redirect URIs.  The older spelling of POST /v1/iam/application. A name already used in the organization is refused rather than overwritten.
-     * Registers an application in your organization — one product or site your people sign in to, with its own client credentials, sign-in methods and allowed redirect URIs.
-     */
-    async postIamAddApplicationRaw(requestParameters: IamApiPostIamAddApplicationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamResponse>> {
-        if (requestParameters['iamApplication'] == null) {
-            throw new runtime.RequiredError(
-                'iamApplication',
-                'Required parameter "iamApplication" was null or undefined when calling postIamAddApplication().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/add-application`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamApplicationToJSON(requestParameters['iamApplication']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Registers an application in your organization — one product or site your people sign in to, with its own client credentials, sign-in methods and allowed redirect URIs.  The older spelling of POST /v1/iam/application. A name already used in the organization is refused rather than overwritten.
-     * Registers an application in your organization — one product or site your people sign in to, with its own client credentials, sign-in methods and allowed redirect URIs.
-     */
-    async postIamAddApplication(requestParameters: IamApiPostIamAddApplicationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamResponse> {
-        const response = await this.postIamAddApplicationRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Lets a person or an application act in an organization. It is the grant behind \"add someone to the team\", and it is safe to repeat — granting a membership that already exists changes nothing. Granting membership IS the org\'s authority to give, so it takes the same gate a write to that org\'s own registry row takes: a SuperAdmin, an admin of the org itself, or an org-admin-capable confidential client. One rule, one place (internal/authz).
-     * Lets a person or an application act in an organization.
-     */
-    async postIamAddMembershipRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/add-membership`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Lets a person or an application act in an organization. It is the grant behind \"add someone to the team\", and it is safe to repeat — granting a membership that already exists changes nothing. Granting membership IS the org\'s authority to give, so it takes the same gate a write to that org\'s own registry row takes: a SuperAdmin, an admin of the org itself, or an org-admin-capable confidential client. One rule, one place (internal/authz).
-     * Lets a person or an application act in an organization.
-     */
-    async postIamAddMembership(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postIamAddMembershipRaw(initOverrides);
-    }
-
-    /**
-     * Creates an organization — the account everything else in your directory hangs from. Users, applications, roles, projects and workspaces are all named inside one organization, so this is the first write in a new tenant.  The older spelling of POST /v1/iam/organizations. Both reach the same create, so a name already taken is refused here too.
-     * Creates an organization — the account everything else in your directory hangs from.
-     */
-    async postIamAddOrganizationRaw(requestParameters: IamApiPostIamAddOrganizationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamResponse>> {
-        if (requestParameters['iamCreateOrganizationInput'] == null) {
-            throw new runtime.RequiredError(
-                'iamCreateOrganizationInput',
-                'Required parameter "iamCreateOrganizationInput" was null or undefined when calling postIamAddOrganization().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/add-organization`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamCreateOrganizationInputToJSON(requestParameters['iamCreateOrganizationInput']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Creates an organization — the account everything else in your directory hangs from. Users, applications, roles, projects and workspaces are all named inside one organization, so this is the first write in a new tenant.  The older spelling of POST /v1/iam/organizations. Both reach the same create, so a name already taken is refused here too.
-     * Creates an organization — the account everything else in your directory hangs from.
-     */
-    async postIamAddOrganization(requestParameters: IamApiPostIamAddOrganizationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamResponse> {
-        const response = await this.postIamAddOrganizationRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Creates a project inside your organization — the scope people pick between when their work is separated by product or client rather than by team.  The older spelling of POST /v1/iam/projects. Creating one takes an administrator of the owning organization.
-     * Creates a project inside your organization — the scope people pick between when their work is separated by product or client rather than by team.
-     */
-    async postIamAddProjectRaw(requestParameters: IamApiPostIamAddProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamResponse>> {
-        if (requestParameters['iamInput'] == null) {
-            throw new runtime.RequiredError(
-                'iamInput',
-                'Required parameter "iamInput" was null or undefined when calling postIamAddProject().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/add-project`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamInputToJSON(requestParameters['iamInput']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Creates a project inside your organization — the scope people pick between when their work is separated by product or client rather than by team.  The older spelling of POST /v1/iam/projects. Creating one takes an administrator of the owning organization.
-     * Creates a project inside your organization — the scope people pick between when their work is separated by product or client rather than by team.
-     */
-    async postIamAddProject(requestParameters: IamApiPostIamAddProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamResponse> {
-        const response = await this.postIamAddProjectRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Adds an identity provider your people can sign in with, or a service your applications send through — a social or enterprise login, an email or SMS sender, a storage or payment connector.  A provider is configured once here and then switched on per application, so several applications can share one set of credentials.  The older spelling of POST /v1/iam/providers.
-     * Adds an identity provider your people can sign in with, or a service your applications send through — a social or enterprise login, an email or SMS sender, a storage or payment connector.
-     */
-    async postIamAddProviderRaw(requestParameters: IamApiPostIamAddProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamResponse>> {
-        if (requestParameters['iamProvider'] == null) {
-            throw new runtime.RequiredError(
-                'iamProvider',
-                'Required parameter "iamProvider" was null or undefined when calling postIamAddProvider().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/add-provider`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamProviderToJSON(requestParameters['iamProvider']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Adds an identity provider your people can sign in with, or a service your applications send through — a social or enterprise login, an email or SMS sender, a storage or payment connector.  A provider is configured once here and then switched on per application, so several applications can share one set of credentials.  The older spelling of POST /v1/iam/providers.
-     * Adds an identity provider your people can sign in with, or a service your applications send through — a social or enterprise login, an email or SMS sender, a storage or payment connector.
-     */
-    async postIamAddProvider(requestParameters: IamApiPostIamAddProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamResponse> {
-        const response = await this.postIamAddProviderRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Creates a role — a named group of people that permissions are granted to. Granting to a role rather than to each person is what keeps access correct as your team changes: add someone to the role and they inherit everything it can do.  The older spelling of POST /v1/iam/roles.
-     * Creates a role — a named group of people that permissions are granted to.
-     */
-    async postIamAddRoleRaw(requestParameters: IamApiPostIamAddRoleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamResponse>> {
-        if (requestParameters['iamRolesInput'] == null) {
-            throw new runtime.RequiredError(
-                'iamRolesInput',
-                'Required parameter "iamRolesInput" was null or undefined when calling postIamAddRole().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/add-role`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamRolesInputToJSON(requestParameters['iamRolesInput']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Creates a role — a named group of people that permissions are granted to. Granting to a role rather than to each person is what keeps access correct as your team changes: add someone to the role and they inherit everything it can do.  The older spelling of POST /v1/iam/roles.
-     * Creates a role — a named group of people that permissions are granted to.
-     */
-    async postIamAddRole(requestParameters: IamApiPostIamAddRoleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamResponse> {
-        const response = await this.postIamAddRoleRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Adds a person to your organization and, if you send a password, sets the one they will sign in with. The password is hashed before it is stored and is never returned to you or to anyone else.  Usernames are checked against one rule wherever an account is created — this verb, password signup, a social sign-in, or SCIM — so a name accepted here is a name accepted everywhere.  The older spelling of POST /v1/iam/users, and it posts the user\'s fields at the top level rather than wrapped in {user, password}.
-     * Adds a person to your organization and, if you send a password, sets the one they will sign in with.
-     */
-    async postIamAddUserRaw(requestParameters: IamApiPostIamAddUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamResponse>> {
-        if (requestParameters['iamUserBody'] == null) {
-            throw new runtime.RequiredError(
-                'iamUserBody',
-                'Required parameter "iamUserBody" was null or undefined when calling postIamAddUser().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/add-user`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamUserBodyToJSON(requestParameters['iamUserBody']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Adds a person to your organization and, if you send a password, sets the one they will sign in with. The password is hashed before it is stored and is never returned to you or to anyone else.  Usernames are checked against one rule wherever an account is created — this verb, password signup, a social sign-in, or SCIM — so a name accepted here is a name accepted everywhere.  The older spelling of POST /v1/iam/users, and it posts the user\'s fields at the top level rather than wrapped in {user, password}.
-     * Adds a person to your organization and, if you send a password, sets the one they will sign in with.
-     */
-    async postIamAddUser(requestParameters: IamApiPostIamAddUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamResponse> {
-        const response = await this.postIamAddUserRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Creates a workspace inside your organization — the scope a team works in, alongside projects rather than instead of them.  The older spelling of POST /v1/iam/workspaces. Creating one takes an administrator of the owning organization.
-     * Creates a workspace inside your organization — the scope a team works in, alongside projects rather than instead of them.
-     */
-    async postIamAddWorkspaceRaw(requestParameters: IamApiPostIamAddWorkspaceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamResponse>> {
-        if (requestParameters['iamWorkspacesInput'] == null) {
-            throw new runtime.RequiredError(
-                'iamWorkspacesInput',
-                'Required parameter "iamWorkspacesInput" was null or undefined when calling postIamAddWorkspace().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/add-workspace`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamWorkspacesInputToJSON(requestParameters['iamWorkspacesInput']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Creates a workspace inside your organization — the scope a team works in, alongside projects rather than instead of them.  The older spelling of POST /v1/iam/workspaces. Creating one takes an administrator of the owning organization.
-     * Creates a workspace inside your organization — the scope a team works in, alongside projects rather than instead of them.
-     */
-    async postIamAddWorkspace(requestParameters: IamApiPostIamAddWorkspaceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamResponse> {
-        const response = await this.postIamAddWorkspaceRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
      * Sets up an account on someone\'s behalf — the same onboarding a person gets themselves, driven by one of your own services instead of by them.  It authenticates as your service rather than as a person, which is why the person to provision is named in the request. The setup it performs is identical to self-service onboarding; there is one provisioning path, not two that can drift.
      * Sets up an account on someone\'s behalf — the same onboarding a person gets themselves, driven by one of your own services instead of by them.
      */
@@ -5007,55 +4877,6 @@ export class IamApi extends runtime.BaseAPI {
      */
     async postIamAdminProvision(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.postIamAdminProvisionRaw(initOverrides);
-    }
-
-    /**
-     * Registers an application in your organization — one product or site your people sign in to, with its own client credentials, sign-in methods and allowed redirect URIs. A name already used in the organization is refused rather than overwritten.  Exported so the legacy add-application alias reuses this exact path — one create, two spellings.
-     * Registers an application in your organization — one product or site your people sign in to, with its own client credentials, sign-in methods and allowed redirect URIs.
-     */
-    async postIamApplicationRaw(requestParameters: IamApiPostIamApplicationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamApplication>> {
-        if (requestParameters['iamApplication'] == null) {
-            throw new runtime.RequiredError(
-                'iamApplication',
-                'Required parameter "iamApplication" was null or undefined when calling postIamApplication().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/application`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamApplicationToJSON(requestParameters['iamApplication']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamApplicationFromJSON(jsonValue));
-    }
-
-    /**
-     * Registers an application in your organization — one product or site your people sign in to, with its own client credentials, sign-in methods and allowed redirect URIs. A name already used in the organization is refused rather than overwritten.  Exported so the legacy add-application alias reuses this exact path — one create, two spellings.
-     * Registers an application in your organization — one product or site your people sign in to, with its own client credentials, sign-in methods and allowed redirect URIs.
-     */
-    async postIamApplication(requestParameters: IamApiPostIamApplicationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamApplication> {
-        const response = await this.postIamApplicationRaw(requestParameters, initOverrides);
-        return await response.value();
     }
 
     /**
@@ -5108,14 +4929,14 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Removes an application. Anyone mid-sign-in through it is turned away and its client credentials stop working, so retire the integration before deleting it.
-     * Removes an application.
+     * Steps a platform operator into an organization: it returns their own access token re-scoped to that tenant, so they see what the tenant sees.  The token still names the operator — stepping in is not becoming somebody else — and records the organization it was scoped to, so everything done with it is attributed to the person who did it. Only a platform operator may, and the attempt is recorded whether or not it succeeds.
+     * Steps a platform operator into an organization: it returns their own access token re-scoped to that tenant, so they see what the tenant sees.
      */
-    async postIamApplicationsDeleteRaw(requestParameters: IamApiPostIamApplicationsDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamDeleteResult>> {
-        if (requestParameters['iamApplicationRef'] == null) {
+    async postIamAssumeRaw(requestParameters: IamApiPostIamAssumeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamAnswer>> {
+        if (requestParameters['iamAssumeBody'] == null) {
             throw new runtime.RequiredError(
-                'iamApplicationRef',
-                'Required parameter "iamApplicationRef" was null or undefined when calling postIamApplicationsDelete().'
+                'iamAssumeBody',
+                'Required parameter "iamAssumeBody" was null or undefined when calling postIamAssume().'
             );
         }
 
@@ -5124,6 +4945,14 @@ export class IamApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         headerParameters['Content-Type'] = 'application/json';
+
+        if (requestParameters['authorization'] != null) {
+            headerParameters['Authorization'] = String(requestParameters['authorization']);
+        }
+
+        if (requestParameters['xForwardedFor'] != null) {
+            headerParameters['X-Forwarded-For'] = String(requestParameters['xForwardedFor']);
+        }
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -5134,74 +4963,25 @@ export class IamApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/iam/applications/delete`;
+        let urlPath = `/v1/iam/assume`;
 
         const response = await this.request({
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: IamApplicationRefToJSON(requestParameters['iamApplicationRef']),
+            body: IamAssumeBodyToJSON(requestParameters['iamAssumeBody']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamDeleteResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => IamAnswerFromJSON(jsonValue));
     }
 
     /**
-     * Removes an application. Anyone mid-sign-in through it is turned away and its client credentials stop working, so retire the integration before deleting it.
-     * Removes an application.
+     * Steps a platform operator into an organization: it returns their own access token re-scoped to that tenant, so they see what the tenant sees.  The token still names the operator — stepping in is not becoming somebody else — and records the organization it was scoped to, so everything done with it is attributed to the person who did it. Only a platform operator may, and the attempt is recorded whether or not it succeeds.
+     * Steps a platform operator into an organization: it returns their own access token re-scoped to that tenant, so they see what the tenant sees.
      */
-    async postIamApplicationsDelete(requestParameters: IamApiPostIamApplicationsDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamDeleteResult> {
-        const response = await this.postIamApplicationsDeleteRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Changes an application\'s display, its sign-in methods and the redirect URIs it may return to — the call that makes login work from a new host. Which organization it belongs to and what it is named are fixed when it is created and are not editable here.  Exported so the legacy update-application alias reuses this exact path — one update, two spellings.
-     * Changes an application\'s display, its sign-in methods and the redirect URIs it may return to — the call that makes login work from a new host.
-     */
-    async postIamApplicationsUpdateRaw(requestParameters: IamApiPostIamApplicationsUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamApplication>> {
-        if (requestParameters['iamApplication'] == null) {
-            throw new runtime.RequiredError(
-                'iamApplication',
-                'Required parameter "iamApplication" was null or undefined when calling postIamApplicationsUpdate().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/applications/update`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamApplicationToJSON(requestParameters['iamApplication']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamApplicationFromJSON(jsonValue));
-    }
-
-    /**
-     * Changes an application\'s display, its sign-in methods and the redirect URIs it may return to — the call that makes login work from a new host. Which organization it belongs to and what it is named are fixed when it is created and are not editable here.  Exported so the legacy update-application alias reuses this exact path — one update, two spellings.
-     * Changes an application\'s display, its sign-in methods and the redirect URIs it may return to — the call that makes login work from a new host.
-     */
-    async postIamApplicationsUpdate(requestParameters: IamApiPostIamApplicationsUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamApplication> {
-        const response = await this.postIamApplicationsUpdateRaw(requestParameters, initOverrides);
+    async postIamAssume(requestParameters: IamApiPostIamAssumeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamAnswer> {
+        const response = await this.postIamAssumeRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -5210,10 +4990,10 @@ export class IamApi extends runtime.BaseAPI {
      * Records an audit entry, so activity from your own systems lands in the same trail as everything the Hanzo Cloud records for you.
      */
     async postIamAuditLogsRaw(requestParameters: IamApiPostIamAuditLogsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamAuditLog>> {
-        if (requestParameters['iamAuditlogsInput'] == null) {
+        if (requestParameters['iamInput'] == null) {
             throw new runtime.RequiredError(
-                'iamAuditlogsInput',
-                'Required parameter "iamAuditlogsInput" was null or undefined when calling postIamAuditLogs().'
+                'iamInput',
+                'Required parameter "iamInput" was null or undefined when calling postIamAuditLogs().'
             );
         }
 
@@ -5239,7 +5019,7 @@ export class IamApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: IamAuditlogsInputToJSON(requestParameters['iamAuditlogsInput']),
+            body: IamInputToJSON(requestParameters['iamInput']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => IamAuditLogFromJSON(jsonValue));
@@ -5255,155 +5035,8 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Removes an audit entry. Retention policy is normally what should expire a trail; deleting by hand leaves a gap a reviewer will notice.
-     * Removes an audit entry.
-     */
-    async postIamAuditLogsDeleteRaw(requestParameters: IamApiPostIamAuditLogsDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamDeleteOutput>> {
-        if (requestParameters['iamRef'] == null) {
-            throw new runtime.RequiredError(
-                'iamRef',
-                'Required parameter "iamRef" was null or undefined when calling postIamAuditLogsDelete().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/audit-logs/delete`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamRefToJSON(requestParameters['iamRef']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamDeleteOutputFromJSON(jsonValue));
-    }
-
-    /**
-     * Removes an audit entry. Retention policy is normally what should expire a trail; deleting by hand leaves a gap a reviewer will notice.
-     * Removes an audit entry.
-     */
-    async postIamAuditLogsDelete(requestParameters: IamApiPostIamAuditLogsDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamDeleteOutput> {
-        const response = await this.postIamAuditLogsDeleteRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Returns one audit entry in full: the action, the person or key behind it, and the request it came in on.
-     * Returns one audit entry in full: the action, the person or key behind it, and the request it came in on.
-     */
-    async postIamAuditLogsGetRaw(requestParameters: IamApiPostIamAuditLogsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamAuditLog>> {
-        if (requestParameters['iamRef'] == null) {
-            throw new runtime.RequiredError(
-                'iamRef',
-                'Required parameter "iamRef" was null or undefined when calling postIamAuditLogsGet().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/audit-logs/get`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamRefToJSON(requestParameters['iamRef']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamAuditLogFromJSON(jsonValue));
-    }
-
-    /**
-     * Returns one audit entry in full: the action, the person or key behind it, and the request it came in on.
-     * Returns one audit entry in full: the action, the person or key behind it, and the request it came in on.
-     */
-    async postIamAuditLogsGet(requestParameters: IamApiPostIamAuditLogsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamAuditLog> {
-        const response = await this.postIamAuditLogsGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Corrects an audit entry. The trail is append-only in normal operation and nothing in the Hanzo Cloud rewrites it — this exists for an administrator to correct an entry their own systems recorded wrongly.
-     * Corrects an audit entry.
-     */
-    async postIamAuditLogsUpdateRaw(requestParameters: IamApiPostIamAuditLogsUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamAuditLog>> {
-        if (requestParameters['iamAuditlogsInput'] == null) {
-            throw new runtime.RequiredError(
-                'iamAuditlogsInput',
-                'Required parameter "iamAuditlogsInput" was null or undefined when calling postIamAuditLogsUpdate().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/audit-logs/update`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamAuditlogsInputToJSON(requestParameters['iamAuditlogsInput']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamAuditLogFromJSON(jsonValue));
-    }
-
-    /**
-     * Corrects an audit entry. The trail is append-only in normal operation and nothing in the Hanzo Cloud rewrites it — this exists for an administrator to correct an entry their own systems recorded wrongly.
-     * Corrects an audit entry.
-     */
-    async postIamAuditLogsUpdate(requestParameters: IamApiPostIamAuditLogsUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamAuditLog> {
-        const response = await this.postIamAuditLogsUpdateRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Adds a signing certificate your applications can verify tokens against — the call you make to bring your own key, or to stage the next one before a rotation. A name already used in your organization is refused.
-     * Adds a signing certificate your applications can verify tokens against — the call you make to bring your own key, or to stage the next one before a rotation.
+     * Adds a signing certificate your applications can verify tokens against — the call you make to stage the next one before a rotation. A name already used in your organization is refused.  It registers the certificate\'s IDENTITY: its name (which is the JWKS `kid`), its algorithm, its expiry. Key material does not travel this way and cannot: the private key is not part of the Cert\'s JSON, so it is neither served here nor accepted here. It is supplied to the process by the deployment, under the name registered here (internal/keyring). Staging a rotation is therefore two halves — this call names the key, and the deployment provides it.
+     * Adds a signing certificate your applications can verify tokens against — the call you make to stage the next one before a rotation.
      */
     async postIamCertsRaw(requestParameters: IamApiPostIamCertsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamCert>> {
         if (requestParameters['iamCert'] == null) {
@@ -5442,207 +5075,11 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Adds a signing certificate your applications can verify tokens against — the call you make to bring your own key, or to stage the next one before a rotation. A name already used in your organization is refused.
-     * Adds a signing certificate your applications can verify tokens against — the call you make to bring your own key, or to stage the next one before a rotation.
+     * Adds a signing certificate your applications can verify tokens against — the call you make to stage the next one before a rotation. A name already used in your organization is refused.  It registers the certificate\'s IDENTITY: its name (which is the JWKS `kid`), its algorithm, its expiry. Key material does not travel this way and cannot: the private key is not part of the Cert\'s JSON, so it is neither served here nor accepted here. It is supplied to the process by the deployment, under the name registered here (internal/keyring). Staging a rotation is therefore two halves — this call names the key, and the deployment provides it.
+     * Adds a signing certificate your applications can verify tokens against — the call you make to stage the next one before a rotation.
      */
     async postIamCerts(requestParameters: IamApiPostIamCertsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamCert> {
         const response = await this.postIamCertsRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Removes a signing certificate. Tokens signed with it can no longer be verified, so retire it only once nothing is still presenting them.
-     * Removes a signing certificate.
-     */
-    async postIamCertsDeleteRaw(requestParameters: IamApiPostIamCertsDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamCertsDeleteOutput>> {
-        if (requestParameters['iamCertsRef'] == null) {
-            throw new runtime.RequiredError(
-                'iamCertsRef',
-                'Required parameter "iamCertsRef" was null or undefined when calling postIamCertsDelete().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/certs/delete`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamCertsRefToJSON(requestParameters['iamCertsRef']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamCertsDeleteOutputFromJSON(jsonValue));
-    }
-
-    /**
-     * Removes a signing certificate. Tokens signed with it can no longer be verified, so retire it only once nothing is still presenting them.
-     * Removes a signing certificate.
-     */
-    async postIamCertsDelete(requestParameters: IamApiPostIamCertsDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamCertsDeleteOutput> {
-        const response = await this.postIamCertsDeleteRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Returns one signing certificate — its algorithm, its validity window and its public half. The private key is masked.
-     * Returns one signing certificate — its algorithm, its validity window and its public half.
-     */
-    async postIamCertsGetRaw(requestParameters: IamApiPostIamCertsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamCert>> {
-        if (requestParameters['iamCertsRef'] == null) {
-            throw new runtime.RequiredError(
-                'iamCertsRef',
-                'Required parameter "iamCertsRef" was null or undefined when calling postIamCertsGet().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/certs/get`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamCertsRefToJSON(requestParameters['iamCertsRef']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamCertFromJSON(jsonValue));
-    }
-
-    /**
-     * Returns one signing certificate — its algorithm, its validity window and its public half. The private key is masked.
-     * Returns one signing certificate — its algorithm, its validity window and its public half.
-     */
-    async postIamCertsGet(requestParameters: IamApiPostIamCertsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamCert> {
-        const response = await this.postIamCertsGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Changes a signing certificate\'s settings. What it is called does not change, and neither does when it was added.
-     * Changes a signing certificate\'s settings.
-     */
-    async postIamCertsUpdateRaw(requestParameters: IamApiPostIamCertsUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamCert>> {
-        if (requestParameters['iamCert'] == null) {
-            throw new runtime.RequiredError(
-                'iamCert',
-                'Required parameter "iamCert" was null or undefined when calling postIamCertsUpdate().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/certs/update`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamCertToJSON(requestParameters['iamCert']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamCertFromJSON(jsonValue));
-    }
-
-    /**
-     * Changes a signing certificate\'s settings. What it is called does not change, and neither does when it was added.
-     * Changes a signing certificate\'s settings.
-     */
-    async postIamCertsUpdate(requestParameters: IamApiPostIamCertsUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamCert> {
-        const response = await this.postIamCertsUpdateRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Deletes an application. Anyone mid-sign-in through it is turned away and its client credentials stop working, so retire the integration first.  The older spelling of DELETE /v1/iam/application.
-     * Deletes an application.
-     */
-    async postIamDeleteApplicationRaw(requestParameters: IamApiPostIamDeleteApplicationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamResponse>> {
-        if (requestParameters['iamApplication'] == null) {
-            throw new runtime.RequiredError(
-                'iamApplication',
-                'Required parameter "iamApplication" was null or undefined when calling postIamDeleteApplication().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/delete-application`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamApplicationToJSON(requestParameters['iamApplication']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Deletes an application. Anyone mid-sign-in through it is turned away and its client credentials stop working, so retire the integration first.  The older spelling of DELETE /v1/iam/application.
-     * Deletes an application.
-     */
-    async postIamDeleteApplication(requestParameters: IamApiPostIamDeleteApplicationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamResponse> {
-        const response = await this.postIamDeleteApplicationRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -5723,300 +5160,6 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Deletes an organization and everything named inside it — its users, applications, roles, projects and workspaces. There is no undo, and every session issued under it stops working.  The older spelling of POST /v1/iam/organizations/delete.
-     * Deletes an organization and everything named inside it — its users, applications, roles, projects and workspaces.
-     */
-    async postIamDeleteOrganizationRaw(requestParameters: IamApiPostIamDeleteOrganizationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamResponse>> {
-        if (requestParameters['iamDeleteOrganizationInput'] == null) {
-            throw new runtime.RequiredError(
-                'iamDeleteOrganizationInput',
-                'Required parameter "iamDeleteOrganizationInput" was null or undefined when calling postIamDeleteOrganization().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/delete-organization`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamDeleteOrganizationInputToJSON(requestParameters['iamDeleteOrganizationInput']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Deletes an organization and everything named inside it — its users, applications, roles, projects and workspaces. There is no undo, and every session issued under it stops working.  The older spelling of POST /v1/iam/organizations/delete.
-     * Deletes an organization and everything named inside it — its users, applications, roles, projects and workspaces.
-     */
-    async postIamDeleteOrganization(requestParameters: IamApiPostIamDeleteOrganizationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamResponse> {
-        const response = await this.postIamDeleteOrganizationRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Deletes a project. The people and roles in your organization are unchanged; what goes is the scope itself, so anything addressed by it must move first.  The older spelling of POST /v1/iam/projects/delete.
-     * Deletes a project.
-     */
-    async postIamDeleteProjectRaw(requestParameters: IamApiPostIamDeleteProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamResponse>> {
-        if (requestParameters['iamProjectsRef'] == null) {
-            throw new runtime.RequiredError(
-                'iamProjectsRef',
-                'Required parameter "iamProjectsRef" was null or undefined when calling postIamDeleteProject().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/delete-project`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamProjectsRefToJSON(requestParameters['iamProjectsRef']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Deletes a project. The people and roles in your organization are unchanged; what goes is the scope itself, so anything addressed by it must move first.  The older spelling of POST /v1/iam/projects/delete.
-     * Deletes a project.
-     */
-    async postIamDeleteProject(requestParameters: IamApiPostIamDeleteProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamResponse> {
-        const response = await this.postIamDeleteProjectRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Removes a provider. Sign-in through it stops for every application that used it, so detach those applications first if they have no other method.  The older spelling of POST /v1/iam/providers/delete.
-     * Removes a provider.
-     */
-    async postIamDeleteProviderRaw(requestParameters: IamApiPostIamDeleteProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamResponse>> {
-        if (requestParameters['iamProvider'] == null) {
-            throw new runtime.RequiredError(
-                'iamProvider',
-                'Required parameter "iamProvider" was null or undefined when calling postIamDeleteProvider().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/delete-provider`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamProviderToJSON(requestParameters['iamProvider']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Removes a provider. Sign-in through it stops for every application that used it, so detach those applications first if they have no other method.  The older spelling of POST /v1/iam/providers/delete.
-     * Removes a provider.
-     */
-    async postIamDeleteProvider(requestParameters: IamApiPostIamDeleteProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamResponse> {
-        const response = await this.postIamDeleteProviderRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Deletes a role. Everyone in it loses the access it carried; their accounts and any other roles they hold are untouched.  The older spelling of POST /v1/iam/roles/delete.
-     * Deletes a role.
-     */
-    async postIamDeleteRoleRaw(requestParameters: IamApiPostIamDeleteRoleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamResponse>> {
-        if (requestParameters['iamRolesRef'] == null) {
-            throw new runtime.RequiredError(
-                'iamRolesRef',
-                'Required parameter "iamRolesRef" was null or undefined when calling postIamDeleteRole().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/delete-role`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamRolesRefToJSON(requestParameters['iamRolesRef']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Deletes a role. Everyone in it loses the access it carried; their accounts and any other roles they hold are untouched.  The older spelling of POST /v1/iam/roles/delete.
-     * Deletes a role.
-     */
-    async postIamDeleteRole(requestParameters: IamApiPostIamDeleteRoleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamResponse> {
-        const response = await this.postIamDeleteRoleRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Removes a person from your organization. Their sessions stop working and the account is gone, not suspended — to keep the record and only stop sign-in, update the user instead.  The older spelling of POST /v1/iam/users/delete.
-     * Removes a person from your organization.
-     */
-    async postIamDeleteUserRaw(requestParameters: IamApiPostIamDeleteUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamResponse>> {
-        if (requestParameters['iamUserBody'] == null) {
-            throw new runtime.RequiredError(
-                'iamUserBody',
-                'Required parameter "iamUserBody" was null or undefined when calling postIamDeleteUser().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/delete-user`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamUserBodyToJSON(requestParameters['iamUserBody']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Removes a person from your organization. Their sessions stop working and the account is gone, not suspended — to keep the record and only stop sign-in, update the user instead.  The older spelling of POST /v1/iam/users/delete.
-     * Removes a person from your organization.
-     */
-    async postIamDeleteUser(requestParameters: IamApiPostIamDeleteUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamResponse> {
-        const response = await this.postIamDeleteUserRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Deletes a workspace. The people and roles in your organization are unchanged; what goes is the scope itself.  The older spelling of POST /v1/iam/workspaces/delete.
-     * Deletes a workspace.
-     */
-    async postIamDeleteWorkspaceRaw(requestParameters: IamApiPostIamDeleteWorkspaceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamResponse>> {
-        if (requestParameters['iamWorkspacesRef'] == null) {
-            throw new runtime.RequiredError(
-                'iamWorkspacesRef',
-                'Required parameter "iamWorkspacesRef" was null or undefined when calling postIamDeleteWorkspace().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/delete-workspace`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamWorkspacesRefToJSON(requestParameters['iamWorkspacesRef']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Deletes a workspace. The people and roles in your organization are unchanged; what goes is the scope itself.  The older spelling of POST /v1/iam/workspaces/delete.
-     * Deletes a workspace.
-     */
-    async postIamDeleteWorkspace(requestParameters: IamApiPostIamDeleteWorkspaceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamResponse> {
-        const response = await this.postIamDeleteWorkspaceRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
      * Issues an invitation to join your organization — the code or link a new member redeems, with the role they arrive holding and the date it stops working. A name already used in the organization is refused.
      * Issues an invitation to join your organization — the code or link a new member redeems, with the role they arrive holding and the date it stops working.
      */
@@ -6062,153 +5205,6 @@ export class IamApi extends runtime.BaseAPI {
      */
     async postIamInvitations(requestParameters: IamApiPostIamInvitationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamInvitation> {
         const response = await this.postIamInvitationsRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Withdraws an invitation. It stops being redeemable at once; anyone who already joined through it keeps their account.
-     * Withdraws an invitation.
-     */
-    async postIamInvitationsDeleteRaw(requestParameters: IamApiPostIamInvitationsDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamInvitationsDeleteOutput>> {
-        if (requestParameters['iamInvitationsRef'] == null) {
-            throw new runtime.RequiredError(
-                'iamInvitationsRef',
-                'Required parameter "iamInvitationsRef" was null or undefined when calling postIamInvitationsDelete().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/invitations/delete`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamInvitationsRefToJSON(requestParameters['iamInvitationsRef']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamInvitationsDeleteOutputFromJSON(jsonValue));
-    }
-
-    /**
-     * Withdraws an invitation. It stops being redeemable at once; anyone who already joined through it keeps their account.
-     * Withdraws an invitation.
-     */
-    async postIamInvitationsDelete(requestParameters: IamApiPostIamInvitationsDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamInvitationsDeleteOutput> {
-        const response = await this.postIamInvitationsDeleteRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Returns one invitation: who it is for, what it grants on acceptance, and when it expires.
-     * Returns one invitation: who it is for, what it grants on acceptance, and when it expires.
-     */
-    async postIamInvitationsGetRaw(requestParameters: IamApiPostIamInvitationsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamInvitation>> {
-        if (requestParameters['iamInvitationsRef'] == null) {
-            throw new runtime.RequiredError(
-                'iamInvitationsRef',
-                'Required parameter "iamInvitationsRef" was null or undefined when calling postIamInvitationsGet().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/invitations/get`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamInvitationsRefToJSON(requestParameters['iamInvitationsRef']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamInvitationFromJSON(jsonValue));
-    }
-
-    /**
-     * Returns one invitation: who it is for, what it grants on acceptance, and when it expires.
-     * Returns one invitation: who it is for, what it grants on acceptance, and when it expires.
-     */
-    async postIamInvitationsGet(requestParameters: IamApiPostIamInvitationsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamInvitation> {
-        const response = await this.postIamInvitationsGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Changes an invitation\'s terms — the role it grants, how many may redeem it, or when it expires. What it is called does not change.
-     * Changes an invitation\'s terms — the role it grants, how many may redeem it, or when it expires.
-     */
-    async postIamInvitationsUpdateRaw(requestParameters: IamApiPostIamInvitationsUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamInvitation>> {
-        if (requestParameters['iamInvitationsInput'] == null) {
-            throw new runtime.RequiredError(
-                'iamInvitationsInput',
-                'Required parameter "iamInvitationsInput" was null or undefined when calling postIamInvitationsUpdate().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/invitations/update`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamInvitationsInputToJSON(requestParameters['iamInvitationsInput']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamInvitationFromJSON(jsonValue));
-    }
-
-    /**
-     * Changes an invitation\'s terms — the role it grants, how many may redeem it, or when it expires. What it is called does not change.
-     * Changes an invitation\'s terms — the role it grants, how many may redeem it, or when it expires.
-     */
-    async postIamInvitationsUpdate(requestParameters: IamApiPostIamInvitationsUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamInvitation> {
-        const response = await this.postIamInvitationsUpdateRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -6296,180 +5292,6 @@ export class IamApi extends runtime.BaseAPI {
      */
     async postIamKeys(requestParameters: IamApiPostIamKeysRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamKey> {
         const response = await this.postIamKeysRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Revokes an API key. Anything still presenting it stops being authorized at once, so roll the replacement out before you revoke.
-     * Revokes an API key.
-     */
-    async postIamKeysDeleteRaw(requestParameters: IamApiPostIamKeysDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamDeleteResponse>> {
-        if (requestParameters['iamKeysRef'] == null) {
-            throw new runtime.RequiredError(
-                'iamKeysRef',
-                'Required parameter "iamKeysRef" was null or undefined when calling postIamKeysDelete().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/keys/delete`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamKeysRefToJSON(requestParameters['iamKeysRef']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamDeleteResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Revokes an API key. Anything still presenting it stops being authorized at once, so roll the replacement out before you revoke.
-     * Revokes an API key.
-     */
-    async postIamKeysDelete(requestParameters: IamApiPostIamKeysDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamDeleteResponse> {
-        const response = await this.postIamKeysDeleteRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * (re)generates the target user\'s key of the requested TYPE and returns it once, over the shared authorizeMinter + mintTarget seam. `?type=secret` (the default) yields the confidential sk-; `?type=publishable` yields the pk- that is safe to ship in client JS and resolves to an org, never a principal.  It writes the schema.Key row that the resolvers actually read. schema.User.AccessKey is not a credential and nothing resolves it, so a key stamped there would authenticate nobody.
-     * (re)generates the target user\'s key of the requested TYPE and returns it once, over the shared authorizeMinter + mintTarget seam.
-     */
-    async postIamKeysMintRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/keys/mint`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * (re)generates the target user\'s key of the requested TYPE and returns it once, over the shared authorizeMinter + mintTarget seam. `?type=secret` (the default) yields the confidential sk-; `?type=publishable` yields the pk- that is safe to ship in client JS and resolves to an org, never a principal.  It writes the schema.Key row that the resolvers actually read. schema.User.AccessKey is not a credential and nothing resolves it, so a key stamped there would authenticate nobody.
-     * (re)generates the target user\'s key of the requested TYPE and returns it once, over the shared authorizeMinter + mintTarget seam.
-     */
-    async postIamKeysMint(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postIamKeysMintRaw(initOverrides);
-    }
-
-    /**
-     * Clears the target user\'s key of the requested TYPE (immediate revoke). Scoped by the same `?type` field mint takes, so revoking the browser key leaves the server key working. A secret key\'s stored value is the sk- in its schema.Key row.
-     * Clears the target user\'s key of the requested TYPE (immediate revoke).
-     */
-    async postIamKeysRevokeRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/keys/revoke`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Clears the target user\'s key of the requested TYPE (immediate revoke). Scoped by the same `?type` field mint takes, so revoking the browser key leaves the server key working. A secret key\'s stored value is the sk- in its schema.Key row.
-     * Clears the target user\'s key of the requested TYPE (immediate revoke).
-     */
-    async postIamKeysRevoke(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postIamKeysRevokeRaw(initOverrides);
-    }
-
-    /**
-     * Changes what a key is called or what it may reach. The credential itself is not reissued — the key in your deployment keeps working.
-     * Changes what a key is called or what it may reach.
-     */
-    async postIamKeysUpdateRaw(requestParameters: IamApiPostIamKeysUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamKey>> {
-        if (requestParameters['iamKey'] == null) {
-            throw new runtime.RequiredError(
-                'iamKey',
-                'Required parameter "iamKey" was null or undefined when calling postIamKeysUpdate().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/keys/update`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamKeyToJSON(requestParameters['iamKey']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamKeyFromJSON(jsonValue));
-    }
-
-    /**
-     * Changes what a key is called or what it may reach. The credential itself is not reissued — the key in your deployment keeps working.
-     * Changes what a key is called or what it may reach.
-     */
-    async postIamKeysUpdate(requestParameters: IamApiPostIamKeysUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamKey> {
-        const response = await this.postIamKeysUpdateRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -6588,44 +5410,6 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Turns a factor off, so sign-in stops asking for it. Naming no factor turns off ALL of them — the reset path. People may do this for themselves; doing it for somebody else takes an administrator, which is what makes it the way back in when a phone is lost.  The recovery codes go with the last factor: they are the way past a challenge, so keeping them alive for an account with nothing to challenge would leave a standing credential behind.
-     * Turns a factor off, so sign-in stops asking for it.
-     */
-    async postIamMfaDisableRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/mfa/disable`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Turns a factor off, so sign-in stops asking for it. Naming no factor turns off ALL of them — the reset path. People may do this for themselves; doing it for somebody else takes an administrator, which is what makes it the way back in when a phone is lost.  The recovery codes go with the last factor: they are the way past a challenge, so keeping them alive for an account with nothing to challenge would leave a standing credential behind.
-     * Turns a factor off, so sign-in stops asking for it.
-     */
-    async postIamMfaDisable(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postIamMfaDisableRaw(initOverrides);
-    }
-
-    /**
      * Picks which second factor an account is asked for first when it has more than one. Only a factor the account actually holds: storing an unheld one told the login gate \"MFA is on\" — factor.Enabled reads that column — while leaving it nothing to ask for, so the sign-in required the password alone.
      * Picks which second factor an account is asked for first when it has more than one.
      */
@@ -6664,7 +5448,7 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Finishes the enrolment: from here the account\'s sign-ins ask for this factor. It requires the proof initiate handed out — a passcode from the authenticator, or the code that was sent — and verifies it BEFORE writing anything.  It used to write on the strength of a `secret` field alone. A client that skipped the verify step, scanned the QR into the wrong app, or was simply buggy switched on a factor no code would ever satisfy, and the account was then locked out with no self-service way back: the gate holds the sign-in before minting, so the person cannot obtain the bearer that disable requires.  The recovery codes are minted here and returned ONCE, on the first factor the account adds. Answering with them is the way back in when no factor can be produced, so they are the same value the row\'s digests were made from — by construction, not by a client echoing them back.
+     * Finishes the enrolment: from here the account\'s sign-ins ask for this factor. It requires the proof initiate handed out — a passcode from the authenticator, or the code that was sent — and verifies it BEFORE writing anything.  Verifying BEFORE writing is what keeps a client that never completed the proof — a skipped verify step, a QR scanned into the wrong app, a bug — from switching on a factor no code can satisfy. That would lock the account out with no self-service way back: the gate holds the sign-in before minting, so the person could not obtain the bearer that disable requires.  The recovery codes are minted here and returned ONCE, on the first factor the account adds. Answering with them is the way back in when no factor can be produced, so they are the same value the row\'s digests were made from — by construction, not by a client echoing them back.
      * Finishes the enrolment: from here the account\'s sign-ins ask for this factor.
      */
     async postIamMfaSetupEnableRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -6694,7 +5478,7 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Finishes the enrolment: from here the account\'s sign-ins ask for this factor. It requires the proof initiate handed out — a passcode from the authenticator, or the code that was sent — and verifies it BEFORE writing anything.  It used to write on the strength of a `secret` field alone. A client that skipped the verify step, scanned the QR into the wrong app, or was simply buggy switched on a factor no code would ever satisfy, and the account was then locked out with no self-service way back: the gate holds the sign-in before minting, so the person cannot obtain the bearer that disable requires.  The recovery codes are minted here and returned ONCE, on the first factor the account adds. Answering with them is the way back in when no factor can be produced, so they are the same value the row\'s digests were made from — by construction, not by a client echoing them back.
+     * Finishes the enrolment: from here the account\'s sign-ins ask for this factor. It requires the proof initiate handed out — a passcode from the authenticator, or the code that was sent — and verifies it BEFORE writing anything.  Verifying BEFORE writing is what keeps a client that never completed the proof — a skipped verify step, a QR scanned into the wrong app, a bug — from switching on a factor no code can satisfy. That would lock the account out with no self-service way back: the gate holds the sign-in before minting, so the person could not obtain the bearer that disable requires.  The recovery codes are minted here and returned ONCE, on the first factor the account adds. Answering with them is the way back in when no factor can be produced, so they are the same value the row\'s digests were made from — by construction, not by a client echoing them back.
      * Finishes the enrolment: from here the account\'s sign-ins ask for this factor.
      */
     async postIamMfaSetupEnable(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
@@ -6854,7 +5638,7 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Answers \"what am I approving?\" for a pending device code.  The approval page exists to tell a human WHICH application they are authorizing; a page that names the wrong one defeats the control it implements. It used to render the portal\'s own app name — a constant, `hanzo-console` for every code — so a device code minted by `hanzo-cli` was approved under a screen naming a different application entirely. The client is a property of the CODE, so it is read from the code\'s row here and nowhere else.  Requires a signed-in session, and answers with the same ONE opaque refusal approveDevice uses. That is deliberate: the user_code is only 40 bits and is the one secret in this flow, so an unauthenticated lookup — or one that distinguished unknown from expired from already-approved — would be an oracle for hunting live codes. Gated and opaque, it reveals strictly less than the approval the same caller could already attempt.
+     * Answers \"what am I approving?\" for a pending device code.  The approval page exists to tell a human WHICH application they are authorizing; a page that names any other one defeats the control it implements. The client is a property of the CODE, not of the page or of whatever app the browser happens to be signed in to, so it is read from the code\'s row here and nowhere else.  Requires a signed-in session, and answers with the same ONE opaque refusal approveDevice uses. That is deliberate: the user_code is only 40 bits and is the one secret in this flow, so an unauthenticated lookup — or one that distinguished unknown from expired from already-approved — would be an oracle for hunting live codes. Gated and opaque, it reveals strictly less than the approval the same caller could already attempt.
      * Answers \"what am I approving?\" for a pending device code.
      */
     async postIamOauthDeviceInfoRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -6884,7 +5668,7 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Answers \"what am I approving?\" for a pending device code.  The approval page exists to tell a human WHICH application they are authorizing; a page that names the wrong one defeats the control it implements. It used to render the portal\'s own app name — a constant, `hanzo-console` for every code — so a device code minted by `hanzo-cli` was approved under a screen naming a different application entirely. The client is a property of the CODE, so it is read from the code\'s row here and nowhere else.  Requires a signed-in session, and answers with the same ONE opaque refusal approveDevice uses. That is deliberate: the user_code is only 40 bits and is the one secret in this flow, so an unauthenticated lookup — or one that distinguished unknown from expired from already-approved — would be an oracle for hunting live codes. Gated and opaque, it reveals strictly less than the approval the same caller could already attempt.
+     * Answers \"what am I approving?\" for a pending device code.  The approval page exists to tell a human WHICH application they are authorizing; a page that names any other one defeats the control it implements. The client is a property of the CODE, not of the page or of whatever app the browser happens to be signed in to, so it is read from the code\'s row here and nowhere else.  Requires a signed-in session, and answers with the same ONE opaque refusal approveDevice uses. That is deliberate: the user_code is only 40 bits and is the one secret in this flow, so an unauthenticated lookup — or one that distinguished unknown from expired from already-approved — would be an oracle for hunting live codes. Gated and opaque, it reveals strictly less than the approval the same caller could already attempt.
      * Answers \"what am I approving?\" for a pending device code.
      */
     async postIamOauthDeviceInfo(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
@@ -6968,7 +5752,7 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Ends a sign-in and sends the browser somewhere sensible. Accepts GET or POST, so it works as a plain link.  It ACTUALLY signs you out, which is worth stating because the endpoint spent a release not doing it: the whole body computed a redirect and answered {\"status\":\"ok\"} unconditionally — no session ended, no token revoked. A logout that reports success while leaving the session live is worse than no logout at all, because the person on the shared machine believes it worked. Three things happen here now, in this order:   1. The browser session dies — sid revoked server-side AND the cookie expired     (sessions.Clear). Server-side revocation is the load-bearing half: a copy     of the cookie taken before logout must not still resolve.  2. The relying party\'s tokens are revoked when an id_token_hint names it, so     the refresh token cannot mint a fresh access token after the human left.     Revocation state is authoritative — a JWT\'s `exp` still reads valid for     days, so expiry is necessary but never sufficient.  3. Only then is a redirect considered, and only to a REGISTERED uri.  The open-redirect guard is unchanged: a redirect happens only when a VERIFIED id_token_hint identifies the application and that application has registered the target. Anything else refuses to redirect — nobody can turn your logout link into a redirect to a site of their choosing.
+     * Ends a sign-in and sends the browser somewhere sensible. Accepts GET or POST, so it works as a plain link.  It ACTUALLY signs you out — worth stating, because a logout that computes a redirect and answers {\"status\":\"ok\"} while ending no session and revoking no token is worse than none: the person on the shared machine believes it worked. Three things happen here, in this order:   1. The browser session dies — sid revoked server-side AND the cookie expired     (sessions.Clear). Server-side revocation is the load-bearing half: a copy     of the cookie taken before logout must not still resolve.  2. The relying party\'s tokens are revoked when an id_token_hint names it, so     the refresh token cannot mint a fresh access token after the human left.     Revocation state is authoritative — a JWT\'s `exp` still reads valid for     days, so expiry is necessary but never sufficient.  3. Only then is a redirect considered, and only to a REGISTERED uri.  The open-redirect guard is unchanged: a redirect happens only when a VERIFIED id_token_hint identifies the application and that application has registered the target. Anything else refuses to redirect — nobody can turn your logout link into a redirect to a site of their choosing.
      * Ends a sign-in and sends the browser somewhere sensible.
      */
     async postIamOauthLogoutRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -6998,7 +5782,7 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Ends a sign-in and sends the browser somewhere sensible. Accepts GET or POST, so it works as a plain link.  It ACTUALLY signs you out, which is worth stating because the endpoint spent a release not doing it: the whole body computed a redirect and answered {\"status\":\"ok\"} unconditionally — no session ended, no token revoked. A logout that reports success while leaving the session live is worse than no logout at all, because the person on the shared machine believes it worked. Three things happen here now, in this order:   1. The browser session dies — sid revoked server-side AND the cookie expired     (sessions.Clear). Server-side revocation is the load-bearing half: a copy     of the cookie taken before logout must not still resolve.  2. The relying party\'s tokens are revoked when an id_token_hint names it, so     the refresh token cannot mint a fresh access token after the human left.     Revocation state is authoritative — a JWT\'s `exp` still reads valid for     days, so expiry is necessary but never sufficient.  3. Only then is a redirect considered, and only to a REGISTERED uri.  The open-redirect guard is unchanged: a redirect happens only when a VERIFIED id_token_hint identifies the application and that application has registered the target. Anything else refuses to redirect — nobody can turn your logout link into a redirect to a site of their choosing.
+     * Ends a sign-in and sends the browser somewhere sensible. Accepts GET or POST, so it works as a plain link.  It ACTUALLY signs you out — worth stating, because a logout that computes a redirect and answers {\"status\":\"ok\"} while ending no session and revoking no token is worse than none: the person on the shared machine believes it worked. Three things happen here, in this order:   1. The browser session dies — sid revoked server-side AND the cookie expired     (sessions.Clear). Server-side revocation is the load-bearing half: a copy     of the cookie taken before logout must not still resolve.  2. The relying party\'s tokens are revoked when an id_token_hint names it, so     the refresh token cannot mint a fresh access token after the human left.     Revocation state is authoritative — a JWT\'s `exp` still reads valid for     days, so expiry is necessary but never sufficient.  3. Only then is a redirect considered, and only to a REGISTERED uri.  The open-redirect guard is unchanged: a redirect happens only when a VERIFIED id_token_hint identifies the application and that application has registered the target. Anything else refuses to redirect — nobody can turn your logout link into a redirect to a site of their choosing.
      * Ends a sign-in and sends the browser somewhere sensible.
      */
     async postIamOauthLogout(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
@@ -7006,7 +5790,7 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Retires a token before it expires — what you call when someone signs out or a credential may have leaked.  Revoking an access token kills that token. Revoking a REFRESH token kills the whole chain it belongs to, so no further access tokens can be minted from it and every token already minted from it dies with it.  A token that is not yours, or that never existed, answers success and does nothing — so the endpoint cannot be used to discover which tokens are real.  PUBLIC clients revoke too, and must: sign-out is the only control a long-lived refresh token has. hanzo-cli is a public PKCE client holding a 30-day rotating refresh token, so a confidential-only revocation endpoint made `hanzo auth logout` a LOCAL DELETE — the credential it dropped stayed spendable at hanzo.id for the rest of the month, with nothing able to kill it. Measured 2026-08-01: revoke answered 401 invalid_client and the refresh token went on minting access tokens.  Widening authentication does not widen authority. The caller must still POSSESS the token — and possession already permits USE, of which revocation is the strict opposite — and the row must belong to the client that presents it, so a public client_id buys the ability to destroy exactly what its holder could otherwise spend. RFC 6749 §3.2.1 is the same reading: a client with no credentials identifies itself with client_id.
+     * Retires a token before it expires — what you call when someone signs out or a credential may have leaked.  Revoking an access token kills that token. Revoking a REFRESH token kills the whole chain it belongs to, so no further access tokens can be minted from it and every token already minted from it dies with it.  A token that is not yours, or that never existed, answers success and does nothing — so the endpoint cannot be used to discover which tokens are real.  PUBLIC clients revoke too, and must: sign-out is the only control a long-lived refresh token has. A native app or CLI is a public PKCE client and holds no secret, so requiring one here would leave signing out as a local delete — forgetting a credential that stays spendable for the rest of its lifetime.  Widening authentication does not widen authority. The caller must still POSSESS the token — and possession already permits USE, of which revocation is the strict opposite — and the row must belong to the client that presents it, so a public client_id buys the ability to destroy exactly what its holder could otherwise spend. RFC 6749 §3.2.1 is the same reading: a client with no credentials identifies itself with client_id.
      * Retires a token before it expires — what you call when someone signs out or a credential may have leaked.
      */
     async postIamOauthRevokeRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -7036,7 +5820,7 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Retires a token before it expires — what you call when someone signs out or a credential may have leaked.  Revoking an access token kills that token. Revoking a REFRESH token kills the whole chain it belongs to, so no further access tokens can be minted from it and every token already minted from it dies with it.  A token that is not yours, or that never existed, answers success and does nothing — so the endpoint cannot be used to discover which tokens are real.  PUBLIC clients revoke too, and must: sign-out is the only control a long-lived refresh token has. hanzo-cli is a public PKCE client holding a 30-day rotating refresh token, so a confidential-only revocation endpoint made `hanzo auth logout` a LOCAL DELETE — the credential it dropped stayed spendable at hanzo.id for the rest of the month, with nothing able to kill it. Measured 2026-08-01: revoke answered 401 invalid_client and the refresh token went on minting access tokens.  Widening authentication does not widen authority. The caller must still POSSESS the token — and possession already permits USE, of which revocation is the strict opposite — and the row must belong to the client that presents it, so a public client_id buys the ability to destroy exactly what its holder could otherwise spend. RFC 6749 §3.2.1 is the same reading: a client with no credentials identifies itself with client_id.
+     * Retires a token before it expires — what you call when someone signs out or a credential may have leaked.  Revoking an access token kills that token. Revoking a REFRESH token kills the whole chain it belongs to, so no further access tokens can be minted from it and every token already minted from it dies with it.  A token that is not yours, or that never existed, answers success and does nothing — so the endpoint cannot be used to discover which tokens are real.  PUBLIC clients revoke too, and must: sign-out is the only control a long-lived refresh token has. A native app or CLI is a public PKCE client and holds no secret, so requiring one here would leave signing out as a local delete — forgetting a credential that stays spendable for the rest of its lifetime.  Widening authentication does not widen authority. The caller must still POSSESS the token — and possession already permits USE, of which revocation is the strict opposite — and the row must belong to the client that presents it, so a public client_id buys the ability to destroy exactly what its holder could otherwise spend. RFC 6749 §3.2.1 is the same reading: a client with no credentials identifies itself with client_id.
      * Retires a token before it expires — what you call when someone signs out or a credential may have leaked.
      */
     async postIamOauthRevoke(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
@@ -7207,104 +5991,6 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Revokes a permission. Everyone who held access only through it loses that access immediately; grants they hold by another route are untouched.
-     * Revokes a permission.
-     */
-    async postIamPermissionsDeleteRaw(requestParameters: IamApiPostIamPermissionsDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamPermissionDeleteResponse>> {
-        if (requestParameters['iamPermissionRef'] == null) {
-            throw new runtime.RequiredError(
-                'iamPermissionRef',
-                'Required parameter "iamPermissionRef" was null or undefined when calling postIamPermissionsDelete().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/permissions/delete`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamPermissionRefToJSON(requestParameters['iamPermissionRef']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamPermissionDeleteResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Revokes a permission. Everyone who held access only through it loses that access immediately; grants they hold by another route are untouched.
-     * Revokes a permission.
-     */
-    async postIamPermissionsDelete(requestParameters: IamApiPostIamPermissionsDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamPermissionDeleteResponse> {
-        const response = await this.postIamPermissionsDeleteRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Changes who a permission grants to, what it allows, or the resources it covers. Access changes as soon as the write lands. What the permission is called does not change, and neither does when it was created.
-     * Changes who a permission grants to, what it allows, or the resources it covers.
-     */
-    async postIamPermissionsUpdateRaw(requestParameters: IamApiPostIamPermissionsUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamPermission>> {
-        if (requestParameters['iamPermission'] == null) {
-            throw new runtime.RequiredError(
-                'iamPermission',
-                'Required parameter "iamPermission" was null or undefined when calling postIamPermissionsUpdate().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/permissions/update`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamPermissionToJSON(requestParameters['iamPermission']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamPermissionFromJSON(jsonValue));
-    }
-
-    /**
-     * Changes who a permission grants to, what it allows, or the resources it covers. Access changes as soon as the write lands. What the permission is called does not change, and neither does when it was created.
-     * Changes who a permission grants to, what it allows, or the resources it covers.
-     */
-    async postIamPermissionsUpdate(requestParameters: IamApiPostIamPermissionsUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamPermission> {
-        const response = await this.postIamPermissionsUpdateRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
      * Saves the calling person\'s own settings and returns the full set afterwards. Send only the settings you are changing — the rest are kept, so two screens can save at once without one undoing the other.
      * Saves the calling person\'s own settings and returns the full set afterwards.
      */
@@ -7347,10 +6033,10 @@ export class IamApi extends runtime.BaseAPI {
      * Makes a project inside your organization — the scope people pick between when their work is separated by product or client rather than by team.
      */
     async postIamProjectsRaw(requestParameters: IamApiPostIamProjectsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamProject>> {
-        if (requestParameters['iamInput'] == null) {
+        if (requestParameters['iamProjectsInput'] == null) {
             throw new runtime.RequiredError(
-                'iamInput',
-                'Required parameter "iamInput" was null or undefined when calling postIamProjects().'
+                'iamProjectsInput',
+                'Required parameter "iamProjectsInput" was null or undefined when calling postIamProjects().'
             );
         }
 
@@ -7376,7 +6062,7 @@ export class IamApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: IamInputToJSON(requestParameters['iamInput']),
+            body: IamProjectsInputToJSON(requestParameters['iamProjectsInput']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => IamProjectFromJSON(jsonValue));
@@ -7388,153 +6074,6 @@ export class IamApi extends runtime.BaseAPI {
      */
     async postIamProjects(requestParameters: IamApiPostIamProjectsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamProject> {
         const response = await this.postIamProjectsRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Removes a project. The people and roles in your organization are unchanged; what goes is the scope itself, so move anything addressed by it first.
-     * Removes a project.
-     */
-    async postIamProjectsDeleteRaw(requestParameters: IamApiPostIamProjectsDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamProjectsDeleteOutput>> {
-        if (requestParameters['iamProjectsRef'] == null) {
-            throw new runtime.RequiredError(
-                'iamProjectsRef',
-                'Required parameter "iamProjectsRef" was null or undefined when calling postIamProjectsDelete().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/projects/delete`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamProjectsRefToJSON(requestParameters['iamProjectsRef']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamProjectsDeleteOutputFromJSON(jsonValue));
-    }
-
-    /**
-     * Removes a project. The people and roles in your organization are unchanged; what goes is the scope itself, so move anything addressed by it first.
-     * Removes a project.
-     */
-    async postIamProjectsDelete(requestParameters: IamApiPostIamProjectsDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamProjectsDeleteOutput> {
-        const response = await this.postIamProjectsDeleteRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Returns one project: what it is called and how it is set up.
-     * Returns one project: what it is called and how it is set up.
-     */
-    async postIamProjectsGetRaw(requestParameters: IamApiPostIamProjectsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamProject>> {
-        if (requestParameters['iamProjectsRef'] == null) {
-            throw new runtime.RequiredError(
-                'iamProjectsRef',
-                'Required parameter "iamProjectsRef" was null or undefined when calling postIamProjectsGet().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/projects/get`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamProjectsRefToJSON(requestParameters['iamProjectsRef']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamProjectFromJSON(jsonValue));
-    }
-
-    /**
-     * Returns one project: what it is called and how it is set up.
-     * Returns one project: what it is called and how it is set up.
-     */
-    async postIamProjectsGet(requestParameters: IamApiPostIamProjectsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamProject> {
-        const response = await this.postIamProjectsGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Changes a project\'s settings. What it is called does not change, and neither does when it was created.
-     * Changes a project\'s settings.
-     */
-    async postIamProjectsUpdateRaw(requestParameters: IamApiPostIamProjectsUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamProject>> {
-        if (requestParameters['iamInput'] == null) {
-            throw new runtime.RequiredError(
-                'iamInput',
-                'Required parameter "iamInput" was null or undefined when calling postIamProjectsUpdate().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/projects/update`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamInputToJSON(requestParameters['iamInput']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamProjectFromJSON(jsonValue));
-    }
-
-    /**
-     * Changes a project\'s settings. What it is called does not change, and neither does when it was created.
-     * Changes a project\'s settings.
-     */
-    async postIamProjectsUpdate(requestParameters: IamApiPostIamProjectsUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamProject> {
-        const response = await this.postIamProjectsUpdateRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -7574,6 +6113,63 @@ export class IamApi extends runtime.BaseAPI {
      */
     async postIamRegistryToken(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.postIamRegistryTokenRaw(initOverrides);
+    }
+
+    /**
+     * Steps a platform operator back out: it returns their own access token with no organization assumed, which is the credential they had before they stepped in. Recorded like the step in.
+     * Steps a platform operator back out: it returns their own access token with no organization assumed, which is the credential they had before they stepped in.
+     */
+    async postIamReleaseRaw(requestParameters: IamApiPostIamReleaseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamAnswer>> {
+        if (requestParameters['iamAssumeBody'] == null) {
+            throw new runtime.RequiredError(
+                'iamAssumeBody',
+                'Required parameter "iamAssumeBody" was null or undefined when calling postIamRelease().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (requestParameters['authorization'] != null) {
+            headerParameters['Authorization'] = String(requestParameters['authorization']);
+        }
+
+        if (requestParameters['xForwardedFor'] != null) {
+            headerParameters['X-Forwarded-For'] = String(requestParameters['xForwardedFor']);
+        }
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/iam/release`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: IamAssumeBodyToJSON(requestParameters['iamAssumeBody']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IamAnswerFromJSON(jsonValue));
+    }
+
+    /**
+     * Steps a platform operator back out: it returns their own access token with no organization assumed, which is the credential they had before they stepped in. Recorded like the step in.
+     * Steps a platform operator back out: it returns their own access token with no organization assumed, which is the credential they had before they stepped in.
+     */
+    async postIamRelease(requestParameters: IamApiPostIamReleaseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamAnswer> {
+        const response = await this.postIamReleaseRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
@@ -7660,153 +6256,6 @@ export class IamApi extends runtime.BaseAPI {
      */
     async postIamRoles(requestParameters: IamApiPostIamRolesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamRole> {
         const response = await this.postIamRolesRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Removes a role. Everyone in it loses the access it carried; their accounts, and any other role they hold, are untouched.
-     * Removes a role.
-     */
-    async postIamRolesDeleteRaw(requestParameters: IamApiPostIamRolesDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamRolesDeleteOutput>> {
-        if (requestParameters['iamRolesRef'] == null) {
-            throw new runtime.RequiredError(
-                'iamRolesRef',
-                'Required parameter "iamRolesRef" was null or undefined when calling postIamRolesDelete().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/roles/delete`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamRolesRefToJSON(requestParameters['iamRolesRef']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamRolesDeleteOutputFromJSON(jsonValue));
-    }
-
-    /**
-     * Removes a role. Everyone in it loses the access it carried; their accounts, and any other role they hold, are untouched.
-     * Removes a role.
-     */
-    async postIamRolesDelete(requestParameters: IamApiPostIamRolesDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamRolesDeleteOutput> {
-        const response = await this.postIamRolesDeleteRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Returns one role: who is in it, and the roles it includes.
-     * Returns one role: who is in it, and the roles it includes.
-     */
-    async postIamRolesGetRaw(requestParameters: IamApiPostIamRolesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamRole>> {
-        if (requestParameters['iamRolesRef'] == null) {
-            throw new runtime.RequiredError(
-                'iamRolesRef',
-                'Required parameter "iamRolesRef" was null or undefined when calling postIamRolesGet().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/roles/get`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamRolesRefToJSON(requestParameters['iamRolesRef']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamRoleFromJSON(jsonValue));
-    }
-
-    /**
-     * Returns one role: who is in it, and the roles it includes.
-     * Returns one role: who is in it, and the roles it includes.
-     */
-    async postIamRolesGet(requestParameters: IamApiPostIamRolesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamRole> {
-        const response = await this.postIamRolesGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Changes who is in a role, or which roles it includes. Access changes for everyone in it as soon as the write lands. What the role is called does not change, and neither does when it was created.
-     * Changes who is in a role, or which roles it includes.
-     */
-    async postIamRolesUpdateRaw(requestParameters: IamApiPostIamRolesUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamRole>> {
-        if (requestParameters['iamRolesInput'] == null) {
-            throw new runtime.RequiredError(
-                'iamRolesInput',
-                'Required parameter "iamRolesInput" was null or undefined when calling postIamRolesUpdate().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/roles/update`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamRolesInputToJSON(requestParameters['iamRolesInput']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamRoleFromJSON(jsonValue));
-    }
-
-    /**
-     * Changes who is in a role, or which roles it includes. Access changes for everyone in it as soon as the write lands. What the role is called does not change, and neither does when it was created.
-     * Changes who is in a role, or which roles it includes.
-     */
-    async postIamRolesUpdate(requestParameters: IamApiPostIamRolesUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamRole> {
-        const response = await this.postIamRolesUpdateRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -8161,104 +6610,6 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Updates one of your applications — its display, its sign-in methods and the redirect URIs it is allowed to return to. Which organization and name the application has are fixed when it is created and are not editable here.  A redirect URI you add becomes an allowed sign-in origin, so this is the call that makes login work from a new host.  The older spelling of PUT /v1/iam/application.
-     * Updates one of your applications — its display, its sign-in methods and the redirect URIs it is allowed to return to.
-     */
-    async postIamUpdateApplicationRaw(requestParameters: IamApiPostIamUpdateApplicationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamResponse>> {
-        if (requestParameters['iamApplication'] == null) {
-            throw new runtime.RequiredError(
-                'iamApplication',
-                'Required parameter "iamApplication" was null or undefined when calling postIamUpdateApplication().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/update-application`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamApplicationToJSON(requestParameters['iamApplication']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Updates one of your applications — its display, its sign-in methods and the redirect URIs it is allowed to return to. Which organization and name the application has are fixed when it is created and are not editable here.  A redirect URI you add becomes an allowed sign-in origin, so this is the call that makes login work from a new host.  The older spelling of PUT /v1/iam/application.
-     * Updates one of your applications — its display, its sign-in methods and the redirect URIs it is allowed to return to.
-     */
-    async postIamUpdateApplication(requestParameters: IamApiPostIamUpdateApplicationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamResponse> {
-        const response = await this.postIamUpdateApplicationRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Updates your organization — its display, its default settings and the sign-in rules everyone in it inherits.  The older spelling of POST /v1/iam/organizations/update.
-     * Updates your organization — its display, its default settings and the sign-in rules everyone in it inherits.
-     */
-    async postIamUpdateOrganizationRaw(requestParameters: IamApiPostIamUpdateOrganizationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamResponse>> {
-        if (requestParameters['iamUpdateOrganizationInput'] == null) {
-            throw new runtime.RequiredError(
-                'iamUpdateOrganizationInput',
-                'Required parameter "iamUpdateOrganizationInput" was null or undefined when calling postIamUpdateOrganization().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/update-organization`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamUpdateOrganizationInputToJSON(requestParameters['iamUpdateOrganizationInput']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Updates your organization — its display, its default settings and the sign-in rules everyone in it inherits.  The older spelling of POST /v1/iam/organizations/update.
-     * Updates your organization — its display, its default settings and the sign-in rules everyone in it inherits.
-     */
-    async postIamUpdateOrganization(requestParameters: IamApiPostIamUpdateOrganizationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamResponse> {
-        const response = await this.postIamUpdateOrganizationRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
      * Saves the calling person\'s own settings and returns the full set afterwards. Send only the settings you are changing — the rest are kept, so two screens can save at once without one undoing the other.
      * Saves the calling person\'s own settings and returns the full set afterwards.
      */
@@ -8294,153 +6645,6 @@ export class IamApi extends runtime.BaseAPI {
      */
     async postIamUpdatePreferences(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.postIamUpdatePreferencesRaw(initOverrides);
-    }
-
-    /**
-     * Updates a provider\'s settings or rotates the credentials it holds. The change takes effect on the next sign-in through it — sessions already issued are unaffected.  The older spelling of POST /v1/iam/providers/update.
-     * Updates a provider\'s settings or rotates the credentials it holds.
-     */
-    async postIamUpdateProviderRaw(requestParameters: IamApiPostIamUpdateProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamResponse>> {
-        if (requestParameters['iamProvider'] == null) {
-            throw new runtime.RequiredError(
-                'iamProvider',
-                'Required parameter "iamProvider" was null or undefined when calling postIamUpdateProvider().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/update-provider`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamProviderToJSON(requestParameters['iamProvider']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Updates a provider\'s settings or rotates the credentials it holds. The change takes effect on the next sign-in through it — sessions already issued are unaffected.  The older spelling of POST /v1/iam/providers/update.
-     * Updates a provider\'s settings or rotates the credentials it holds.
-     */
-    async postIamUpdateProvider(requestParameters: IamApiPostIamUpdateProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamResponse> {
-        const response = await this.postIamUpdateProviderRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Updates a role\'s members or the roles it includes. Access changes for everyone in it as soon as the write lands.  The older spelling of POST /v1/iam/roles/update.
-     * Updates a role\'s members or the roles it includes.
-     */
-    async postIamUpdateRoleRaw(requestParameters: IamApiPostIamUpdateRoleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamResponse>> {
-        if (requestParameters['iamRolesInput'] == null) {
-            throw new runtime.RequiredError(
-                'iamRolesInput',
-                'Required parameter "iamRolesInput" was null or undefined when calling postIamUpdateRole().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/update-role`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamRolesInputToJSON(requestParameters['iamRolesInput']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Updates a role\'s members or the roles it includes. Access changes for everyone in it as soon as the write lands.  The older spelling of POST /v1/iam/roles/update.
-     * Updates a role\'s members or the roles it includes.
-     */
-    async postIamUpdateRole(requestParameters: IamApiPostIamUpdateRoleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamResponse> {
-        const response = await this.postIamUpdateRoleRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Updates one of your users\' profile, roles or credentials. Send a password to reset it; leave it out and the current one stands.  The older spelling of POST /v1/iam/users/update, with the user\'s fields at the top level rather than wrapped in {user, password}.
-     * Updates one of your users\' profile, roles or credentials.
-     */
-    async postIamUpdateUserRaw(requestParameters: IamApiPostIamUpdateUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamResponse>> {
-        if (requestParameters['iamUserBody'] == null) {
-            throw new runtime.RequiredError(
-                'iamUserBody',
-                'Required parameter "iamUserBody" was null or undefined when calling postIamUpdateUser().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/update-user`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamUserBodyToJSON(requestParameters['iamUserBody']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Updates one of your users\' profile, roles or credentials. Send a password to reset it; leave it out and the current one stands.  The older spelling of POST /v1/iam/users/update, with the user\'s fields at the top level rather than wrapped in {user, password}.
-     * Updates one of your users\' profile, roles or credentials.
-     */
-    async postIamUpdateUser(requestParameters: IamApiPostIamUpdateUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamResponse> {
-        const response = await this.postIamUpdateUserRaw(requestParameters, initOverrides);
-        return await response.value();
     }
 
     /**
@@ -8493,22 +6697,27 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Removes a person from your organization. Their sessions stop working immediately and the account is gone rather than suspended — to keep the record and only stop sign-in, update the user instead.
-     * Removes a person from your organization.
+     * (re)generates the target user\'s key of the requested TYPE and returns it once, over the shared authorizeMinter + mintTarget seam. `?type=secret` (the default) yields the confidential sk-; `?type=publishable` yields the pk- that is safe to ship in client JS and resolves to an org, never a principal.  It writes the schema.Key row that the resolvers actually read. schema.User.AccessKey is not a credential and nothing resolves it, so a key stamped there would authenticate nobody.
+     * (re)generates the target user\'s key of the requested TYPE and returns it once, over the shared authorizeMinter + mintTarget seam.
      */
-    async postIamUsersDeleteRaw(requestParameters: IamApiPostIamUsersDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamUsersDeleteOutput>> {
-        if (requestParameters['iamUsersRef'] == null) {
+    async postIamUsersByOwnerByNameKeysRaw(requestParameters: IamApiPostIamUsersByOwnerByNameKeysRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
-                'iamUsersRef',
-                'Required parameter "iamUsersRef" was null or undefined when calling postIamUsersDelete().'
+                'owner',
+                'Required parameter "owner" was null or undefined when calling postIamUsersByOwnerByNameKeys().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling postIamUsersByOwnerByNameKeys().'
             );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -8519,75 +6728,26 @@ export class IamApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/iam/users/delete`;
+        let urlPath = `/v1/iam/users/{owner}/{name}/keys`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
 
         const response = await this.request({
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: IamUsersRefToJSON(requestParameters['iamUsersRef']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamUsersDeleteOutputFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
-     * Removes a person from your organization. Their sessions stop working immediately and the account is gone rather than suspended — to keep the record and only stop sign-in, update the user instead.
-     * Removes a person from your organization.
+     * (re)generates the target user\'s key of the requested TYPE and returns it once, over the shared authorizeMinter + mintTarget seam. `?type=secret` (the default) yields the confidential sk-; `?type=publishable` yields the pk- that is safe to ship in client JS and resolves to an org, never a principal.  It writes the schema.Key row that the resolvers actually read. schema.User.AccessKey is not a credential and nothing resolves it, so a key stamped there would authenticate nobody.
+     * (re)generates the target user\'s key of the requested TYPE and returns it once, over the shared authorizeMinter + mintTarget seam.
      */
-    async postIamUsersDelete(requestParameters: IamApiPostIamUsersDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamUsersDeleteOutput> {
-        const response = await this.postIamUsersDeleteRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Changes a person\'s profile, their roles, or the credentials they sign in with. Send a password to reset it; leave it out and their current one keeps working.  Who they are does not change: their organization, username and the identifier their existing sessions are keyed on all survive the write, so an update never signs anyone out.
-     * Changes a person\'s profile, their roles, or the credentials they sign in with.
-     */
-    async postIamUsersUpdateRaw(requestParameters: IamApiPostIamUsersUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamUser>> {
-        if (requestParameters['iamUpdateInput'] == null) {
-            throw new runtime.RequiredError(
-                'iamUpdateInput',
-                'Required parameter "iamUpdateInput" was null or undefined when calling postIamUsersUpdate().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/users/update`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamUpdateInputToJSON(requestParameters['iamUpdateInput']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamUserFromJSON(jsonValue));
-    }
-
-    /**
-     * Changes a person\'s profile, their roles, or the credentials they sign in with. Send a password to reset it; leave it out and their current one keeps working.  Who they are does not change: their organization, username and the identifier their existing sessions are keyed on all survive the write, so an update never signs anyone out.
-     * Changes a person\'s profile, their roles, or the credentials they sign in with.
-     */
-    async postIamUsersUpdate(requestParameters: IamApiPostIamUsersUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamUser> {
-        const response = await this.postIamUsersUpdateRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postIamUsersByOwnerByNameKeys(requestParameters: IamApiPostIamUsersByOwnerByNameKeysRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postIamUsersByOwnerByNameKeysRaw(requestParameters, initOverrides);
     }
 
     /**
@@ -8667,6 +6827,82 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
+     * Verifies the signed challenge and signs the person in.  It answers exactly as a password sign-in does — the same envelope, through the same grant — so nothing downstream branches on how somebody arrived.
+     * Verifies the signed challenge and signs the person in.
+     */
+    async postIamWebauthnSigninFinishRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/iam/webauthn/signin/finish`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Verifies the signed challenge and signs the person in.  It answers exactly as a password sign-in does — the same envelope, through the same grant — so nothing downstream branches on how somebody arrived.
+     * Verifies the signed challenge and signs the person in.
+     */
+    async postIamWebauthnSigninFinish(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postIamWebauthnSigninFinishRaw(initOverrides);
+    }
+
+    /**
+     * Verifies the newly created passkey and stores it, so the person can sign in with their device from then on.
+     * Verifies the newly created passkey and stores it, so the person can sign in with their device from then on.
+     */
+    async postIamWebauthnSignupFinishRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/iam/webauthn/signup/finish`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Verifies the newly created passkey and stores it, so the person can sign in with their device from then on.
+     * Verifies the newly created passkey and stores it, so the person can sign in with their device from then on.
+     */
+    async postIamWebauthnSignupFinish(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postIamWebauthnSignupFinishRaw(initOverrides);
+    }
+
+    /**
      * Makes a workspace inside your organization — the scope a team works in, alongside projects rather than instead of them. A name already used in the organization is refused.
      * Makes a workspace inside your organization — the scope a team works in, alongside projects rather than instead of them.
      */
@@ -8716,14 +6952,14 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Removes a workspace. The people and roles in your organization are unchanged; what goes is the scope itself.
-     * Removes a workspace.
+     * Saves the calling person\'s own profile — the name they are shown by, their picture, a line about themselves and a link.  Only their own: the request names nobody, so it cannot reach another account. Send only what you are changing; a field you leave out keeps the value it had, and a field you send empty is cleared.  A picture is an https link or an inline image up to 96 KiB, the same value an organization\'s mark is (schema.AvatarRef) — one rule for how a subject appears, whether the subject is a person or an organization.
+     * Saves the calling person\'s own profile — the name they are shown by, their picture, a line about themselves and a link.
      */
-    async postIamWorkspacesDeleteRaw(requestParameters: IamApiPostIamWorkspacesDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamWorkspacesDeleteOutput>> {
-        if (requestParameters['iamWorkspacesRef'] == null) {
+    async putIamAccountRaw(requestParameters: IamApiPutIamAccountRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamAnswer>> {
+        if (requestParameters['iamAccountBody'] == null) {
             throw new runtime.RequiredError(
-                'iamWorkspacesRef',
-                'Required parameter "iamWorkspacesRef" was null or undefined when calling postIamWorkspacesDelete().'
+                'iamAccountBody',
+                'Required parameter "iamAccountBody" was null or undefined when calling putIamAccount().'
             );
         }
 
@@ -8732,6 +6968,14 @@ export class IamApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         headerParameters['Content-Type'] = 'application/json';
+
+        if (requestParameters['cookie'] != null) {
+            headerParameters['Cookie'] = String(requestParameters['cookie']);
+        }
+
+        if (requestParameters['authorization'] != null) {
+            headerParameters['Authorization'] = String(requestParameters['authorization']);
+        }
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -8742,123 +6986,25 @@ export class IamApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/iam/workspaces/delete`;
+        let urlPath = `/v1/iam/account`;
 
         const response = await this.request({
             path: urlPath,
-            method: 'POST',
+            method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: IamWorkspacesRefToJSON(requestParameters['iamWorkspacesRef']),
+            body: IamAccountBodyToJSON(requestParameters['iamAccountBody']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamWorkspacesDeleteOutputFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => IamAnswerFromJSON(jsonValue));
     }
 
     /**
-     * Removes a workspace. The people and roles in your organization are unchanged; what goes is the scope itself.
-     * Removes a workspace.
+     * Saves the calling person\'s own profile — the name they are shown by, their picture, a line about themselves and a link.  Only their own: the request names nobody, so it cannot reach another account. Send only what you are changing; a field you leave out keeps the value it had, and a field you send empty is cleared.  A picture is an https link or an inline image up to 96 KiB, the same value an organization\'s mark is (schema.AvatarRef) — one rule for how a subject appears, whether the subject is a person or an organization.
+     * Saves the calling person\'s own profile — the name they are shown by, their picture, a line about themselves and a link.
      */
-    async postIamWorkspacesDelete(requestParameters: IamApiPostIamWorkspacesDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamWorkspacesDeleteOutput> {
-        const response = await this.postIamWorkspacesDeleteRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Returns one workspace: what it is called and how it is set up.
-     * Returns one workspace: what it is called and how it is set up.
-     */
-    async postIamWorkspacesGetRaw(requestParameters: IamApiPostIamWorkspacesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamWorkspace>> {
-        if (requestParameters['iamWorkspacesRef'] == null) {
-            throw new runtime.RequiredError(
-                'iamWorkspacesRef',
-                'Required parameter "iamWorkspacesRef" was null or undefined when calling postIamWorkspacesGet().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/workspaces/get`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamWorkspacesRefToJSON(requestParameters['iamWorkspacesRef']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamWorkspaceFromJSON(jsonValue));
-    }
-
-    /**
-     * Returns one workspace: what it is called and how it is set up.
-     * Returns one workspace: what it is called and how it is set up.
-     */
-    async postIamWorkspacesGet(requestParameters: IamApiPostIamWorkspacesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamWorkspace> {
-        const response = await this.postIamWorkspacesGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Changes a workspace\'s settings. What it is called does not change, and neither does when it was created.
-     * Changes a workspace\'s settings.
-     */
-    async postIamWorkspacesUpdateRaw(requestParameters: IamApiPostIamWorkspacesUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamWorkspace>> {
-        if (requestParameters['iamWorkspacesInput'] == null) {
-            throw new runtime.RequiredError(
-                'iamWorkspacesInput',
-                'Required parameter "iamWorkspacesInput" was null or undefined when calling postIamWorkspacesUpdate().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/workspaces/update`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IamWorkspacesInputToJSON(requestParameters['iamWorkspacesInput']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamWorkspaceFromJSON(jsonValue));
-    }
-
-    /**
-     * Changes a workspace\'s settings. What it is called does not change, and neither does when it was created.
-     * Changes a workspace\'s settings.
-     */
-    async postIamWorkspacesUpdate(requestParameters: IamApiPostIamWorkspacesUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamWorkspace> {
-        const response = await this.postIamWorkspacesUpdateRaw(requestParameters, initOverrides);
+    async putIamAccount(requestParameters: IamApiPutIamAccountRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamAnswer> {
+        const response = await this.putIamAccountRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -8866,11 +7012,25 @@ export class IamApi extends runtime.BaseAPI {
      * Changes an application\'s display, its sign-in methods and the redirect URIs it may return to — the call that makes login work from a new host. Which organization it belongs to and what it is named are fixed when it is created and are not editable here.  Exported so the legacy update-application alias reuses this exact path — one update, two spellings.
      * Changes an application\'s display, its sign-in methods and the redirect URIs it may return to — the call that makes login work from a new host.
      */
-    async putIamApplicationRaw(requestParameters: IamApiPutIamApplicationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamApplication>> {
+    async putIamApplicationsByOwnerByNameRaw(requestParameters: IamApiPutIamApplicationsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamApplication>> {
+        if (requestParameters['owner'] == null) {
+            throw new runtime.RequiredError(
+                'owner',
+                'Required parameter "owner" was null or undefined when calling putIamApplicationsByOwnerByName().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling putIamApplicationsByOwnerByName().'
+            );
+        }
+
         if (requestParameters['iamApplication'] == null) {
             throw new runtime.RequiredError(
                 'iamApplication',
-                'Required parameter "iamApplication" was null or undefined when calling putIamApplication().'
+                'Required parameter "iamApplication" was null or undefined when calling putIamApplicationsByOwnerByName().'
             );
         }
 
@@ -8889,7 +7049,9 @@ export class IamApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/iam/application`;
+        let urlPath = `/v1/iam/applications/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
 
         const response = await this.request({
             path: urlPath,
@@ -8906,8 +7068,138 @@ export class IamApi extends runtime.BaseAPI {
      * Changes an application\'s display, its sign-in methods and the redirect URIs it may return to — the call that makes login work from a new host. Which organization it belongs to and what it is named are fixed when it is created and are not editable here.  Exported so the legacy update-application alias reuses this exact path — one update, two spellings.
      * Changes an application\'s display, its sign-in methods and the redirect URIs it may return to — the call that makes login work from a new host.
      */
-    async putIamApplication(requestParameters: IamApiPutIamApplicationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamApplication> {
-        const response = await this.putIamApplicationRaw(requestParameters, initOverrides);
+    async putIamApplicationsByOwnerByName(requestParameters: IamApiPutIamApplicationsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamApplication> {
+        const response = await this.putIamApplicationsByOwnerByNameRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Corrects an audit entry. The trail is append-only in normal operation and nothing in the Hanzo Cloud rewrites it — this exists for an administrator to correct an entry their own systems recorded wrongly.
+     * Corrects an audit entry.
+     */
+    async putIamAuditLogsByOwnerByNameRaw(requestParameters: IamApiPutIamAuditLogsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamAuditLog>> {
+        if (requestParameters['owner'] == null) {
+            throw new runtime.RequiredError(
+                'owner',
+                'Required parameter "owner" was null or undefined when calling putIamAuditLogsByOwnerByName().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling putIamAuditLogsByOwnerByName().'
+            );
+        }
+
+        if (requestParameters['iamInput'] == null) {
+            throw new runtime.RequiredError(
+                'iamInput',
+                'Required parameter "iamInput" was null or undefined when calling putIamAuditLogsByOwnerByName().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/iam/audit-logs/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: IamInputToJSON(requestParameters['iamInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IamAuditLogFromJSON(jsonValue));
+    }
+
+    /**
+     * Corrects an audit entry. The trail is append-only in normal operation and nothing in the Hanzo Cloud rewrites it — this exists for an administrator to correct an entry their own systems recorded wrongly.
+     * Corrects an audit entry.
+     */
+    async putIamAuditLogsByOwnerByName(requestParameters: IamApiPutIamAuditLogsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamAuditLog> {
+        const response = await this.putIamAuditLogsByOwnerByNameRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Changes a signing certificate\'s settings. What it is called does not change, and neither does when it was added.  A PUT here is a METADATA edit — display name, expiry, provider. It overlays only the fields the request actually SET onto the loaded row: a field the JSON omits (or leaves at its zero value) keeps what the row holds, rather than blanking it. That is load-bearing, not a nicety. A read serves the public Certificate (Mask hides only PrivateKey and AccessSecret), so a client that reads a cert, changes one field, and writes it back sends the masked halves empty and every other field it did not touch at its zero value — and the old full-struct overlay wrote all of those blanks back. Blanking CryptoAlgorithm alone drops the cert from the JWKS (oidc.Publishes turns false), so every token under its `kid` stops verifying; blanking Provider/Account/ExpireTime breaks ACME renewal and expiry — all from a request that only meant to rename it. Absent-or-zero means \"unchanged\", so the deployment (key) and a rotation (cert) remain the only way key or published material changes; the metadata API cannot clear it.  The overlay is generic — it copies every set field, so a field nobody has added yet is carried without a line here — and leaves three things the request may not move: the bound Model (id, createdAt, key, snapshot), the natural key (owner/name address the row, they do not mutate it), and the creation stamp.
+     * Changes a signing certificate\'s settings.
+     */
+    async putIamCertsByOwnerByNameRaw(requestParameters: IamApiPutIamCertsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamCert>> {
+        if (requestParameters['owner'] == null) {
+            throw new runtime.RequiredError(
+                'owner',
+                'Required parameter "owner" was null or undefined when calling putIamCertsByOwnerByName().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling putIamCertsByOwnerByName().'
+            );
+        }
+
+        if (requestParameters['iamCert'] == null) {
+            throw new runtime.RequiredError(
+                'iamCert',
+                'Required parameter "iamCert" was null or undefined when calling putIamCertsByOwnerByName().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/iam/certs/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: IamCertToJSON(requestParameters['iamCert']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IamCertFromJSON(jsonValue));
+    }
+
+    /**
+     * Changes a signing certificate\'s settings. What it is called does not change, and neither does when it was added.  A PUT here is a METADATA edit — display name, expiry, provider. It overlays only the fields the request actually SET onto the loaded row: a field the JSON omits (or leaves at its zero value) keeps what the row holds, rather than blanking it. That is load-bearing, not a nicety. A read serves the public Certificate (Mask hides only PrivateKey and AccessSecret), so a client that reads a cert, changes one field, and writes it back sends the masked halves empty and every other field it did not touch at its zero value — and the old full-struct overlay wrote all of those blanks back. Blanking CryptoAlgorithm alone drops the cert from the JWKS (oidc.Publishes turns false), so every token under its `kid` stops verifying; blanking Provider/Account/ExpireTime breaks ACME renewal and expiry — all from a request that only meant to rename it. Absent-or-zero means \"unchanged\", so the deployment (key) and a rotation (cert) remain the only way key or published material changes; the metadata API cannot clear it.  The overlay is generic — it copies every set field, so a field nobody has added yet is carried without a line here — and leaves three things the request may not move: the bound Model (id, createdAt, key, snapshot), the natural key (owner/name address the row, they do not mutate it), and the creation stamp.
+     * Changes a signing certificate\'s settings.
+     */
+    async putIamCertsByOwnerByName(requestParameters: IamApiPutIamCertsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamCert> {
+        const response = await this.putIamCertsByOwnerByNameRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -8947,6 +7239,136 @@ export class IamApi extends runtime.BaseAPI {
      */
     async putIamConsent(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.putIamConsentRaw(initOverrides);
+    }
+
+    /**
+     * Changes an invitation\'s terms — the role it grants, how many may redeem it, or when it expires. What it is called does not change.
+     * Changes an invitation\'s terms — the role it grants, how many may redeem it, or when it expires.
+     */
+    async putIamInvitationsByOwnerByNameRaw(requestParameters: IamApiPutIamInvitationsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamInvitation>> {
+        if (requestParameters['owner'] == null) {
+            throw new runtime.RequiredError(
+                'owner',
+                'Required parameter "owner" was null or undefined when calling putIamInvitationsByOwnerByName().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling putIamInvitationsByOwnerByName().'
+            );
+        }
+
+        if (requestParameters['iamInvitationsInput'] == null) {
+            throw new runtime.RequiredError(
+                'iamInvitationsInput',
+                'Required parameter "iamInvitationsInput" was null or undefined when calling putIamInvitationsByOwnerByName().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/iam/invitations/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: IamInvitationsInputToJSON(requestParameters['iamInvitationsInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IamInvitationFromJSON(jsonValue));
+    }
+
+    /**
+     * Changes an invitation\'s terms — the role it grants, how many may redeem it, or when it expires. What it is called does not change.
+     * Changes an invitation\'s terms — the role it grants, how many may redeem it, or when it expires.
+     */
+    async putIamInvitationsByOwnerByName(requestParameters: IamApiPutIamInvitationsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamInvitation> {
+        const response = await this.putIamInvitationsByOwnerByNameRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Changes what a key is called or what it may reach. The credential itself is not reissued — the key in your deployment keeps working.
+     * Changes what a key is called or what it may reach.
+     */
+    async putIamKeysByOwnerByNameRaw(requestParameters: IamApiPutIamKeysByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamKey>> {
+        if (requestParameters['owner'] == null) {
+            throw new runtime.RequiredError(
+                'owner',
+                'Required parameter "owner" was null or undefined when calling putIamKeysByOwnerByName().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling putIamKeysByOwnerByName().'
+            );
+        }
+
+        if (requestParameters['iamKey'] == null) {
+            throw new runtime.RequiredError(
+                'iamKey',
+                'Required parameter "iamKey" was null or undefined when calling putIamKeysByOwnerByName().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/iam/keys/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: IamKeyToJSON(requestParameters['iamKey']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IamKeyFromJSON(jsonValue));
+    }
+
+    /**
+     * Changes what a key is called or what it may reach. The credential itself is not reissued — the key in your deployment keeps working.
+     * Changes what a key is called or what it may reach.
+     */
+    async putIamKeysByOwnerByName(requestParameters: IamApiPutIamKeysByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamKey> {
+        const response = await this.putIamKeysByOwnerByNameRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
@@ -9007,6 +7429,201 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
+     * Changes who a permission grants to, what it allows, or the resources it covers. Access changes as soon as the write lands. What the permission is called does not change, and neither does when it was created.
+     * Changes who a permission grants to, what it allows, or the resources it covers.
+     */
+    async putIamPermissionsByOwnerByNameRaw(requestParameters: IamApiPutIamPermissionsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamPermission>> {
+        if (requestParameters['owner'] == null) {
+            throw new runtime.RequiredError(
+                'owner',
+                'Required parameter "owner" was null or undefined when calling putIamPermissionsByOwnerByName().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling putIamPermissionsByOwnerByName().'
+            );
+        }
+
+        if (requestParameters['iamPermission'] == null) {
+            throw new runtime.RequiredError(
+                'iamPermission',
+                'Required parameter "iamPermission" was null or undefined when calling putIamPermissionsByOwnerByName().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/iam/permissions/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: IamPermissionToJSON(requestParameters['iamPermission']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IamPermissionFromJSON(jsonValue));
+    }
+
+    /**
+     * Changes who a permission grants to, what it allows, or the resources it covers. Access changes as soon as the write lands. What the permission is called does not change, and neither does when it was created.
+     * Changes who a permission grants to, what it allows, or the resources it covers.
+     */
+    async putIamPermissionsByOwnerByName(requestParameters: IamApiPutIamPermissionsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamPermission> {
+        const response = await this.putIamPermissionsByOwnerByNameRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Changes a project\'s settings. What it is called does not change, and neither does when it was created.
+     * Changes a project\'s settings.
+     */
+    async putIamProjectsByOwnerByNameRaw(requestParameters: IamApiPutIamProjectsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamProject>> {
+        if (requestParameters['owner'] == null) {
+            throw new runtime.RequiredError(
+                'owner',
+                'Required parameter "owner" was null or undefined when calling putIamProjectsByOwnerByName().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling putIamProjectsByOwnerByName().'
+            );
+        }
+
+        if (requestParameters['iamProjectsInput'] == null) {
+            throw new runtime.RequiredError(
+                'iamProjectsInput',
+                'Required parameter "iamProjectsInput" was null or undefined when calling putIamProjectsByOwnerByName().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/iam/projects/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: IamProjectsInputToJSON(requestParameters['iamProjectsInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IamProjectFromJSON(jsonValue));
+    }
+
+    /**
+     * Changes a project\'s settings. What it is called does not change, and neither does when it was created.
+     * Changes a project\'s settings.
+     */
+    async putIamProjectsByOwnerByName(requestParameters: IamApiPutIamProjectsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamProject> {
+        const response = await this.putIamProjectsByOwnerByNameRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Changes who is in a role, or which roles it includes. Access changes for everyone in it as soon as the write lands. What the role is called does not change, and neither does when it was created.
+     * Changes who is in a role, or which roles it includes.
+     */
+    async putIamRolesByOwnerByNameRaw(requestParameters: IamApiPutIamRolesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamRole>> {
+        if (requestParameters['owner'] == null) {
+            throw new runtime.RequiredError(
+                'owner',
+                'Required parameter "owner" was null or undefined when calling putIamRolesByOwnerByName().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling putIamRolesByOwnerByName().'
+            );
+        }
+
+        if (requestParameters['iamRolesInput'] == null) {
+            throw new runtime.RequiredError(
+                'iamRolesInput',
+                'Required parameter "iamRolesInput" was null or undefined when calling putIamRolesByOwnerByName().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/iam/roles/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: IamRolesInputToJSON(requestParameters['iamRolesInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IamRoleFromJSON(jsonValue));
+    }
+
+    /**
+     * Changes who is in a role, or which roles it includes. Access changes for everyone in it as soon as the write lands. What the role is called does not change, and neither does when it was created.
+     * Changes who is in a role, or which roles it includes.
+     */
+    async putIamRolesByOwnerByName(requestParameters: IamApiPutIamRolesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamRole> {
+        const response = await this.putIamRolesByOwnerByNameRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Overwrites a person\'s SCIM attributes with what your identity provider sends — how a change made there lands here.  Only the attributes SCIM describes are replaced. Anything the standard does not cover — their multi-factor enrolment above all — survives untouched, so a routine sync from your IdP can never quietly strip someone\'s second factor or bring a deleted account back.
      * Overwrites a person\'s SCIM attributes with what your identity provider sends — how a change made there lands here.
      */
@@ -9061,10 +7678,203 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
+     * Changes a person\'s profile, their roles, or the credentials they sign in with. Send a password to reset it; leave it out and their current one keeps working.  Who they are does not change: their organization, username and the identifier their existing sessions are keyed on all survive the write, so an update never signs anyone out.
+     * Changes a person\'s profile, their roles, or the credentials they sign in with.
+     */
+    async putIamUsersByOwnerByNameRaw(requestParameters: IamApiPutIamUsersByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamUser>> {
+        if (requestParameters['owner'] == null) {
+            throw new runtime.RequiredError(
+                'owner',
+                'Required parameter "owner" was null or undefined when calling putIamUsersByOwnerByName().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling putIamUsersByOwnerByName().'
+            );
+        }
+
+        if (requestParameters['iamUpdateInput'] == null) {
+            throw new runtime.RequiredError(
+                'iamUpdateInput',
+                'Required parameter "iamUpdateInput" was null or undefined when calling putIamUsersByOwnerByName().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/iam/users/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: IamUpdateInputToJSON(requestParameters['iamUpdateInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IamUserFromJSON(jsonValue));
+    }
+
+    /**
+     * Changes a person\'s profile, their roles, or the credentials they sign in with. Send a password to reset it; leave it out and their current one keeps working.  Who they are does not change: their organization, username and the identifier their existing sessions are keyed on all survive the write, so an update never signs anyone out.
+     * Changes a person\'s profile, their roles, or the credentials they sign in with.
+     */
+    async putIamUsersByOwnerByName(requestParameters: IamApiPutIamUsersByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamUser> {
+        const response = await this.putIamUsersByOwnerByNameRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Changes a workspace\'s settings. What it is called does not change, and neither does when it was created.
+     * Changes a workspace\'s settings.
+     */
+    async putIamWorkspacesByOwnerByNameRaw(requestParameters: IamApiPutIamWorkspacesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamWorkspace>> {
+        if (requestParameters['owner'] == null) {
+            throw new runtime.RequiredError(
+                'owner',
+                'Required parameter "owner" was null or undefined when calling putIamWorkspacesByOwnerByName().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling putIamWorkspacesByOwnerByName().'
+            );
+        }
+
+        if (requestParameters['iamWorkspacesInput'] == null) {
+            throw new runtime.RequiredError(
+                'iamWorkspacesInput',
+                'Required parameter "iamWorkspacesInput" was null or undefined when calling putIamWorkspacesByOwnerByName().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/iam/workspaces/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: IamWorkspacesInputToJSON(requestParameters['iamWorkspacesInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IamWorkspaceFromJSON(jsonValue));
+    }
+
+    /**
+     * Changes a workspace\'s settings. What it is called does not change, and neither does when it was created.
+     * Changes a workspace\'s settings.
+     */
+    async putIamWorkspacesByOwnerByName(requestParameters: IamApiPutIamWorkspacesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamWorkspace> {
+        const response = await this.putIamWorkspacesByOwnerByNameRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Changes how an organization appears across Hanzo: the square mark beside its name, as an uploaded image or as a single emoji. Sending an image clears the emoji and sending an emoji clears the image — an organization has one mark, not a preference order — and sending neither clears both, which is how it goes back to being drawn as its initial.  An image is an https link or the bytes inline as a data URL, up to 96 KiB. Anyone who administers the organization may set this; it is not reserved to the platform.  It writes the two fields onto the stored row and touches nothing else, which update cannot do: update replaces the whole record, and a record read back first arrives masked, so a read-modify-write through it would persist the mask over the organization\'s own credential settings.
+     * Changes how an organization appears across Hanzo: the square mark beside its name, as an uploaded image or as a single emoji.
+     */
+    async setOrganizationAvatarRaw(requestParameters: IamApiSetOrganizationAvatarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamOrganization>> {
+        if (requestParameters['iamSetAvatarInput'] == null) {
+            throw new runtime.RequiredError(
+                'iamSetAvatarInput',
+                'Required parameter "iamSetAvatarInput" was null or undefined when calling setOrganizationAvatar().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/iam/organizations/avatar`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: IamSetAvatarInputToJSON(requestParameters['iamSetAvatarInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IamOrganizationFromJSON(jsonValue));
+    }
+
+    /**
+     * Changes how an organization appears across Hanzo: the square mark beside its name, as an uploaded image or as a single emoji. Sending an image clears the emoji and sending an emoji clears the image — an organization has one mark, not a preference order — and sending neither clears both, which is how it goes back to being drawn as its initial.  An image is an https link or the bytes inline as a data URL, up to 96 KiB. Anyone who administers the organization may set this; it is not reserved to the platform.  It writes the two fields onto the stored row and touches nothing else, which update cannot do: update replaces the whole record, and a record read back first arrives masked, so a read-modify-write through it would persist the mask over the organization\'s own credential settings.
+     * Changes how an organization appears across Hanzo: the square mark beside its name, as an uploaded image or as a single emoji.
+     */
+    async setOrganizationAvatar(requestParameters: IamApiSetOrganizationAvatarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamOrganization> {
+        const response = await this.setOrganizationAvatarRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Changes an organization\'s display, its defaults and the sign-in rules everyone in it inherits. Which organization it is does not change, and neither does when it was created.
      * Changes an organization\'s display, its defaults and the sign-in rules everyone in it inherits.
      */
     async updateOrganizationRaw(requestParameters: IamApiUpdateOrganizationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamOrganization>> {
+        if (requestParameters['owner'] == null) {
+            throw new runtime.RequiredError(
+                'owner',
+                'Required parameter "owner" was null or undefined when calling updateOrganization().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling updateOrganization().'
+            );
+        }
+
         if (requestParameters['iamUpdateOrganizationInput'] == null) {
             throw new runtime.RequiredError(
                 'iamUpdateOrganizationInput',
@@ -9087,11 +7897,13 @@ export class IamApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/iam/organizations/update`;
+        let urlPath = `/v1/iam/organizations/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
 
         const response = await this.request({
             path: urlPath,
-            method: 'POST',
+            method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
             body: IamUpdateOrganizationInputToJSON(requestParameters['iamUpdateOrganizationInput']),
@@ -9114,6 +7926,20 @@ export class IamApi extends runtime.BaseAPI {
      * Changes a provider\'s settings or rotates the credentials it holds.
      */
     async updateProviderRaw(requestParameters: IamApiUpdateProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamMutationResult>> {
+        if (requestParameters['owner'] == null) {
+            throw new runtime.RequiredError(
+                'owner',
+                'Required parameter "owner" was null or undefined when calling updateProvider().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling updateProvider().'
+            );
+        }
+
         if (requestParameters['iamProvider'] == null) {
             throw new runtime.RequiredError(
                 'iamProvider',
@@ -9136,11 +7962,13 @@ export class IamApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/iam/providers/update`;
+        let urlPath = `/v1/iam/providers/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
 
         const response = await this.request({
             path: urlPath,
-            method: 'POST',
+            method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
             body: IamProviderToJSON(requestParameters['iamProvider']),
@@ -9163,6 +7991,27 @@ export class IamApi extends runtime.BaseAPI {
      * Replaces the set of browsers a session covers — signing out the ones you leave off while the session itself stays live.
      */
     async updateSessionRaw(requestParameters: IamApiUpdateSessionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamSession>> {
+        if (requestParameters['owner'] == null) {
+            throw new runtime.RequiredError(
+                'owner',
+                'Required parameter "owner" was null or undefined when calling updateSession().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling updateSession().'
+            );
+        }
+
+        if (requestParameters['application'] == null) {
+            throw new runtime.RequiredError(
+                'application',
+                'Required parameter "application" was null or undefined when calling updateSession().'
+            );
+        }
+
         if (requestParameters['iamUpdateSessionIn'] == null) {
             throw new runtime.RequiredError(
                 'iamUpdateSessionIn',
@@ -9185,11 +8034,14 @@ export class IamApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/iam/sessions/update`;
+        let urlPath = `/v1/iam/sessions/{owner}/{name}/{application}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
+        urlPath = urlPath.replace(`{${"application"}}`, encodeURIComponent(String(requestParameters['application'])));
 
         const response = await this.request({
             path: urlPath,
-            method: 'POST',
+            method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
             body: IamUpdateSessionInToJSON(requestParameters['iamUpdateSessionIn']),
@@ -9212,6 +8064,20 @@ export class IamApi extends runtime.BaseAPI {
      * Changes an access token\'s scope or expiry.
      */
     async updateTokenRaw(requestParameters: IamApiUpdateTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamTokenMutation>> {
+        if (requestParameters['owner'] == null) {
+            throw new runtime.RequiredError(
+                'owner',
+                'Required parameter "owner" was null or undefined when calling updateToken().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling updateToken().'
+            );
+        }
+
         if (requestParameters['iamToken'] == null) {
             throw new runtime.RequiredError(
                 'iamToken',
@@ -9234,11 +8100,13 @@ export class IamApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/iam/tokens/update`;
+        let urlPath = `/v1/iam/tokens/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
 
         const response = await this.request({
             path: urlPath,
-            method: 'POST',
+            method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
             body: IamTokenToJSON(requestParameters['iamToken']),
@@ -9261,6 +8129,20 @@ export class IamApi extends runtime.BaseAPI {
      * Renames a registered passkey or security key, so a person can tell their devices apart.
      */
     async updateWebauthnCredentialRaw(requestParameters: IamApiUpdateWebauthnCredentialRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamWebauthnCredentialMutationResult>> {
+        if (requestParameters['owner'] == null) {
+            throw new runtime.RequiredError(
+                'owner',
+                'Required parameter "owner" was null or undefined when calling updateWebauthnCredential().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling updateWebauthnCredential().'
+            );
+        }
+
         if (requestParameters['iamWebauthnCredential'] == null) {
             throw new runtime.RequiredError(
                 'iamWebauthnCredential',
@@ -9283,11 +8165,13 @@ export class IamApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/iam/webauthn-credentials/update`;
+        let urlPath = `/v1/iam/webauthn-credentials/{owner}/{name}`;
+        urlPath = urlPath.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner'])));
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
 
         const response = await this.request({
             path: urlPath,
-            method: 'POST',
+            method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
             body: IamWebauthnCredentialToJSON(requestParameters['iamWebauthnCredential']),
@@ -9359,7 +8243,7 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Creates a person or updates them in place, so a deployment can declare the accounts it needs and re-run that declaration safely.  Passwords are hashed before they are stored. Leave the password out and their current one is kept, so a redeploy never locks somebody out.
+     * Creates a person or updates them in place, so a deployment can declare the accounts it needs and re-run that declaration safely.  It DESCRIBES an account it meets and GRANTS only to one it creates: org-admin is never raised on a row that already exists, and a machine identity is answered by name rather than adopted. Both are properties of the update itself, so a steady-state reconcile — which changes neither — is unaffected.  Passwords are hashed before they are stored. Leave the password out and their current one is kept, so a redeploy never locks somebody out; send the same one again and it is kept too, so a steady-state re-run is not a rotation.
      * Creates a person or updates them in place, so a deployment can declare the accounts it needs and re-run that declaration safely.
      */
     async upsertUserRaw(requestParameters: IamApiUpsertUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamReply>> {
@@ -9403,7 +8287,7 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Creates a person or updates them in place, so a deployment can declare the accounts it needs and re-run that declaration safely.  Passwords are hashed before they are stored. Leave the password out and their current one is kept, so a redeploy never locks somebody out.
+     * Creates a person or updates them in place, so a deployment can declare the accounts it needs and re-run that declaration safely.  It DESCRIBES an account it meets and GRANTS only to one it creates: org-admin is never raised on a row that already exists, and a machine identity is answered by name rather than adopted. Both are properties of the update itself, so a steady-state reconcile — which changes neither — is unaffected.  Passwords are hashed before they are stored. Leave the password out and their current one is kept, so a redeploy never locks somebody out; send the same one again and it is kept too, so a steady-state re-run is not a rotation.
      * Creates a person or updates them in place, so a deployment can declare the accounts it needs and re-run that declaration safely.
      */
     async upsertUser(requestParameters: IamApiUpsertUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamReply> {

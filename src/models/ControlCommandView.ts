@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,13 +20,17 @@ import { mapValues } from '../runtime.js';
  */
 export interface ControlCommandView {
     /**
-     * 
+     * Command is what was asked, from a closed four: pause, resume, stop, message.
+     * It is an INTENT — the poller decides what to do about it, and the session's
+     * status changes only when the poller reports back that it did.
      * @type {string}
      * @memberof ControlCommandView
      */
     command?: string;
     /**
-     * 
+     * Message is the text that came with the command: what to say into the run for
+     * `message`, and the cancellation reason for `stop`. Up to 16 KiB. Empty on a
+     * bare pause or resume.
      * @type {string}
      * @memberof ControlCommandView
      */
@@ -38,7 +42,10 @@ export interface ControlCommandView {
      */
     payload?: any | null;
     /**
-     * 
+     * Seq is this command's position in the session's log — the same monotonic
+     * number every other turn is ordered by, so a command sits in the transcript
+     * where it was issued. Send the highest one you applied back as `after` and it
+     * is never redelivered.
      * @type {number}
      * @memberof ControlCommandView
      */

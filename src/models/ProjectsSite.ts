@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,31 +20,33 @@ import { mapValues } from '../runtime.js';
  */
 export interface ProjectsSite {
     /**
-     * 
+     * Name is the site's display name.
      * @type {string}
      * @memberof ProjectsSite
      */
     name?: string;
     /**
-     * 
+     * Slug is the site's handle — also the label of the host it serves at.
      * @type {string}
      * @memberof ProjectsSite
      */
     slug?: string;
     /**
-     * 
+     * Status is the project's state behind the site — whether it is serving, still
+     * building, or failed its last build. A site that is listed is not necessarily
+     * one that answers.
      * @type {string}
      * @memberof ProjectsSite
      */
     status?: string;
     /**
-     * 
+     * UpdatedAt is when the project last changed, as Unix seconds.
      * @type {number}
      * @memberof ProjectsSite
      */
     updatedAt?: number;
     /**
-     * 
+     * URL is the pretty address readers use, not the object-store path behind it.
      * @type {string}
      * @memberof ProjectsSite
      */

@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,25 +20,29 @@ import { mapValues } from '../runtime.js';
  */
 export interface BuildRequest {
     /**
-     * 
+     * Name is the plugin's name: one lowercase path segment (a-z0-9, _ or -),
+     * and the id the runtime loads it by.
      * @type {string}
      * @memberof BuildRequest
      */
     name?: string;
     /**
-     * 
+     * Provider is the connectors provider whose credential the plugin reads at
+     * run time. Empty for a plugin that needs none.
      * @type {string}
      * @memberof BuildRequest
      */
     provider?: string;
     /**
-     * 
+     * Source is TypeScript to build as-is. Exactly one of Source or Spec.
      * @type {string}
      * @memberof BuildRequest
      */
     source?: string;
     /**
-     * 
+     * Spec is API documentation — an OpenAPI document, or prose describing the
+     * endpoints — that the generator turns into Source. The generated source is
+     * returned in the response, so a caller can read what will run before it runs.
      * @type {string}
      * @memberof BuildRequest
      */

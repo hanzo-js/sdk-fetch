@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -218,8 +218,8 @@ export class ComplianceApi extends runtime.BaseAPI {
     }
 
     /**
-     * AuditRead is the compliance-scoped read of the SHARED tamper-evident audit plane — the SOC 2 posture surface (privileged actions: who started/decided what, when). The org is PINNED to the caller\'s validated org and the rows are narrowed to compliance.* actions. Fail-closed: no principal is a 403, no configured audit store a 501.
-     * AuditRead is the compliance-scoped read of the SHARED tamper-evident audit plane — the SOC 2 posture surface (privileged actions: who started/decided what, when).
+     * AuditRead is the compliance read of the SHARED tamper-evident audit plane — the SOC 2 posture surface (privileged actions: who started/decided what, when). The org is PINNED to the caller\'s validated org and the rows are narrowed to compliance.* actions. Fail-closed: no principal is a 403, no configured audit store a 501.
+     * AuditRead is the compliance read of the SHARED tamper-evident audit plane — the SOC 2 posture surface (privileged actions: who started/decided what, when).
      */
     async getComplianceAuditRaw(requestParameters: ComplianceApiGetComplianceAuditRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AuditList>> {
         const queryParameters: any = {};
@@ -252,8 +252,8 @@ export class ComplianceApi extends runtime.BaseAPI {
     }
 
     /**
-     * AuditRead is the compliance-scoped read of the SHARED tamper-evident audit plane — the SOC 2 posture surface (privileged actions: who started/decided what, when). The org is PINNED to the caller\'s validated org and the rows are narrowed to compliance.* actions. Fail-closed: no principal is a 403, no configured audit store a 501.
-     * AuditRead is the compliance-scoped read of the SHARED tamper-evident audit plane — the SOC 2 posture surface (privileged actions: who started/decided what, when).
+     * AuditRead is the compliance read of the SHARED tamper-evident audit plane — the SOC 2 posture surface (privileged actions: who started/decided what, when). The org is PINNED to the caller\'s validated org and the rows are narrowed to compliance.* actions. Fail-closed: no principal is a 403, no configured audit store a 501.
+     * AuditRead is the compliance read of the SHARED tamper-evident audit plane — the SOC 2 posture surface (privileged actions: who started/decided what, when).
      */
     async getComplianceAudit(requestParameters: ComplianceApiGetComplianceAuditRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AuditList> {
         const response = await this.getComplianceAuditRaw(requestParameters, initOverrides);

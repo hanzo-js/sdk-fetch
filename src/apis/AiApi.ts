@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -16,154 +16,10 @@
 import * as runtime from '../runtime.js';
 import type {
   AiMCPSurface,
-  Envelope,
-  GetAiActivities200Response,
-  GetAiArticles200Response,
-  GetAiAssets200Response,
-  GetAiChats200Response,
-  GetAiDeployments200Response,
-  GetAiFiles200Response,
-  GetAiForms200Response,
-  GetAiGraphs200Response,
-  GetAiMessages200Response,
-  GetAiNodes200Response,
-  GetAiProviders200Response,
-  GetAiRecords200Response,
-  GetAiRemoteConnections200Response,
-  GetAiRoutes200Response,
-  GetAiScales200Response,
-  GetAiScans200Response,
-  GetAiSigninSessions200Response,
-  GetAiStores200Response,
-  GetAiTasks200Response,
-  GetAiTemplates200Response,
-  GetAiUsages200Response,
-  GetAiVectors200Response,
-  GetAiVideos200Response,
-  GetAiWorkflows200Response,
-  PostAiArticles200Response,
-  PostAiAssets200Response,
-  PostAiChats200Response,
-  PostAiDeployments200Response,
-  PostAiFiles200Response,
-  PostAiForms200Response,
-  PostAiGraphs200Response,
-  PostAiMessages200Response,
-  PostAiNodes200Response,
-  PostAiProviders200Response,
-  PostAiRecords200Response,
-  PostAiRemoteConnections200Response,
-  PostAiRoutes200Response,
-  PostAiScales200Response,
-  PostAiScans200Response,
-  PostAiSigninSessions200Response,
-  PostAiStores200Response,
-  PostAiTasks200Response,
-  PostAiTemplates200Response,
-  PostAiTreeFiles200Response,
-  PostAiVectors200Response,
-  PostAiVideos200Response,
-  PostAiWorkflows200Response,
 } from '../models/index.js';
 import {
     AiMCPSurfaceFromJSON,
     AiMCPSurfaceToJSON,
-    EnvelopeFromJSON,
-    EnvelopeToJSON,
-    GetAiActivities200ResponseFromJSON,
-    GetAiActivities200ResponseToJSON,
-    GetAiArticles200ResponseFromJSON,
-    GetAiArticles200ResponseToJSON,
-    GetAiAssets200ResponseFromJSON,
-    GetAiAssets200ResponseToJSON,
-    GetAiChats200ResponseFromJSON,
-    GetAiChats200ResponseToJSON,
-    GetAiDeployments200ResponseFromJSON,
-    GetAiDeployments200ResponseToJSON,
-    GetAiFiles200ResponseFromJSON,
-    GetAiFiles200ResponseToJSON,
-    GetAiForms200ResponseFromJSON,
-    GetAiForms200ResponseToJSON,
-    GetAiGraphs200ResponseFromJSON,
-    GetAiGraphs200ResponseToJSON,
-    GetAiMessages200ResponseFromJSON,
-    GetAiMessages200ResponseToJSON,
-    GetAiNodes200ResponseFromJSON,
-    GetAiNodes200ResponseToJSON,
-    GetAiProviders200ResponseFromJSON,
-    GetAiProviders200ResponseToJSON,
-    GetAiRecords200ResponseFromJSON,
-    GetAiRecords200ResponseToJSON,
-    GetAiRemoteConnections200ResponseFromJSON,
-    GetAiRemoteConnections200ResponseToJSON,
-    GetAiRoutes200ResponseFromJSON,
-    GetAiRoutes200ResponseToJSON,
-    GetAiScales200ResponseFromJSON,
-    GetAiScales200ResponseToJSON,
-    GetAiScans200ResponseFromJSON,
-    GetAiScans200ResponseToJSON,
-    GetAiSigninSessions200ResponseFromJSON,
-    GetAiSigninSessions200ResponseToJSON,
-    GetAiStores200ResponseFromJSON,
-    GetAiStores200ResponseToJSON,
-    GetAiTasks200ResponseFromJSON,
-    GetAiTasks200ResponseToJSON,
-    GetAiTemplates200ResponseFromJSON,
-    GetAiTemplates200ResponseToJSON,
-    GetAiUsages200ResponseFromJSON,
-    GetAiUsages200ResponseToJSON,
-    GetAiVectors200ResponseFromJSON,
-    GetAiVectors200ResponseToJSON,
-    GetAiVideos200ResponseFromJSON,
-    GetAiVideos200ResponseToJSON,
-    GetAiWorkflows200ResponseFromJSON,
-    GetAiWorkflows200ResponseToJSON,
-    PostAiArticles200ResponseFromJSON,
-    PostAiArticles200ResponseToJSON,
-    PostAiAssets200ResponseFromJSON,
-    PostAiAssets200ResponseToJSON,
-    PostAiChats200ResponseFromJSON,
-    PostAiChats200ResponseToJSON,
-    PostAiDeployments200ResponseFromJSON,
-    PostAiDeployments200ResponseToJSON,
-    PostAiFiles200ResponseFromJSON,
-    PostAiFiles200ResponseToJSON,
-    PostAiForms200ResponseFromJSON,
-    PostAiForms200ResponseToJSON,
-    PostAiGraphs200ResponseFromJSON,
-    PostAiGraphs200ResponseToJSON,
-    PostAiMessages200ResponseFromJSON,
-    PostAiMessages200ResponseToJSON,
-    PostAiNodes200ResponseFromJSON,
-    PostAiNodes200ResponseToJSON,
-    PostAiProviders200ResponseFromJSON,
-    PostAiProviders200ResponseToJSON,
-    PostAiRecords200ResponseFromJSON,
-    PostAiRecords200ResponseToJSON,
-    PostAiRemoteConnections200ResponseFromJSON,
-    PostAiRemoteConnections200ResponseToJSON,
-    PostAiRoutes200ResponseFromJSON,
-    PostAiRoutes200ResponseToJSON,
-    PostAiScales200ResponseFromJSON,
-    PostAiScales200ResponseToJSON,
-    PostAiScans200ResponseFromJSON,
-    PostAiScans200ResponseToJSON,
-    PostAiSigninSessions200ResponseFromJSON,
-    PostAiSigninSessions200ResponseToJSON,
-    PostAiStores200ResponseFromJSON,
-    PostAiStores200ResponseToJSON,
-    PostAiTasks200ResponseFromJSON,
-    PostAiTasks200ResponseToJSON,
-    PostAiTemplates200ResponseFromJSON,
-    PostAiTemplates200ResponseToJSON,
-    PostAiTreeFiles200ResponseFromJSON,
-    PostAiTreeFiles200ResponseToJSON,
-    PostAiVectors200ResponseFromJSON,
-    PostAiVectors200ResponseToJSON,
-    PostAiVideos200ResponseFromJSON,
-    PostAiVideos200ResponseToJSON,
-    PostAiWorkflows200ResponseFromJSON,
-    PostAiWorkflows200ResponseToJSON,
 } from '../models/index.js';
 
 export interface AiApiAiMCPToolsRequest {
@@ -183,6 +39,10 @@ export interface AiApiDeleteAiAssetsByOwnerByNameRequest {
 export interface AiApiDeleteAiChatsByOwnerByNameRequest {
     owner: string;
     name: string;
+}
+
+export interface AiApiDeleteAiConnectionsByProviderRequest {
+    provider: string;
 }
 
 export interface AiApiDeleteAiDeploymentsByOwnerByNameRequest {
@@ -300,6 +160,18 @@ export interface AiApiGetAiChatsByOwnerByNameRequest {
     name: string;
 }
 
+export interface AiApiGetAiConnectionsByProviderAuthorizeRequest {
+    provider: string;
+}
+
+export interface AiApiGetAiConnectionsByProviderCallbackRequest {
+    provider: string;
+}
+
+export interface AiApiGetAiConnectionsByProviderUsageRequest {
+    provider: string;
+}
+
 export interface AiApiGetAiDeploymentsByOwnerByNameRequest {
     owner: string;
     name: string;
@@ -405,488 +277,304 @@ export interface AiApiGetAiWorkflowsByOwnerByNameRequest {
     name: string;
 }
 
+export interface AiApiGetModelsByModelAccessRequest {
+    model: string;
+}
+
+export interface AiApiGetVideosByIdRequest {
+    id: string;
+}
+
+export interface AiApiGetVideosByIdContentRequest {
+    id: string;
+}
+
 export interface AiApiPatchAiArticlesByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPatchAiAssetsByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPatchAiChatsByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPatchAiDeploymentsByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPatchAiFilesByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPatchAiFormsByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPatchAiGraphsByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPatchAiMessagesByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPatchAiNodesByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
-}
-
-export interface AiApiPatchAiPreferencesRequest {
-    body: object;
 }
 
 export interface AiApiPatchAiProvidersByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPatchAiRecordsByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPatchAiRemoteConnectionsByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPatchAiRoutesByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPatchAiScalesByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPatchAiScansByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPatchAiSigninSessionsByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPatchAiStoresByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPatchAiTasksByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPatchAiTemplatesByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
-}
-
-export interface AiApiPatchAiTrainingContributionRequest {
-    body: object;
 }
 
 export interface AiApiPatchAiTreeFilesByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPatchAiVectorsByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPatchAiVideosByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPatchAiWorkflowsByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
-}
-
-export interface AiApiPostAiArticlesRequest {
-    body: object;
-}
-
-export interface AiApiPostAiAssetsRequest {
-    body: object;
 }
 
 export interface AiApiPostAiAssetsByOwnerByNameScanRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
-export interface AiApiPostAiAssetsScanRequest {
-    body: object;
-}
-
-export interface AiApiPostAiChatsRequest {
-    body: object;
-}
-
-export interface AiApiPostAiDeploymentsRequest {
-    body: object;
+export interface AiApiPostAiConnectionsByProviderRequest {
+    provider: string;
 }
 
 export interface AiApiPostAiDeploymentsByOwnerByNameDeployRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPostAiDeploymentsByOwnerByNameUndeployRequest {
     owner: string;
     name: string;
-    body: object;
-}
-
-export interface AiApiPostAiFilesRequest {
-    body: object;
-}
-
-export interface AiApiPostAiFilesActivateRequest {
-    body: object;
 }
 
 export interface AiApiPostAiFilesByOwnerByNameVectorsRequest {
     owner: string;
     name: string;
-    body: object;
-}
-
-export interface AiApiPostAiFilesUploadRequest {
-    body: object;
-}
-
-export interface AiApiPostAiFormsRequest {
-    body: object;
-}
-
-export interface AiApiPostAiGraphsRequest {
-    body: object;
-}
-
-export interface AiApiPostAiMessagesRequest {
-    body: object;
-}
-
-export interface AiApiPostAiNodesRequest {
-    body: object;
 }
 
 export interface AiApiPostAiNodesByOwnerByNameTunnelRequest {
     owner: string;
     name: string;
-    body: object;
-}
-
-export interface AiApiPostAiProvidersRequest {
-    body: object;
-}
-
-export interface AiApiPostAiProvidersMcpToolsRequest {
-    body: object;
-}
-
-export interface AiApiPostAiRecordsRequest {
-    body: object;
-}
-
-export interface AiApiPostAiRecordsBatchRequest {
-    body: object;
-}
-
-export interface AiApiPostAiRecordsCommitRequest {
-    body: object;
-}
-
-export interface AiApiPostAiRecordsCommitSecondRequest {
-    body: object;
-}
-
-export interface AiApiPostAiRemoteConnectionsRequest {
-    body: object;
 }
 
 export interface AiApiPostAiRemoteConnectionsByOwnerByNameStartRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPostAiRemoteConnectionsByOwnerByNameStopRequest {
     owner: string;
     name: string;
-    body: object;
-}
-
-export interface AiApiPostAiRoutesRequest {
-    body: object;
-}
-
-export interface AiApiPostAiScalesRequest {
-    body: object;
-}
-
-export interface AiApiPostAiScansRequest {
-    body: object;
-}
-
-export interface AiApiPostAiSigninRequest {
-    body: object;
-}
-
-export interface AiApiPostAiSigninSessionsRequest {
-    body: object;
-}
-
-export interface AiApiPostAiSignoutRequest {
-    body: object;
-}
-
-export interface AiApiPostAiStoresRequest {
-    body: object;
 }
 
 export interface AiApiPostAiStoresByOwnerByNameVectorsRequest {
     owner: string;
     name: string;
-    body: object;
-}
-
-export interface AiApiPostAiTasksRequest {
-    body: object;
 }
 
 export interface AiApiPostAiTasksByOwnerByNameAnalyzeRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPostAiTasksByOwnerByNameDocumentRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
-export interface AiApiPostAiTemplatesRequest {
-    body: object;
-}
-
-export interface AiApiPostAiTreeFilesRequest {
-    body: object;
-}
-
-export interface AiApiPostAiVectorsRequest {
-    body: object;
-}
-
-export interface AiApiPostAiVideosRequest {
-    body: object;
-}
-
-export interface AiApiPostAiVideosUploadRequest {
-    body: object;
-}
-
-export interface AiApiPostAiWorkflowsRequest {
-    body: object;
+export interface AiApiPostModelsByModelAccessRequest {
+    model: string;
 }
 
 export interface AiApiPutAiArticlesByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPutAiAssetsByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPutAiChatsByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPutAiDeploymentsByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPutAiFilesByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPutAiFormsByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPutAiGraphsByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPutAiMessagesByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPutAiNodesByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
-}
-
-export interface AiApiPutAiPreferencesRequest {
-    body: object;
 }
 
 export interface AiApiPutAiProvidersByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPutAiRecordsByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPutAiRemoteConnectionsByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPutAiRoutesByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPutAiScalesByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPutAiScansByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPutAiSigninSessionsByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPutAiStoresByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPutAiTasksByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPutAiTemplatesByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
-}
-
-export interface AiApiPutAiTrainingContributionRequest {
-    body: object;
 }
 
 export interface AiApiPutAiTreeFilesByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPutAiVectorsByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPutAiVideosByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 export interface AiApiPutAiWorkflowsByOwnerByNameRequest {
     owner: string;
     name: string;
-    body: object;
 }
 
 /**
@@ -941,7 +629,7 @@ export class AiApi extends runtime.BaseAPI {
      * Delete one article.
      * Delete a article
      */
-    async deleteAiArticlesByOwnerByNameRaw(requestParameters: AiApiDeleteAiArticlesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiArticles200Response>> {
+    async deleteAiArticlesByOwnerByNameRaw(requestParameters: AiApiDeleteAiArticlesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -980,23 +668,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiArticles200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Delete one article.
      * Delete a article
      */
-    async deleteAiArticlesByOwnerByName(requestParameters: AiApiDeleteAiArticlesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiArticles200Response> {
-        const response = await this.deleteAiArticlesByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async deleteAiArticlesByOwnerByName(requestParameters: AiApiDeleteAiArticlesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteAiArticlesByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Delete one asset.
      * Delete a asset
      */
-    async deleteAiAssetsByOwnerByNameRaw(requestParameters: AiApiDeleteAiAssetsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiAssets200Response>> {
+    async deleteAiAssetsByOwnerByNameRaw(requestParameters: AiApiDeleteAiAssetsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -1035,23 +722,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiAssets200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Delete one asset.
      * Delete a asset
      */
-    async deleteAiAssetsByOwnerByName(requestParameters: AiApiDeleteAiAssetsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiAssets200Response> {
-        const response = await this.deleteAiAssetsByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async deleteAiAssetsByOwnerByName(requestParameters: AiApiDeleteAiAssetsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteAiAssetsByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Delete one chat.
      * Delete a chat
      */
-    async deleteAiChatsByOwnerByNameRaw(requestParameters: AiApiDeleteAiChatsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiChats200Response>> {
+    async deleteAiChatsByOwnerByNameRaw(requestParameters: AiApiDeleteAiChatsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -1090,23 +776,29 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiChats200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Delete one chat.
      * Delete a chat
      */
-    async deleteAiChatsByOwnerByName(requestParameters: AiApiDeleteAiChatsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiChats200Response> {
-        const response = await this.deleteAiChatsByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async deleteAiChatsByOwnerByName(requestParameters: AiApiDeleteAiChatsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteAiChatsByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Disconnects a third-party AI account: it deactivates the org\'s row so completion resolution falls back to the global Hanzo account (no BYO), and best-effort tombstones the sealed secret. Idempotent.
      * Disconnects a third-party AI account: it deactivates the org\'s row so completion resolution falls back to the global Hanzo account (no BYO), and best-effort tombstones the sealed secret.
      */
-    async deleteAiConnectionsByProviderRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async deleteAiConnectionsByProviderRaw(requestParameters: AiApiDeleteAiConnectionsByProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['provider'] == null) {
+            throw new runtime.RequiredError(
+                'provider',
+                'Required parameter "provider" was null or undefined when calling deleteAiConnectionsByProvider().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -1121,6 +813,7 @@ export class AiApi extends runtime.BaseAPI {
         }
 
         let urlPath = `/v1/ai/connections/{provider}`;
+        urlPath = urlPath.replace(`{${"provider"}}`, encodeURIComponent(String(requestParameters['provider'])));
 
         const response = await this.request({
             path: urlPath,
@@ -1136,15 +829,15 @@ export class AiApi extends runtime.BaseAPI {
      * Disconnects a third-party AI account: it deactivates the org\'s row so completion resolution falls back to the global Hanzo account (no BYO), and best-effort tombstones the sealed secret. Idempotent.
      * Disconnects a third-party AI account: it deactivates the org\'s row so completion resolution falls back to the global Hanzo account (no BYO), and best-effort tombstones the sealed secret.
      */
-    async deleteAiConnectionsByProvider(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.deleteAiConnectionsByProviderRaw(initOverrides);
+    async deleteAiConnectionsByProvider(requestParameters: AiApiDeleteAiConnectionsByProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteAiConnectionsByProviderRaw(requestParameters, initOverrides);
     }
 
     /**
      * Delete one application.
      * Delete a application
      */
-    async deleteAiDeploymentsByOwnerByNameRaw(requestParameters: AiApiDeleteAiDeploymentsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiDeployments200Response>> {
+    async deleteAiDeploymentsByOwnerByNameRaw(requestParameters: AiApiDeleteAiDeploymentsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -1183,23 +876,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiDeployments200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Delete one application.
      * Delete a application
      */
-    async deleteAiDeploymentsByOwnerByName(requestParameters: AiApiDeleteAiDeploymentsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiDeployments200Response> {
-        const response = await this.deleteAiDeploymentsByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async deleteAiDeploymentsByOwnerByName(requestParameters: AiApiDeleteAiDeploymentsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteAiDeploymentsByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Delete one file.
      * Delete a file
      */
-    async deleteAiFilesByOwnerByNameRaw(requestParameters: AiApiDeleteAiFilesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiFiles200Response>> {
+    async deleteAiFilesByOwnerByNameRaw(requestParameters: AiApiDeleteAiFilesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -1238,23 +930,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiFiles200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Delete one file.
      * Delete a file
      */
-    async deleteAiFilesByOwnerByName(requestParameters: AiApiDeleteAiFilesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiFiles200Response> {
-        const response = await this.deleteAiFilesByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async deleteAiFilesByOwnerByName(requestParameters: AiApiDeleteAiFilesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteAiFilesByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Delete one form.
      * Delete a form
      */
-    async deleteAiFormsByOwnerByNameRaw(requestParameters: AiApiDeleteAiFormsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiForms200Response>> {
+    async deleteAiFormsByOwnerByNameRaw(requestParameters: AiApiDeleteAiFormsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -1293,23 +984,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiForms200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Delete one form.
      * Delete a form
      */
-    async deleteAiFormsByOwnerByName(requestParameters: AiApiDeleteAiFormsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiForms200Response> {
-        const response = await this.deleteAiFormsByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async deleteAiFormsByOwnerByName(requestParameters: AiApiDeleteAiFormsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteAiFormsByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Delete one graph.
      * Delete a graph
      */
-    async deleteAiGraphsByOwnerByNameRaw(requestParameters: AiApiDeleteAiGraphsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiGraphs200Response>> {
+    async deleteAiGraphsByOwnerByNameRaw(requestParameters: AiApiDeleteAiGraphsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -1348,23 +1038,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiGraphs200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Delete one graph.
      * Delete a graph
      */
-    async deleteAiGraphsByOwnerByName(requestParameters: AiApiDeleteAiGraphsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiGraphs200Response> {
-        const response = await this.deleteAiGraphsByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async deleteAiGraphsByOwnerByName(requestParameters: AiApiDeleteAiGraphsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteAiGraphsByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Delete one message.
      * Delete a message
      */
-    async deleteAiMessagesByOwnerByNameRaw(requestParameters: AiApiDeleteAiMessagesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiMessages200Response>> {
+    async deleteAiMessagesByOwnerByNameRaw(requestParameters: AiApiDeleteAiMessagesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -1403,22 +1092,21 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiMessages200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Delete one message.
      * Delete a message
      */
-    async deleteAiMessagesByOwnerByName(requestParameters: AiApiDeleteAiMessagesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiMessages200Response> {
-        const response = await this.deleteAiMessagesByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async deleteAiMessagesByOwnerByName(requestParameters: AiApiDeleteAiMessagesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteAiMessagesByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Welcome (message)
      */
-    async deleteAiMessagesWelcomeRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
+    async deleteAiMessagesWelcomeRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -1441,22 +1129,21 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Welcome (message)
      */
-    async deleteAiMessagesWelcome(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.deleteAiMessagesWelcomeRaw(initOverrides);
-        return await response.value();
+    async deleteAiMessagesWelcome(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteAiMessagesWelcomeRaw(initOverrides);
     }
 
     /**
      * Delete one node.
      * Delete a node
      */
-    async deleteAiNodesByOwnerByNameRaw(requestParameters: AiApiDeleteAiNodesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiNodes200Response>> {
+    async deleteAiNodesByOwnerByNameRaw(requestParameters: AiApiDeleteAiNodesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -1495,23 +1182,98 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiNodes200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Delete one node.
      * Delete a node
      */
-    async deleteAiNodesByOwnerByName(requestParameters: AiApiDeleteAiNodesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiNodes200Response> {
-        const response = await this.deleteAiNodesByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async deleteAiNodesByOwnerByName(requestParameters: AiApiDeleteAiNodesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteAiNodesByOwnerByNameRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async deleteAiOrgSettingsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/org/settings`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async deleteAiOrgSettings(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteAiOrgSettingsRaw(initOverrides);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async deleteAiOrgSettingsListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/org/settings/list`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async deleteAiOrgSettingsList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteAiOrgSettingsListRaw(initOverrides);
     }
 
     /**
      * Delete one provider.
      * Delete a provider
      */
-    async deleteAiProvidersByOwnerByNameRaw(requestParameters: AiApiDeleteAiProvidersByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiProviders200Response>> {
+    async deleteAiProvidersByOwnerByNameRaw(requestParameters: AiApiDeleteAiProvidersByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -1550,23 +1312,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiProviders200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Delete one provider.
      * Delete a provider
      */
-    async deleteAiProvidersByOwnerByName(requestParameters: AiApiDeleteAiProvidersByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiProviders200Response> {
-        const response = await this.deleteAiProvidersByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async deleteAiProvidersByOwnerByName(requestParameters: AiApiDeleteAiProvidersByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteAiProvidersByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Delete one record.
      * Delete a record
      */
-    async deleteAiRecordsByOwnerByNameRaw(requestParameters: AiApiDeleteAiRecordsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiRecords200Response>> {
+    async deleteAiRecordsByOwnerByNameRaw(requestParameters: AiApiDeleteAiRecordsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -1605,23 +1366,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiRecords200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Delete one record.
      * Delete a record
      */
-    async deleteAiRecordsByOwnerByName(requestParameters: AiApiDeleteAiRecordsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiRecords200Response> {
-        const response = await this.deleteAiRecordsByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async deleteAiRecordsByOwnerByName(requestParameters: AiApiDeleteAiRecordsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteAiRecordsByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Delete one connection.
      * Delete a connection
      */
-    async deleteAiRemoteConnectionsByOwnerByNameRaw(requestParameters: AiApiDeleteAiRemoteConnectionsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiRemoteConnections200Response>> {
+    async deleteAiRemoteConnectionsByOwnerByNameRaw(requestParameters: AiApiDeleteAiRemoteConnectionsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -1660,23 +1420,248 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiRemoteConnections200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Delete one connection.
      * Delete a connection
      */
-    async deleteAiRemoteConnectionsByOwnerByName(requestParameters: AiApiDeleteAiRemoteConnectionsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiRemoteConnections200Response> {
-        const response = await this.deleteAiRemoteConnectionsByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async deleteAiRemoteConnectionsByOwnerByName(requestParameters: AiApiDeleteAiRemoteConnectionsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteAiRemoteConnectionsByOwnerByNameRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async deleteAiRouterArtifactMetaRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/router/artifact-meta`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async deleteAiRouterArtifactMeta(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteAiRouterArtifactMetaRaw(initOverrides);
+    }
+
+    /**
+     * Router Data
+     */
+    async deleteAiRouterDataRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/router/data`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Router Data
+     */
+    async deleteAiRouterData(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteAiRouterDataRaw(initOverrides);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async deleteAiRouterDefaultsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/router/defaults`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async deleteAiRouterDefaults(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteAiRouterDefaultsRaw(initOverrides);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async deleteAiRouterLedgerRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/router/ledger`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async deleteAiRouterLedger(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteAiRouterLedgerRaw(initOverrides);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async deleteAiRouterPolicyRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/router/policy`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async deleteAiRouterPolicy(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteAiRouterPolicyRaw(initOverrides);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async deleteAiRouterRewardsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/router/rewards`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async deleteAiRouterRewards(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteAiRouterRewardsRaw(initOverrides);
     }
 
     /**
      * Delete one model-route.
      * Delete a model-route
      */
-    async deleteAiRoutesByOwnerByNameRaw(requestParameters: AiApiDeleteAiRoutesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiRoutes200Response>> {
+    async deleteAiRoutesByOwnerByNameRaw(requestParameters: AiApiDeleteAiRoutesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -1715,23 +1700,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiRoutes200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Delete one model-route.
      * Delete a model-route
      */
-    async deleteAiRoutesByOwnerByName(requestParameters: AiApiDeleteAiRoutesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiRoutes200Response> {
-        const response = await this.deleteAiRoutesByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async deleteAiRoutesByOwnerByName(requestParameters: AiApiDeleteAiRoutesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteAiRoutesByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Delete one scale.
      * Delete a scale
      */
-    async deleteAiScalesByOwnerByNameRaw(requestParameters: AiApiDeleteAiScalesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiScales200Response>> {
+    async deleteAiScalesByOwnerByNameRaw(requestParameters: AiApiDeleteAiScalesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -1770,23 +1754,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiScales200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Delete one scale.
      * Delete a scale
      */
-    async deleteAiScalesByOwnerByName(requestParameters: AiApiDeleteAiScalesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiScales200Response> {
-        const response = await this.deleteAiScalesByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async deleteAiScalesByOwnerByName(requestParameters: AiApiDeleteAiScalesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteAiScalesByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Delete one scan.
      * Delete a scan
      */
-    async deleteAiScansByOwnerByNameRaw(requestParameters: AiApiDeleteAiScansByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiScans200Response>> {
+    async deleteAiScansByOwnerByNameRaw(requestParameters: AiApiDeleteAiScansByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -1825,23 +1808,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiScans200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Delete one scan.
      * Delete a scan
      */
-    async deleteAiScansByOwnerByName(requestParameters: AiApiDeleteAiScansByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiScans200Response> {
-        const response = await this.deleteAiScansByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async deleteAiScansByOwnerByName(requestParameters: AiApiDeleteAiScansByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteAiScansByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Delete one session.
      * Delete a session
      */
-    async deleteAiSigninSessionsByOwnerByNameRaw(requestParameters: AiApiDeleteAiSigninSessionsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiSigninSessions200Response>> {
+    async deleteAiSigninSessionsByOwnerByNameRaw(requestParameters: AiApiDeleteAiSigninSessionsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -1880,23 +1862,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiSigninSessions200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Delete one session.
      * Delete a session
      */
-    async deleteAiSigninSessionsByOwnerByName(requestParameters: AiApiDeleteAiSigninSessionsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiSigninSessions200Response> {
-        const response = await this.deleteAiSigninSessionsByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async deleteAiSigninSessionsByOwnerByName(requestParameters: AiApiDeleteAiSigninSessionsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteAiSigninSessionsByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Delete one store.
      * Delete a store
      */
-    async deleteAiStoresByOwnerByNameRaw(requestParameters: AiApiDeleteAiStoresByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiStores200Response>> {
+    async deleteAiStoresByOwnerByNameRaw(requestParameters: AiApiDeleteAiStoresByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -1935,23 +1916,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiStores200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Delete one store.
      * Delete a store
      */
-    async deleteAiStoresByOwnerByName(requestParameters: AiApiDeleteAiStoresByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiStores200Response> {
-        const response = await this.deleteAiStoresByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async deleteAiStoresByOwnerByName(requestParameters: AiApiDeleteAiStoresByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteAiStoresByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Delete one task.
      * Delete a task
      */
-    async deleteAiTasksByOwnerByNameRaw(requestParameters: AiApiDeleteAiTasksByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiTasks200Response>> {
+    async deleteAiTasksByOwnerByNameRaw(requestParameters: AiApiDeleteAiTasksByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -1990,23 +1970,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiTasks200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Delete one task.
      * Delete a task
      */
-    async deleteAiTasksByOwnerByName(requestParameters: AiApiDeleteAiTasksByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiTasks200Response> {
-        const response = await this.deleteAiTasksByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async deleteAiTasksByOwnerByName(requestParameters: AiApiDeleteAiTasksByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteAiTasksByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Delete one template.
      * Delete a template
      */
-    async deleteAiTemplatesByOwnerByNameRaw(requestParameters: AiApiDeleteAiTemplatesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiTemplates200Response>> {
+    async deleteAiTemplatesByOwnerByNameRaw(requestParameters: AiApiDeleteAiTemplatesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -2045,23 +2024,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiTemplates200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Delete one template.
      * Delete a template
      */
-    async deleteAiTemplatesByOwnerByName(requestParameters: AiApiDeleteAiTemplatesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiTemplates200Response> {
-        const response = await this.deleteAiTemplatesByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async deleteAiTemplatesByOwnerByName(requestParameters: AiApiDeleteAiTemplatesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteAiTemplatesByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Delete one tree-file.
      * Delete a tree-file
      */
-    async deleteAiTreeFilesByOwnerByNameRaw(requestParameters: AiApiDeleteAiTreeFilesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiTreeFiles200Response>> {
+    async deleteAiTreeFilesByOwnerByNameRaw(requestParameters: AiApiDeleteAiTreeFilesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -2100,22 +2078,21 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiTreeFiles200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Delete one tree-file.
      * Delete a tree-file
      */
-    async deleteAiTreeFilesByOwnerByName(requestParameters: AiApiDeleteAiTreeFilesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiTreeFiles200Response> {
-        const response = await this.deleteAiTreeFilesByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async deleteAiTreeFilesByOwnerByName(requestParameters: AiApiDeleteAiTreeFilesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteAiTreeFilesByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * All (vector)
      */
-    async deleteAiVectorsAllRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
+    async deleteAiVectorsAllRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -2138,22 +2115,21 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * All (vector)
      */
-    async deleteAiVectorsAll(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.deleteAiVectorsAllRaw(initOverrides);
-        return await response.value();
+    async deleteAiVectorsAll(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteAiVectorsAllRaw(initOverrides);
     }
 
     /**
      * Delete one vector.
      * Delete a vector
      */
-    async deleteAiVectorsByOwnerByNameRaw(requestParameters: AiApiDeleteAiVectorsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiVectors200Response>> {
+    async deleteAiVectorsByOwnerByNameRaw(requestParameters: AiApiDeleteAiVectorsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -2192,23 +2168,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiVectors200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Delete one vector.
      * Delete a vector
      */
-    async deleteAiVectorsByOwnerByName(requestParameters: AiApiDeleteAiVectorsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiVectors200Response> {
-        const response = await this.deleteAiVectorsByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async deleteAiVectorsByOwnerByName(requestParameters: AiApiDeleteAiVectorsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteAiVectorsByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Delete one video.
      * Delete a video
      */
-    async deleteAiVideosByOwnerByNameRaw(requestParameters: AiApiDeleteAiVideosByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiVideos200Response>> {
+    async deleteAiVideosByOwnerByNameRaw(requestParameters: AiApiDeleteAiVideosByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -2247,23 +2222,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiVideos200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Delete one video.
      * Delete a video
      */
-    async deleteAiVideosByOwnerByName(requestParameters: AiApiDeleteAiVideosByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiVideos200Response> {
-        const response = await this.deleteAiVideosByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async deleteAiVideosByOwnerByName(requestParameters: AiApiDeleteAiVideosByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteAiVideosByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Delete one workflow.
      * Delete a workflow
      */
-    async deleteAiWorkflowsByOwnerByNameRaw(requestParameters: AiApiDeleteAiWorkflowsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiWorkflows200Response>> {
+    async deleteAiWorkflowsByOwnerByNameRaw(requestParameters: AiApiDeleteAiWorkflowsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -2302,22 +2276,21 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiWorkflows200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Delete one workflow.
      * Delete a workflow
      */
-    async deleteAiWorkflowsByOwnerByName(requestParameters: AiApiDeleteAiWorkflowsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiWorkflows200Response> {
-        const response = await this.deleteAiWorkflowsByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async deleteAiWorkflowsByOwnerByName(requestParameters: AiApiDeleteAiWorkflowsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteAiWorkflowsByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Account
      */
-    async getAiAccountRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
+    async getAiAccountRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -2340,22 +2313,21 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Account
      */
-    async getAiAccount(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.getAiAccountRaw(initOverrides);
-        return await response.value();
+    async getAiAccount(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiAccountRaw(initOverrides);
     }
 
     /**
      * List the caller\'s activities.
      * List activities
      */
-    async getAiActivitiesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAiActivities200Response>> {
+    async getAiActivitiesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -2378,22 +2350,21 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAiActivities200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * List the caller\'s activities.
      * List activities
      */
-    async getAiActivities(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAiActivities200Response> {
-        const response = await this.getAiActivitiesRaw(initOverrides);
-        return await response.value();
+    async getAiActivities(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiActivitiesRaw(initOverrides);
     }
 
     /**
      * Answer
      */
-    async getAiAnswerRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
+    async getAiAnswerRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -2416,22 +2387,21 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Answer
      */
-    async getAiAnswer(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.getAiAnswerRaw(initOverrides);
-        return await response.value();
+    async getAiAnswer(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiAnswerRaw(initOverrides);
     }
 
     /**
      * List the caller\'s articles.
      * List articles
      */
-    async getAiArticlesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAiArticles200Response>> {
+    async getAiArticlesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -2454,23 +2424,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAiArticles200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * List the caller\'s articles.
      * List articles
      */
-    async getAiArticles(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAiArticles200Response> {
-        const response = await this.getAiArticlesRaw(initOverrides);
-        return await response.value();
+    async getAiArticles(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiArticlesRaw(initOverrides);
     }
 
     /**
      * Read one article by its (owner, name) key.
      * Retrieve a article
      */
-    async getAiArticlesByOwnerByNameRaw(requestParameters: AiApiGetAiArticlesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiArticles200Response>> {
+    async getAiArticlesByOwnerByNameRaw(requestParameters: AiApiGetAiArticlesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -2509,23 +2478,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiArticles200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Read one article by its (owner, name) key.
      * Retrieve a article
      */
-    async getAiArticlesByOwnerByName(requestParameters: AiApiGetAiArticlesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiArticles200Response> {
-        const response = await this.getAiArticlesByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async getAiArticlesByOwnerByName(requestParameters: AiApiGetAiArticlesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiArticlesByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Cross-tenant listing. Admin-only; a tenant caller is refused.
      * List articles across tenants
      */
-    async getAiArticlesGlobalRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAiArticles200Response>> {
+    async getAiArticlesGlobalRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -2548,23 +2516,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAiArticles200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Cross-tenant listing. Admin-only; a tenant caller is refused.
      * List articles across tenants
      */
-    async getAiArticlesGlobal(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAiArticles200Response> {
-        const response = await this.getAiArticlesGlobalRaw(initOverrides);
-        return await response.value();
+    async getAiArticlesGlobal(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiArticlesGlobalRaw(initOverrides);
     }
 
     /**
      * List the caller\'s assets.
      * List assets
      */
-    async getAiAssetsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAiAssets200Response>> {
+    async getAiAssetsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -2587,23 +2554,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAiAssets200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * List the caller\'s assets.
      * List assets
      */
-    async getAiAssets(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAiAssets200Response> {
-        const response = await this.getAiAssetsRaw(initOverrides);
-        return await response.value();
+    async getAiAssets(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiAssetsRaw(initOverrides);
     }
 
     /**
      * Read one asset by its (owner, name) key.
      * Retrieve a asset
      */
-    async getAiAssetsByOwnerByNameRaw(requestParameters: AiApiGetAiAssetsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiAssets200Response>> {
+    async getAiAssetsByOwnerByNameRaw(requestParameters: AiApiGetAiAssetsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -2642,23 +2608,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiAssets200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Read one asset by its (owner, name) key.
      * Retrieve a asset
      */
-    async getAiAssetsByOwnerByName(requestParameters: AiApiGetAiAssetsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiAssets200Response> {
-        const response = await this.getAiAssetsByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async getAiAssetsByOwnerByName(requestParameters: AiApiGetAiAssetsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiAssetsByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * List the caller\'s chats.
      * List chats
      */
-    async getAiChatsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAiChats200Response>> {
+    async getAiChatsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -2681,23 +2646,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAiChats200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * List the caller\'s chats.
      * List chats
      */
-    async getAiChats(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAiChats200Response> {
-        const response = await this.getAiChatsRaw(initOverrides);
-        return await response.value();
+    async getAiChats(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiChatsRaw(initOverrides);
     }
 
     /**
      * Read one chat by its (owner, name) key.
      * Retrieve a chat
      */
-    async getAiChatsByOwnerByNameRaw(requestParameters: AiApiGetAiChatsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiChats200Response>> {
+    async getAiChatsByOwnerByNameRaw(requestParameters: AiApiGetAiChatsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -2736,23 +2700,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiChats200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Read one chat by its (owner, name) key.
      * Retrieve a chat
      */
-    async getAiChatsByOwnerByName(requestParameters: AiApiGetAiChatsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiChats200Response> {
-        const response = await this.getAiChatsByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async getAiChatsByOwnerByName(requestParameters: AiApiGetAiChatsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiChatsByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Cross-tenant listing. Admin-only; a tenant caller is refused.
      * List chats across tenants
      */
-    async getAiChatsGlobalRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAiChats200Response>> {
+    async getAiChatsGlobalRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -2775,16 +2738,15 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAiChats200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Cross-tenant listing. Admin-only; a tenant caller is refused.
      * List chats across tenants
      */
-    async getAiChatsGlobal(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAiChats200Response> {
-        const response = await this.getAiChatsGlobalRaw(initOverrides);
-        return await response.value();
+    async getAiChatsGlobal(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiChatsGlobalRaw(initOverrides);
     }
 
     /**
@@ -2829,7 +2791,14 @@ export class AiApi extends runtime.BaseAPI {
      * Begins an OAuth connection for the caller\'s org: it binds the org into a signed state and sends the caller to the provider\'s authorize URL. By default it 302-redirects (a top-level browser \"connect your login\" click); a SPA/BFF that needs to drive the redirect itself passes ?format=json and gets {authorizeUrl} in the standard envelope. The org is the VERIFIED principal, so only the caller\'s own connection can result.
      * Begins an OAuth connection for the caller\'s org: it binds the org into a signed state and sends the caller to the provider\'s authorize URL.
      */
-    async getAiConnectionsByProviderAuthorizeRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getAiConnectionsByProviderAuthorizeRaw(requestParameters: AiApiGetAiConnectionsByProviderAuthorizeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['provider'] == null) {
+            throw new runtime.RequiredError(
+                'provider',
+                'Required parameter "provider" was null or undefined when calling getAiConnectionsByProviderAuthorize().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -2844,6 +2813,7 @@ export class AiApi extends runtime.BaseAPI {
         }
 
         let urlPath = `/v1/ai/connections/{provider}/authorize`;
+        urlPath = urlPath.replace(`{${"provider"}}`, encodeURIComponent(String(requestParameters['provider'])));
 
         const response = await this.request({
             path: urlPath,
@@ -2859,15 +2829,22 @@ export class AiApi extends runtime.BaseAPI {
      * Begins an OAuth connection for the caller\'s org: it binds the org into a signed state and sends the caller to the provider\'s authorize URL. By default it 302-redirects (a top-level browser \"connect your login\" click); a SPA/BFF that needs to drive the redirect itself passes ?format=json and gets {authorizeUrl} in the standard envelope. The org is the VERIFIED principal, so only the caller\'s own connection can result.
      * Begins an OAuth connection for the caller\'s org: it binds the org into a signed state and sends the caller to the provider\'s authorize URL.
      */
-    async getAiConnectionsByProviderAuthorize(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getAiConnectionsByProviderAuthorizeRaw(initOverrides);
+    async getAiConnectionsByProviderAuthorize(requestParameters: AiApiGetAiConnectionsByProviderAuthorizeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiConnectionsByProviderAuthorizeRaw(requestParameters, initOverrides);
     }
 
     /**
      * Completes OAuth: the org is recovered from the SIGNED state (not a header), the code is exchanged for a token, the token is SEALED into KMS (never the row/logs) through the same path as a BYOK key, and the org\'s provider row is upserted to \"connected\". The browser is then redirected back to the console with ?ai_connected=<provider> (or ?ai_connect_error=<provider> on failure). Because the org comes from the state THIS server signed, an attacker cannot land their token in a victim org — which is why this endpoint is state-authenticated rather than credential-gated.
      * Completes OAuth: the org is recovered from the SIGNED state (not a header), the code is exchanged for a token, the token is SEALED into KMS (never the row/logs) through the same path as a BYOK key, and the org\'s provider row is upserted to \"connected\".
      */
-    async getAiConnectionsByProviderCallbackRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getAiConnectionsByProviderCallbackRaw(requestParameters: AiApiGetAiConnectionsByProviderCallbackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['provider'] == null) {
+            throw new runtime.RequiredError(
+                'provider',
+                'Required parameter "provider" was null or undefined when calling getAiConnectionsByProviderCallback().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -2882,6 +2859,7 @@ export class AiApi extends runtime.BaseAPI {
         }
 
         let urlPath = `/v1/ai/connections/{provider}/callback`;
+        urlPath = urlPath.replace(`{${"provider"}}`, encodeURIComponent(String(requestParameters['provider'])));
 
         const response = await this.request({
             path: urlPath,
@@ -2897,15 +2875,22 @@ export class AiApi extends runtime.BaseAPI {
      * Completes OAuth: the org is recovered from the SIGNED state (not a header), the code is exchanged for a token, the token is SEALED into KMS (never the row/logs) through the same path as a BYOK key, and the org\'s provider row is upserted to \"connected\". The browser is then redirected back to the console with ?ai_connected=<provider> (or ?ai_connect_error=<provider> on failure). Because the org comes from the state THIS server signed, an attacker cannot land their token in a victim org — which is why this endpoint is state-authenticated rather than credential-gated.
      * Completes OAuth: the org is recovered from the SIGNED state (not a header), the code is exchanged for a token, the token is SEALED into KMS (never the row/logs) through the same path as a BYOK key, and the org\'s provider row is upserted to \"connected\".
      */
-    async getAiConnectionsByProviderCallback(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getAiConnectionsByProviderCallbackRaw(initOverrides);
+    async getAiConnectionsByProviderCallback(requestParameters: AiApiGetAiConnectionsByProviderCallbackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiConnectionsByProviderCallbackRaw(requestParameters, initOverrides);
     }
 
     /**
      * Imports the caller org\'s usage for a connected third-party account. The org is resolved from the VERIFIED principal (requireConnectionOrg), so a tenant reads only its own connection. The key is unsealed SERVER-SIDE and never returned. An unconnected account, a missing importer, or a scope-denied provider all return a 200 ProviderUsage with connected/available flags + a human note — the UI\'s honest-empty states — never a fabricated figure.
      * Imports the caller org\'s usage for a connected third-party account.
      */
-    async getAiConnectionsByProviderUsageRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getAiConnectionsByProviderUsageRaw(requestParameters: AiApiGetAiConnectionsByProviderUsageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['provider'] == null) {
+            throw new runtime.RequiredError(
+                'provider',
+                'Required parameter "provider" was null or undefined when calling getAiConnectionsByProviderUsage().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -2920,6 +2905,7 @@ export class AiApi extends runtime.BaseAPI {
         }
 
         let urlPath = `/v1/ai/connections/{provider}/usage`;
+        urlPath = urlPath.replace(`{${"provider"}}`, encodeURIComponent(String(requestParameters['provider'])));
 
         const response = await this.request({
             path: urlPath,
@@ -2935,14 +2921,14 @@ export class AiApi extends runtime.BaseAPI {
      * Imports the caller org\'s usage for a connected third-party account. The org is resolved from the VERIFIED principal (requireConnectionOrg), so a tenant reads only its own connection. The key is unsealed SERVER-SIDE and never returned. An unconnected account, a missing importer, or a scope-denied provider all return a 200 ProviderUsage with connected/available flags + a human note — the UI\'s honest-empty states — never a fabricated figure.
      * Imports the caller org\'s usage for a connected third-party account.
      */
-    async getAiConnectionsByProviderUsage(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getAiConnectionsByProviderUsageRaw(initOverrides);
+    async getAiConnectionsByProviderUsage(requestParameters: AiApiGetAiConnectionsByProviderUsageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiConnectionsByProviderUsageRaw(requestParameters, initOverrides);
     }
 
     /**
      * Dashboards Agents
      */
-    async getAiDashboardsAgentsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
+    async getAiDashboardsAgentsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -2965,21 +2951,20 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Dashboards Agents
      */
-    async getAiDashboardsAgents(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.getAiDashboardsAgentsRaw(initOverrides);
-        return await response.value();
+    async getAiDashboardsAgents(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiDashboardsAgentsRaw(initOverrides);
     }
 
     /**
      * Dashboards Vm
      */
-    async getAiDashboardsVmRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
+    async getAiDashboardsVmRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -3002,22 +2987,21 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Dashboards Vm
      */
-    async getAiDashboardsVm(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.getAiDashboardsVmRaw(initOverrides);
-        return await response.value();
+    async getAiDashboardsVm(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiDashboardsVmRaw(initOverrides);
     }
 
     /**
      * List the caller\'s deployments.
      * List deployments
      */
-    async getAiDeploymentsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAiDeployments200Response>> {
+    async getAiDeploymentsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -3040,23 +3024,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAiDeployments200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * List the caller\'s deployments.
      * List deployments
      */
-    async getAiDeployments(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAiDeployments200Response> {
-        const response = await this.getAiDeploymentsRaw(initOverrides);
-        return await response.value();
+    async getAiDeployments(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiDeploymentsRaw(initOverrides);
     }
 
     /**
      * Read one application by its (owner, name) key.
      * Retrieve a application
      */
-    async getAiDeploymentsByOwnerByNameRaw(requestParameters: AiApiGetAiDeploymentsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiDeployments200Response>> {
+    async getAiDeploymentsByOwnerByNameRaw(requestParameters: AiApiGetAiDeploymentsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -3095,23 +3078,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiDeployments200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Read one application by its (owner, name) key.
      * Retrieve a application
      */
-    async getAiDeploymentsByOwnerByName(requestParameters: AiApiGetAiDeploymentsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiDeployments200Response> {
-        const response = await this.getAiDeploymentsByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async getAiDeploymentsByOwnerByName(requestParameters: AiApiGetAiDeploymentsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiDeploymentsByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * List the caller\'s files.
      * List files
      */
-    async getAiFilesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAiFiles200Response>> {
+    async getAiFilesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -3134,22 +3116,21 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAiFiles200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * List the caller\'s files.
      * List files
      */
-    async getAiFiles(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAiFiles200Response> {
-        const response = await this.getAiFilesRaw(initOverrides);
-        return await response.value();
+    async getAiFiles(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiFilesRaw(initOverrides);
     }
 
     /**
      * Active (file)
      */
-    async getAiFilesActiveRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
+    async getAiFilesActiveRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -3172,22 +3153,21 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Active (file)
      */
-    async getAiFilesActive(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.getAiFilesActiveRaw(initOverrides);
-        return await response.value();
+    async getAiFilesActive(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiFilesActiveRaw(initOverrides);
     }
 
     /**
      * Read one file by its (owner, name) key.
      * Retrieve a file
      */
-    async getAiFilesByOwnerByNameRaw(requestParameters: AiApiGetAiFilesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiFiles200Response>> {
+    async getAiFilesByOwnerByNameRaw(requestParameters: AiApiGetAiFilesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -3226,23 +3206,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiFiles200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Read one file by its (owner, name) key.
      * Retrieve a file
      */
-    async getAiFilesByOwnerByName(requestParameters: AiApiGetAiFilesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiFiles200Response> {
-        const response = await this.getAiFilesByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async getAiFilesByOwnerByName(requestParameters: AiApiGetAiFilesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiFilesByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Cross-tenant listing. Admin-only; a tenant caller is refused.
      * List files across tenants
      */
-    async getAiFilesGlobalRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAiFiles200Response>> {
+    async getAiFilesGlobalRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -3265,23 +3244,250 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAiFiles200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Cross-tenant listing. Admin-only; a tenant caller is refused.
      * List files across tenants
      */
-    async getAiFilesGlobal(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAiFiles200Response> {
-        const response = await this.getAiFilesGlobalRaw(initOverrides);
-        return await response.value();
+    async getAiFilesGlobal(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiFilesGlobalRaw(initOverrides);
+    }
+
+    /**
+     * Proxies a HuggingFace dataset search (dataset picker).
+     * Proxies a HuggingFace dataset search (dataset picker).
+     */
+    async getAiFinetuneHfDatasetsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/finetune/hf/datasets`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Proxies a HuggingFace dataset search (dataset picker).
+     * Proxies a HuggingFace dataset search (dataset picker).
+     */
+    async getAiFinetuneHfDatasets(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiFinetuneHfDatasetsRaw(initOverrides);
+    }
+
+    /**
+     * Proxies a HuggingFace model search (base-model picker).
+     * Proxies a HuggingFace model search (base-model picker).
+     */
+    async getAiFinetuneHfModelsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/finetune/hf/models`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Proxies a HuggingFace model search (base-model picker).
+     * Proxies a HuggingFace model search (base-model picker).
+     */
+    async getAiFinetuneHfModels(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiFinetuneHfModelsRaw(initOverrides);
+    }
+
+    /**
+     * Returns a repo\'s detail (files, gated/private state). ?id=&kind=model|dataset
+     * Returns a repo\'s detail (files, gated/private state).
+     */
+    async getAiFinetuneHfRepoRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/finetune/hf/repo`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Returns a repo\'s detail (files, gated/private state). ?id=&kind=model|dataset
+     * Returns a repo\'s detail (files, gated/private state).
+     */
+    async getAiFinetuneHfRepo(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiFinetuneHfRepoRaw(initOverrides);
+    }
+
+    /**
+     * Returns one job with refreshed live status. ?id=owner/name or ?name=
+     * Returns one job with refreshed live status.
+     */
+    async getAiFinetuneJobRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/finetune/job`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Returns one job with refreshed live status. ?id=owner/name or ?name=
+     * Returns one job with refreshed live status.
+     */
+    async getAiFinetuneJob(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiFinetuneJobRaw(initOverrides);
+    }
+
+    /**
+     * Returns the org\'s jobs, refreshing live status for active ones.
+     * Returns the org\'s jobs, refreshing live status for active ones.
+     */
+    async getAiFinetuneJobsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/finetune/jobs`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Returns the org\'s jobs, refreshing live status for active ones.
+     * Returns the org\'s jobs, refreshing live status for active ones.
+     */
+    async getAiFinetuneJobs(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiFinetuneJobsRaw(initOverrides);
+    }
+
+    /**
+     * Returns the new-job catalog plus, when a selection is passed (?baseModel&method&task&preset[&datasetExamples]), the recommended config so the console can render \"Recommended\" as a one-click, ready-to-run default.
+     * Returns the new-job catalog plus, when a selection is passed (?baseModel&method&task&preset[&datasetExamples]), the recommended config so the console can render \"Recommended\" as a one-click, ready-to-run default.
+     */
+    async getAiFinetunePresetsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/finetune/presets`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Returns the new-job catalog plus, when a selection is passed (?baseModel&method&task&preset[&datasetExamples]), the recommended config so the console can render \"Recommended\" as a one-click, ready-to-run default.
+     * Returns the new-job catalog plus, when a selection is passed (?baseModel&method&task&preset[&datasetExamples]), the recommended config so the console can render \"Recommended\" as a one-click, ready-to-run default.
+     */
+    async getAiFinetunePresets(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiFinetunePresetsRaw(initOverrides);
     }
 
     /**
      * List the caller\'s forms.
      * List forms
      */
-    async getAiFormsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAiForms200Response>> {
+    async getAiFormsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -3304,23 +3510,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAiForms200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * List the caller\'s forms.
      * List forms
      */
-    async getAiForms(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAiForms200Response> {
-        const response = await this.getAiFormsRaw(initOverrides);
-        return await response.value();
+    async getAiForms(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiFormsRaw(initOverrides);
     }
 
     /**
      * Read one form by its (owner, name) key.
      * Retrieve a form
      */
-    async getAiFormsByOwnerByNameRaw(requestParameters: AiApiGetAiFormsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiForms200Response>> {
+    async getAiFormsByOwnerByNameRaw(requestParameters: AiApiGetAiFormsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -3359,22 +3564,21 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiForms200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Read one form by its (owner, name) key.
      * Retrieve a form
      */
-    async getAiFormsByOwnerByName(requestParameters: AiApiGetAiFormsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiForms200Response> {
-        const response = await this.getAiFormsByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async getAiFormsByOwnerByName(requestParameters: AiApiGetAiFormsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiFormsByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Data (form)
      */
-    async getAiFormsDataRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
+    async getAiFormsDataRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -3397,22 +3601,21 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Data (form)
      */
-    async getAiFormsData(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.getAiFormsDataRaw(initOverrides);
-        return await response.value();
+    async getAiFormsData(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiFormsDataRaw(initOverrides);
     }
 
     /**
      * Cross-tenant listing. Admin-only; a tenant caller is refused.
      * List forms across tenants
      */
-    async getAiFormsGlobalRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAiForms200Response>> {
+    async getAiFormsGlobalRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -3435,23 +3638,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAiForms200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Cross-tenant listing. Admin-only; a tenant caller is refused.
      * List forms across tenants
      */
-    async getAiFormsGlobal(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAiForms200Response> {
-        const response = await this.getAiFormsGlobalRaw(initOverrides);
-        return await response.value();
+    async getAiFormsGlobal(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiFormsGlobalRaw(initOverrides);
     }
 
     /**
      * List the caller\'s graphs.
      * List graphs
      */
-    async getAiGraphsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAiGraphs200Response>> {
+    async getAiGraphsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -3474,23 +3676,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAiGraphs200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * List the caller\'s graphs.
      * List graphs
      */
-    async getAiGraphs(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAiGraphs200Response> {
-        const response = await this.getAiGraphsRaw(initOverrides);
-        return await response.value();
+    async getAiGraphs(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiGraphsRaw(initOverrides);
     }
 
     /**
      * Read one graph by its (owner, name) key.
      * Retrieve a graph
      */
-    async getAiGraphsByOwnerByNameRaw(requestParameters: AiApiGetAiGraphsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiGraphs200Response>> {
+    async getAiGraphsByOwnerByNameRaw(requestParameters: AiApiGetAiGraphsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -3529,23 +3730,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiGraphs200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Read one graph by its (owner, name) key.
      * Retrieve a graph
      */
-    async getAiGraphsByOwnerByName(requestParameters: AiApiGetAiGraphsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiGraphs200Response> {
-        const response = await this.getAiGraphsByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async getAiGraphsByOwnerByName(requestParameters: AiApiGetAiGraphsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiGraphsByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Cross-tenant listing. Admin-only; a tenant caller is refused.
      * List graphs across tenants
      */
-    async getAiGraphsGlobalRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAiGraphs200Response>> {
+    async getAiGraphsGlobalRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -3568,22 +3768,21 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAiGraphs200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Cross-tenant listing. Admin-only; a tenant caller is refused.
      * List graphs across tenants
      */
-    async getAiGraphsGlobal(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAiGraphs200Response> {
-        const response = await this.getAiGraphsGlobalRaw(initOverrides);
-        return await response.value();
+    async getAiGraphsGlobal(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiGraphsGlobalRaw(initOverrides);
     }
 
     /**
      * K8s Status
      */
-    async getAiK8sStatusRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
+    async getAiK8sStatusRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -3606,22 +3805,173 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * K8s Status
      */
-    async getAiK8sStatus(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.getAiK8sStatusRaw(initOverrides);
-        return await response.value();
+    async getAiK8sStatus(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiK8sStatusRaw(initOverrides);
+    }
+
+    /**
+     * List the authenticated user\'s stored facts
+     * List the authenticated user\'s stored facts
+     */
+    async getAiMemoryFactsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/memory/facts`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * List the authenticated user\'s stored facts
+     * List the authenticated user\'s stored facts
+     */
+    async getAiMemoryFacts(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiMemoryFactsRaw(initOverrides);
+    }
+
+    /**
+     * List the authenticated user\'s memories, newest first
+     * List the authenticated user\'s memories, newest first
+     */
+    async getAiMemoryListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/memory/list`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * List the authenticated user\'s memories, newest first
+     * List the authenticated user\'s memories, newest first
+     */
+    async getAiMemoryList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiMemoryListRaw(initOverrides);
+    }
+
+    /**
+     * Recall recent/relevant memories for context injection; with q it ranks semantically, without q it returns the most recent
+     * Recall recent/relevant memories for context injection; with q it
+     */
+    async getAiMemoryRecallRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/memory/recall`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Recall recent/relevant memories for context injection; with q it ranks semantically, without q it returns the most recent
+     * Recall recent/relevant memories for context injection; with q it
+     */
+    async getAiMemoryRecall(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiMemoryRecallRaw(initOverrides);
+    }
+
+    /**
+     * Search the authenticated user\'s memories (semantic, text fallback)
+     * Search the authenticated user\'s memories (semantic, text fallback)
+     */
+    async getAiMemorySearchRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/memory/search`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Search the authenticated user\'s memories (semantic, text fallback)
+     * Search the authenticated user\'s memories (semantic, text fallback)
+     */
+    async getAiMemorySearch(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiMemorySearchRaw(initOverrides);
     }
 
     /**
      * List the caller\'s messages.
      * List messages
      */
-    async getAiMessagesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAiMessages200Response>> {
+    async getAiMessagesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -3644,23 +3994,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAiMessages200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * List the caller\'s messages.
      * List messages
      */
-    async getAiMessages(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAiMessages200Response> {
-        const response = await this.getAiMessagesRaw(initOverrides);
-        return await response.value();
+    async getAiMessages(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiMessagesRaw(initOverrides);
     }
 
     /**
      * Read one message by its (owner, name) key.
      * Retrieve a message
      */
-    async getAiMessagesByOwnerByNameRaw(requestParameters: AiApiGetAiMessagesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiMessages200Response>> {
+    async getAiMessagesByOwnerByNameRaw(requestParameters: AiApiGetAiMessagesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -3699,22 +4048,21 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiMessages200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Read one message by its (owner, name) key.
      * Retrieve a message
      */
-    async getAiMessagesByOwnerByName(requestParameters: AiApiGetAiMessagesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiMessages200Response> {
-        const response = await this.getAiMessagesByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async getAiMessagesByOwnerByName(requestParameters: AiApiGetAiMessagesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiMessagesByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Answer (message)
      */
-    async getAiMessagesByOwnerByNameAnswerRaw(requestParameters: AiApiGetAiMessagesByOwnerByNameAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
+    async getAiMessagesByOwnerByNameAnswerRaw(requestParameters: AiApiGetAiMessagesByOwnerByNameAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -3753,22 +4101,21 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Answer (message)
      */
-    async getAiMessagesByOwnerByNameAnswer(requestParameters: AiApiGetAiMessagesByOwnerByNameAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.getAiMessagesByOwnerByNameAnswerRaw(requestParameters, initOverrides);
-        return await response.value();
+    async getAiMessagesByOwnerByNameAnswer(requestParameters: AiApiGetAiMessagesByOwnerByNameAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiMessagesByOwnerByNameAnswerRaw(requestParameters, initOverrides);
     }
 
     /**
      * Cross-tenant listing. Admin-only; a tenant caller is refused.
      * List messages across tenants
      */
-    async getAiMessagesGlobalRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAiMessages200Response>> {
+    async getAiMessagesGlobalRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -3791,23 +4138,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAiMessages200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Cross-tenant listing. Admin-only; a tenant caller is refused.
      * List messages across tenants
      */
-    async getAiMessagesGlobal(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAiMessages200Response> {
-        const response = await this.getAiMessagesGlobalRaw(initOverrides);
-        return await response.value();
+    async getAiMessagesGlobal(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiMessagesGlobalRaw(initOverrides);
     }
 
     /**
      * List the caller\'s nodes.
      * List nodes
      */
-    async getAiNodesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAiNodes200Response>> {
+    async getAiNodesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -3830,23 +4176,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAiNodes200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * List the caller\'s nodes.
      * List nodes
      */
-    async getAiNodes(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAiNodes200Response> {
-        const response = await this.getAiNodesRaw(initOverrides);
-        return await response.value();
+    async getAiNodes(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiNodesRaw(initOverrides);
     }
 
     /**
      * Read one node by its (owner, name) key.
      * Retrieve a node
      */
-    async getAiNodesByOwnerByNameRaw(requestParameters: AiApiGetAiNodesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiNodes200Response>> {
+    async getAiNodesByOwnerByNameRaw(requestParameters: AiApiGetAiNodesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -3885,22 +4230,21 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiNodes200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Read one node by its (owner, name) key.
      * Retrieve a node
      */
-    async getAiNodesByOwnerByName(requestParameters: AiApiGetAiNodesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiNodes200Response> {
-        const response = await this.getAiNodesByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async getAiNodesByOwnerByName(requestParameters: AiApiGetAiNodesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiNodesByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Tunnel (node)
      */
-    async getAiNodesByOwnerByNameTunnelRaw(requestParameters: AiApiGetAiNodesByOwnerByNameTunnelRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
+    async getAiNodesByOwnerByNameTunnelRaw(requestParameters: AiApiGetAiNodesByOwnerByNameTunnelRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -3939,21 +4283,96 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Tunnel (node)
      */
-    async getAiNodesByOwnerByNameTunnel(requestParameters: AiApiGetAiNodesByOwnerByNameTunnelRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.getAiNodesByOwnerByNameTunnelRaw(requestParameters, initOverrides);
-        return await response.value();
+    async getAiNodesByOwnerByNameTunnel(requestParameters: AiApiGetAiNodesByOwnerByNameTunnelRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiNodesByOwnerByNameTunnelRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async getAiOrgSettingsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/org/settings`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async getAiOrgSettings(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiOrgSettingsRaw(initOverrides);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async getAiOrgSettingsListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/org/settings/list`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async getAiOrgSettingsList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiOrgSettingsListRaw(initOverrides);
     }
 
     /**
      * Prometheus
      */
-    async getAiPrometheusRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
+    async getAiPrometheusRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -3976,22 +4395,21 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Prometheus
      */
-    async getAiPrometheus(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.getAiPrometheusRaw(initOverrides);
-        return await response.value();
+    async getAiPrometheus(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiPrometheusRaw(initOverrides);
     }
 
     /**
      * List the caller\'s providers.
      * List providers
      */
-    async getAiProvidersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAiProviders200Response>> {
+    async getAiProvidersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -4014,23 +4432,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAiProviders200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * List the caller\'s providers.
      * List providers
      */
-    async getAiProviders(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAiProviders200Response> {
-        const response = await this.getAiProvidersRaw(initOverrides);
-        return await response.value();
+    async getAiProviders(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiProvidersRaw(initOverrides);
     }
 
     /**
      * Read one provider by its (owner, name) key.
      * Retrieve a provider
      */
-    async getAiProvidersByOwnerByNameRaw(requestParameters: AiApiGetAiProvidersByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiProviders200Response>> {
+    async getAiProvidersByOwnerByNameRaw(requestParameters: AiApiGetAiProvidersByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -4069,23 +4486,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiProviders200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Read one provider by its (owner, name) key.
      * Retrieve a provider
      */
-    async getAiProvidersByOwnerByName(requestParameters: AiApiGetAiProvidersByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiProviders200Response> {
-        const response = await this.getAiProvidersByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async getAiProvidersByOwnerByName(requestParameters: AiApiGetAiProvidersByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiProvidersByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Cross-tenant listing. Admin-only; a tenant caller is refused.
      * List providers across tenants
      */
-    async getAiProvidersGlobalRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAiProviders200Response>> {
+    async getAiProvidersGlobalRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -4108,23 +4524,60 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAiProviders200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Cross-tenant listing. Admin-only; a tenant caller is refused.
      * List providers across tenants
      */
-    async getAiProvidersGlobal(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAiProviders200Response> {
-        const response = await this.getAiProvidersGlobalRaw(initOverrides);
-        return await response.value();
+    async getAiProvidersGlobal(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiProvidersGlobalRaw(initOverrides);
+    }
+
+    /**
+     * Return every stored chunk of one file_id (full document context). Consolidates the retired chat-rag-api GET /documents/{id}/context.
+     * Return every stored chunk of one file_id (full document context).
+     */
+    async getAiRagContextRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/rag/context`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Return every stored chunk of one file_id (full document context). Consolidates the retired chat-rag-api GET /documents/{id}/context.
+     * Return every stored chunk of one file_id (full document context).
+     */
+    async getAiRagContext(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiRagContextRaw(initOverrides);
     }
 
     /**
      * List the caller\'s records.
      * List records
      */
-    async getAiRecordsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAiRecords200Response>> {
+    async getAiRecordsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -4147,23 +4600,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAiRecords200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * List the caller\'s records.
      * List records
      */
-    async getAiRecords(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAiRecords200Response> {
-        const response = await this.getAiRecordsRaw(initOverrides);
-        return await response.value();
+    async getAiRecords(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiRecordsRaw(initOverrides);
     }
 
     /**
      * Read one record by its (owner, name) key.
      * Retrieve a record
      */
-    async getAiRecordsByOwnerByNameRaw(requestParameters: AiApiGetAiRecordsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiRecords200Response>> {
+    async getAiRecordsByOwnerByNameRaw(requestParameters: AiApiGetAiRecordsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -4202,22 +4654,21 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiRecords200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Read one record by its (owner, name) key.
      * Retrieve a record
      */
-    async getAiRecordsByOwnerByName(requestParameters: AiApiGetAiRecordsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiRecords200Response> {
-        const response = await this.getAiRecordsByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async getAiRecordsByOwnerByName(requestParameters: AiApiGetAiRecordsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiRecordsByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Query (record)
      */
-    async getAiRecordsQueryRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
+    async getAiRecordsQueryRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -4240,21 +4691,20 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Query (record)
      */
-    async getAiRecordsQuery(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.getAiRecordsQueryRaw(initOverrides);
-        return await response.value();
+    async getAiRecordsQuery(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiRecordsQueryRaw(initOverrides);
     }
 
     /**
      * Query Second (record)
      */
-    async getAiRecordsQuerySecondRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
+    async getAiRecordsQuerySecondRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -4277,22 +4727,21 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Query Second (record)
      */
-    async getAiRecordsQuerySecond(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.getAiRecordsQuerySecondRaw(initOverrides);
-        return await response.value();
+    async getAiRecordsQuerySecond(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiRecordsQuerySecondRaw(initOverrides);
     }
 
     /**
      * List the caller\'s remote-connections.
      * List remote-connections
      */
-    async getAiRemoteConnectionsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAiRemoteConnections200Response>> {
+    async getAiRemoteConnectionsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -4315,23 +4764,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAiRemoteConnections200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * List the caller\'s remote-connections.
      * List remote-connections
      */
-    async getAiRemoteConnections(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAiRemoteConnections200Response> {
-        const response = await this.getAiRemoteConnectionsRaw(initOverrides);
-        return await response.value();
+    async getAiRemoteConnections(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiRemoteConnectionsRaw(initOverrides);
     }
 
     /**
      * Read one connection by its (owner, name) key.
      * Retrieve a connection
      */
-    async getAiRemoteConnectionsByOwnerByNameRaw(requestParameters: AiApiGetAiRemoteConnectionsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiRemoteConnections200Response>> {
+    async getAiRemoteConnectionsByOwnerByNameRaw(requestParameters: AiApiGetAiRemoteConnectionsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -4370,23 +4818,362 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiRemoteConnections200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Read one connection by its (owner, name) key.
      * Retrieve a connection
      */
-    async getAiRemoteConnectionsByOwnerByName(requestParameters: AiApiGetAiRemoteConnectionsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiRemoteConnections200Response> {
-        const response = await this.getAiRemoteConnectionsByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async getAiRemoteConnectionsByOwnerByName(requestParameters: AiApiGetAiRemoteConnectionsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiRemoteConnectionsByOwnerByNameRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async getAiRouterArtifactMetaRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/router/artifact-meta`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async getAiRouterArtifactMeta(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiRouterArtifactMetaRaw(initOverrides);
+    }
+
+    /**
+     * Router Data
+     */
+    async getAiRouterDataRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/router/data`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Router Data
+     */
+    async getAiRouterData(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiRouterDataRaw(initOverrides);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async getAiRouterDefaultsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/router/defaults`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async getAiRouterDefaults(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiRouterDefaultsRaw(initOverrides);
+    }
+
+    /**
+     * Returns the router-improvement time-series. Two scopes, one route, mirroring /v1/ai/router/stats:    - ?scope=platform — PUBLIC-safe aggregate over ALL orgs, no authentication. Emits     the daily reward/cost-saved/adoption series (task mix included, model ids NOT)     and the retrain timeline. This is what world.hanzo.ai polls.   - default (org scope) — requires a signed-in principal, scoped to the caller\'s OWN     org (a super admin may pass ?org= to target another or \"\" for all).  Window: ?days=N (default 30, capped at 90). Aggregates only.
+     * Returns the router-improvement time-series.
+     */
+    async getAiRouterHistoryRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/router/history`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Returns the router-improvement time-series. Two scopes, one route, mirroring /v1/ai/router/stats:    - ?scope=platform — PUBLIC-safe aggregate over ALL orgs, no authentication. Emits     the daily reward/cost-saved/adoption series (task mix included, model ids NOT)     and the retrain timeline. This is what world.hanzo.ai polls.   - default (org scope) — requires a signed-in principal, scoped to the caller\'s OWN     org (a super admin may pass ?org= to target another or \"\" for all).  Window: ?days=N (default 30, capped at 90). Aggregates only.
+     * Returns the router-improvement time-series.
+     */
+    async getAiRouterHistory(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiRouterHistoryRaw(initOverrides);
+    }
+
+    /**
+     * Returns the LIVE Mean-Field Judge Panel state: the configured panel + dynamic judge posture (enabled/sample) resolved from the \"*\" GlobalDefaultOwner row, the live in-process per-judge calibration (weight/mean/n), and the static published benchmark. PUBLIC-safe and platform-global (model ids + scalars only), so it rides the same unauthenticated, balance-exempt class as /v1/ai/router/stats?scope=platform — the world widget polls it with no auth. The judge state is a single in-process population (not per-org), so there is nothing to scope; ?scope=platform is accepted for symmetry with router-stats.
+     * Returns the LIVE Mean-Field Judge Panel state: the configured panel + dynamic judge posture (enabled/sample) resolved from the \"*\" GlobalDefaultOwner row, the live in-process per-judge calibration (weight/mean/n), and the static published benchmark.
+     */
+    async getAiRouterJudgePanelRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/router/judge-panel`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Returns the LIVE Mean-Field Judge Panel state: the configured panel + dynamic judge posture (enabled/sample) resolved from the \"*\" GlobalDefaultOwner row, the live in-process per-judge calibration (weight/mean/n), and the static published benchmark. PUBLIC-safe and platform-global (model ids + scalars only), so it rides the same unauthenticated, balance-exempt class as /v1/ai/router/stats?scope=platform — the world widget polls it with no auth. The judge state is a single in-process population (not per-org), so there is nothing to scope; ?scope=platform is accepted for symmetry with router-stats.
+     * Returns the LIVE Mean-Field Judge Panel state: the configured panel + dynamic judge posture (enabled/sample) resolved from the \"*\" GlobalDefaultOwner row, the live in-process per-judge calibration (weight/mean/n), and the static published benchmark.
+     */
+    async getAiRouterJudgePanel(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiRouterJudgePanelRaw(initOverrides);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async getAiRouterLedgerRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/router/ledger`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async getAiRouterLedger(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiRouterLedgerRaw(initOverrides);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async getAiRouterPolicyRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/router/policy`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async getAiRouterPolicy(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiRouterPolicyRaw(initOverrides);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async getAiRouterRewardsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/router/rewards`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async getAiRouterRewards(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiRouterRewardsRaw(initOverrides);
+    }
+
+    /**
+     * Returns the router observability aggregate. Two scopes, one route:    - ?scope=platform — PUBLIC-safe aggregate over ALL orgs, no authentication.     Emits rates, shares, per-task/per-model counts, throughput, and the cost     RATIO (saved_pct) + counterfactual model id, but NEVER absolute $ levels,     org identity, raw events, or feature vectors. This is what world.hanzo.ai     polls.   - default (org scope) — requires a signed-in principal; scoped to the caller\'s     OWN org (a super admin may pass ?org= to target another org or \"\" for all).     Carries the absolute $/MTok indices for the admin savings panel.  Window: ?since= (RFC3339) or ?hours= (default 24, capped). Aggregates only.
+     * Returns the router observability aggregate.
+     */
+    async getAiRouterStatsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/router/stats`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Returns the router observability aggregate. Two scopes, one route:    - ?scope=platform — PUBLIC-safe aggregate over ALL orgs, no authentication.     Emits rates, shares, per-task/per-model counts, throughput, and the cost     RATIO (saved_pct) + counterfactual model id, but NEVER absolute $ levels,     org identity, raw events, or feature vectors. This is what world.hanzo.ai     polls.   - default (org scope) — requires a signed-in principal; scoped to the caller\'s     OWN org (a super admin may pass ?org= to target another org or \"\" for all).     Carries the absolute $/MTok indices for the admin savings panel.  Window: ?since= (RFC3339) or ?hours= (default 24, capped). Aggregates only.
+     * Returns the router observability aggregate.
+     */
+    async getAiRouterStats(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiRouterStatsRaw(initOverrides);
     }
 
     /**
      * List the caller\'s routes.
      * List routes
      */
-    async getAiRoutesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAiRoutes200Response>> {
+    async getAiRoutesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -4409,23 +5196,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAiRoutes200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * List the caller\'s routes.
      * List routes
      */
-    async getAiRoutes(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAiRoutes200Response> {
-        const response = await this.getAiRoutesRaw(initOverrides);
-        return await response.value();
+    async getAiRoutes(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiRoutesRaw(initOverrides);
     }
 
     /**
      * Read one model-route by its (owner, name) key.
      * Retrieve a model-route
      */
-    async getAiRoutesByOwnerByNameRaw(requestParameters: AiApiGetAiRoutesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiRoutes200Response>> {
+    async getAiRoutesByOwnerByNameRaw(requestParameters: AiApiGetAiRoutesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -4464,23 +5250,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiRoutes200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Read one model-route by its (owner, name) key.
      * Retrieve a model-route
      */
-    async getAiRoutesByOwnerByName(requestParameters: AiApiGetAiRoutesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiRoutes200Response> {
-        const response = await this.getAiRoutesByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async getAiRoutesByOwnerByName(requestParameters: AiApiGetAiRoutesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiRoutesByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * List the caller\'s scales.
      * List scales
      */
-    async getAiScalesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAiScales200Response>> {
+    async getAiScalesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -4503,23 +5288,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAiScales200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * List the caller\'s scales.
      * List scales
      */
-    async getAiScales(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAiScales200Response> {
-        const response = await this.getAiScalesRaw(initOverrides);
-        return await response.value();
+    async getAiScales(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiScalesRaw(initOverrides);
     }
 
     /**
      * Read one scale by its (owner, name) key.
      * Retrieve a scale
      */
-    async getAiScalesByOwnerByNameRaw(requestParameters: AiApiGetAiScalesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiScales200Response>> {
+    async getAiScalesByOwnerByNameRaw(requestParameters: AiApiGetAiScalesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -4558,23 +5342,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiScales200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Read one scale by its (owner, name) key.
      * Retrieve a scale
      */
-    async getAiScalesByOwnerByName(requestParameters: AiApiGetAiScalesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiScales200Response> {
-        const response = await this.getAiScalesByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async getAiScalesByOwnerByName(requestParameters: AiApiGetAiScalesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiScalesByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Cross-tenant listing. Admin-only; a tenant caller is refused.
      * List scales across tenants
      */
-    async getAiScalesGlobalRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAiScales200Response>> {
+    async getAiScalesGlobalRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -4597,22 +5380,21 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAiScales200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Cross-tenant listing. Admin-only; a tenant caller is refused.
      * List scales across tenants
      */
-    async getAiScalesGlobal(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAiScales200Response> {
-        const response = await this.getAiScalesGlobalRaw(initOverrides);
-        return await response.value();
+    async getAiScalesGlobal(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiScalesGlobalRaw(initOverrides);
     }
 
     /**
      * Public (scale)
      */
-    async getAiScalesPublicRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
+    async getAiScalesPublicRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -4635,22 +5417,21 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Public (scale)
      */
-    async getAiScalesPublic(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.getAiScalesPublicRaw(initOverrides);
-        return await response.value();
+    async getAiScalesPublic(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiScalesPublicRaw(initOverrides);
     }
 
     /**
      * List the caller\'s scans.
      * List scans
      */
-    async getAiScansRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAiScans200Response>> {
+    async getAiScansRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -4673,23 +5454,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAiScans200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * List the caller\'s scans.
      * List scans
      */
-    async getAiScans(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAiScans200Response> {
-        const response = await this.getAiScansRaw(initOverrides);
-        return await response.value();
+    async getAiScans(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiScansRaw(initOverrides);
     }
 
     /**
      * Read one scan by its (owner, name) key.
      * Retrieve a scan
      */
-    async getAiScansByOwnerByNameRaw(requestParameters: AiApiGetAiScansByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiScans200Response>> {
+    async getAiScansByOwnerByNameRaw(requestParameters: AiApiGetAiScansByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -4728,23 +5508,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiScans200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Read one scan by its (owner, name) key.
      * Retrieve a scan
      */
-    async getAiScansByOwnerByName(requestParameters: AiApiGetAiScansByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiScans200Response> {
-        const response = await this.getAiScansByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async getAiScansByOwnerByName(requestParameters: AiApiGetAiScansByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiScansByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * List the caller\'s signin-sessions.
      * List signin-sessions
      */
-    async getAiSigninSessionsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAiSigninSessions200Response>> {
+    async getAiSigninSessionsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -4767,23 +5546,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAiSigninSessions200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * List the caller\'s signin-sessions.
      * List signin-sessions
      */
-    async getAiSigninSessions(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAiSigninSessions200Response> {
-        const response = await this.getAiSigninSessionsRaw(initOverrides);
-        return await response.value();
+    async getAiSigninSessions(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiSigninSessionsRaw(initOverrides);
     }
 
     /**
      * Read one session by its (owner, name) key.
      * Retrieve a session
      */
-    async getAiSigninSessionsByOwnerByNameRaw(requestParameters: AiApiGetAiSigninSessionsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiSigninSessions200Response>> {
+    async getAiSigninSessionsByOwnerByNameRaw(requestParameters: AiApiGetAiSigninSessionsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -4822,22 +5600,21 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiSigninSessions200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Read one session by its (owner, name) key.
      * Retrieve a session
      */
-    async getAiSigninSessionsByOwnerByName(requestParameters: AiApiGetAiSigninSessionsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiSigninSessions200Response> {
-        const response = await this.getAiSigninSessionsByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async getAiSigninSessionsByOwnerByName(requestParameters: AiApiGetAiSigninSessionsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiSigninSessionsByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Duplicated (session)
      */
-    async getAiSigninSessionsDuplicatedRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
+    async getAiSigninSessionsDuplicatedRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -4860,22 +5637,21 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Duplicated (session)
      */
-    async getAiSigninSessionsDuplicated(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.getAiSigninSessionsDuplicatedRaw(initOverrides);
-        return await response.value();
+    async getAiSigninSessionsDuplicated(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiSigninSessionsDuplicatedRaw(initOverrides);
     }
 
     /**
      * List the caller\'s stores.
      * List stores
      */
-    async getAiStoresRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAiStores200Response>> {
+    async getAiStoresRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -4898,23 +5674,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAiStores200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * List the caller\'s stores.
      * List stores
      */
-    async getAiStores(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAiStores200Response> {
-        const response = await this.getAiStoresRaw(initOverrides);
-        return await response.value();
+    async getAiStores(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiStoresRaw(initOverrides);
     }
 
     /**
      * Read one store by its (owner, name) key.
      * Retrieve a store
      */
-    async getAiStoresByOwnerByNameRaw(requestParameters: AiApiGetAiStoresByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiStores200Response>> {
+    async getAiStoresByOwnerByNameRaw(requestParameters: AiApiGetAiStoresByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -4953,23 +5728,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiStores200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Read one store by its (owner, name) key.
      * Retrieve a store
      */
-    async getAiStoresByOwnerByName(requestParameters: AiApiGetAiStoresByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiStores200Response> {
-        const response = await this.getAiStoresByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async getAiStoresByOwnerByName(requestParameters: AiApiGetAiStoresByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiStoresByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Cross-tenant listing. Admin-only; a tenant caller is refused.
      * List stores across tenants
      */
-    async getAiStoresGlobalRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAiStores200Response>> {
+    async getAiStoresGlobalRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -4992,22 +5766,21 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAiStores200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Cross-tenant listing. Admin-only; a tenant caller is refused.
      * List stores across tenants
      */
-    async getAiStoresGlobal(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAiStores200Response> {
-        const response = await this.getAiStoresGlobalRaw(initOverrides);
-        return await response.value();
+    async getAiStoresGlobal(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiStoresGlobalRaw(initOverrides);
     }
 
     /**
      * Names (store)
      */
-    async getAiStoresNamesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
+    async getAiStoresNamesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -5030,21 +5803,20 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Names (store)
      */
-    async getAiStoresNames(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.getAiStoresNamesRaw(initOverrides);
-        return await response.value();
+    async getAiStoresNames(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiStoresNamesRaw(initOverrides);
     }
 
     /**
      * Providers (store)
      */
-    async getAiStoresProvidersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
+    async getAiStoresProvidersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -5067,21 +5839,20 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Providers (store)
      */
-    async getAiStoresProviders(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.getAiStoresProvidersRaw(initOverrides);
-        return await response.value();
+    async getAiStoresProviders(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiStoresProvidersRaw(initOverrides);
     }
 
     /**
      * System
      */
-    async getAiSystemRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
+    async getAiSystemRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -5104,22 +5875,21 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * System
      */
-    async getAiSystem(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.getAiSystemRaw(initOverrides);
-        return await response.value();
+    async getAiSystem(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiSystemRaw(initOverrides);
     }
 
     /**
      * List the caller\'s tasks.
      * List tasks
      */
-    async getAiTasksRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAiTasks200Response>> {
+    async getAiTasksRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -5142,23 +5912,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAiTasks200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * List the caller\'s tasks.
      * List tasks
      */
-    async getAiTasks(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAiTasks200Response> {
-        const response = await this.getAiTasksRaw(initOverrides);
-        return await response.value();
+    async getAiTasks(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiTasksRaw(initOverrides);
     }
 
     /**
      * Read one task by its (owner, name) key.
      * Retrieve a task
      */
-    async getAiTasksByOwnerByNameRaw(requestParameters: AiApiGetAiTasksByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiTasks200Response>> {
+    async getAiTasksByOwnerByNameRaw(requestParameters: AiApiGetAiTasksByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -5197,23 +5966,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiTasks200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Read one task by its (owner, name) key.
      * Retrieve a task
      */
-    async getAiTasksByOwnerByName(requestParameters: AiApiGetAiTasksByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiTasks200Response> {
-        const response = await this.getAiTasksByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async getAiTasksByOwnerByName(requestParameters: AiApiGetAiTasksByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiTasksByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Cross-tenant listing. Admin-only; a tenant caller is refused.
      * List tasks across tenants
      */
-    async getAiTasksGlobalRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAiTasks200Response>> {
+    async getAiTasksGlobalRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -5236,23 +6004,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAiTasks200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Cross-tenant listing. Admin-only; a tenant caller is refused.
      * List tasks across tenants
      */
-    async getAiTasksGlobal(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAiTasks200Response> {
-        const response = await this.getAiTasksGlobalRaw(initOverrides);
-        return await response.value();
+    async getAiTasksGlobal(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiTasksGlobalRaw(initOverrides);
     }
 
     /**
      * List the caller\'s templates.
      * List templates
      */
-    async getAiTemplatesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAiTemplates200Response>> {
+    async getAiTemplatesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -5275,23 +6042,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAiTemplates200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * List the caller\'s templates.
      * List templates
      */
-    async getAiTemplates(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAiTemplates200Response> {
-        const response = await this.getAiTemplatesRaw(initOverrides);
-        return await response.value();
+    async getAiTemplates(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiTemplatesRaw(initOverrides);
     }
 
     /**
      * Read one template by its (owner, name) key.
      * Retrieve a template
      */
-    async getAiTemplatesByOwnerByNameRaw(requestParameters: AiApiGetAiTemplatesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiTemplates200Response>> {
+    async getAiTemplatesByOwnerByNameRaw(requestParameters: AiApiGetAiTemplatesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -5330,22 +6096,59 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiTemplates200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Read one template by its (owner, name) key.
      * Retrieve a template
      */
-    async getAiTemplatesByOwnerByName(requestParameters: AiApiGetAiTemplatesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiTemplates200Response> {
-        const response = await this.getAiTemplatesByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async getAiTemplatesByOwnerByName(requestParameters: AiApiGetAiTemplatesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiTemplatesByOwnerByNameRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Returns the PUBLIC live request-geo aggregate for the world.hanzo.ai \"Hanzo mode\" globe: WHERE requests to api.hanzo.ai are coming from, as country/region points with per-service-class counts, plus headline throughput rates.  It is AUTH-exempt and BALANCE-exempt exactly like /v1/ai/router/stats?scope=platform:   - auth: the controller name \"traffic/globe\" is neither a get-/update- CRUD name     nor a super-admin/present-credential endpoint, so the authz filter passes it     through, and this handler requires no principal.   - balance: isBalanceExempt(\"/v1/ai/traffic/...\") returns true.  It exposes ONLY aggregates — counts, rates, and country/region centroids — and NEVER any IP, per-request row, org, or user dimension (see object/traffic.go). Marketing telemetry; nothing sensitive.
+     * Returns the PUBLIC live request-geo aggregate for the world.hanzo.ai \"Hanzo mode\" globe: WHERE requests to api.hanzo.ai are coming from, as country/region points with per-service-class counts, plus headline throughput rates.
+     */
+    async getAiTrafficGlobeRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/traffic/globe`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Returns the PUBLIC live request-geo aggregate for the world.hanzo.ai \"Hanzo mode\" globe: WHERE requests to api.hanzo.ai are coming from, as country/region points with per-service-class counts, plus headline throughput rates.  It is AUTH-exempt and BALANCE-exempt exactly like /v1/ai/router/stats?scope=platform:   - auth: the controller name \"traffic/globe\" is neither a get-/update- CRUD name     nor a super-admin/present-credential endpoint, so the authz filter passes it     through, and this handler requires no principal.   - balance: isBalanceExempt(\"/v1/ai/traffic/...\") returns true.  It exposes ONLY aggregates — counts, rates, and country/region centroids — and NEVER any IP, per-request row, org, or user dimension (see object/traffic.go). Marketing telemetry; nothing sensitive.
+     * Returns the PUBLIC live request-geo aggregate for the world.hanzo.ai \"Hanzo mode\" globe: WHERE requests to api.hanzo.ai are coming from, as country/region points with per-service-class counts, plus headline throughput rates.
+     */
+    async getAiTrafficGlobe(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiTrafficGlobeRaw(initOverrides);
     }
 
     /**
      * Training Contribution
      */
-    async getAiTrainingContributionRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
+    async getAiTrainingContributionRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -5368,22 +6171,21 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Training Contribution
      */
-    async getAiTrainingContribution(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.getAiTrainingContributionRaw(initOverrides);
-        return await response.value();
+    async getAiTrainingContribution(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiTrainingContributionRaw(initOverrides);
     }
 
     /**
      * List the caller\'s usages.
      * List usages
      */
-    async getAiUsagesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAiUsages200Response>> {
+    async getAiUsagesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -5406,22 +6208,21 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAiUsages200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * List the caller\'s usages.
      * List usages
      */
-    async getAiUsages(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAiUsages200Response> {
-        const response = await this.getAiUsagesRaw(initOverrides);
-        return await response.value();
+    async getAiUsages(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiUsagesRaw(initOverrides);
     }
 
     /**
      * By User (usage)
      */
-    async getAiUsagesByUserRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
+    async getAiUsagesByUserRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -5444,21 +6245,20 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * By User (usage)
      */
-    async getAiUsagesByUser(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.getAiUsagesByUserRaw(initOverrides);
-        return await response.value();
+    async getAiUsagesByUser(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiUsagesByUserRaw(initOverrides);
     }
 
     /**
      * Cloud (usage)
      */
-    async getAiUsagesCloudRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
+    async getAiUsagesCloudRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -5481,21 +6281,20 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Cloud (usage)
      */
-    async getAiUsagesCloud(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.getAiUsagesCloudRaw(initOverrides);
-        return await response.value();
+    async getAiUsagesCloud(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiUsagesCloudRaw(initOverrides);
     }
 
     /**
      * Range (usage)
      */
-    async getAiUsagesRangeRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
+    async getAiUsagesRangeRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -5518,21 +6317,20 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Range (usage)
      */
-    async getAiUsagesRange(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.getAiUsagesRangeRaw(initOverrides);
-        return await response.value();
+    async getAiUsagesRange(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiUsagesRangeRaw(initOverrides);
     }
 
     /**
      * User Names (usage)
      */
-    async getAiUsagesUserNamesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
+    async getAiUsagesUserNamesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -5555,22 +6353,21 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * User Names (usage)
      */
-    async getAiUsagesUserNames(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.getAiUsagesUserNamesRaw(initOverrides);
-        return await response.value();
+    async getAiUsagesUserNames(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiUsagesUserNamesRaw(initOverrides);
     }
 
     /**
      * List the caller\'s vectors.
      * List vectors
      */
-    async getAiVectorsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAiVectors200Response>> {
+    async getAiVectorsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -5593,23 +6390,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAiVectors200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * List the caller\'s vectors.
      * List vectors
      */
-    async getAiVectors(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAiVectors200Response> {
-        const response = await this.getAiVectorsRaw(initOverrides);
-        return await response.value();
+    async getAiVectors(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiVectorsRaw(initOverrides);
     }
 
     /**
      * Read one vector by its (owner, name) key.
      * Retrieve a vector
      */
-    async getAiVectorsByOwnerByNameRaw(requestParameters: AiApiGetAiVectorsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiVectors200Response>> {
+    async getAiVectorsByOwnerByNameRaw(requestParameters: AiApiGetAiVectorsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -5648,23 +6444,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiVectors200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Read one vector by its (owner, name) key.
      * Retrieve a vector
      */
-    async getAiVectorsByOwnerByName(requestParameters: AiApiGetAiVectorsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiVectors200Response> {
-        const response = await this.getAiVectorsByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async getAiVectorsByOwnerByName(requestParameters: AiApiGetAiVectorsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiVectorsByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Cross-tenant listing. Admin-only; a tenant caller is refused.
      * List vectors across tenants
      */
-    async getAiVectorsGlobalRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAiVectors200Response>> {
+    async getAiVectorsGlobalRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -5687,22 +6482,21 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAiVectors200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Cross-tenant listing. Admin-only; a tenant caller is refused.
      * List vectors across tenants
      */
-    async getAiVectorsGlobal(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAiVectors200Response> {
-        const response = await this.getAiVectorsGlobalRaw(initOverrides);
-        return await response.value();
+    async getAiVectorsGlobal(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiVectorsGlobalRaw(initOverrides);
     }
 
     /**
      * Version
      */
-    async getAiVersionRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
+    async getAiVersionRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -5725,22 +6519,21 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Version
      */
-    async getAiVersion(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.getAiVersionRaw(initOverrides);
-        return await response.value();
+    async getAiVersion(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiVersionRaw(initOverrides);
     }
 
     /**
      * List the caller\'s videos.
      * List videos
      */
-    async getAiVideosRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAiVideos200Response>> {
+    async getAiVideosRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -5763,23 +6556,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAiVideos200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * List the caller\'s videos.
      * List videos
      */
-    async getAiVideos(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAiVideos200Response> {
-        const response = await this.getAiVideosRaw(initOverrides);
-        return await response.value();
+    async getAiVideos(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiVideosRaw(initOverrides);
     }
 
     /**
      * Read one video by its (owner, name) key.
      * Retrieve a video
      */
-    async getAiVideosByOwnerByNameRaw(requestParameters: AiApiGetAiVideosByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiVideos200Response>> {
+    async getAiVideosByOwnerByNameRaw(requestParameters: AiApiGetAiVideosByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -5818,23 +6610,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiVideos200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Read one video by its (owner, name) key.
      * Retrieve a video
      */
-    async getAiVideosByOwnerByName(requestParameters: AiApiGetAiVideosByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiVideos200Response> {
-        const response = await this.getAiVideosByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async getAiVideosByOwnerByName(requestParameters: AiApiGetAiVideosByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiVideosByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Cross-tenant listing. Admin-only; a tenant caller is refused.
      * List videos across tenants
      */
-    async getAiVideosGlobalRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAiVideos200Response>> {
+    async getAiVideosGlobalRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -5857,23 +6648,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAiVideos200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Cross-tenant listing. Admin-only; a tenant caller is refused.
      * List videos across tenants
      */
-    async getAiVideosGlobal(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAiVideos200Response> {
-        const response = await this.getAiVideosGlobalRaw(initOverrides);
-        return await response.value();
+    async getAiVideosGlobal(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiVideosGlobalRaw(initOverrides);
     }
 
     /**
      * List the caller\'s workflows.
      * List workflows
      */
-    async getAiWorkflowsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAiWorkflows200Response>> {
+    async getAiWorkflowsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -5896,23 +6686,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAiWorkflows200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * List the caller\'s workflows.
      * List workflows
      */
-    async getAiWorkflows(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAiWorkflows200Response> {
-        const response = await this.getAiWorkflowsRaw(initOverrides);
-        return await response.value();
+    async getAiWorkflows(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiWorkflowsRaw(initOverrides);
     }
 
     /**
      * Read one workflow by its (owner, name) key.
      * Retrieve a workflow
      */
-    async getAiWorkflowsByOwnerByNameRaw(requestParameters: AiApiGetAiWorkflowsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiWorkflows200Response>> {
+    async getAiWorkflowsByOwnerByNameRaw(requestParameters: AiApiGetAiWorkflowsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -5951,23 +6740,22 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiWorkflows200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Read one workflow by its (owner, name) key.
      * Retrieve a workflow
      */
-    async getAiWorkflowsByOwnerByName(requestParameters: AiApiGetAiWorkflowsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiWorkflows200Response> {
-        const response = await this.getAiWorkflowsByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async getAiWorkflowsByOwnerByName(requestParameters: AiApiGetAiWorkflowsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiWorkflowsByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Cross-tenant listing. Admin-only; a tenant caller is refused.
      * List workflows across tenants
      */
-    async getAiWorkflowsGlobalRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAiWorkflows200Response>> {
+    async getAiWorkflowsGlobalRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -5990,23 +6778,236 @@ export class AiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAiWorkflows200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Cross-tenant listing. Admin-only; a tenant caller is refused.
      * List workflows across tenants
      */
-    async getAiWorkflowsGlobal(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAiWorkflows200Response> {
-        const response = await this.getAiWorkflowsGlobalRaw(initOverrides);
-        return await response.value();
+    async getAiWorkflowsGlobal(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAiWorkflowsGlobalRaw(initOverrides);
+    }
+
+    /**
+     * Returns the list of available models from the routing table.  PUBLIC BY DESIGN, AND IT DOES NOT AUTHENTICATE — that is the whole contract, so it is stated here rather than left to be inferred. The catalogue is the same for everyone (listAvailableModels takes no principal), docs.hanzo.ai fetches it from the browser, and every policy layer around it already says so out loud: the authz filter lists \"models\" as public, filter_balance refuses to gate it (a 402 here was a console-wide outage), the rate limiter excludes it, and cloud\'s spend.Reachable carries /v1/models/ as \"the model catalog the shell reads for discovery\".  SO THE Authorization HEADER IS NOT AN ADMISSION CHECK HERE. It is read for ONE thing — annotating gated SKUs with the caller\'s own access standing — and annotation degrades to nothing when there is no verified principal.  It used to hold a \"require authentication\" gate that authenticated nobody: it rejected an ABSENT credential and a MALFORMED one, then accepted any string that merely looked like a key. `Bearer sk-` followed by 36 zeroes returned 200 in production; so did a JWT three days expired. It was a shape check wearing an auth check\'s clothes, and its cost was diagnostic: /v1/models is the natural \"is my auth working?\" probe, and answering 200 to a dead credential sent people debugging the wrong system. A public endpoint must not appear to validate. Either check the credential or ignore it — this one ignores it, deliberately and visibly.  Removing that gate discloses nothing new: the catalogue was already reachable by anyone willing to type three characters, so there is no confidentiality delta, only an honesty one.
+     * Returns the list of available models from the routing table.
+     */
+    async getModelsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/models`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Returns the list of available models from the routing table.  PUBLIC BY DESIGN, AND IT DOES NOT AUTHENTICATE — that is the whole contract, so it is stated here rather than left to be inferred. The catalogue is the same for everyone (listAvailableModels takes no principal), docs.hanzo.ai fetches it from the browser, and every policy layer around it already says so out loud: the authz filter lists \"models\" as public, filter_balance refuses to gate it (a 402 here was a console-wide outage), the rate limiter excludes it, and cloud\'s spend.Reachable carries /v1/models/ as \"the model catalog the shell reads for discovery\".  SO THE Authorization HEADER IS NOT AN ADMISSION CHECK HERE. It is read for ONE thing — annotating gated SKUs with the caller\'s own access standing — and annotation degrades to nothing when there is no verified principal.  It used to hold a \"require authentication\" gate that authenticated nobody: it rejected an ABSENT credential and a MALFORMED one, then accepted any string that merely looked like a key. `Bearer sk-` followed by 36 zeroes returned 200 in production; so did a JWT three days expired. It was a shape check wearing an auth check\'s clothes, and its cost was diagnostic: /v1/models is the natural \"is my auth working?\" probe, and answering 200 to a dead credential sent people debugging the wrong system. A public endpoint must not appear to validate. Either check the credential or ignore it — this one ignores it, deliberately and visibly.  Removing that gate discloses nothing new: the catalogue was already reachable by anyone willing to type three characters, so there is no confidentiality delta, only an honesty one.
+     * Returns the list of available models from the routing table.
+     */
+    async getModels(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getModelsRaw(initOverrides);
+    }
+
+    /**
+     * Returns the caller\'s own standing for a gated model: \"granted\", \"requested\", or empty when they have never asked.
+     * Returns the caller\'s own standing for a gated model: \"granted\", \"requested\", or empty when they have never asked.
+     */
+    async getModelsByModelAccessRaw(requestParameters: AiApiGetModelsByModelAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['model'] == null) {
+            throw new runtime.RequiredError(
+                'model',
+                'Required parameter "model" was null or undefined when calling getModelsByModelAccess().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/models/{model}/access`;
+        urlPath = urlPath.replace(`{${"model"}}`, encodeURIComponent(String(requestParameters['model'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Returns the caller\'s own standing for a gated model: \"granted\", \"requested\", or empty when they have never asked.
+     * Returns the caller\'s own standing for a gated model: \"granted\", \"requested\", or empty when they have never asked.
+     */
+    async getModelsByModelAccess(requestParameters: AiApiGetModelsByModelAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getModelsByModelAccessRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Public, secret-free list of the providers serving the models that GET /v1/models lists — the same source, projected. Safe unauthenticated: no keys, URLs, or config are returned, and it reports a SET of names, never which provider serves which model.
+     * Public, secret-free list of the providers serving the models that GET /v1/models lists — the same source, projected.
+     */
+    async getModelsProvidersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/models/providers`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Public, secret-free list of the providers serving the models that GET /v1/models lists — the same source, projected. Safe unauthenticated: no keys, URLs, or config are returned, and it reports a SET of names, never which provider serves which model.
+     * Public, secret-free list of the providers serving the models that GET /v1/models lists — the same source, projected.
+     */
+    async getModelsProviders(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getModelsProvidersRaw(initOverrides);
+    }
+
+    /**
+     * Implements GET /v1/videos/{id} — poll a job\'s status.  It authenticates the caller, verifies they OWN the job (the caller\'s billing subject must equal the job\'s), performs ONE upstream status poll, and — the first time the job is observed completed — settles the reservation with the actual cost and records the billable usage event (exactly once). Returns the OpenAI-shaped video object.
+     * Implements GET /v1/videos/{id} — poll a job\'s status.
+     */
+    async getVideosByIdRaw(requestParameters: AiApiGetVideosByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getVideosById().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/videos/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Implements GET /v1/videos/{id} — poll a job\'s status.  It authenticates the caller, verifies they OWN the job (the caller\'s billing subject must equal the job\'s), performs ONE upstream status poll, and — the first time the job is observed completed — settles the reservation with the actual cost and records the billable usage event (exactly once). Returns the OpenAI-shaped video object.
+     * Implements GET /v1/videos/{id} — poll a job\'s status.
+     */
+    async getVideosById(requestParameters: AiApiGetVideosByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getVideosByIdRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Implements GET /v1/videos/{id}/content — download the finished MP4.  It authenticates + ownership-checks the caller, then proxies the upstream /content endpoint (bounded by the download concurrency ceiling) and streams the raw video bytes back inline. A successful download also bills the job once (for the client that downloads without first polling to completion) — idempotent with the poll path via job.markCompleted.
+     * Implements GET /v1/videos/{id}/content — download the finished MP4.
+     */
+    async getVideosByIdContentRaw(requestParameters: AiApiGetVideosByIdContentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getVideosByIdContent().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/videos/{id}/content`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Implements GET /v1/videos/{id}/content — download the finished MP4.  It authenticates + ownership-checks the caller, then proxies the upstream /content endpoint (bounded by the download concurrency ceiling) and streams the raw video bytes back inline. A successful download also bills the job once (for the client that downloads without first polling to completion) — idempotent with the poll path via job.markCompleted.
+     * Implements GET /v1/videos/{id}/content — download the finished MP4.
+     */
+    async getVideosByIdContent(requestParameters: AiApiGetVideosByIdContentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getVideosByIdContentRaw(requestParameters, initOverrides);
     }
 
     /**
      * Update one article. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a article
      */
-    async patchAiArticlesByOwnerByNameRaw(requestParameters: AiApiPatchAiArticlesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiArticles200Response>> {
+    async patchAiArticlesByOwnerByNameRaw(requestParameters: AiApiPatchAiArticlesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -6021,18 +7022,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling patchAiArticlesByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -6052,26 +7044,24 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiArticles200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Update one article. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a article
      */
-    async patchAiArticlesByOwnerByName(requestParameters: AiApiPatchAiArticlesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiArticles200Response> {
-        const response = await this.patchAiArticlesByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async patchAiArticlesByOwnerByName(requestParameters: AiApiPatchAiArticlesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.patchAiArticlesByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Update one asset. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a asset
      */
-    async patchAiAssetsByOwnerByNameRaw(requestParameters: AiApiPatchAiAssetsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiAssets200Response>> {
+    async patchAiAssetsByOwnerByNameRaw(requestParameters: AiApiPatchAiAssetsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -6086,18 +7076,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling patchAiAssetsByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -6117,26 +7098,24 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiAssets200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Update one asset. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a asset
      */
-    async patchAiAssetsByOwnerByName(requestParameters: AiApiPatchAiAssetsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiAssets200Response> {
-        const response = await this.patchAiAssetsByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async patchAiAssetsByOwnerByName(requestParameters: AiApiPatchAiAssetsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.patchAiAssetsByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Update one chat. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a chat
      */
-    async patchAiChatsByOwnerByNameRaw(requestParameters: AiApiPatchAiChatsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiChats200Response>> {
+    async patchAiChatsByOwnerByNameRaw(requestParameters: AiApiPatchAiChatsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -6151,18 +7130,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling patchAiChatsByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -6182,26 +7152,24 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiChats200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Update one chat. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a chat
      */
-    async patchAiChatsByOwnerByName(requestParameters: AiApiPatchAiChatsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiChats200Response> {
-        const response = await this.patchAiChatsByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async patchAiChatsByOwnerByName(requestParameters: AiApiPatchAiChatsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.patchAiChatsByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Update one application. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a application
      */
-    async patchAiDeploymentsByOwnerByNameRaw(requestParameters: AiApiPatchAiDeploymentsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiDeployments200Response>> {
+    async patchAiDeploymentsByOwnerByNameRaw(requestParameters: AiApiPatchAiDeploymentsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -6216,18 +7184,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling patchAiDeploymentsByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -6247,26 +7206,24 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiDeployments200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Update one application. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a application
      */
-    async patchAiDeploymentsByOwnerByName(requestParameters: AiApiPatchAiDeploymentsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiDeployments200Response> {
-        const response = await this.patchAiDeploymentsByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async patchAiDeploymentsByOwnerByName(requestParameters: AiApiPatchAiDeploymentsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.patchAiDeploymentsByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Update one file. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a file
      */
-    async patchAiFilesByOwnerByNameRaw(requestParameters: AiApiPatchAiFilesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiFiles200Response>> {
+    async patchAiFilesByOwnerByNameRaw(requestParameters: AiApiPatchAiFilesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -6281,18 +7238,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling patchAiFilesByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -6312,26 +7260,24 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiFiles200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Update one file. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a file
      */
-    async patchAiFilesByOwnerByName(requestParameters: AiApiPatchAiFilesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiFiles200Response> {
-        const response = await this.patchAiFilesByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async patchAiFilesByOwnerByName(requestParameters: AiApiPatchAiFilesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.patchAiFilesByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Update one form. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a form
      */
-    async patchAiFormsByOwnerByNameRaw(requestParameters: AiApiPatchAiFormsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiForms200Response>> {
+    async patchAiFormsByOwnerByNameRaw(requestParameters: AiApiPatchAiFormsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -6346,18 +7292,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling patchAiFormsByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -6377,26 +7314,24 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiForms200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Update one form. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a form
      */
-    async patchAiFormsByOwnerByName(requestParameters: AiApiPatchAiFormsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiForms200Response> {
-        const response = await this.patchAiFormsByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async patchAiFormsByOwnerByName(requestParameters: AiApiPatchAiFormsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.patchAiFormsByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Update one graph. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a graph
      */
-    async patchAiGraphsByOwnerByNameRaw(requestParameters: AiApiPatchAiGraphsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiGraphs200Response>> {
+    async patchAiGraphsByOwnerByNameRaw(requestParameters: AiApiPatchAiGraphsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -6411,18 +7346,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling patchAiGraphsByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -6442,26 +7368,24 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiGraphs200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Update one graph. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a graph
      */
-    async patchAiGraphsByOwnerByName(requestParameters: AiApiPatchAiGraphsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiGraphs200Response> {
-        const response = await this.patchAiGraphsByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async patchAiGraphsByOwnerByName(requestParameters: AiApiPatchAiGraphsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.patchAiGraphsByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Update one message. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a message
      */
-    async patchAiMessagesByOwnerByNameRaw(requestParameters: AiApiPatchAiMessagesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiMessages200Response>> {
+    async patchAiMessagesByOwnerByNameRaw(requestParameters: AiApiPatchAiMessagesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -6476,18 +7400,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling patchAiMessagesByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -6507,26 +7422,24 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiMessages200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Update one message. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a message
      */
-    async patchAiMessagesByOwnerByName(requestParameters: AiApiPatchAiMessagesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiMessages200Response> {
-        const response = await this.patchAiMessagesByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async patchAiMessagesByOwnerByName(requestParameters: AiApiPatchAiMessagesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.patchAiMessagesByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Update one node. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a node
      */
-    async patchAiNodesByOwnerByNameRaw(requestParameters: AiApiPatchAiNodesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiNodes200Response>> {
+    async patchAiNodesByOwnerByNameRaw(requestParameters: AiApiPatchAiNodesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -6541,18 +7454,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling patchAiNodesByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -6572,37 +7476,102 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiNodes200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Update one node. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a node
      */
-    async patchAiNodesByOwnerByName(requestParameters: AiApiPatchAiNodesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiNodes200Response> {
-        const response = await this.patchAiNodesByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async patchAiNodesByOwnerByName(requestParameters: AiApiPatchAiNodesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.patchAiNodesByOwnerByNameRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async patchAiOrgSettingsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/org/settings`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async patchAiOrgSettings(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.patchAiOrgSettingsRaw(initOverrides);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async patchAiOrgSettingsListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/org/settings/list`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async patchAiOrgSettingsList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.patchAiOrgSettingsListRaw(initOverrides);
     }
 
     /**
      * Preferences
      */
-    async patchAiPreferencesRaw(requestParameters: AiApiPatchAiPreferencesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling patchAiPreferences().'
-            );
-        }
-
+    async patchAiPreferencesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -6620,25 +7589,23 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Preferences
      */
-    async patchAiPreferences(requestParameters: AiApiPatchAiPreferencesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.patchAiPreferencesRaw(requestParameters, initOverrides);
-        return await response.value();
+    async patchAiPreferences(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.patchAiPreferencesRaw(initOverrides);
     }
 
     /**
      * Update one provider. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a provider
      */
-    async patchAiProvidersByOwnerByNameRaw(requestParameters: AiApiPatchAiProvidersByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiProviders200Response>> {
+    async patchAiProvidersByOwnerByNameRaw(requestParameters: AiApiPatchAiProvidersByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -6653,18 +7620,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling patchAiProvidersByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -6684,26 +7642,24 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiProviders200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Update one provider. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a provider
      */
-    async patchAiProvidersByOwnerByName(requestParameters: AiApiPatchAiProvidersByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiProviders200Response> {
-        const response = await this.patchAiProvidersByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async patchAiProvidersByOwnerByName(requestParameters: AiApiPatchAiProvidersByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.patchAiProvidersByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Update one record. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a record
      */
-    async patchAiRecordsByOwnerByNameRaw(requestParameters: AiApiPatchAiRecordsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiRecords200Response>> {
+    async patchAiRecordsByOwnerByNameRaw(requestParameters: AiApiPatchAiRecordsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -6718,18 +7674,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling patchAiRecordsByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -6749,26 +7696,24 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiRecords200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Update one record. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a record
      */
-    async patchAiRecordsByOwnerByName(requestParameters: AiApiPatchAiRecordsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiRecords200Response> {
-        const response = await this.patchAiRecordsByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async patchAiRecordsByOwnerByName(requestParameters: AiApiPatchAiRecordsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.patchAiRecordsByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Update one connection. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a connection
      */
-    async patchAiRemoteConnectionsByOwnerByNameRaw(requestParameters: AiApiPatchAiRemoteConnectionsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiRemoteConnections200Response>> {
+    async patchAiRemoteConnectionsByOwnerByNameRaw(requestParameters: AiApiPatchAiRemoteConnectionsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -6783,18 +7728,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling patchAiRemoteConnectionsByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -6814,26 +7750,214 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiRemoteConnections200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Update one connection. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a connection
      */
-    async patchAiRemoteConnectionsByOwnerByName(requestParameters: AiApiPatchAiRemoteConnectionsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiRemoteConnections200Response> {
-        const response = await this.patchAiRemoteConnectionsByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async patchAiRemoteConnectionsByOwnerByName(requestParameters: AiApiPatchAiRemoteConnectionsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.patchAiRemoteConnectionsByOwnerByNameRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async patchAiRouterArtifactMetaRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/router/artifact-meta`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async patchAiRouterArtifactMeta(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.patchAiRouterArtifactMetaRaw(initOverrides);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async patchAiRouterDefaultsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/router/defaults`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async patchAiRouterDefaults(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.patchAiRouterDefaultsRaw(initOverrides);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async patchAiRouterLedgerRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/router/ledger`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async patchAiRouterLedger(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.patchAiRouterLedgerRaw(initOverrides);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async patchAiRouterPolicyRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/router/policy`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async patchAiRouterPolicy(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.patchAiRouterPolicyRaw(initOverrides);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async patchAiRouterRewardsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/router/rewards`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async patchAiRouterRewards(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.patchAiRouterRewardsRaw(initOverrides);
     }
 
     /**
      * Update one model-route. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a model-route
      */
-    async patchAiRoutesByOwnerByNameRaw(requestParameters: AiApiPatchAiRoutesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiRoutes200Response>> {
+    async patchAiRoutesByOwnerByNameRaw(requestParameters: AiApiPatchAiRoutesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -6848,18 +7972,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling patchAiRoutesByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -6879,26 +7994,24 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiRoutes200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Update one model-route. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a model-route
      */
-    async patchAiRoutesByOwnerByName(requestParameters: AiApiPatchAiRoutesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiRoutes200Response> {
-        const response = await this.patchAiRoutesByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async patchAiRoutesByOwnerByName(requestParameters: AiApiPatchAiRoutesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.patchAiRoutesByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Update one scale. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a scale
      */
-    async patchAiScalesByOwnerByNameRaw(requestParameters: AiApiPatchAiScalesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiScales200Response>> {
+    async patchAiScalesByOwnerByNameRaw(requestParameters: AiApiPatchAiScalesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -6913,18 +8026,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling patchAiScalesByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -6944,26 +8048,24 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiScales200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Update one scale. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a scale
      */
-    async patchAiScalesByOwnerByName(requestParameters: AiApiPatchAiScalesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiScales200Response> {
-        const response = await this.patchAiScalesByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async patchAiScalesByOwnerByName(requestParameters: AiApiPatchAiScalesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.patchAiScalesByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Update one scan. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a scan
      */
-    async patchAiScansByOwnerByNameRaw(requestParameters: AiApiPatchAiScansByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiScans200Response>> {
+    async patchAiScansByOwnerByNameRaw(requestParameters: AiApiPatchAiScansByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -6978,18 +8080,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling patchAiScansByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -7009,26 +8102,24 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiScans200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Update one scan. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a scan
      */
-    async patchAiScansByOwnerByName(requestParameters: AiApiPatchAiScansByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiScans200Response> {
-        const response = await this.patchAiScansByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async patchAiScansByOwnerByName(requestParameters: AiApiPatchAiScansByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.patchAiScansByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Update one session. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a session
      */
-    async patchAiSigninSessionsByOwnerByNameRaw(requestParameters: AiApiPatchAiSigninSessionsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiSigninSessions200Response>> {
+    async patchAiSigninSessionsByOwnerByNameRaw(requestParameters: AiApiPatchAiSigninSessionsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -7043,18 +8134,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling patchAiSigninSessionsByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -7074,26 +8156,24 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiSigninSessions200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Update one session. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a session
      */
-    async patchAiSigninSessionsByOwnerByName(requestParameters: AiApiPatchAiSigninSessionsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiSigninSessions200Response> {
-        const response = await this.patchAiSigninSessionsByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async patchAiSigninSessionsByOwnerByName(requestParameters: AiApiPatchAiSigninSessionsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.patchAiSigninSessionsByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Update one store. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a store
      */
-    async patchAiStoresByOwnerByNameRaw(requestParameters: AiApiPatchAiStoresByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiStores200Response>> {
+    async patchAiStoresByOwnerByNameRaw(requestParameters: AiApiPatchAiStoresByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -7108,18 +8188,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling patchAiStoresByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -7139,26 +8210,24 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiStores200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Update one store. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a store
      */
-    async patchAiStoresByOwnerByName(requestParameters: AiApiPatchAiStoresByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiStores200Response> {
-        const response = await this.patchAiStoresByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async patchAiStoresByOwnerByName(requestParameters: AiApiPatchAiStoresByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.patchAiStoresByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Update one task. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a task
      */
-    async patchAiTasksByOwnerByNameRaw(requestParameters: AiApiPatchAiTasksByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiTasks200Response>> {
+    async patchAiTasksByOwnerByNameRaw(requestParameters: AiApiPatchAiTasksByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -7173,18 +8242,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling patchAiTasksByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -7204,26 +8264,24 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiTasks200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Update one task. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a task
      */
-    async patchAiTasksByOwnerByName(requestParameters: AiApiPatchAiTasksByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiTasks200Response> {
-        const response = await this.patchAiTasksByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async patchAiTasksByOwnerByName(requestParameters: AiApiPatchAiTasksByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.patchAiTasksByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Update one template. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a template
      */
-    async patchAiTemplatesByOwnerByNameRaw(requestParameters: AiApiPatchAiTemplatesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiTemplates200Response>> {
+    async patchAiTemplatesByOwnerByNameRaw(requestParameters: AiApiPatchAiTemplatesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -7238,18 +8296,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling patchAiTemplatesByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -7269,37 +8318,26 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiTemplates200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Update one template. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a template
      */
-    async patchAiTemplatesByOwnerByName(requestParameters: AiApiPatchAiTemplatesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiTemplates200Response> {
-        const response = await this.patchAiTemplatesByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async patchAiTemplatesByOwnerByName(requestParameters: AiApiPatchAiTemplatesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.patchAiTemplatesByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Training Contribution
      */
-    async patchAiTrainingContributionRaw(requestParameters: AiApiPatchAiTrainingContributionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling patchAiTrainingContribution().'
-            );
-        }
-
+    async patchAiTrainingContributionRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -7317,25 +8355,23 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Training Contribution
      */
-    async patchAiTrainingContribution(requestParameters: AiApiPatchAiTrainingContributionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.patchAiTrainingContributionRaw(requestParameters, initOverrides);
-        return await response.value();
+    async patchAiTrainingContribution(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.patchAiTrainingContributionRaw(initOverrides);
     }
 
     /**
      * Update one tree-file. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a tree-file
      */
-    async patchAiTreeFilesByOwnerByNameRaw(requestParameters: AiApiPatchAiTreeFilesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiTreeFiles200Response>> {
+    async patchAiTreeFilesByOwnerByNameRaw(requestParameters: AiApiPatchAiTreeFilesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -7350,18 +8386,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling patchAiTreeFilesByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -7381,26 +8408,24 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiTreeFiles200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Update one tree-file. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a tree-file
      */
-    async patchAiTreeFilesByOwnerByName(requestParameters: AiApiPatchAiTreeFilesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiTreeFiles200Response> {
-        const response = await this.patchAiTreeFilesByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async patchAiTreeFilesByOwnerByName(requestParameters: AiApiPatchAiTreeFilesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.patchAiTreeFilesByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Update one vector. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a vector
      */
-    async patchAiVectorsByOwnerByNameRaw(requestParameters: AiApiPatchAiVectorsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiVectors200Response>> {
+    async patchAiVectorsByOwnerByNameRaw(requestParameters: AiApiPatchAiVectorsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -7415,18 +8440,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling patchAiVectorsByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -7446,26 +8462,24 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiVectors200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Update one vector. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a vector
      */
-    async patchAiVectorsByOwnerByName(requestParameters: AiApiPatchAiVectorsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiVectors200Response> {
-        const response = await this.patchAiVectorsByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async patchAiVectorsByOwnerByName(requestParameters: AiApiPatchAiVectorsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.patchAiVectorsByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Update one video. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a video
      */
-    async patchAiVideosByOwnerByNameRaw(requestParameters: AiApiPatchAiVideosByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiVideos200Response>> {
+    async patchAiVideosByOwnerByNameRaw(requestParameters: AiApiPatchAiVideosByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -7480,18 +8494,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling patchAiVideosByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -7511,26 +8516,24 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiVideos200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Update one video. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a video
      */
-    async patchAiVideosByOwnerByName(requestParameters: AiApiPatchAiVideosByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiVideos200Response> {
-        const response = await this.patchAiVideosByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async patchAiVideosByOwnerByName(requestParameters: AiApiPatchAiVideosByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.patchAiVideosByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Update one workflow. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a workflow
      */
-    async patchAiWorkflowsByOwnerByNameRaw(requestParameters: AiApiPatchAiWorkflowsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiWorkflows200Response>> {
+    async patchAiWorkflowsByOwnerByNameRaw(requestParameters: AiApiPatchAiWorkflowsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -7545,18 +8548,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling patchAiWorkflowsByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -7576,38 +8570,27 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiWorkflows200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Update one workflow. PATCH and PUT reach the same handler, which has always taken a whole object.
      * Update a workflow
      */
-    async patchAiWorkflowsByOwnerByName(requestParameters: AiApiPatchAiWorkflowsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiWorkflows200Response> {
-        const response = await this.patchAiWorkflowsByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async patchAiWorkflowsByOwnerByName(requestParameters: AiApiPatchAiWorkflowsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.patchAiWorkflowsByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Create one article.
      * Create a article
      */
-    async postAiArticlesRaw(requestParameters: AiApiPostAiArticlesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiArticles200Response>> {
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiArticles().'
-            );
-        }
-
+    async postAiArticlesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -7625,38 +8608,27 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiArticles200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Create one article.
      * Create a article
      */
-    async postAiArticles(requestParameters: AiApiPostAiArticlesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiArticles200Response> {
-        const response = await this.postAiArticlesRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiArticles(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiArticlesRaw(initOverrides);
     }
 
     /**
      * Create one asset.
      * Create a asset
      */
-    async postAiAssetsRaw(requestParameters: AiApiPostAiAssetsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiAssets200Response>> {
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiAssets().'
-            );
-        }
-
+    async postAiAssetsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -7674,25 +8646,23 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiAssets200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Create one asset.
      * Create a asset
      */
-    async postAiAssets(requestParameters: AiApiPostAiAssetsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiAssets200Response> {
-        const response = await this.postAiAssetsRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiAssets(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiAssetsRaw(initOverrides);
     }
 
     /**
      * Scan (asset)
      */
-    async postAiAssetsByOwnerByNameScanRaw(requestParameters: AiApiPostAiAssetsByOwnerByNameScanRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
+    async postAiAssetsByOwnerByNameScanRaw(requestParameters: AiApiPostAiAssetsByOwnerByNameScanRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -7707,18 +8677,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiAssetsByOwnerByNameScan().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -7738,36 +8699,25 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Scan (asset)
      */
-    async postAiAssetsByOwnerByNameScan(requestParameters: AiApiPostAiAssetsByOwnerByNameScanRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.postAiAssetsByOwnerByNameScanRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiAssetsByOwnerByNameScan(requestParameters: AiApiPostAiAssetsByOwnerByNameScanRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiAssetsByOwnerByNameScanRaw(requestParameters, initOverrides);
     }
 
     /**
      * Scan (asset)
      */
-    async postAiAssetsScanRaw(requestParameters: AiApiPostAiAssetsScanRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiAssetsScan().'
-            );
-        }
-
+    async postAiAssetsScanRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -7785,37 +8735,26 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Scan (asset)
      */
-    async postAiAssetsScan(requestParameters: AiApiPostAiAssetsScanRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.postAiAssetsScanRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiAssetsScan(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiAssetsScanRaw(initOverrides);
     }
 
     /**
      * Create one chat.
      * Create a chat
      */
-    async postAiChatsRaw(requestParameters: AiApiPostAiChatsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiChats200Response>> {
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiChats().'
-            );
-        }
-
+    async postAiChatsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -7833,19 +8772,17 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiChats200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Create one chat.
      * Create a chat
      */
-    async postAiChats(requestParameters: AiApiPostAiChatsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiChats200Response> {
-        const response = await this.postAiChatsRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiChats(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiChatsRaw(initOverrides);
     }
 
     /**
@@ -7890,7 +8827,14 @@ export class AiApi extends runtime.BaseAPI {
      * Disconnects a third-party AI account: it deactivates the org\'s row so completion resolution falls back to the global Hanzo account (no BYO), and best-effort tombstones the sealed secret. Idempotent.
      * Disconnects a third-party AI account: it deactivates the org\'s row so completion resolution falls back to the global Hanzo account (no BYO), and best-effort tombstones the sealed secret.
      */
-    async postAiConnectionsByProviderRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postAiConnectionsByProviderRaw(requestParameters: AiApiPostAiConnectionsByProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['provider'] == null) {
+            throw new runtime.RequiredError(
+                'provider',
+                'Required parameter "provider" was null or undefined when calling postAiConnectionsByProvider().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -7905,6 +8849,7 @@ export class AiApi extends runtime.BaseAPI {
         }
 
         let urlPath = `/v1/ai/connections/{provider}`;
+        urlPath = urlPath.replace(`{${"provider"}}`, encodeURIComponent(String(requestParameters['provider'])));
 
         const response = await this.request({
             path: urlPath,
@@ -7920,27 +8865,18 @@ export class AiApi extends runtime.BaseAPI {
      * Disconnects a third-party AI account: it deactivates the org\'s row so completion resolution falls back to the global Hanzo account (no BYO), and best-effort tombstones the sealed secret. Idempotent.
      * Disconnects a third-party AI account: it deactivates the org\'s row so completion resolution falls back to the global Hanzo account (no BYO), and best-effort tombstones the sealed secret.
      */
-    async postAiConnectionsByProvider(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postAiConnectionsByProviderRaw(initOverrides);
+    async postAiConnectionsByProvider(requestParameters: AiApiPostAiConnectionsByProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiConnectionsByProviderRaw(requestParameters, initOverrides);
     }
 
     /**
      * Create one application.
      * Create a application
      */
-    async postAiDeploymentsRaw(requestParameters: AiApiPostAiDeploymentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiDeployments200Response>> {
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiDeployments().'
-            );
-        }
-
+    async postAiDeploymentsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -7958,25 +8894,23 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiDeployments200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Create one application.
      * Create a application
      */
-    async postAiDeployments(requestParameters: AiApiPostAiDeploymentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiDeployments200Response> {
-        const response = await this.postAiDeploymentsRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiDeployments(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiDeploymentsRaw(initOverrides);
     }
 
     /**
      * Deploy (application)
      */
-    async postAiDeploymentsByOwnerByNameDeployRaw(requestParameters: AiApiPostAiDeploymentsByOwnerByNameDeployRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
+    async postAiDeploymentsByOwnerByNameDeployRaw(requestParameters: AiApiPostAiDeploymentsByOwnerByNameDeployRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -7991,18 +8925,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiDeploymentsByOwnerByNameDeploy().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -8022,24 +8947,22 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Deploy (application)
      */
-    async postAiDeploymentsByOwnerByNameDeploy(requestParameters: AiApiPostAiDeploymentsByOwnerByNameDeployRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.postAiDeploymentsByOwnerByNameDeployRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiDeploymentsByOwnerByNameDeploy(requestParameters: AiApiPostAiDeploymentsByOwnerByNameDeployRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiDeploymentsByOwnerByNameDeployRaw(requestParameters, initOverrides);
     }
 
     /**
      * Undeploy (application)
      */
-    async postAiDeploymentsByOwnerByNameUndeployRaw(requestParameters: AiApiPostAiDeploymentsByOwnerByNameUndeployRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
+    async postAiDeploymentsByOwnerByNameUndeployRaw(requestParameters: AiApiPostAiDeploymentsByOwnerByNameUndeployRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -8054,18 +8977,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiDeploymentsByOwnerByNameUndeploy().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -8085,37 +8999,64 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Undeploy (application)
      */
-    async postAiDeploymentsByOwnerByNameUndeploy(requestParameters: AiApiPostAiDeploymentsByOwnerByNameUndeployRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.postAiDeploymentsByOwnerByNameUndeployRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiDeploymentsByOwnerByNameUndeploy(requestParameters: AiApiPostAiDeploymentsByOwnerByNameUndeployRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiDeploymentsByOwnerByNameUndeployRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Attaches a per-request outcome reward to the routing decision that served request_id — the enso training loop\'s quality signal. Org-scoped via the same session-OR-Bearer principal the usage read uses (RequirePrincipal): the reward lands only on the caller\'s OWN org\'s event, so a request_id from another org (or unknown) is a 404 — cross-org writes are impossible and unknown ids are indistinguishable from foreign ones. Idempotent: a repeat overwrites. The body carries NO prompt text — only {request_id, reward|rating}.
+     * Attaches a per-request outcome reward to the routing decision that served request_id — the enso training loop\'s quality signal.
+     */
+    async postAiFeedbackRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/feedback`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Attaches a per-request outcome reward to the routing decision that served request_id — the enso training loop\'s quality signal. Org-scoped via the same session-OR-Bearer principal the usage read uses (RequirePrincipal): the reward lands only on the caller\'s OWN org\'s event, so a request_id from another org (or unknown) is a 404 — cross-org writes are impossible and unknown ids are indistinguishable from foreign ones. Idempotent: a repeat overwrites. The body carries NO prompt text — only {request_id, reward|rating}.
+     * Attaches a per-request outcome reward to the routing decision that served request_id — the enso training loop\'s quality signal.
+     */
+    async postAiFeedback(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiFeedbackRaw(initOverrides);
     }
 
     /**
      * Create one file.
      * Create a file
      */
-    async postAiFilesRaw(requestParameters: AiApiPostAiFilesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiFiles200Response>> {
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiFiles().'
-            );
-        }
-
+    async postAiFilesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -8133,37 +9074,26 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiFiles200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Create one file.
      * Create a file
      */
-    async postAiFiles(requestParameters: AiApiPostAiFilesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiFiles200Response> {
-        const response = await this.postAiFilesRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiFiles(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiFilesRaw(initOverrides);
     }
 
     /**
      * Activate (file)
      */
-    async postAiFilesActivateRaw(requestParameters: AiApiPostAiFilesActivateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiFilesActivate().'
-            );
-        }
-
+    async postAiFilesActivateRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -8181,24 +9111,22 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Activate (file)
      */
-    async postAiFilesActivate(requestParameters: AiApiPostAiFilesActivateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.postAiFilesActivateRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiFilesActivate(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiFilesActivateRaw(initOverrides);
     }
 
     /**
      * Vectors (file)
      */
-    async postAiFilesByOwnerByNameVectorsRaw(requestParameters: AiApiPostAiFilesByOwnerByNameVectorsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
+    async postAiFilesByOwnerByNameVectorsRaw(requestParameters: AiApiPostAiFilesByOwnerByNameVectorsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -8213,18 +9141,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiFilesByOwnerByNameVectors().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -8244,36 +9163,25 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Vectors (file)
      */
-    async postAiFilesByOwnerByNameVectors(requestParameters: AiApiPostAiFilesByOwnerByNameVectorsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.postAiFilesByOwnerByNameVectorsRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiFilesByOwnerByNameVectors(requestParameters: AiApiPostAiFilesByOwnerByNameVectorsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiFilesByOwnerByNameVectorsRaw(requestParameters, initOverrides);
     }
 
     /**
      * Upload (file)
      */
-    async postAiFilesUploadRaw(requestParameters: AiApiPostAiFilesUploadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiFilesUpload().'
-            );
-        }
-
+    async postAiFilesUploadRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -8291,37 +9199,140 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Upload (file)
      */
-    async postAiFilesUpload(requestParameters: AiApiPostAiFilesUploadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.postAiFilesUploadRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiFilesUpload(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiFilesUploadRaw(initOverrides);
+    }
+
+    /**
+     * Deletes the TrainJob CR, meters the GPU-hours used so far, and marks the job cancelled. ?id= or ?name=
+     * Deletes the TrainJob CR, meters the GPU-hours used so far, and marks the job cancelled.
+     */
+    async postAiFinetuneCancelRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/finetune/cancel`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Deletes the TrainJob CR, meters the GPU-hours used so far, and marks the job cancelled. ?id= or ?name=
+     * Deletes the TrainJob CR, meters the GPU-hours used so far, and marks the job cancelled.
+     */
+    async postAiFinetuneCancel(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiFinetuneCancelRaw(initOverrides);
+    }
+
+    /**
+     * Serves a completed job\'s checkpoints and registers the result as a routable model on api.hanzo.ai. ?id= or ?name=
+     * Serves a completed job\'s checkpoints and registers the result as a routable model on api.hanzo.ai.
+     */
+    async postAiFinetuneDeployRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/finetune/deploy`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Serves a completed job\'s checkpoints and registers the result as a routable model on api.hanzo.ai. ?id= or ?name=
+     * Serves a completed job\'s checkpoints and registers the result as a routable model on api.hanzo.ai.
+     */
+    async postAiFinetuneDeploy(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiFinetuneDeployRaw(initOverrides);
+    }
+
+    /**
+     * Validates the request, resolves efficient defaults, persists the job, and submits a real TrainJob CR. A submit failure (e.g. no cluster wired) is surfaced honestly: the job is saved with status \"failed\" + the reason, never faked.
+     * Validates the request, resolves efficient defaults, persists the job, and submits a real TrainJob CR.
+     */
+    async postAiFinetuneJobsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/finetune/jobs`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Validates the request, resolves efficient defaults, persists the job, and submits a real TrainJob CR. A submit failure (e.g. no cluster wired) is surfaced honestly: the job is saved with status \"failed\" + the reason, never faked.
+     * Validates the request, resolves efficient defaults, persists the job, and submits a real TrainJob CR.
+     */
+    async postAiFinetuneJobs(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiFinetuneJobsRaw(initOverrides);
     }
 
     /**
      * Create one form.
      * Create a form
      */
-    async postAiFormsRaw(requestParameters: AiApiPostAiFormsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiForms200Response>> {
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiForms().'
-            );
-        }
-
+    async postAiFormsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -8339,38 +9350,27 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiForms200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Create one form.
      * Create a form
      */
-    async postAiForms(requestParameters: AiApiPostAiFormsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiForms200Response> {
-        const response = await this.postAiFormsRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiForms(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiFormsRaw(initOverrides);
     }
 
     /**
      * Create one graph.
      * Create a graph
      */
-    async postAiGraphsRaw(requestParameters: AiApiPostAiGraphsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiGraphs200Response>> {
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiGraphs().'
-            );
-        }
-
+    async postAiGraphsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -8388,38 +9388,141 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiGraphs200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Create one graph.
      * Create a graph
      */
-    async postAiGraphs(requestParameters: AiApiPostAiGraphsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiGraphs200Response> {
-        const response = await this.postAiGraphsRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiGraphs(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiGraphsRaw(initOverrides);
+    }
+
+    /**
+     * Delete one of the authenticated user\'s memories
+     * Delete one of the authenticated user\'s memories
+     */
+    async postAiMemoryDeleteRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/memory/delete`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Delete one of the authenticated user\'s memories
+     * Delete one of the authenticated user\'s memories
+     */
+    async postAiMemoryDelete(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiMemoryDeleteRaw(initOverrides);
+    }
+
+    /**
+     * Store a memory for the authenticated user
+     * Store a memory for the authenticated user
+     */
+    async postAiMemoryRememberRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/memory/remember`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Store a memory for the authenticated user
+     * Store a memory for the authenticated user
+     */
+    async postAiMemoryRemember(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiMemoryRememberRaw(initOverrides);
+    }
+
+    /**
+     * Update one of the authenticated user\'s memories
+     * Update one of the authenticated user\'s memories
+     */
+    async postAiMemoryUpdateRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/memory/update`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Update one of the authenticated user\'s memories
+     * Update one of the authenticated user\'s memories
+     */
+    async postAiMemoryUpdate(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiMemoryUpdateRaw(initOverrides);
     }
 
     /**
      * Create one message.
      * Create a message
      */
-    async postAiMessagesRaw(requestParameters: AiApiPostAiMessagesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiMessages200Response>> {
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiMessages().'
-            );
-        }
-
+    async postAiMessagesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -8437,38 +9540,27 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiMessages200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Create one message.
      * Create a message
      */
-    async postAiMessages(requestParameters: AiApiPostAiMessagesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiMessages200Response> {
-        const response = await this.postAiMessagesRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiMessages(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiMessagesRaw(initOverrides);
     }
 
     /**
      * Create one node.
      * Create a node
      */
-    async postAiNodesRaw(requestParameters: AiApiPostAiNodesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiNodes200Response>> {
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiNodes().'
-            );
-        }
-
+    async postAiNodesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -8486,25 +9578,23 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiNodes200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Create one node.
      * Create a node
      */
-    async postAiNodes(requestParameters: AiApiPostAiNodesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiNodes200Response> {
-        const response = await this.postAiNodesRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiNodes(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiNodesRaw(initOverrides);
     }
 
     /**
      * Tunnel (node)
      */
-    async postAiNodesByOwnerByNameTunnelRaw(requestParameters: AiApiPostAiNodesByOwnerByNameTunnelRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
+    async postAiNodesByOwnerByNameTunnelRaw(requestParameters: AiApiPostAiNodesByOwnerByNameTunnelRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -8519,18 +9609,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiNodesByOwnerByNameTunnel().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -8550,37 +9631,102 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Tunnel (node)
      */
-    async postAiNodesByOwnerByNameTunnel(requestParameters: AiApiPostAiNodesByOwnerByNameTunnelRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.postAiNodesByOwnerByNameTunnelRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiNodesByOwnerByNameTunnel(requestParameters: AiApiPostAiNodesByOwnerByNameTunnelRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiNodesByOwnerByNameTunnelRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async postAiOrgSettingsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/org/settings`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async postAiOrgSettings(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiOrgSettingsRaw(initOverrides);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async postAiOrgSettingsListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/org/settings/list`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async postAiOrgSettingsList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiOrgSettingsListRaw(initOverrides);
     }
 
     /**
      * Create one provider.
      * Create a provider
      */
-    async postAiProvidersRaw(requestParameters: AiApiPostAiProvidersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiProviders200Response>> {
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiProviders().'
-            );
-        }
-
+    async postAiProvidersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -8598,37 +9744,26 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiProviders200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Create one provider.
      * Create a provider
      */
-    async postAiProviders(requestParameters: AiApiPostAiProvidersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiProviders200Response> {
-        const response = await this.postAiProvidersRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiProviders(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiProvidersRaw(initOverrides);
     }
 
     /**
      * Mcp Tools (provider)
      */
-    async postAiProvidersMcpToolsRaw(requestParameters: AiApiPostAiProvidersMcpToolsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiProvidersMcpTools().'
-            );
-        }
-
+    async postAiProvidersMcpToolsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -8646,37 +9781,216 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Mcp Tools (provider)
      */
-    async postAiProvidersMcpTools(requestParameters: AiApiPostAiProvidersMcpToolsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.postAiProvidersMcpToolsRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiProvidersMcpTools(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiProvidersMcpToolsRaw(initOverrides);
+    }
+
+    /**
+     * Delete all chunks of one or more uploaded files (by file_id) from the owner\'s Search+Vector index. Consolidates the retired chat-rag-api DELETE /documents.
+     * Delete all chunks of one or more uploaded files (by file_id) from the owner\'s Search+Vector index.
+     */
+    async postAiRagDeleteRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/rag/delete`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Delete all chunks of one or more uploaded files (by file_id) from the owner\'s Search+Vector index. Consolidates the retired chat-rag-api DELETE /documents.
+     * Delete all chunks of one or more uploaded files (by file_id) from the owner\'s Search+Vector index.
+     */
+    async postAiRagDelete(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiRagDeleteRaw(initOverrides);
+    }
+
+    /**
+     * Parse, chunk, and embed one uploaded file under its file_id into the unified Search+Vector index, scoped to the authenticated owner. Provide inline `content` or a `url` to fetch+parse (PDF/CSV/XLSX/PPTX/…). Re-embedding the same file_id replaces its chunks. Consolidates the retired chat-rag-api POST /embed and /local/embed.
+     * Parse, chunk, and embed one uploaded file under its file_id into the unified Search+Vector index, scoped to the authenticated owner.
+     */
+    async postAiRagEmbedRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/rag/embed`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Parse, chunk, and embed one uploaded file under its file_id into the unified Search+Vector index, scoped to the authenticated owner. Provide inline `content` or a `url` to fetch+parse (PDF/CSV/XLSX/PPTX/…). Re-embedding the same file_id replaces its chunks. Consolidates the retired chat-rag-api POST /embed and /local/embed.
+     * Parse, chunk, and embed one uploaded file under its file_id into the unified Search+Vector index, scoped to the authenticated owner.
+     */
+    async postAiRagEmbed(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiRagEmbedRaw(initOverrides);
+    }
+
+    /**
+     * Unified RAG ingest: parse + chunk + embed documents and pipe them to BOTH Hanzo Vector (semantic) AND Hanzo Search (keyword) under the tenant index {owner}-{store}-docs — the same index /v1/chat retrieval reads. The source is pluggable: \"upload\" (inline files/documents), \"github\" (index a repo), \"crawl\" (web), or \"s3\" (the store\'s object-storage space). The owner is bound to the authenticated principal; the client-supplied owner is never trusted.
+     * Unified RAG ingest: parse + chunk + embed documents and pipe them to BOTH Hanzo Vector (semantic) AND Hanzo Search (keyword) under the tenant index {owner}-{store}-docs — the same index /v1/chat retrieval reads.
+     */
+    async postAiRagIngestRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/rag/ingest`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Unified RAG ingest: parse + chunk + embed documents and pipe them to BOTH Hanzo Vector (semantic) AND Hanzo Search (keyword) under the tenant index {owner}-{store}-docs — the same index /v1/chat retrieval reads. The source is pluggable: \"upload\" (inline files/documents), \"github\" (index a repo), \"crawl\" (web), or \"s3\" (the store\'s object-storage space). The owner is bound to the authenticated principal; the client-supplied owner is never trusted.
+     * Unified RAG ingest: parse + chunk + embed documents and pipe them to BOTH Hanzo Vector (semantic) AND Hanzo Search (keyword) under the tenant index {owner}-{store}-docs — the same index /v1/chat retrieval reads.
+     */
+    async postAiRagIngest(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiRagIngestRaw(initOverrides);
+    }
+
+    /**
+     * Retrieve the top-K chunks relevant to a query, scoped to a single uploaded file (`file_id`). Hybrid keyword+vector retrieval over the same index. Consolidates the retired chat-rag-api POST /query.
+     * Retrieve the top-K chunks relevant to a query, scoped to a single uploaded file (`file_id`).
+     */
+    async postAiRagQueryRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/rag/query`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Retrieve the top-K chunks relevant to a query, scoped to a single uploaded file (`file_id`). Hybrid keyword+vector retrieval over the same index. Consolidates the retired chat-rag-api POST /query.
+     * Retrieve the top-K chunks relevant to a query, scoped to a single uploaded file (`file_id`).
+     */
+    async postAiRagQuery(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiRagQueryRaw(initOverrides);
+    }
+
+    /**
+     * Retrieve the top-K chunks relevant to a query, scoped to a SET of uploaded files (`file_ids`). Consolidates the retired chat-rag-api POST /query_multiple. Shares one retrieval path with /rag/query.
+     * Retrieve the top-K chunks relevant to a query, scoped to a SET of uploaded files (`file_ids`).
+     */
+    async postAiRagQueryMultipleRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/rag/query-multiple`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Retrieve the top-K chunks relevant to a query, scoped to a SET of uploaded files (`file_ids`). Consolidates the retired chat-rag-api POST /query_multiple. Shares one retrieval path with /rag/query.
+     * Retrieve the top-K chunks relevant to a query, scoped to a SET of uploaded files (`file_ids`).
+     */
+    async postAiRagQueryMultiple(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiRagQueryMultipleRaw(initOverrides);
     }
 
     /**
      * Create one record.
      * Create a record
      */
-    async postAiRecordsRaw(requestParameters: AiApiPostAiRecordsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiRecords200Response>> {
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiRecords().'
-            );
-        }
-
+    async postAiRecordsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -8694,37 +10008,26 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiRecords200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Create one record.
      * Create a record
      */
-    async postAiRecords(requestParameters: AiApiPostAiRecordsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiRecords200Response> {
-        const response = await this.postAiRecordsRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiRecords(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiRecordsRaw(initOverrides);
     }
 
     /**
      * Batch (record)
      */
-    async postAiRecordsBatchRaw(requestParameters: AiApiPostAiRecordsBatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiRecordsBatch().'
-            );
-        }
-
+    async postAiRecordsBatchRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -8742,36 +10045,25 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Batch (record)
      */
-    async postAiRecordsBatch(requestParameters: AiApiPostAiRecordsBatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.postAiRecordsBatchRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiRecordsBatch(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiRecordsBatchRaw(initOverrides);
     }
 
     /**
      * Commit (record)
      */
-    async postAiRecordsCommitRaw(requestParameters: AiApiPostAiRecordsCommitRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiRecordsCommit().'
-            );
-        }
-
+    async postAiRecordsCommitRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -8789,36 +10081,25 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Commit (record)
      */
-    async postAiRecordsCommit(requestParameters: AiApiPostAiRecordsCommitRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.postAiRecordsCommitRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiRecordsCommit(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiRecordsCommitRaw(initOverrides);
     }
 
     /**
      * Commit Second (record)
      */
-    async postAiRecordsCommitSecondRaw(requestParameters: AiApiPostAiRecordsCommitSecondRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiRecordsCommitSecond().'
-            );
-        }
-
+    async postAiRecordsCommitSecondRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -8836,37 +10117,26 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Commit Second (record)
      */
-    async postAiRecordsCommitSecond(requestParameters: AiApiPostAiRecordsCommitSecondRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.postAiRecordsCommitSecondRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiRecordsCommitSecond(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiRecordsCommitSecondRaw(initOverrides);
     }
 
     /**
      * Create one connection.
      * Create a connection
      */
-    async postAiRemoteConnectionsRaw(requestParameters: AiApiPostAiRemoteConnectionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiRemoteConnections200Response>> {
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiRemoteConnections().'
-            );
-        }
-
+    async postAiRemoteConnectionsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -8884,25 +10154,23 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiRemoteConnections200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Create one connection.
      * Create a connection
      */
-    async postAiRemoteConnections(requestParameters: AiApiPostAiRemoteConnectionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiRemoteConnections200Response> {
-        const response = await this.postAiRemoteConnectionsRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiRemoteConnections(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiRemoteConnectionsRaw(initOverrides);
     }
 
     /**
      * Start (connection)
      */
-    async postAiRemoteConnectionsByOwnerByNameStartRaw(requestParameters: AiApiPostAiRemoteConnectionsByOwnerByNameStartRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
+    async postAiRemoteConnectionsByOwnerByNameStartRaw(requestParameters: AiApiPostAiRemoteConnectionsByOwnerByNameStartRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -8917,18 +10185,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiRemoteConnectionsByOwnerByNameStart().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -8948,24 +10207,22 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Start (connection)
      */
-    async postAiRemoteConnectionsByOwnerByNameStart(requestParameters: AiApiPostAiRemoteConnectionsByOwnerByNameStartRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.postAiRemoteConnectionsByOwnerByNameStartRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiRemoteConnectionsByOwnerByNameStart(requestParameters: AiApiPostAiRemoteConnectionsByOwnerByNameStartRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiRemoteConnectionsByOwnerByNameStartRaw(requestParameters, initOverrides);
     }
 
     /**
      * Stop (connection)
      */
-    async postAiRemoteConnectionsByOwnerByNameStopRaw(requestParameters: AiApiPostAiRemoteConnectionsByOwnerByNameStopRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
+    async postAiRemoteConnectionsByOwnerByNameStopRaw(requestParameters: AiApiPostAiRemoteConnectionsByOwnerByNameStopRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -8980,18 +10237,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiRemoteConnectionsByOwnerByNameStop().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -9011,37 +10259,216 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Stop (connection)
      */
-    async postAiRemoteConnectionsByOwnerByNameStop(requestParameters: AiApiPostAiRemoteConnectionsByOwnerByNameStopRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.postAiRemoteConnectionsByOwnerByNameStopRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiRemoteConnectionsByOwnerByNameStop(requestParameters: AiApiPostAiRemoteConnectionsByOwnerByNameStopRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiRemoteConnectionsByOwnerByNameStopRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async postAiRouterArtifactMetaRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/router/artifact-meta`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async postAiRouterArtifactMeta(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiRouterArtifactMetaRaw(initOverrides);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async postAiRouterDefaultsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/router/defaults`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async postAiRouterDefaults(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiRouterDefaultsRaw(initOverrides);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async postAiRouterLedgerRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/router/ledger`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async postAiRouterLedger(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiRouterLedgerRaw(initOverrides);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async postAiRouterPolicyRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/router/policy`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async postAiRouterPolicy(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiRouterPolicyRaw(initOverrides);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async postAiRouterRewardsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/router/rewards`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async postAiRouterRewards(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiRouterRewardsRaw(initOverrides);
     }
 
     /**
      * Create one model-route.
      * Create a model-route
      */
-    async postAiRoutesRaw(requestParameters: AiApiPostAiRoutesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiRoutes200Response>> {
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiRoutes().'
-            );
-        }
-
+    async postAiRoutesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -9059,38 +10486,27 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiRoutes200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Create one model-route.
      * Create a model-route
      */
-    async postAiRoutes(requestParameters: AiApiPostAiRoutesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiRoutes200Response> {
-        const response = await this.postAiRoutesRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiRoutes(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiRoutesRaw(initOverrides);
     }
 
     /**
      * Create one scale.
      * Create a scale
      */
-    async postAiScalesRaw(requestParameters: AiApiPostAiScalesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiScales200Response>> {
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiScales().'
-            );
-        }
-
+    async postAiScalesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -9108,38 +10524,27 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiScales200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Create one scale.
      * Create a scale
      */
-    async postAiScales(requestParameters: AiApiPostAiScalesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiScales200Response> {
-        const response = await this.postAiScalesRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiScales(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiScalesRaw(initOverrides);
     }
 
     /**
      * Create one scan.
      * Create a scan
      */
-    async postAiScansRaw(requestParameters: AiApiPostAiScansRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiScans200Response>> {
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiScans().'
-            );
-        }
-
+    async postAiScansRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -9157,37 +10562,26 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiScans200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Create one scan.
      * Create a scan
      */
-    async postAiScans(requestParameters: AiApiPostAiScansRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiScans200Response> {
-        const response = await this.postAiScansRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiScans(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiScansRaw(initOverrides);
     }
 
     /**
      * Signin
      */
-    async postAiSigninRaw(requestParameters: AiApiPostAiSigninRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiSignin().'
-            );
-        }
-
+    async postAiSigninRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -9205,37 +10599,26 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Signin
      */
-    async postAiSignin(requestParameters: AiApiPostAiSigninRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.postAiSigninRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiSignin(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiSigninRaw(initOverrides);
     }
 
     /**
      * Create one session.
      * Create a session
      */
-    async postAiSigninSessionsRaw(requestParameters: AiApiPostAiSigninSessionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiSigninSessions200Response>> {
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiSigninSessions().'
-            );
-        }
-
+    async postAiSigninSessionsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -9253,37 +10636,26 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiSigninSessions200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Create one session.
      * Create a session
      */
-    async postAiSigninSessions(requestParameters: AiApiPostAiSigninSessionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiSigninSessions200Response> {
-        const response = await this.postAiSigninSessionsRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiSigninSessions(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiSigninSessionsRaw(initOverrides);
     }
 
     /**
      * Signout
      */
-    async postAiSignoutRaw(requestParameters: AiApiPostAiSignoutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiSignout().'
-            );
-        }
-
+    async postAiSignoutRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -9301,37 +10673,26 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Signout
      */
-    async postAiSignout(requestParameters: AiApiPostAiSignoutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.postAiSignoutRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiSignout(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiSignoutRaw(initOverrides);
     }
 
     /**
      * Create one store.
      * Create a store
      */
-    async postAiStoresRaw(requestParameters: AiApiPostAiStoresRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiStores200Response>> {
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiStores().'
-            );
-        }
-
+    async postAiStoresRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -9349,25 +10710,23 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiStores200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Create one store.
      * Create a store
      */
-    async postAiStores(requestParameters: AiApiPostAiStoresRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiStores200Response> {
-        const response = await this.postAiStoresRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiStores(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiStoresRaw(initOverrides);
     }
 
     /**
      * Vectors (store)
      */
-    async postAiStoresByOwnerByNameVectorsRaw(requestParameters: AiApiPostAiStoresByOwnerByNameVectorsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
+    async postAiStoresByOwnerByNameVectorsRaw(requestParameters: AiApiPostAiStoresByOwnerByNameVectorsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -9382,18 +10741,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiStoresByOwnerByNameVectors().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -9413,37 +10763,26 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Vectors (store)
      */
-    async postAiStoresByOwnerByNameVectors(requestParameters: AiApiPostAiStoresByOwnerByNameVectorsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.postAiStoresByOwnerByNameVectorsRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiStoresByOwnerByNameVectors(requestParameters: AiApiPostAiStoresByOwnerByNameVectorsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiStoresByOwnerByNameVectorsRaw(requestParameters, initOverrides);
     }
 
     /**
      * Create one task.
      * Create a task
      */
-    async postAiTasksRaw(requestParameters: AiApiPostAiTasksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiTasks200Response>> {
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiTasks().'
-            );
-        }
-
+    async postAiTasksRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -9461,25 +10800,23 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiTasks200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Create one task.
      * Create a task
      */
-    async postAiTasks(requestParameters: AiApiPostAiTasksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiTasks200Response> {
-        const response = await this.postAiTasksRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiTasks(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiTasksRaw(initOverrides);
     }
 
     /**
      * Analyze (task)
      */
-    async postAiTasksByOwnerByNameAnalyzeRaw(requestParameters: AiApiPostAiTasksByOwnerByNameAnalyzeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
+    async postAiTasksByOwnerByNameAnalyzeRaw(requestParameters: AiApiPostAiTasksByOwnerByNameAnalyzeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -9494,18 +10831,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiTasksByOwnerByNameAnalyze().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -9525,24 +10853,22 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Analyze (task)
      */
-    async postAiTasksByOwnerByNameAnalyze(requestParameters: AiApiPostAiTasksByOwnerByNameAnalyzeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.postAiTasksByOwnerByNameAnalyzeRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiTasksByOwnerByNameAnalyze(requestParameters: AiApiPostAiTasksByOwnerByNameAnalyzeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiTasksByOwnerByNameAnalyzeRaw(requestParameters, initOverrides);
     }
 
     /**
      * Document (task)
      */
-    async postAiTasksByOwnerByNameDocumentRaw(requestParameters: AiApiPostAiTasksByOwnerByNameDocumentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
+    async postAiTasksByOwnerByNameDocumentRaw(requestParameters: AiApiPostAiTasksByOwnerByNameDocumentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -9557,18 +10883,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiTasksByOwnerByNameDocument().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -9588,37 +10905,26 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Document (task)
      */
-    async postAiTasksByOwnerByNameDocument(requestParameters: AiApiPostAiTasksByOwnerByNameDocumentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.postAiTasksByOwnerByNameDocumentRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiTasksByOwnerByNameDocument(requestParameters: AiApiPostAiTasksByOwnerByNameDocumentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiTasksByOwnerByNameDocumentRaw(requestParameters, initOverrides);
     }
 
     /**
      * Create one template.
      * Create a template
      */
-    async postAiTemplatesRaw(requestParameters: AiApiPostAiTemplatesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiTemplates200Response>> {
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiTemplates().'
-            );
-        }
-
+    async postAiTemplatesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -9636,38 +10942,27 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiTemplates200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Create one template.
      * Create a template
      */
-    async postAiTemplates(requestParameters: AiApiPostAiTemplatesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiTemplates200Response> {
-        const response = await this.postAiTemplatesRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiTemplates(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiTemplatesRaw(initOverrides);
     }
 
     /**
      * Create one tree-file.
      * Create a tree-file
      */
-    async postAiTreeFilesRaw(requestParameters: AiApiPostAiTreeFilesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiTreeFiles200Response>> {
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiTreeFiles().'
-            );
-        }
-
+    async postAiTreeFilesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -9685,38 +10980,27 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiTreeFiles200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Create one tree-file.
      * Create a tree-file
      */
-    async postAiTreeFiles(requestParameters: AiApiPostAiTreeFilesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiTreeFiles200Response> {
-        const response = await this.postAiTreeFilesRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiTreeFiles(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiTreeFilesRaw(initOverrides);
     }
 
     /**
      * Create one vector.
      * Create a vector
      */
-    async postAiVectorsRaw(requestParameters: AiApiPostAiVectorsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiVectors200Response>> {
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiVectors().'
-            );
-        }
-
+    async postAiVectorsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -9734,38 +11018,27 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiVectors200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Create one vector.
      * Create a vector
      */
-    async postAiVectors(requestParameters: AiApiPostAiVectorsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiVectors200Response> {
-        const response = await this.postAiVectorsRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiVectors(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiVectorsRaw(initOverrides);
     }
 
     /**
      * Create one video.
      * Create a video
      */
-    async postAiVideosRaw(requestParameters: AiApiPostAiVideosRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiVideos200Response>> {
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiVideos().'
-            );
-        }
-
+    async postAiVideosRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -9783,37 +11056,26 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiVideos200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Create one video.
      * Create a video
      */
-    async postAiVideos(requestParameters: AiApiPostAiVideosRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiVideos200Response> {
-        const response = await this.postAiVideosRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiVideos(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiVideosRaw(initOverrides);
     }
 
     /**
      * Upload (video)
      */
-    async postAiVideosUploadRaw(requestParameters: AiApiPostAiVideosUploadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiVideosUpload().'
-            );
-        }
-
+    async postAiVideosUploadRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -9831,37 +11093,26 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Upload (video)
      */
-    async postAiVideosUpload(requestParameters: AiApiPostAiVideosUploadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.postAiVideosUploadRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiVideosUpload(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiVideosUploadRaw(initOverrides);
     }
 
     /**
      * Create one workflow.
      * Create a workflow
      */
-    async postAiWorkflowsRaw(requestParameters: AiApiPostAiWorkflowsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiWorkflows200Response>> {
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling postAiWorkflows().'
-            );
-        }
-
+    async postAiWorkflowsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -9879,26 +11130,678 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiWorkflows200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Create one workflow.
      * Create a workflow
      */
-    async postAiWorkflows(requestParameters: AiApiPostAiWorkflowsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiWorkflows200Response> {
-        const response = await this.postAiWorkflowsRaw(requestParameters, initOverrides);
-        return await response.value();
+    async postAiWorkflows(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAiWorkflowsRaw(initOverrides);
+    }
+
+    /**
+     * Serves the generative audio verbs — /v1/audio/voice (TTS), /music, /foley — that the Zen family serves natively. It resolves the SKU and, for a Zen model, forwards to zen\'s matching verb billed per call at the discovered price. These verbs are Zen-native; a non-Zen model is rejected.
+     * Serves the generative audio verbs — /v1/audio/voice (TTS), /music, /foley — that the Zen family serves natively.
+     */
+    async postAudioFoleyRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/audio/foley`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Serves the generative audio verbs — /v1/audio/voice (TTS), /music, /foley — that the Zen family serves natively. It resolves the SKU and, for a Zen model, forwards to zen\'s matching verb billed per call at the discovered price. These verbs are Zen-native; a non-Zen model is rejected.
+     * Serves the generative audio verbs — /v1/audio/voice (TTS), /music, /foley — that the Zen family serves natively.
+     */
+    async postAudioFoley(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAudioFoleyRaw(initOverrides);
+    }
+
+    /**
+     * Serves the generative audio verbs — /v1/audio/voice (TTS), /music, /foley — that the Zen family serves natively. It resolves the SKU and, for a Zen model, forwards to zen\'s matching verb billed per call at the discovered price. These verbs are Zen-native; a non-Zen model is rejected.
+     * Serves the generative audio verbs — /v1/audio/voice (TTS), /music, /foley — that the Zen family serves natively.
+     */
+    async postAudioMusicRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/audio/music`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Serves the generative audio verbs — /v1/audio/voice (TTS), /music, /foley — that the Zen family serves natively. It resolves the SKU and, for a Zen model, forwards to zen\'s matching verb billed per call at the discovered price. These verbs are Zen-native; a non-Zen model is rejected.
+     * Serves the generative audio verbs — /v1/audio/voice (TTS), /music, /foley — that the Zen family serves natively.
+     */
+    async postAudioMusic(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAudioMusicRaw(initOverrides);
+    }
+
+    /**
+     * The OpenAI-compatible TTS endpoint (POST /v1/audio/speech). It authenticates the caller, resolves `model` to its TTS provider (the SAME model-route resolution the chat/images/video endpoints use — so a BYO node registered as a TTS provider works transparently), synthesizes the audio, and streams the bytes back. This is the ONE way to synthesize speech: OpenAI-shaped, with no store or message coupling, so a caller needs no chat to speak.
+     * The OpenAI-compatible TTS endpoint (POST /v1/audio/speech).
+     */
+    async postAudioSpeechRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/audio/speech`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The OpenAI-compatible TTS endpoint (POST /v1/audio/speech). It authenticates the caller, resolves `model` to its TTS provider (the SAME model-route resolution the chat/images/video endpoints use — so a BYO node registered as a TTS provider works transparently), synthesizes the audio, and streams the bytes back. This is the ONE way to synthesize speech: OpenAI-shaped, with no store or message coupling, so a caller needs no chat to speak.
+     * The OpenAI-compatible TTS endpoint (POST /v1/audio/speech).
+     */
+    async postAudioSpeech(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAudioSpeechRaw(initOverrides);
+    }
+
+    /**
+     * The OpenAI-compatible STT endpoint (POST /v1/audio/transcriptions, multipart: file + model [+ language + response_format]). It mirrors AudioSpeech exactly: authenticate the caller, resolve `model` to its STT provider through the SAME model-route resolution (so the in-cluster speech service — or any BYO node registered as an STT provider — works transparently), transcribe, and return the OpenAI body. This is the ONE way to transcribe: OpenAI-shaped, with no store coupling, so a caller needs no chat to be heard.
+     * The OpenAI-compatible STT endpoint (POST /v1/audio/transcriptions, multipart: file + model [+ language + response_format]).
+     */
+    async postAudioTranscriptionsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/audio/transcriptions`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The OpenAI-compatible STT endpoint (POST /v1/audio/transcriptions, multipart: file + model [+ language + response_format]). It mirrors AudioSpeech exactly: authenticate the caller, resolve `model` to its STT provider through the SAME model-route resolution (so the in-cluster speech service — or any BYO node registered as an STT provider — works transparently), transcribe, and return the OpenAI body. This is the ONE way to transcribe: OpenAI-shaped, with no store coupling, so a caller needs no chat to be heard.
+     * The OpenAI-compatible STT endpoint (POST /v1/audio/transcriptions, multipart: file + model [+ language + response_format]).
+     */
+    async postAudioTranscriptions(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAudioTranscriptionsRaw(initOverrides);
+    }
+
+    /**
+     * Serves the generative audio verbs — /v1/audio/voice (TTS), /music, /foley — that the Zen family serves natively. It resolves the SKU and, for a Zen model, forwards to zen\'s matching verb billed per call at the discovered price. These verbs are Zen-native; a non-Zen model is rejected.
+     * Serves the generative audio verbs — /v1/audio/voice (TTS), /music, /foley — that the Zen family serves natively.
+     */
+    async postAudioVoiceRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/audio/voice`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Serves the generative audio verbs — /v1/audio/voice (TTS), /music, /foley — that the Zen family serves natively. It resolves the SKU and, for a Zen model, forwards to zen\'s matching verb billed per call at the discovered price. These verbs are Zen-native; a non-Zen model is rejected.
+     * Serves the generative audio verbs — /v1/audio/voice (TTS), /music, /foley — that the Zen family serves natively.
+     */
+    async postAudioVoice(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAudioVoiceRaw(initOverrides);
+    }
+
+    /**
+     * Implements the OpenAI-compatible chat completions API
+     * Implements the OpenAI-compatible chat completions API
+     */
+    async postChatRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/chat`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Implements the OpenAI-compatible chat completions API
+     * Implements the OpenAI-compatible chat completions API
+     */
+    async postChat(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postChatRaw(initOverrides);
+    }
+
+    /**
+     * Implements the OpenAI-compatible chat completions API
+     * Implements the OpenAI-compatible chat completions API
+     */
+    async postChatCompletionsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/chat/completions`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Implements the OpenAI-compatible chat completions API
+     * Implements the OpenAI-compatible chat completions API
+     */
+    async postChatCompletions(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postChatCompletionsRaw(initOverrides);
+    }
+
+    /**
+     * Serves one completion to a caller with no account.
+     * Serves one completion to a caller with no account.
+     */
+    async postChatPublicRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/chat/public`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Serves one completion to a caller with no account.
+     * Serves one completion to a caller with no account.
+     */
+    async postChatPublic(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postChatPublicRaw(initOverrides);
+    }
+
+    /**
+     * Implements the OpenAI-compatible chat completions API
+     * Implements the OpenAI-compatible chat completions API
+     */
+    async postCompletionsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/completions`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Implements the OpenAI-compatible chat completions API
+     * Implements the OpenAI-compatible chat completions API
+     */
+    async postCompletions(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postCompletionsRaw(initOverrides);
+    }
+
+    /**
+     * Implements POST /v1/embeddings (OpenAI-compatible).  Body: {\"model\": \"...\", \"input\": \"...\"|[\"...\", ...], \"encoding_format\"?, \"dimensions\"?} It authenticates the caller, resolves the model to its upstream provider via the shared routing table, rewrites the user-facing model name to the upstream id, and proxies the request to the provider\'s /embeddings endpoint verbatim.
+     * Implements POST /v1/embeddings (OpenAI-compatible).
+     */
+    async postEmbeddingsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/embeddings`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Implements POST /v1/embeddings (OpenAI-compatible).  Body: {\"model\": \"...\", \"input\": \"...\"|[\"...\", ...], \"encoding_format\"?, \"dimensions\"?} It authenticates the caller, resolves the model to its upstream provider via the shared routing table, rewrites the user-facing model name to the upstream id, and proxies the request to the provider\'s /embeddings endpoint verbatim.
+     * Implements POST /v1/embeddings (OpenAI-compatible).
+     */
+    async postEmbeddings(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postEmbeddingsRaw(initOverrides);
+    }
+
+    /**
+     * Implements POST /v1/images/generations (OpenAI-compatible).  Body: {\"model\": \"...\", \"prompt\": \"...\", \"n\"?: int, \"size\"?: \"1024x1024\",   \"response_format\"?: \"url\"|\"b64_json\"}  It authenticates the caller, resolves the model to its upstream provider via the shared routing table (zen3-image* → do-ai fal diffusion), reserves the per-image budget, generates the image(s) through the do-ai async image client, records usage for billing, and returns the OpenAI images response.
+     * Implements POST /v1/images/generations (OpenAI-compatible).
+     */
+    async postImagesGenerationsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/images/generations`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Implements POST /v1/images/generations (OpenAI-compatible).  Body: {\"model\": \"...\", \"prompt\": \"...\", \"n\"?: int, \"size\"?: \"1024x1024\",   \"response_format\"?: \"url\"|\"b64_json\"}  It authenticates the caller, resolves the model to its upstream provider via the shared routing table (zen3-image* → do-ai fal diffusion), reserves the per-image budget, generates the image(s) through the do-ai async image client, records usage for billing, and returns the OpenAI images response.
+     * Implements POST /v1/images/generations (OpenAI-compatible).
+     */
+    async postImagesGenerations(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postImagesGenerationsRaw(initOverrides);
+    }
+
+    /**
+     * Implements the Anthropic Messages API.
+     * Implements the Anthropic Messages API.
+     */
+    async postMessagesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/messages`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Implements the Anthropic Messages API.
+     * Implements the Anthropic Messages API.
+     */
+    async postMessages(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postMessagesRaw(initOverrides);
+    }
+
+    /**
+     * Implements POST /v1/messages/count_tokens. Claude Code calls it before a request; it returns {\"input_tokens\": N} for the given model + messages + tools.
+     * Implements POST /v1/messages/count_tokens.
+     */
+    async postMessagesCountTokensRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/messages/count_tokens`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Implements POST /v1/messages/count_tokens. Claude Code calls it before a request; it returns {\"input_tokens\": N} for the given model + messages + tools.
+     * Implements POST /v1/messages/count_tokens.
+     */
+    async postMessagesCountTokens(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postMessagesCountTokensRaw(initOverrides);
+    }
+
+    /**
+     * Records the caller\'s waitlist request for a gated model and answers their new standing. Authed, idempotent, and self-scoped: the row is keyed to the caller\'s own org and identity, never to a body-supplied owner.
+     * Records the caller\'s waitlist request for a gated model and answers their new standing.
+     */
+    async postModelsByModelAccessRaw(requestParameters: AiApiPostModelsByModelAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['model'] == null) {
+            throw new runtime.RequiredError(
+                'model',
+                'Required parameter "model" was null or undefined when calling postModelsByModelAccess().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/models/{model}/access`;
+        urlPath = urlPath.replace(`{${"model"}}`, encodeURIComponent(String(requestParameters['model'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Records the caller\'s waitlist request for a gated model and answers their new standing. Authed, idempotent, and self-scoped: the row is keyed to the caller\'s own org and identity, never to a body-supplied owner.
+     * Records the caller\'s waitlist request for a gated model and answers their new standing.
+     */
+    async postModelsByModelAccess(requestParameters: AiApiPostModelsByModelAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postModelsByModelAccessRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Implements POST /v1/rerank (Cohere/Jina-compatible).  Body: {\"model\": \"...\", \"query\": \"...\", \"documents\": [\"...\", ...]|[{\"text\":\"...\"}],   \"top_n\"?: int, \"return_documents\"?: bool}  Response: {\"object\":\"list\",\"model\":...,\"results\":[{\"index\",\"relevance_score\",\"document\"?}],\"usage\":{...}}  Backend selection is provider-driven (one endpoint, one contract):   - If the model routes to a native rerank provider (Jina/Cohere/Voyage) the     request is proxied to that provider\'s /rerank endpoint.   - Otherwise scores are computed as a real bi-encoder ranking: embed the     query and documents through the resolved embedding model and rank by     cosine similarity. No rerank-specific key required.
+     * Implements POST /v1/rerank (Cohere/Jina-compatible).
+     */
+    async postRerankRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/rerank`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Implements POST /v1/rerank (Cohere/Jina-compatible).  Body: {\"model\": \"...\", \"query\": \"...\", \"documents\": [\"...\", ...]|[{\"text\":\"...\"}],   \"top_n\"?: int, \"return_documents\"?: bool}  Response: {\"object\":\"list\",\"model\":...,\"results\":[{\"index\",\"relevance_score\",\"document\"?}],\"usage\":{...}}  Backend selection is provider-driven (one endpoint, one contract):   - If the model routes to a native rerank provider (Jina/Cohere/Voyage) the     request is proxied to that provider\'s /rerank endpoint.   - Otherwise scores are computed as a real bi-encoder ranking: embed the     query and documents through the resolved embedding model and rank by     cosine similarity. No rerank-specific key required.
+     * Implements POST /v1/rerank (Cohere/Jina-compatible).
+     */
+    async postRerank(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postRerankRaw(initOverrides);
+    }
+
+    /**
+     * Implements POST /v1/responses. The converted request is completed by the chat path, which is handed a sink saying where the answer goes: a stream is translated as it is produced, a whole body is translated entire.
+     * Implements POST /v1/responses.
+     */
+    async postResponsesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/responses`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Implements POST /v1/responses. The converted request is completed by the chat path, which is handed a sink saying where the answer goes: a stream is translated as it is produced, a whole body is translated entire.
+     * Implements POST /v1/responses.
+     */
+    async postResponses(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postResponsesRaw(initOverrides);
+    }
+
+    /**
+     * Implements POST /v1/videos/generations — the ASYNC create.  Body: {\"model\": \"...\", \"prompt\": \"...\", \"size\"?: \"1280x720\", \"seconds\"?: int}  It authenticates the caller, resolves the model to its upstream provider via the shared routing table (zen3-video* / wan2-2-t2v-a14b → the spark-video backend), reserves the per-video budget (the balance gate), creates ONE upstream job, registers it in the in-pod store, and returns the OpenAI-shaped video object with status \"queued\" IMMEDIATELY. The client then polls GET /v1/videos/{id} and downloads GET /v1/videos/{id}/content. Nothing is billed here — the debit lands on completion.
+     * Implements POST /v1/videos/generations — the ASYNC create.
+     */
+    async postVideosGenerationsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/videos/generations`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Implements POST /v1/videos/generations — the ASYNC create.  Body: {\"model\": \"...\", \"prompt\": \"...\", \"size\"?: \"1280x720\", \"seconds\"?: int}  It authenticates the caller, resolves the model to its upstream provider via the shared routing table (zen3-video* / wan2-2-t2v-a14b → the spark-video backend), reserves the per-video budget (the balance gate), creates ONE upstream job, registers it in the in-pod store, and returns the OpenAI-shaped video object with status \"queued\" IMMEDIATELY. The client then polls GET /v1/videos/{id} and downloads GET /v1/videos/{id}/content. Nothing is billed here — the debit lands on completion.
+     * Implements POST /v1/videos/generations — the ASYNC create.
+     */
+    async postVideosGenerations(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postVideosGenerationsRaw(initOverrides);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a article
      */
-    async putAiArticlesByOwnerByNameRaw(requestParameters: AiApiPutAiArticlesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiArticles200Response>> {
+    async putAiArticlesByOwnerByNameRaw(requestParameters: AiApiPutAiArticlesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -9913,18 +11816,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling putAiArticlesByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -9944,26 +11838,24 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiArticles200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a article
      */
-    async putAiArticlesByOwnerByName(requestParameters: AiApiPutAiArticlesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiArticles200Response> {
-        const response = await this.putAiArticlesByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async putAiArticlesByOwnerByName(requestParameters: AiApiPutAiArticlesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putAiArticlesByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a asset
      */
-    async putAiAssetsByOwnerByNameRaw(requestParameters: AiApiPutAiAssetsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiAssets200Response>> {
+    async putAiAssetsByOwnerByNameRaw(requestParameters: AiApiPutAiAssetsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -9978,18 +11870,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling putAiAssetsByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -10009,26 +11892,24 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiAssets200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a asset
      */
-    async putAiAssetsByOwnerByName(requestParameters: AiApiPutAiAssetsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiAssets200Response> {
-        const response = await this.putAiAssetsByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async putAiAssetsByOwnerByName(requestParameters: AiApiPutAiAssetsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putAiAssetsByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a chat
      */
-    async putAiChatsByOwnerByNameRaw(requestParameters: AiApiPutAiChatsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiChats200Response>> {
+    async putAiChatsByOwnerByNameRaw(requestParameters: AiApiPutAiChatsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -10043,18 +11924,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling putAiChatsByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -10074,26 +11946,24 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiChats200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a chat
      */
-    async putAiChatsByOwnerByName(requestParameters: AiApiPutAiChatsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiChats200Response> {
-        const response = await this.putAiChatsByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async putAiChatsByOwnerByName(requestParameters: AiApiPutAiChatsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putAiChatsByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a application
      */
-    async putAiDeploymentsByOwnerByNameRaw(requestParameters: AiApiPutAiDeploymentsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiDeployments200Response>> {
+    async putAiDeploymentsByOwnerByNameRaw(requestParameters: AiApiPutAiDeploymentsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -10108,18 +11978,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling putAiDeploymentsByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -10139,26 +12000,24 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiDeployments200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a application
      */
-    async putAiDeploymentsByOwnerByName(requestParameters: AiApiPutAiDeploymentsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiDeployments200Response> {
-        const response = await this.putAiDeploymentsByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async putAiDeploymentsByOwnerByName(requestParameters: AiApiPutAiDeploymentsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putAiDeploymentsByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a file
      */
-    async putAiFilesByOwnerByNameRaw(requestParameters: AiApiPutAiFilesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiFiles200Response>> {
+    async putAiFilesByOwnerByNameRaw(requestParameters: AiApiPutAiFilesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -10173,18 +12032,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling putAiFilesByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -10204,26 +12054,24 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiFiles200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a file
      */
-    async putAiFilesByOwnerByName(requestParameters: AiApiPutAiFilesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiFiles200Response> {
-        const response = await this.putAiFilesByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async putAiFilesByOwnerByName(requestParameters: AiApiPutAiFilesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putAiFilesByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a form
      */
-    async putAiFormsByOwnerByNameRaw(requestParameters: AiApiPutAiFormsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiForms200Response>> {
+    async putAiFormsByOwnerByNameRaw(requestParameters: AiApiPutAiFormsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -10238,18 +12086,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling putAiFormsByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -10269,26 +12108,24 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiForms200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a form
      */
-    async putAiFormsByOwnerByName(requestParameters: AiApiPutAiFormsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiForms200Response> {
-        const response = await this.putAiFormsByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async putAiFormsByOwnerByName(requestParameters: AiApiPutAiFormsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putAiFormsByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a graph
      */
-    async putAiGraphsByOwnerByNameRaw(requestParameters: AiApiPutAiGraphsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiGraphs200Response>> {
+    async putAiGraphsByOwnerByNameRaw(requestParameters: AiApiPutAiGraphsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -10303,18 +12140,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling putAiGraphsByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -10334,26 +12162,24 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiGraphs200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a graph
      */
-    async putAiGraphsByOwnerByName(requestParameters: AiApiPutAiGraphsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiGraphs200Response> {
-        const response = await this.putAiGraphsByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async putAiGraphsByOwnerByName(requestParameters: AiApiPutAiGraphsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putAiGraphsByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a message
      */
-    async putAiMessagesByOwnerByNameRaw(requestParameters: AiApiPutAiMessagesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiMessages200Response>> {
+    async putAiMessagesByOwnerByNameRaw(requestParameters: AiApiPutAiMessagesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -10368,18 +12194,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling putAiMessagesByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -10399,26 +12216,24 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiMessages200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a message
      */
-    async putAiMessagesByOwnerByName(requestParameters: AiApiPutAiMessagesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiMessages200Response> {
-        const response = await this.putAiMessagesByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async putAiMessagesByOwnerByName(requestParameters: AiApiPutAiMessagesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putAiMessagesByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a node
      */
-    async putAiNodesByOwnerByNameRaw(requestParameters: AiApiPutAiNodesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiNodes200Response>> {
+    async putAiNodesByOwnerByNameRaw(requestParameters: AiApiPutAiNodesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -10433,18 +12248,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling putAiNodesByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -10464,37 +12270,102 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiNodes200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a node
      */
-    async putAiNodesByOwnerByName(requestParameters: AiApiPutAiNodesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiNodes200Response> {
-        const response = await this.putAiNodesByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async putAiNodesByOwnerByName(requestParameters: AiApiPutAiNodesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putAiNodesByOwnerByNameRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async putAiOrgSettingsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/org/settings`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async putAiOrgSettings(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putAiOrgSettingsRaw(initOverrides);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async putAiOrgSettingsListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/org/settings/list`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async putAiOrgSettingsList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putAiOrgSettingsListRaw(initOverrides);
     }
 
     /**
      * Preferences
      */
-    async putAiPreferencesRaw(requestParameters: AiApiPutAiPreferencesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling putAiPreferences().'
-            );
-        }
-
+    async putAiPreferencesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -10512,25 +12383,23 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Preferences
      */
-    async putAiPreferences(requestParameters: AiApiPutAiPreferencesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.putAiPreferencesRaw(requestParameters, initOverrides);
-        return await response.value();
+    async putAiPreferences(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putAiPreferencesRaw(initOverrides);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a provider
      */
-    async putAiProvidersByOwnerByNameRaw(requestParameters: AiApiPutAiProvidersByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiProviders200Response>> {
+    async putAiProvidersByOwnerByNameRaw(requestParameters: AiApiPutAiProvidersByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -10545,18 +12414,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling putAiProvidersByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -10576,26 +12436,24 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiProviders200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a provider
      */
-    async putAiProvidersByOwnerByName(requestParameters: AiApiPutAiProvidersByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiProviders200Response> {
-        const response = await this.putAiProvidersByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async putAiProvidersByOwnerByName(requestParameters: AiApiPutAiProvidersByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putAiProvidersByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a record
      */
-    async putAiRecordsByOwnerByNameRaw(requestParameters: AiApiPutAiRecordsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiRecords200Response>> {
+    async putAiRecordsByOwnerByNameRaw(requestParameters: AiApiPutAiRecordsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -10610,18 +12468,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling putAiRecordsByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -10641,26 +12490,24 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiRecords200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a record
      */
-    async putAiRecordsByOwnerByName(requestParameters: AiApiPutAiRecordsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiRecords200Response> {
-        const response = await this.putAiRecordsByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async putAiRecordsByOwnerByName(requestParameters: AiApiPutAiRecordsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putAiRecordsByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a connection
      */
-    async putAiRemoteConnectionsByOwnerByNameRaw(requestParameters: AiApiPutAiRemoteConnectionsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiRemoteConnections200Response>> {
+    async putAiRemoteConnectionsByOwnerByNameRaw(requestParameters: AiApiPutAiRemoteConnectionsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -10675,18 +12522,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling putAiRemoteConnectionsByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -10706,26 +12544,214 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiRemoteConnections200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a connection
      */
-    async putAiRemoteConnectionsByOwnerByName(requestParameters: AiApiPutAiRemoteConnectionsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiRemoteConnections200Response> {
-        const response = await this.putAiRemoteConnectionsByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async putAiRemoteConnectionsByOwnerByName(requestParameters: AiApiPutAiRemoteConnectionsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putAiRemoteConnectionsByOwnerByNameRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async putAiRouterArtifactMetaRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/router/artifact-meta`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async putAiRouterArtifactMeta(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putAiRouterArtifactMetaRaw(initOverrides);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async putAiRouterDefaultsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/router/defaults`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async putAiRouterDefaults(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putAiRouterDefaultsRaw(initOverrides);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async putAiRouterLedgerRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/router/ledger`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async putAiRouterLedger(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putAiRouterLedgerRaw(initOverrides);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async putAiRouterPolicyRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/router/policy`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async putAiRouterPolicy(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putAiRouterPolicyRaw(initOverrides);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async putAiRouterRewardsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/ai/router/rewards`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]). It dispatches IN-PROCESS through dispatchGateway — the SAME canonical ZAP gateway registry (zap_registry.go) that the MsgType 200 handler serves over the gateway transport. The native ZAP handler is the ONE and ONLY implementation of these routes; this is purely the api.hanzo.ai HTTP binding, so there is NO controller twin to drift from and the split-brain the router refactor removed stays removed.  Why a bridge and not a twin controller method: every other migrated route (get-records, get-connections, …) carries BOTH a controller method and a ZAP handler — the exact dual-impl drift that silently NULLed customer router settings (the update-router-policy data-wipe). Routing these nouns through the ZAP handler over one adapter keeps a single source of truth.  Identity is the request\'s own Bearer credential (Authorization header), which the native handlers resolve exactly as the gateway does — every caller (console, chat, app) already sends it. The dispatched handler returns a ZAP message whose status is field 0 and body is field 4 (BuildCloudResponse / BuildGatewayResponse layout); both are relayed verbatim. The route is mapped \"*\" (any verb) because the native handler is method-aware: /v1/ai/router/policy splits GET (read) vs PUT (write), /v1/ai/org/settings GET/PUT/DELETE, and returns 405 for a verb it does not own.
+     * The HTTP transport binding for the RESTful router-config nouns (/v1/ai/router/{policy,defaults,ledger,rewards,artifact-meta} and /v1/ai/org/settings[/list]).
+     */
+    async putAiRouterRewards(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putAiRouterRewardsRaw(initOverrides);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a model-route
      */
-    async putAiRoutesByOwnerByNameRaw(requestParameters: AiApiPutAiRoutesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiRoutes200Response>> {
+    async putAiRoutesByOwnerByNameRaw(requestParameters: AiApiPutAiRoutesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -10740,18 +12766,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling putAiRoutesByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -10771,26 +12788,24 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiRoutes200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a model-route
      */
-    async putAiRoutesByOwnerByName(requestParameters: AiApiPutAiRoutesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiRoutes200Response> {
-        const response = await this.putAiRoutesByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async putAiRoutesByOwnerByName(requestParameters: AiApiPutAiRoutesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putAiRoutesByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a scale
      */
-    async putAiScalesByOwnerByNameRaw(requestParameters: AiApiPutAiScalesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiScales200Response>> {
+    async putAiScalesByOwnerByNameRaw(requestParameters: AiApiPutAiScalesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -10805,18 +12820,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling putAiScalesByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -10836,26 +12842,24 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiScales200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a scale
      */
-    async putAiScalesByOwnerByName(requestParameters: AiApiPutAiScalesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiScales200Response> {
-        const response = await this.putAiScalesByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async putAiScalesByOwnerByName(requestParameters: AiApiPutAiScalesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putAiScalesByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a scan
      */
-    async putAiScansByOwnerByNameRaw(requestParameters: AiApiPutAiScansByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiScans200Response>> {
+    async putAiScansByOwnerByNameRaw(requestParameters: AiApiPutAiScansByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -10870,18 +12874,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling putAiScansByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -10901,26 +12896,24 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiScans200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a scan
      */
-    async putAiScansByOwnerByName(requestParameters: AiApiPutAiScansByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiScans200Response> {
-        const response = await this.putAiScansByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async putAiScansByOwnerByName(requestParameters: AiApiPutAiScansByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putAiScansByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a session
      */
-    async putAiSigninSessionsByOwnerByNameRaw(requestParameters: AiApiPutAiSigninSessionsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiSigninSessions200Response>> {
+    async putAiSigninSessionsByOwnerByNameRaw(requestParameters: AiApiPutAiSigninSessionsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -10935,18 +12928,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling putAiSigninSessionsByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -10966,26 +12950,24 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiSigninSessions200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a session
      */
-    async putAiSigninSessionsByOwnerByName(requestParameters: AiApiPutAiSigninSessionsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiSigninSessions200Response> {
-        const response = await this.putAiSigninSessionsByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async putAiSigninSessionsByOwnerByName(requestParameters: AiApiPutAiSigninSessionsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putAiSigninSessionsByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a store
      */
-    async putAiStoresByOwnerByNameRaw(requestParameters: AiApiPutAiStoresByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiStores200Response>> {
+    async putAiStoresByOwnerByNameRaw(requestParameters: AiApiPutAiStoresByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -11000,18 +12982,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling putAiStoresByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -11031,26 +13004,24 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiStores200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a store
      */
-    async putAiStoresByOwnerByName(requestParameters: AiApiPutAiStoresByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiStores200Response> {
-        const response = await this.putAiStoresByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async putAiStoresByOwnerByName(requestParameters: AiApiPutAiStoresByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putAiStoresByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a task
      */
-    async putAiTasksByOwnerByNameRaw(requestParameters: AiApiPutAiTasksByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiTasks200Response>> {
+    async putAiTasksByOwnerByNameRaw(requestParameters: AiApiPutAiTasksByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -11065,18 +13036,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling putAiTasksByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -11096,26 +13058,24 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiTasks200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a task
      */
-    async putAiTasksByOwnerByName(requestParameters: AiApiPutAiTasksByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiTasks200Response> {
-        const response = await this.putAiTasksByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async putAiTasksByOwnerByName(requestParameters: AiApiPutAiTasksByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putAiTasksByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a template
      */
-    async putAiTemplatesByOwnerByNameRaw(requestParameters: AiApiPutAiTemplatesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiTemplates200Response>> {
+    async putAiTemplatesByOwnerByNameRaw(requestParameters: AiApiPutAiTemplatesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -11130,18 +13090,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling putAiTemplatesByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -11161,37 +13112,26 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiTemplates200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a template
      */
-    async putAiTemplatesByOwnerByName(requestParameters: AiApiPutAiTemplatesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiTemplates200Response> {
-        const response = await this.putAiTemplatesByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async putAiTemplatesByOwnerByName(requestParameters: AiApiPutAiTemplatesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putAiTemplatesByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Training Contribution
      */
-    async putAiTrainingContributionRaw(requestParameters: AiApiPutAiTrainingContributionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Envelope>> {
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling putAiTrainingContribution().'
-            );
-        }
-
+    async putAiTrainingContributionRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -11209,25 +13149,23 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvelopeFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Training Contribution
      */
-    async putAiTrainingContribution(requestParameters: AiApiPutAiTrainingContributionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Envelope> {
-        const response = await this.putAiTrainingContributionRaw(requestParameters, initOverrides);
-        return await response.value();
+    async putAiTrainingContribution(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putAiTrainingContributionRaw(initOverrides);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a tree-file
      */
-    async putAiTreeFilesByOwnerByNameRaw(requestParameters: AiApiPutAiTreeFilesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiTreeFiles200Response>> {
+    async putAiTreeFilesByOwnerByNameRaw(requestParameters: AiApiPutAiTreeFilesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -11242,18 +13180,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling putAiTreeFilesByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -11273,26 +13202,24 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiTreeFiles200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a tree-file
      */
-    async putAiTreeFilesByOwnerByName(requestParameters: AiApiPutAiTreeFilesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiTreeFiles200Response> {
-        const response = await this.putAiTreeFilesByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async putAiTreeFilesByOwnerByName(requestParameters: AiApiPutAiTreeFilesByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putAiTreeFilesByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a vector
      */
-    async putAiVectorsByOwnerByNameRaw(requestParameters: AiApiPutAiVectorsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiVectors200Response>> {
+    async putAiVectorsByOwnerByNameRaw(requestParameters: AiApiPutAiVectorsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -11307,18 +13234,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling putAiVectorsByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -11338,26 +13256,24 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiVectors200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a vector
      */
-    async putAiVectorsByOwnerByName(requestParameters: AiApiPutAiVectorsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiVectors200Response> {
-        const response = await this.putAiVectorsByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async putAiVectorsByOwnerByName(requestParameters: AiApiPutAiVectorsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putAiVectorsByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a video
      */
-    async putAiVideosByOwnerByNameRaw(requestParameters: AiApiPutAiVideosByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiVideos200Response>> {
+    async putAiVideosByOwnerByNameRaw(requestParameters: AiApiPutAiVideosByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -11372,18 +13288,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling putAiVideosByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -11403,26 +13310,24 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiVideos200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a video
      */
-    async putAiVideosByOwnerByName(requestParameters: AiApiPutAiVideosByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiVideos200Response> {
-        const response = await this.putAiVideosByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async putAiVideosByOwnerByName(requestParameters: AiApiPutAiVideosByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putAiVideosByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a workflow
      */
-    async putAiWorkflowsByOwnerByNameRaw(requestParameters: AiApiPutAiWorkflowsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostAiWorkflows200Response>> {
+    async putAiWorkflowsByOwnerByNameRaw(requestParameters: AiApiPutAiWorkflowsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['owner'] == null) {
             throw new runtime.RequiredError(
                 'owner',
@@ -11437,18 +13342,9 @@ export class AiApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling putAiWorkflowsByOwnerByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -11468,19 +13364,17 @@ export class AiApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostAiWorkflows200ResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Identical to PATCH — the handler takes a whole object either way.
      * Replace a workflow
      */
-    async putAiWorkflowsByOwnerByName(requestParameters: AiApiPutAiWorkflowsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostAiWorkflows200Response> {
-        const response = await this.putAiWorkflowsByOwnerByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async putAiWorkflowsByOwnerByName(requestParameters: AiApiPutAiWorkflowsByOwnerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putAiWorkflowsByOwnerByNameRaw(requestParameters, initOverrides);
     }
 
 }

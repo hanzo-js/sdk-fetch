@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -28,14 +28,15 @@ export interface RiskSplitCounts {
      */
     judged?: number;
     /**
-     * Productive and Unproductive are the two judged classes, so the imbalance is
-     * visible before anyone trains on it.
+     * Productive is how many judged rows carry the one disposition.
      * @type {number}
      * @memberof RiskSplitCounts
      */
     productive?: number;
     /**
-     * 
+     * Rows is how many rows the version holds across every split. It is the size
+     * of the version, not of the source window — the horizon, the cuts and the row
+     * cap all bind before this number.
      * @type {number}
      * @memberof RiskSplitCounts
      */
@@ -49,25 +50,29 @@ export interface RiskSplitCounts {
      */
     subjects?: number;
     /**
-     * 
+     * Test is how many fall after the second cut — the LATEST slice, and the only
+     * one a score is honest about, since the split is temporal.
      * @type {number}
      * @memberof RiskSplitCounts
      */
     test?: number;
     /**
-     * 
+     * Train is how many rows fall before the first cut — the EARLIEST slice of the
+     * window, which is what a model is fitted on.
      * @type {number}
      * @memberof RiskSplitCounts
      */
     train?: number;
     /**
-     * 
+     * Unproductive is how many carry the other. With Productive it accounts for
+     * Judged, so the class imbalance is visible before anyone trains on it; both
+     * stay 0 while Judged is 0.
      * @type {number}
      * @memberof RiskSplitCounts
      */
     unproductive?: number;
     /**
-     * 
+     * Val is how many fall between the two cuts, held out for tuning.
      * @type {number}
      * @memberof RiskSplitCounts
      */

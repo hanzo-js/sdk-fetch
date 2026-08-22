@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -28,79 +28,88 @@ import {
  */
 export interface ProjectsDeployment {
     /**
-     * 
+     * Bucket is the object-store bucket its files were written to.
      * @type {string}
      * @memberof ProjectsDeployment
      */
     bucket?: string;
     /**
-     * 
+     * Bytes is their total size in bytes.
      * @type {number}
      * @memberof ProjectsDeployment
      */
     bytes?: number;
     /**
-     * 
+     * Commit is the revision that was built, for a deployment that came from a
+     * repository. Absent for an uploaded artifact, which has no revision.
      * @type {string}
      * @memberof ProjectsDeployment
      */
     commit?: string;
     /**
-     * 
+     * CreatedAt is when the deployment was queued, as Unix seconds.
      * @type {number}
      * @memberof ProjectsDeployment
      */
     createdAt?: number;
     /**
-     * 
+     * Files is how many objects the deployment published.
      * @type {number}
      * @memberof ProjectsDeployment
      */
     files?: number;
     /**
-     * 
+     * ID identifies this one deployment attempt, and is what CI quotes back to
+     * complete it.
      * @type {string}
      * @memberof ProjectsDeployment
      */
     id?: string;
     /**
-     * 
+     * LiveURL is where this deployment serves, once it is live.
      * @type {string}
      * @memberof ProjectsDeployment
      */
     liveUrl?: string;
     /**
-     * 
+     * Message is what happened, in words — the build's own note, or on a failure
+     * why it failed.
      * @type {string}
      * @memberof ProjectsDeployment
      */
     message?: string;
     /**
-     * 
+     * Prefix is the key prefix within that bucket holding EXACTLY this deployment's
+     * objects — the unit an upload grant is scoped to, so a grant for one deployment
+     * cannot write over another.
      * @type {string}
      * @memberof ProjectsDeployment
      */
     prefix?: string;
     /**
-     * 
+     * ProjectID is the project this deployment belongs to.
      * @type {string}
      * @memberof ProjectsDeployment
      */
     projectId?: string;
     /**
-     * 
+     * Source is what caused the deployment — a git push, an uploaded artifact, a
+     * generated site.
      * @type {string}
      * @memberof ProjectsDeployment
      */
     source?: string;
     /**
-     * 
+     * Status is where the attempt got to — queued, live, or failed. A deployment
+     * that is live is not necessarily the one SERVING: the project's own
+     * currentDeploymentId says which is.
      * @type {string}
      * @memberof ProjectsDeployment
      */
     status?: string;
     /**
-     * 
+     * UpdatedAt is when it last changed state, as Unix seconds — so the gap between
+     * the two is how long the build took.
      * @type {number}
      * @memberof ProjectsDeployment
      */
@@ -116,7 +125,8 @@ export interface ProjectsDeployment {
      */
     upload?: ProjectsUploadGrant;
     /**
-     * 
+     * Version counts deployments of this project from 1, so the history reads as an
+     * ordered sequence rather than by timestamp. It is per project, not global.
      * @type {number}
      * @memberof ProjectsDeployment
      */

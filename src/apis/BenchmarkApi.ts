@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -17,11 +17,15 @@ import * as runtime from '../runtime.js';
 import type {
   Admission,
   BenchmarkCatalog,
+  ClaimsOut,
+  HistoryOut,
   Leaderboard,
   Pairing,
   Preset,
   PresetAccepted,
   PresetList,
+  PutClaimsIn,
+  PutClaimsOut,
   Suite,
 } from '../models/index.js';
 import {
@@ -29,6 +33,10 @@ import {
     AdmissionToJSON,
     BenchmarkCatalogFromJSON,
     BenchmarkCatalogToJSON,
+    ClaimsOutFromJSON,
+    ClaimsOutToJSON,
+    HistoryOutFromJSON,
+    HistoryOutToJSON,
     LeaderboardFromJSON,
     LeaderboardToJSON,
     PairingFromJSON,
@@ -39,9 +47,21 @@ import {
     PresetAcceptedToJSON,
     PresetListFromJSON,
     PresetListToJSON,
+    PutClaimsInFromJSON,
+    PutClaimsInToJSON,
+    PutClaimsOutFromJSON,
+    PutClaimsOutToJSON,
     SuiteFromJSON,
     SuiteToJSON,
 } from '../models/index.js';
+
+export interface BenchmarkApiGetBenchmarkClaimsRequest {
+    benchmark?: string;
+    model?: string;
+    provider?: string;
+    source?: string;
+    protocol?: string;
+}
 
 export interface BenchmarkApiGetBenchmarkCompareRequest {
     a: string;
@@ -49,8 +69,17 @@ export interface BenchmarkApiGetBenchmarkCompareRequest {
     benchmark?: string;
 }
 
+export interface BenchmarkApiGetBenchmarkHistoryRequest {
+    benchmark?: string;
+    model?: string;
+}
+
 export interface BenchmarkApiGetBenchmarkLeaderboardRequest {
     benchmark?: string;
+}
+
+export interface BenchmarkApiPostBenchmarkClaimsRequest {
+    putClaimsIn: PutClaimsIn;
 }
 
 export interface BenchmarkApiPostBenchmarkPresetsRequest {
@@ -102,6 +131,65 @@ export class BenchmarkApi extends runtime.BaseAPI {
      */
     async getBenchmarkCatalog(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BenchmarkCatalog> {
         const response = await this.getBenchmarkCatalogRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Lists the effective published claims: what the leaderboard will use for each (benchmark, model) after the seed, the import and any stored correction are layered. It answers the operator\'s question — what does this arena currently believe someone else reported, and did we ship that or fix it.  Effective values only. The history of a key lives in the append-only file and is not what this op is for; a list that returned every superseded row would make the common question the hard one.
+     * Lists the effective published claims: what the leaderboard will use for each (benchmark, model) after the seed, the import and any stored correction are layered.
+     */
+    async getBenchmarkClaimsRaw(requestParameters: BenchmarkApiGetBenchmarkClaimsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ClaimsOut>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['benchmark'] != null) {
+            queryParameters['Benchmark'] = requestParameters['benchmark'];
+        }
+
+        if (requestParameters['model'] != null) {
+            queryParameters['Model'] = requestParameters['model'];
+        }
+
+        if (requestParameters['provider'] != null) {
+            queryParameters['Provider'] = requestParameters['provider'];
+        }
+
+        if (requestParameters['source'] != null) {
+            queryParameters['Source'] = requestParameters['source'];
+        }
+
+        if (requestParameters['protocol'] != null) {
+            queryParameters['Protocol'] = requestParameters['protocol'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/benchmark/claims`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ClaimsOutFromJSON(jsonValue));
+    }
+
+    /**
+     * Lists the effective published claims: what the leaderboard will use for each (benchmark, model) after the seed, the import and any stored correction are layered. It answers the operator\'s question — what does this arena currently believe someone else reported, and did we ship that or fix it.  Effective values only. The history of a key lives in the append-only file and is not what this op is for; a list that returned every superseded row would make the common question the hard one.
+     * Lists the effective published claims: what the leaderboard will use for each (benchmark, model) after the seed, the import and any stored correction are layered.
+     */
+    async getBenchmarkClaims(requestParameters: BenchmarkApiGetBenchmarkClaimsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ClaimsOut> {
+        const response = await this.getBenchmarkClaimsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -167,6 +255,53 @@ export class BenchmarkApi extends runtime.BaseAPI {
      */
     async getBenchmarkCompare(requestParameters: BenchmarkApiGetBenchmarkCompareRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Pairing> {
         const response = await this.getBenchmarkCompareRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns each model\'s measured score per run over time, oldest first, with the change between runs.  This is the counterweight to a leaderboard: the board shows the latest run because that is what \"how good is it\" means, and a single latest number cannot distinguish a model that has always been strong from one that just improved, or from one that regressed after a provider changed something. Both matter for routing, and only one of them is visible on a board.  Runs with no id — attempts recorded before runs existed — group under the empty run, which is honestly what they are: one undated measurement.
+     * Returns each model\'s measured score per run over time, oldest first, with the change between runs.
+     */
+    async getBenchmarkHistoryRaw(requestParameters: BenchmarkApiGetBenchmarkHistoryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<HistoryOut>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['benchmark'] != null) {
+            queryParameters['Benchmark'] = requestParameters['benchmark'];
+        }
+
+        if (requestParameters['model'] != null) {
+            queryParameters['Model'] = requestParameters['model'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/benchmark/history`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => HistoryOutFromJSON(jsonValue));
+    }
+
+    /**
+     * Returns each model\'s measured score per run over time, oldest first, with the change between runs.  This is the counterweight to a leaderboard: the board shows the latest run because that is what \"how good is it\" means, and a single latest number cannot distinguish a model that has always been strong from one that just improved, or from one that regressed after a provider changed something. Both matter for routing, and only one of them is visible on a board.  Runs with no id — attempts recorded before runs existed — group under the empty run, which is honestly what they are: one undated measurement.
+     * Returns each model\'s measured score per run over time, oldest first, with the change between runs.
+     */
+    async getBenchmarkHistory(requestParameters: BenchmarkApiGetBenchmarkHistoryRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<HistoryOut> {
+        const response = await this.getBenchmarkHistoryRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -249,6 +384,55 @@ export class BenchmarkApi extends runtime.BaseAPI {
      */
     async getBenchmarkPresets(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PresetList> {
         const response = await this.getBenchmarkPresetsRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Records published claims: one to correct a number, many to import a leaderboard. Every row must carry a Source, because a claim without its citation is a number nobody can check — and an unattributed number in the published plane is indistinguishable from a measurement, which is the one confusion this whole surface is built to prevent.  Writes are append-only, so this never destroys the value it replaces. A vendor restating a score leaves both rows on disk, which is how the restating itself becomes visible.
+     * Records published claims: one to correct a number, many to import a leaderboard.
+     */
+    async postBenchmarkClaimsRaw(requestParameters: BenchmarkApiPostBenchmarkClaimsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PutClaimsOut>> {
+        if (requestParameters['putClaimsIn'] == null) {
+            throw new runtime.RequiredError(
+                'putClaimsIn',
+                'Required parameter "putClaimsIn" was null or undefined when calling postBenchmarkClaims().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/benchmark/claims`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: PutClaimsInToJSON(requestParameters['putClaimsIn']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => PutClaimsOutFromJSON(jsonValue));
+    }
+
+    /**
+     * Records published claims: one to correct a number, many to import a leaderboard. Every row must carry a Source, because a claim without its citation is a number nobody can check — and an unattributed number in the published plane is indistinguishable from a measurement, which is the one confusion this whole surface is built to prevent.  Writes are append-only, so this never destroys the value it replaces. A vendor restating a score leaves both rows on disk, which is how the restating itself becomes visible.
+     * Records published claims: one to correct a number, many to import a leaderboard.
+     */
+    async postBenchmarkClaims(requestParameters: BenchmarkApiPostBenchmarkClaimsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PutClaimsOut> {
+        const response = await this.postBenchmarkClaimsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -15,6 +15,8 @@
 
 import * as runtime from '../runtime.js';
 import type {
+  EnablementBoard,
+  EnablementOptRef,
   PricingHealth,
   PricingModelList,
   PricingPlanList,
@@ -24,8 +26,13 @@ import type {
   PricingSyncOut,
   PricingTierList,
   PricingToolList,
+  UserEnablementItem,
 } from '../models/index.js';
 import {
+    EnablementBoardFromJSON,
+    EnablementBoardToJSON,
+    EnablementOptRefFromJSON,
+    EnablementOptRefToJSON,
     PricingHealthFromJSON,
     PricingHealthToJSON,
     PricingModelListFromJSON,
@@ -44,10 +51,20 @@ import {
     PricingTierListToJSON,
     PricingToolListFromJSON,
     PricingToolListToJSON,
+    UserEnablementItemFromJSON,
+    UserEnablementItemToJSON,
 } from '../models/index.js';
 
 export interface PricingApiGetPricingModelByNameRequest {
     name: string;
+}
+
+export interface PricingApiPostPricingEnablementOptinRequest {
+    enablementOptRef: EnablementOptRef;
+}
+
+export interface PricingApiPostPricingEnablementOptoutRequest {
+    enablementOptRef: EnablementOptRef;
 }
 
 /**
@@ -442,6 +459,45 @@ export class PricingApi extends runtime.BaseAPI {
      */
     async getPricingDatastore(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<{ [key: string]: object; }> {
         const response = await this.getPricingDatastoreRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns what the caller\'s org can actually use: every managed item with its global state, whether it is effective here, whether this org is already opted into its beta, and whether it may still opt in. Read-only and safe for any caller — one without a validated principal simply sees the generally-available items and no opt-in affordance, never another org\'s state.
+     * Returns what the caller\'s org can actually use: every managed item with its global state, whether it is effective here, whether this org is already opted into its beta, and whether it may still opt in.
+     */
+    async getPricingEnablementRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<EnablementBoard>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/pricing/enablement`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EnablementBoardFromJSON(jsonValue));
+    }
+
+    /**
+     * Returns what the caller\'s org can actually use: every managed item with its global state, whether it is effective here, whether this org is already opted into its beta, and whether it may still opt in. Read-only and safe for any caller — one without a validated principal simply sees the generally-available items and no opt-in affordance, never another org\'s state.
+     * Returns what the caller\'s org can actually use: every managed item with its global state, whether it is effective here, whether this org is already opted into its beta, and whether it may still opt in.
+     */
+    async getPricingEnablement(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<EnablementBoard> {
+        const response = await this.getPricingEnablementRaw(initOverrides);
         return await response.value();
     }
 
@@ -996,6 +1052,104 @@ export class PricingApi extends runtime.BaseAPI {
      */
     async getPricingTools(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PricingToolList> {
         const response = await this.getPricingToolsRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Opts the caller\'s OWN org into a beta item. The org is the caller\'s validated one, so this can never target another org, and the registry refuses anything not in beta — so it can neither re-open an item an operator turned off nor touch one that is already generally available. Requires a signed-in caller with an org.
+     * Opts the caller\'s OWN org into a beta item.
+     */
+    async postPricingEnablementOptinRaw(requestParameters: PricingApiPostPricingEnablementOptinRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserEnablementItem>> {
+        if (requestParameters['enablementOptRef'] == null) {
+            throw new runtime.RequiredError(
+                'enablementOptRef',
+                'Required parameter "enablementOptRef" was null or undefined when calling postPricingEnablementOptin().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/pricing/enablement/optin`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: EnablementOptRefToJSON(requestParameters['enablementOptRef']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => UserEnablementItemFromJSON(jsonValue));
+    }
+
+    /**
+     * Opts the caller\'s OWN org into a beta item. The org is the caller\'s validated one, so this can never target another org, and the registry refuses anything not in beta — so it can neither re-open an item an operator turned off nor touch one that is already generally available. Requires a signed-in caller with an org.
+     * Opts the caller\'s OWN org into a beta item.
+     */
+    async postPricingEnablementOptin(requestParameters: PricingApiPostPricingEnablementOptinRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserEnablementItem> {
+        const response = await this.postPricingEnablementOptinRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Removes the caller\'s OWN org from a beta item\'s grant list, the reverse of OptIntoBeta and idempotent. The org is the caller\'s validated one, so this can never revoke another org\'s grant. Requires a signed-in caller with an org.
+     * Removes the caller\'s OWN org from a beta item\'s grant list, the reverse of OptIntoBeta and idempotent.
+     */
+    async postPricingEnablementOptoutRaw(requestParameters: PricingApiPostPricingEnablementOptoutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserEnablementItem>> {
+        if (requestParameters['enablementOptRef'] == null) {
+            throw new runtime.RequiredError(
+                'enablementOptRef',
+                'Required parameter "enablementOptRef" was null or undefined when calling postPricingEnablementOptout().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/pricing/enablement/optout`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: EnablementOptRefToJSON(requestParameters['enablementOptRef']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => UserEnablementItemFromJSON(jsonValue));
+    }
+
+    /**
+     * Removes the caller\'s OWN org from a beta item\'s grant list, the reverse of OptIntoBeta and idempotent. The org is the caller\'s validated one, so this can never revoke another org\'s grant. Requires a signed-in caller with an org.
+     * Removes the caller\'s OWN org from a beta item\'s grant list, the reverse of OptIntoBeta and idempotent.
+     */
+    async postPricingEnablementOptout(requestParameters: PricingApiPostPricingEnablementOptoutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserEnablementItem> {
+        const response = await this.postPricingEnablementOptoutRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

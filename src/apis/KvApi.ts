@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -15,32 +15,56 @@
 
 import * as runtime from '../runtime.js';
 import type {
-  ProvisionRequest,
-  ProvisionResult,
-  ProvisionedResource,
-  ProvisionedSummary,
+  BucketRecord,
+  BucketWrite,
+  KvAck,
+  KvEntry,
+  KvPage,
+  KvWrite,
 } from '../models/index.js';
 import {
-    ProvisionRequestFromJSON,
-    ProvisionRequestToJSON,
-    ProvisionResultFromJSON,
-    ProvisionResultToJSON,
-    ProvisionedResourceFromJSON,
-    ProvisionedResourceToJSON,
-    ProvisionedSummaryFromJSON,
-    ProvisionedSummaryToJSON,
+    BucketRecordFromJSON,
+    BucketRecordToJSON,
+    BucketWriteFromJSON,
+    BucketWriteToJSON,
+    KvAckFromJSON,
+    KvAckToJSON,
+    KvEntryFromJSON,
+    KvEntryToJSON,
+    KvPageFromJSON,
+    KvPageToJSON,
+    KvWriteFromJSON,
+    KvWriteToJSON,
 } from '../models/index.js';
 
-export interface KvApiDeleteKvByNameRequest {
-    name: string;
+export interface KvApiDeleteKvByBucketRequest {
+    bucket: string;
 }
 
-export interface KvApiGetKvByNameRequest {
-    name: string;
+export interface KvApiDeleteKvByBucketByKeyRequest {
+    bucket: string;
+    key: string;
 }
 
-export interface KvApiPostKvRequest {
-    provisionRequest?: ProvisionRequest;
+export interface KvApiGetKvByBucketByKeyRequest {
+    bucket: string;
+    key: string;
+}
+
+export interface KvApiGetKvByBucketByKeyHistoryRequest {
+    bucket: string;
+    key: string;
+}
+
+export interface KvApiPostKvByBucketRequest {
+    bucket: string;
+    bucketWrite: BucketWrite;
+}
+
+export interface KvApiPutKvByBucketByKeyRequest {
+    bucket: string;
+    key: string;
+    kvWrite: KvWrite;
 }
 
 /**
@@ -49,14 +73,14 @@ export interface KvApiPostKvRequest {
 export class KvApi extends runtime.BaseAPI {
 
     /**
-     * DropKV deprovisions one Hanzo KV store. It reverts any app instance bound to it back to Base BEFORE tearing down the org\'s dedicated Valkey instance, then deletes the sealed credential and removes the metadata row. Answers 204 with no body; a second call is a 404.
-     * DropKV deprovisions one Hanzo KV store.
+     * Removes one bucket of the caller\'s org — every key and every revision with it — and answers 204 with no body. 404 when the org has no bucket of that name.
+     * Removes one bucket of the caller\'s org — every key and every revision with it — and answers 204 with no body.
      */
-    async deleteKvByNameRaw(requestParameters: KvApiDeleteKvByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters['name'] == null) {
+    async deleteKvByBucketRaw(requestParameters: KvApiDeleteKvByBucketRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['bucket'] == null) {
             throw new runtime.RequiredError(
-                'name',
-                'Required parameter "name" was null or undefined when calling deleteKvByName().'
+                'bucket',
+                'Required parameter "bucket" was null or undefined when calling deleteKvByBucket().'
             );
         }
 
@@ -73,8 +97,8 @@ export class KvApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/kv/{name}`;
-        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
+        let urlPath = `/v1/kv/{bucket}`;
+        urlPath = urlPath.replace(`{${"bucket"}}`, encodeURIComponent(String(requestParameters['bucket'])));
 
         const response = await this.request({
             path: urlPath,
@@ -87,61 +111,29 @@ export class KvApi extends runtime.BaseAPI {
     }
 
     /**
-     * DropKV deprovisions one Hanzo KV store. It reverts any app instance bound to it back to Base BEFORE tearing down the org\'s dedicated Valkey instance, then deletes the sealed credential and removes the metadata row. Answers 204 with no body; a second call is a 404.
-     * DropKV deprovisions one Hanzo KV store.
+     * Removes one bucket of the caller\'s org — every key and every revision with it — and answers 204 with no body. 404 when the org has no bucket of that name.
+     * Removes one bucket of the caller\'s org — every key and every revision with it — and answers 204 with no body.
      */
-    async deleteKvByName(requestParameters: KvApiDeleteKvByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.deleteKvByNameRaw(requestParameters, initOverrides);
+    async deleteKvByBucket(requestParameters: KvApiDeleteKvByBucketRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteKvByBucketRaw(requestParameters, initOverrides);
     }
 
     /**
-     * ListKV lists the caller org\'s Hanzo KV stores. Each one is a DEDICATED Valkey instance the org alone runs, so the host is that instance\'s own in-cluster Service and the port is 6379.
-     * ListKV lists the caller org\'s Hanzo KV stores.
+     * Delete removes one key — a delete marker in the key\'s history, so watchers see it and Get answers 404 — and answers 204 with no body. 404 when the bucket does not exist.
+     * Delete removes one key — a delete marker in the key\'s history, so watchers see it and Get answers 404 — and answers 204 with no body.
      */
-    async getKvRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ProvisionedSummary>>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
+    async deleteKvByBucketByKeyRaw(requestParameters: KvApiDeleteKvByBucketByKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['bucket'] == null) {
+            throw new runtime.RequiredError(
+                'bucket',
+                'Required parameter "bucket" was null or undefined when calling deleteKvByBucketByKey().'
+            );
         }
 
-        let urlPath = `/v1/kv`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ProvisionedSummaryFromJSON));
-    }
-
-    /**
-     * ListKV lists the caller org\'s Hanzo KV stores. Each one is a DEDICATED Valkey instance the org alone runs, so the host is that instance\'s own in-cluster Service and the port is 6379.
-     * ListKV lists the caller org\'s Hanzo KV stores.
-     */
-    async getKv(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ProvisionedSummary>> {
-        const response = await this.getKvRaw(initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * GetKV returns one Hanzo KV store\'s metadata. It carries the store\'s status, its instance address and the Valkey user it authenticates as (\"default\", the only user a requirepass instance has) — never the password. A still-booting instance reads \"provisioning\", reconciled from the operator\'s live view.
-     * GetKV returns one Hanzo KV store\'s metadata.
-     */
-    async getKvByNameRaw(requestParameters: KvApiGetKvByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProvisionedResource>> {
-        if (requestParameters['name'] == null) {
+        if (requestParameters['key'] == null) {
             throw new runtime.RequiredError(
-                'name',
-                'Required parameter "name" was null or undefined when calling getKvByName().'
+                'key',
+                'Required parameter "key" was null or undefined when calling deleteKvByBucketByKey().'
             );
         }
 
@@ -158,8 +150,63 @@ export class KvApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/kv/{name}`;
-        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
+        let urlPath = `/v1/kv/{bucket}/{key}`;
+        urlPath = urlPath.replace(`{${"bucket"}}`, encodeURIComponent(String(requestParameters['bucket'])));
+        urlPath = urlPath.replace(`{${"key"}}`, encodeURIComponent(String(requestParameters['key'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Delete removes one key — a delete marker in the key\'s history, so watchers see it and Get answers 404 — and answers 204 with no body. 404 when the bucket does not exist.
+     * Delete removes one key — a delete marker in the key\'s history, so watchers see it and Get answers 404 — and answers 204 with no body.
+     */
+    async deleteKvByBucketByKey(requestParameters: KvApiDeleteKvByBucketByKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteKvByBucketByKeyRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Get returns one key\'s current value and revision. 404 when the bucket does not exist, the key was never written, or its latest revision is a delete.
+     * Get returns one key\'s current value and revision.
+     */
+    async getKvByBucketByKeyRaw(requestParameters: KvApiGetKvByBucketByKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<KvEntry>> {
+        if (requestParameters['bucket'] == null) {
+            throw new runtime.RequiredError(
+                'bucket',
+                'Required parameter "bucket" was null or undefined when calling getKvByBucketByKey().'
+            );
+        }
+
+        if (requestParameters['key'] == null) {
+            throw new runtime.RequiredError(
+                'key',
+                'Required parameter "key" was null or undefined when calling getKvByBucketByKey().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/kv/{bucket}/{key}`;
+        urlPath = urlPath.replace(`{${"bucket"}}`, encodeURIComponent(String(requestParameters['bucket'])));
+        urlPath = urlPath.replace(`{${"key"}}`, encodeURIComponent(String(requestParameters['key'])));
 
         const response = await this.request({
             path: urlPath,
@@ -168,23 +215,92 @@ export class KvApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ProvisionedResourceFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => KvEntryFromJSON(jsonValue));
     }
 
     /**
-     * GetKV returns one Hanzo KV store\'s metadata. It carries the store\'s status, its instance address and the Valkey user it authenticates as (\"default\", the only user a requirepass instance has) — never the password. A still-booting instance reads \"provisioning\", reconciled from the operator\'s live view.
-     * GetKV returns one Hanzo KV store\'s metadata.
+     * Get returns one key\'s current value and revision. 404 when the bucket does not exist, the key was never written, or its latest revision is a delete.
+     * Get returns one key\'s current value and revision.
      */
-    async getKvByName(requestParameters: KvApiGetKvByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProvisionedResource> {
-        const response = await this.getKvByNameRaw(requestParameters, initOverrides);
+    async getKvByBucketByKey(requestParameters: KvApiGetKvByBucketByKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<KvEntry> {
+        const response = await this.getKvByBucketByKeyRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Launches your org\'s OWN key-value instance and answers with its `kv://` connection string. The instance is yours alone: a deployment in your own tenant namespace, so its admin credential is naturally scoped to you and no other tenant shares the process. Off-cluster, where there is no orchestrator to launch one, this fails closed with 503 rather than handing back a shared one.  `name` is the org-unique slug every physical name derives from, and must match ^[a-z0-9]([a-z0-9-]{0,38}[a-z0-9])?$. `instance` optionally BINDS the add-on to one of your app instances: the DSN is injected into that instance\'s addons secret as <KIND>_URL, switching the app off its built-in store and onto this one. Omit it and the connection string is yours to wire.  THE CREDENTIAL COMES BACK ONCE. The connection string and password are in this response and nowhere else — every read beside it omits the password — so a caller that does not keep them has to provision again. Where KMS is configured the password is sealed there and only a reference is persisted; where it is not, it is returned this once and stored nowhere. It is never held in plaintext.  Scoped to the caller\'s validated org (403 without one), which also namespaces the physical resource under a fixed-width hash, so two tenants can never fold onto one backend resource — a residual collision fails closed with 409 rather than silently sharing. A name already taken in your org is 409; an invalid name or instance slug is 400; a backend that refuses the create is 502. Where a later step fails after the backend resource already exists, it is torn back down rather than left orphaned.  Billing is gated BEFORE anything is created: an unfunded org — or, in the fail-closed default, an unreachable meter — gets the fleet-wide 402/503 and nothing is provisioned. The fee is per-kind and set by the deployment.
-     * Provision a key-value store for your org
+     * History returns one key\'s retained revisions, oldest first — every put and every delete marker up to the bucket\'s History depth. 404 when the bucket does not exist or the key was never written.
+     * History returns one key\'s retained revisions, oldest first — every put and every delete marker up to the bucket\'s History depth.
      */
-    async postKvRaw(requestParameters: KvApiPostKvRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProvisionResult>> {
+    async getKvByBucketByKeyHistoryRaw(requestParameters: KvApiGetKvByBucketByKeyHistoryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<KvPage>> {
+        if (requestParameters['bucket'] == null) {
+            throw new runtime.RequiredError(
+                'bucket',
+                'Required parameter "bucket" was null or undefined when calling getKvByBucketByKeyHistory().'
+            );
+        }
+
+        if (requestParameters['key'] == null) {
+            throw new runtime.RequiredError(
+                'key',
+                'Required parameter "key" was null or undefined when calling getKvByBucketByKeyHistory().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/kv/{bucket}/{key}/history`;
+        urlPath = urlPath.replace(`{${"bucket"}}`, encodeURIComponent(String(requestParameters['bucket'])));
+        urlPath = urlPath.replace(`{${"key"}}`, encodeURIComponent(String(requestParameters['key'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => KvPageFromJSON(jsonValue));
+    }
+
+    /**
+     * History returns one key\'s retained revisions, oldest first — every put and every delete marker up to the bucket\'s History depth. 404 when the bucket does not exist or the key was never written.
+     * History returns one key\'s retained revisions, oldest first — every put and every delete marker up to the bucket\'s History depth.
+     */
+    async getKvByBucketByKeyHistory(requestParameters: KvApiGetKvByBucketByKeyHistoryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<KvPage> {
+        const response = await this.getKvByBucketByKeyHistoryRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates a KV bucket and returns it. A bucket is keyed state on the same durable plane as the streams: each key holds up to History revisions, entries can expire by TTL, and watchers on the NATS port see every write. 409 when the org already has a bucket of that name.
+     * Creates a KV bucket and returns it.
+     */
+    async postKvByBucketRaw(requestParameters: KvApiPostKvByBucketRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BucketRecord>> {
+        if (requestParameters['bucket'] == null) {
+            throw new runtime.RequiredError(
+                'bucket',
+                'Required parameter "bucket" was null or undefined when calling postKvByBucket().'
+            );
+        }
+
+        if (requestParameters['bucketWrite'] == null) {
+            throw new runtime.RequiredError(
+                'bucketWrite',
+                'Required parameter "bucketWrite" was null or undefined when calling postKvByBucket().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -200,25 +316,91 @@ export class KvApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/kv`;
+        let urlPath = `/v1/kv/{bucket}`;
+        urlPath = urlPath.replace(`{${"bucket"}}`, encodeURIComponent(String(requestParameters['bucket'])));
 
         const response = await this.request({
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: ProvisionRequestToJSON(requestParameters['provisionRequest']),
+            body: BucketWriteToJSON(requestParameters['bucketWrite']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ProvisionResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => BucketRecordFromJSON(jsonValue));
     }
 
     /**
-     * Launches your org\'s OWN key-value instance and answers with its `kv://` connection string. The instance is yours alone: a deployment in your own tenant namespace, so its admin credential is naturally scoped to you and no other tenant shares the process. Off-cluster, where there is no orchestrator to launch one, this fails closed with 503 rather than handing back a shared one.  `name` is the org-unique slug every physical name derives from, and must match ^[a-z0-9]([a-z0-9-]{0,38}[a-z0-9])?$. `instance` optionally BINDS the add-on to one of your app instances: the DSN is injected into that instance\'s addons secret as <KIND>_URL, switching the app off its built-in store and onto this one. Omit it and the connection string is yours to wire.  THE CREDENTIAL COMES BACK ONCE. The connection string and password are in this response and nowhere else — every read beside it omits the password — so a caller that does not keep them has to provision again. Where KMS is configured the password is sealed there and only a reference is persisted; where it is not, it is returned this once and stored nowhere. It is never held in plaintext.  Scoped to the caller\'s validated org (403 without one), which also namespaces the physical resource under a fixed-width hash, so two tenants can never fold onto one backend resource — a residual collision fails closed with 409 rather than silently sharing. A name already taken in your org is 409; an invalid name or instance slug is 400; a backend that refuses the create is 502. Where a later step fails after the backend resource already exists, it is torn back down rather than left orphaned.  Billing is gated BEFORE anything is created: an unfunded org — or, in the fail-closed default, an unreachable meter — gets the fleet-wide 402/503 and nothing is provisioned. The fee is per-kind and set by the deployment.
-     * Provision a key-value store for your org
+     * Creates a KV bucket and returns it. A bucket is keyed state on the same durable plane as the streams: each key holds up to History revisions, entries can expire by TTL, and watchers on the NATS port see every write. 409 when the org already has a bucket of that name.
+     * Creates a KV bucket and returns it.
      */
-    async postKv(requestParameters: KvApiPostKvRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProvisionResult> {
-        const response = await this.postKvRaw(requestParameters, initOverrides);
+    async postKvByBucket(requestParameters: KvApiPostKvByBucketRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BucketRecord> {
+        const response = await this.postKvByBucketRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Put sets one key to one value and returns the revision the write created. Writes are versioned: each put is a new revision and the bucket retains up to its History of them per key.
+     * Put sets one key to one value and returns the revision the write created.
+     */
+    async putKvByBucketByKeyRaw(requestParameters: KvApiPutKvByBucketByKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<KvAck>> {
+        if (requestParameters['bucket'] == null) {
+            throw new runtime.RequiredError(
+                'bucket',
+                'Required parameter "bucket" was null or undefined when calling putKvByBucketByKey().'
+            );
+        }
+
+        if (requestParameters['key'] == null) {
+            throw new runtime.RequiredError(
+                'key',
+                'Required parameter "key" was null or undefined when calling putKvByBucketByKey().'
+            );
+        }
+
+        if (requestParameters['kvWrite'] == null) {
+            throw new runtime.RequiredError(
+                'kvWrite',
+                'Required parameter "kvWrite" was null or undefined when calling putKvByBucketByKey().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/kv/{bucket}/{key}`;
+        urlPath = urlPath.replace(`{${"bucket"}}`, encodeURIComponent(String(requestParameters['bucket'])));
+        urlPath = urlPath.replace(`{${"key"}}`, encodeURIComponent(String(requestParameters['key'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: KvWriteToJSON(requestParameters['kvWrite']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => KvAckFromJSON(jsonValue));
+    }
+
+    /**
+     * Put sets one key to one value and returns the revision the write created. Writes are versioned: each put is a new revision and the bucket retains up to its History of them per key.
+     * Put sets one key to one value and returns the revision the write created.
+     */
+    async putKvByBucketByKey(requestParameters: KvApiPutKvByBucketByKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<KvAck> {
+        const response = await this.putKvByBucketByKeyRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

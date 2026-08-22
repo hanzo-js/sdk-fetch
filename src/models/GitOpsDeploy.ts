@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,31 +20,35 @@ import { mapValues } from '../runtime.js';
  */
 export interface GitOpsDeploy {
     /**
-     * 
+     * Automated is whether CD started this deploy itself, from its own polling of
+     * the tracked git ref (initiatedBy.automated), rather than someone asking for it.
      * @type {boolean}
      * @memberof GitOpsDeploy
      */
     automated?: boolean;
     /**
-     * 
+     * DeployedAt is when the apply finished, RFC 3339. Absent when CD recorded none.
      * @type {string}
      * @memberof GitOpsDeploy
      */
     deployedAt?: string;
     /**
-     * 
+     * ID is CD's own sequence number for this deploy (status.history[].id). It
+     * increases with every applied revision, so the largest id in `history` is the
+     * most recent deploy — which is the first entry, since the list is reversed.
      * @type {number}
      * @memberof GitOpsDeploy
      */
     id?: number;
     /**
-     * 
+     * Revision is the git commit this deploy applied, as CD recorded it.
      * @type {string}
      * @memberof GitOpsDeploy
      */
     revision?: string;
     /**
-     * 
+     * StartedAt is when CD began applying the revision (deployStartedAt), RFC 3339.
+     * Absent when CD recorded none.
      * @type {string}
      * @memberof GitOpsDeploy
      */

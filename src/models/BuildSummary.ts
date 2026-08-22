@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,61 +20,68 @@ import { mapValues } from '../runtime.js';
  */
 export interface BuildSummary {
     /**
-     * 
+     * Agent is the label the surface that did the work calls itself by.
      * @type {string}
      * @memberof BuildSummary
      */
     agent?: string;
     /**
-     * 
+     * EndedAt is when it finished, same format. Empty means it is still going.
      * @type {string}
      * @memberof BuildSummary
      */
     endedAt?: string;
     /**
-     * 
+     * Org and Project are the build's public ADDRESS — the pair the full story is
+     * read at, and the pair a visitor sees in the URL bar. Not a tenant key: this
+     * index is anonymous and lists only what authors published.
      * @type {string}
      * @memberof BuildSummary
      */
     org?: string;
     /**
-     * 
+     * Project is the product's slug, the second half of that address.
      * @type {string}
      * @memberof BuildSummary
      */
     project?: string;
     /**
-     * 
+     * Repo is the repository the work was done in, as the session reported it.
      * @type {string}
      * @memberof BuildSummary
      */
     repo?: string;
     /**
-     * 
+     * Session is the agent session behind the build, and the value its commits name
+     * in their `Hanzo-Session:` trailer.
      * @type {string}
      * @memberof BuildSummary
      */
     session?: string;
     /**
-     * 
+     * StartedAt is when the session opened, RFC 3339 in UTC.
      * @type {string}
      * @memberof BuildSummary
      */
     startedAt?: string;
     /**
-     * 
+     * Status is the session's own: running, paused, done or error — so a card can
+     * show a build still being written.
      * @type {string}
      * @memberof BuildSummary
      */
     status?: string;
     /**
-     * 
+     * Title is the human line for the card. Sent even when empty, like every field
+     * here, because that is what this route has always sent.
      * @type {string}
      * @memberof BuildSummary
      */
     title?: string;
     /**
-     * 
+     * Turns is HOW MANY turns the transcript holds — a COUNT, unlike the `turn` on
+     * each turn of the full story, which is that turn's position. The full read
+     * returns at most 1000 of them; this number is not capped.
      * @type {number}
      * @memberof BuildSummary
      */

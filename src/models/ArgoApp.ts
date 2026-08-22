@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -42,31 +42,35 @@ import {
  */
 export interface ArgoApp {
     /**
-     * 
+     * APIVersion is the constant "argoproj.io/v1alpha1" — the shape, not the source.
+     * These are projections of operator App CRs and Hanzo CD Applications; no
+     * argoproj.io object is stored anywhere behind this plane.
      * @type {string}
      * @memberof ArgoApp
      */
     apiVersion?: string;
     /**
-     * 
+     * Kind is the constant "Application".
      * @type {string}
      * @memberof ArgoApp
      */
     kind?: string;
     /**
-     * 
+     * Metadata is the projected object's identity.
      * @type {ArgoMeta}
      * @memberof ArgoApp
      */
     metadata?: ArgoMeta;
     /**
-     * 
+     * Spec is the desired state: where it comes from, where it lands, what project
+     * it belongs to.
      * @type {ArgoSpec}
      * @memberof ArgoApp
      */
     spec?: ArgoSpec;
     /**
-     * 
+     * Status is what was observed: the sync verdict, the health, and the owned
+     * objects when this is a detail read.
      * @type {ArgoStatus}
      * @memberof ArgoApp
      */

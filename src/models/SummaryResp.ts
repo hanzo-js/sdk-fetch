@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -35,20 +35,26 @@ import {
  */
 export interface SummaryResp {
     /**
-     * Account and Hanzo report each ledger's own availability, so a partial
-     * warehouse never fabricates the other half.
+     * Account reports the linked-accounts ledger's own availability, so a partial
+     * answer never fabricates this half. It is scoped to the CALLER: the accounts
+     * they linked, metered from each provider's own login.
      * @type {SourceState}
      * @memberof SummaryResp
      */
     account?: SourceState;
     /**
-     * From and To are the one [from, to) window BOTH halves resolved, RFC 3339 UTC.
+     * From is when the window opens, RFC 3339 UTC. ONE resolver fixes it for both
+     * ledgers, so the account rows and the Hanzo rows always cover the same period
+     * — two resolvers could drift and turn the union into a lie.
      * @type {string}
      * @memberof SummaryResp
      */
     from?: string;
     /**
-     * 
+     * Hanzo reports the same for the Hanzo-routed ledger, which is scoped to the
+     * ORG rather than the caller — a different question over the same window. The
+     * two are independent: either can be unavailable while the other answers, and
+     * Rows then carries only the half that did.
      * @type {SourceState}
      * @memberof SummaryResp
      */
@@ -67,7 +73,8 @@ export interface SummaryResp {
      */
     rows?: Array<TotalView>;
     /**
-     * 
+     * To is where the window closes, EXCLUSIVE, RFC 3339 UTC — the instant the read
+     * was served. Shared by both ledgers, for the reason From gives.
      * @type {string}
      * @memberof SummaryResp
      */

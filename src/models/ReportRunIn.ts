@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -27,25 +27,31 @@ export interface ReportRunIn {
      */
     branch?: string;
     /**
-     * 
+     * Changed says whether the run produced any commit. It is INDEPENDENT of OK: a
+     * run can succeed and change nothing (there was nothing to do), and a run can
+     * fail after committing some of its work. Two questions, two booleans.
      * @type {boolean}
      * @memberof ReportRunIn
      */
     changed?: boolean;
     /**
-     * 
+     * CommitSha is the tip the run pushed, clamped to 128 characters. Empty when it
+     * pushed nothing, which is the same case Changed reports false for.
      * @type {string}
      * @memberof ReportRunIn
      */
     commitSha?: string;
     /**
-     * 
+     * Diffstat is the run's own summary of what it changed, as text, clamped to
+     * 64 KiB. Free-form: it is shown, never parsed.
      * @type {string}
      * @memberof ReportRunIn
      */
     diffstat?: string;
     /**
-     * 
+     * Error is why the run failed, clamped to 64 KiB. It is CLAMPED rather than
+     * refused — a truncated reason is worth more than a rejected report, because a
+     * rejected report leaves the durable workflow waiting forever.
      * @type {string}
      * @memberof ReportRunIn
      */

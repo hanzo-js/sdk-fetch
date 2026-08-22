@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -24,37 +24,49 @@ export interface IamInput {
      * @type {string}
      * @memberof IamInput
      */
+    action?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof IamInput
+     */
+    clientIp?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof IamInput
+     */
     createdTime?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof IamInput
-     */
-    description?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof IamInput
-     */
-    displayName?: string;
     /**
      * 
      * @type {boolean}
      * @memberof IamInput
      */
-    isDefault?: boolean;
+    isTriggered?: boolean;
     /**
      * 
      * @type {string}
      * @memberof IamInput
      */
-    metadata?: string;
+    language?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof IamInput
+     */
+    method?: string;
     /**
      * 
      * @type {string}
      * @memberof IamInput
      */
     name?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof IamInput
+     */
+    object?: string;
     /**
      * 
      * @type {string}
@@ -69,16 +81,28 @@ export interface IamInput {
     owner?: string;
     /**
      * 
-     * @type {Array<string>}
+     * @type {string}
      * @memberof IamInput
      */
-    tags?: Array<string>;
+    requestUri?: string;
     /**
      * 
      * @type {string}
      * @memberof IamInput
      */
-    workspace?: string;
+    response?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof IamInput
+     */
+    statusCode?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof IamInput
+     */
+    user?: string;
 }
 
 /**
@@ -98,16 +122,20 @@ export function IamInputFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
     }
     return {
         
+        'action': json['action'] == null ? undefined : json['action'],
+        'clientIp': json['clientIp'] == null ? undefined : json['clientIp'],
         'createdTime': json['createdTime'] == null ? undefined : json['createdTime'],
-        'description': json['description'] == null ? undefined : json['description'],
-        'displayName': json['displayName'] == null ? undefined : json['displayName'],
-        'isDefault': json['isDefault'] == null ? undefined : json['isDefault'],
-        'metadata': json['metadata'] == null ? undefined : json['metadata'],
+        'isTriggered': json['isTriggered'] == null ? undefined : json['isTriggered'],
+        'language': json['language'] == null ? undefined : json['language'],
+        'method': json['method'] == null ? undefined : json['method'],
         'name': json['name'] == null ? undefined : json['name'],
+        'object': json['object'] == null ? undefined : json['object'],
         'organization': json['organization'] == null ? undefined : json['organization'],
         'owner': json['owner'] == null ? undefined : json['owner'],
-        'tags': json['tags'] == null ? undefined : json['tags'],
-        'workspace': json['workspace'] == null ? undefined : json['workspace'],
+        'requestUri': json['requestUri'] == null ? undefined : json['requestUri'],
+        'response': json['response'] == null ? undefined : json['response'],
+        'statusCode': json['statusCode'] == null ? undefined : json['statusCode'],
+        'user': json['user'] == null ? undefined : json['user'],
     };
 }
 
@@ -122,16 +150,20 @@ export function IamInputToJSONTyped(value?: IamInput | null, ignoreDiscriminator
 
     return {
         
+        'action': value['action'],
+        'clientIp': value['clientIp'],
         'createdTime': value['createdTime'],
-        'description': value['description'],
-        'displayName': value['displayName'],
-        'isDefault': value['isDefault'],
-        'metadata': value['metadata'],
+        'isTriggered': value['isTriggered'],
+        'language': value['language'],
+        'method': value['method'],
         'name': value['name'],
+        'object': value['object'],
         'organization': value['organization'],
         'owner': value['owner'],
-        'tags': value['tags'],
-        'workspace': value['workspace'],
+        'requestUri': value['requestUri'],
+        'response': value['response'],
+        'statusCode': value['statusCode'],
+        'user': value['user'],
     };
 }
 

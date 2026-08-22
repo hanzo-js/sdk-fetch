@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -14,6 +14,31 @@
 
 
 import * as runtime from '../runtime.js';
+import type {
+  Cart,
+  CartItemSet,
+  CartOpen,
+  Liveness,
+  PaymentIn,
+  PaymentOut,
+  PaymentRecord,
+} from '../models/index.js';
+import {
+    CartFromJSON,
+    CartToJSON,
+    CartItemSetFromJSON,
+    CartItemSetToJSON,
+    CartOpenFromJSON,
+    CartOpenToJSON,
+    LivenessFromJSON,
+    LivenessToJSON,
+    PaymentInFromJSON,
+    PaymentInToJSON,
+    PaymentOutFromJSON,
+    PaymentOutToJSON,
+    PaymentRecordFromJSON,
+    PaymentRecordToJSON,
+} from '../models/index.js';
 
 export interface CommerceApiDeleteCommerceCollectionByCollectionidRequest {
     collectionid: string;
@@ -35,8 +60,16 @@ export interface CommerceApiDeleteCommerceNoteByNoteidRequest {
     noteid: string;
 }
 
+export interface CommerceApiDeleteCommercePlansEntriesBySlugRequest {
+    slug: string;
+}
+
 export interface CommerceApiDeleteCommerceProductByProductidRequest {
     productid: string;
+}
+
+export interface CommerceApiDeleteCommerceRatesEntriesBySlugRequest {
+    slug: string;
 }
 
 export interface CommerceApiDeleteCommerceReturnByReturnidRequest {
@@ -49,6 +82,15 @@ export interface CommerceApiDeleteCommerceSaleschannelBySaleschannelidRequest {
 
 export interface CommerceApiDeleteCommerceStocklocationByStocklocationidRequest {
     stocklocationid: string;
+}
+
+export interface CommerceApiDeleteCommerceStoreByStoreidRequest {
+    storeid: string;
+}
+
+export interface CommerceApiDeleteCommerceStoreByStoreidListingByKeyRequest {
+    storeid: string;
+    key: string;
 }
 
 export interface CommerceApiDeleteCommerceSubmissionBySubmissionidRequest {
@@ -81,6 +123,14 @@ export interface CommerceApiDeleteCommerceWatchlistByWatchlistidRequest {
 
 export interface CommerceApiDeleteCommerceWebhookByWebhookidRequest {
     webhookid: string;
+}
+
+export interface CommerceApiDiscardCartRequest {
+    id: string;
+}
+
+export interface CommerceApiGetCartRequest {
+    id: string;
 }
 
 export interface CommerceApiGetCommerceCollectionByCollectionidRequest {
@@ -119,6 +169,34 @@ export interface CommerceApiGetCommerceStocklocationByStocklocationidRequest {
     stocklocationid: string;
 }
 
+export interface CommerceApiGetCommerceStoreByStoreidRequest {
+    storeid: string;
+}
+
+export interface CommerceApiGetCommerceStoreByStoreidBundleByKeyRequest {
+    storeid: string;
+    key: string;
+}
+
+export interface CommerceApiGetCommerceStoreByStoreidListingRequest {
+    storeid: string;
+}
+
+export interface CommerceApiGetCommerceStoreByStoreidListingByKeyRequest {
+    storeid: string;
+    key: string;
+}
+
+export interface CommerceApiGetCommerceStoreByStoreidProductByKeyRequest {
+    storeid: string;
+    key: string;
+}
+
+export interface CommerceApiGetCommerceStoreByStoreidVariantByKeyRequest {
+    storeid: string;
+    key: string;
+}
+
 export interface CommerceApiGetCommerceSubmissionBySubmissionidRequest {
     submissionid: string;
 }
@@ -149,6 +227,14 @@ export interface CommerceApiGetCommerceWatchlistByWatchlistidRequest {
 
 export interface CommerceApiGetCommerceWebhookByWebhookidRequest {
     webhookid: string;
+}
+
+export interface CommerceApiGetPaymentRequest {
+    id: string;
+}
+
+export interface CommerceApiOpenCartRequest {
+    cartOpen: CartOpen;
 }
 
 export interface CommerceApiPatchCommerceCollectionByCollectionidRequest {
@@ -185,6 +271,15 @@ export interface CommerceApiPatchCommerceSaleschannelBySaleschannelidRequest {
 
 export interface CommerceApiPatchCommerceStocklocationByStocklocationidRequest {
     stocklocationid: string;
+}
+
+export interface CommerceApiPatchCommerceStoreByStoreidRequest {
+    storeid: string;
+}
+
+export interface CommerceApiPatchCommerceStoreByStoreidListingByKeyRequest {
+    storeid: string;
+    key: string;
 }
 
 export interface CommerceApiPatchCommerceSubmissionBySubmissionidRequest {
@@ -255,6 +350,83 @@ export interface CommerceApiPostCommerceStocklocationByStocklocationidRequest {
     stocklocationid: string;
 }
 
+export interface CommerceApiPostCommerceStoreByStoreidRequest {
+    storeid: string;
+}
+
+export interface CommerceApiPostCommerceStoreByStoreidAuthorizeRequest {
+    storeid: string;
+}
+
+export interface CommerceApiPostCommerceStoreByStoreidAuthorizeByOrderidRequest {
+    storeid: string;
+    orderid: string;
+}
+
+export interface CommerceApiPostCommerceStoreByStoreidCaptureByOrderidRequest {
+    storeid: string;
+    orderid: string;
+}
+
+export interface CommerceApiPostCommerceStoreByStoreidChargeRequest {
+    storeid: string;
+}
+
+export interface CommerceApiPostCommerceStoreByStoreidCheckoutAuthorizeRequest {
+    storeid: string;
+}
+
+export interface CommerceApiPostCommerceStoreByStoreidCheckoutAuthorizeByOrderidRequest {
+    storeid: string;
+    orderid: string;
+}
+
+export interface CommerceApiPostCommerceStoreByStoreidCheckoutCaptureByOrderidRequest {
+    storeid: string;
+    orderid: string;
+}
+
+export interface CommerceApiPostCommerceStoreByStoreidCheckoutChargeRequest {
+    storeid: string;
+}
+
+export interface CommerceApiPostCommerceStoreByStoreidCheckoutPaypalCancelByPaykeyRequest {
+    storeid: string;
+    payKey: string;
+}
+
+export interface CommerceApiPostCommerceStoreByStoreidCheckoutPaypalConfirmByPaykeyRequest {
+    storeid: string;
+    payKey: string;
+}
+
+export interface CommerceApiPostCommerceStoreByStoreidCheckoutPaypalPayRequest {
+    storeid: string;
+}
+
+export interface CommerceApiPostCommerceStoreByStoreidListingByKeyRequest {
+    storeid: string;
+    key: string;
+}
+
+export interface CommerceApiPostCommerceStoreByStoreidPaypalCancelByPaykeyRequest {
+    storeid: string;
+    payKey: string;
+}
+
+export interface CommerceApiPostCommerceStoreByStoreidPaypalConfirmByPaykeyRequest {
+    storeid: string;
+    payKey: string;
+}
+
+export interface CommerceApiPostCommerceStoreByStoreidPaypalPayRequest {
+    storeid: string;
+}
+
+export interface CommerceApiPostCommerceStoreByStoreidTrialRequest {
+    storeid: string;
+}
+
 export interface CommerceApiPostCommerceSubmissionBySubmissionidRequest {
     submissionid: string;
 }
@@ -287,6 +459,10 @@ export interface CommerceApiPostCommerceWebhookByWebhookidRequest {
     webhookid: string;
 }
 
+export interface CommerceApiPostCommerceWebhooksByProviderRequest {
+    provider: string;
+}
+
 export interface CommerceApiPutCommerceCollectionByCollectionidRequest {
     collectionid: string;
 }
@@ -307,8 +483,16 @@ export interface CommerceApiPutCommerceNoteByNoteidRequest {
     noteid: string;
 }
 
+export interface CommerceApiPutCommercePlansEntriesBySlugRequest {
+    slug: string;
+}
+
 export interface CommerceApiPutCommerceProductByProductidRequest {
     productid: string;
+}
+
+export interface CommerceApiPutCommerceRatesEntriesBySlugRequest {
+    slug: string;
 }
 
 export interface CommerceApiPutCommerceReturnByReturnidRequest {
@@ -321,6 +505,15 @@ export interface CommerceApiPutCommerceSaleschannelBySaleschannelidRequest {
 
 export interface CommerceApiPutCommerceStocklocationByStocklocationidRequest {
     stocklocationid: string;
+}
+
+export interface CommerceApiPutCommerceStoreByStoreidRequest {
+    storeid: string;
+}
+
+export interface CommerceApiPutCommerceStoreByStoreidListingByKeyRequest {
+    storeid: string;
+    key: string;
 }
 
 export interface CommerceApiPutCommerceSubmissionBySubmissionidRequest {
@@ -353,6 +546,15 @@ export interface CommerceApiPutCommerceWatchlistByWatchlistidRequest {
 
 export interface CommerceApiPutCommerceWebhookByWebhookidRequest {
     webhookid: string;
+}
+
+export interface CommerceApiSetCartItemRequest {
+    id: string;
+    cartItemSet: CartItemSet;
+}
+
+export interface CommerceApiTakePaymentRequest {
+    paymentIn: PaymentIn;
 }
 
 /**
@@ -591,6 +793,52 @@ export class CommerceApi extends runtime.BaseAPI {
     }
 
     /**
+     * Deletes the addressed plan and answers 204. It removes the plan from the catalog buyers choose from; it does not touch subscriptions already sold against it, which keep their stored plan id. PLATFORM admin only — an org-level admin is refused 403 — and an unknown slug is 404.
+     * Remove a plan from the authority
+     */
+    async deleteCommercePlansEntriesBySlugRaw(requestParameters: CommerceApiDeleteCommercePlansEntriesBySlugRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['slug'] == null) {
+            throw new runtime.RequiredError(
+                'slug',
+                'Required parameter "slug" was null or undefined when calling deleteCommercePlansEntriesBySlug().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/plans/entries/{slug}`;
+        urlPath = urlPath.replace(`{${"slug"}}`, encodeURIComponent(String(requestParameters['slug'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Deletes the addressed plan and answers 204. It removes the plan from the catalog buyers choose from; it does not touch subscriptions already sold against it, which keep their stored plan id. PLATFORM admin only — an org-level admin is refused 403 — and an unknown slug is 404.
+     * Remove a plan from the authority
+     */
+    async deleteCommercePlansEntriesBySlug(requestParameters: CommerceApiDeleteCommercePlansEntriesBySlugRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteCommercePlansEntriesBySlugRaw(requestParameters, initOverrides);
+    }
+
+    /**
      * A product is a sellable catalog item: slug, SKU and UPC, name and copy, media, availability and preorder flags, a reservation block, and its money — currency, price, MSRP, list price and inventory cost in minor units, inventory count, taxability, and the subscription interval when it is subscribeable. Its variants and options are carried as a denormalized JSON snapshot inside the product, separate from the standalone variant rows, and nothing keeps the two in step for you. Removes the addressed row and answers 204 with no body. Before the live row goes it is written once more under a deleted tombstone kind, so a deletion leaves a recoverable copy rather than destroying the record outright — and a tombstone that cannot be written fails the call with 500 before anything is removed. The id is resolved inside the caller org\'s own namespace, so an absent or foreign id is 404. Any valid access token reaches it. The org must also be entitled to the commerce admin: the paywall answers 402 subscription_required unless the org holds an active or trialing pro subscription, a live trial credit or a redeemed invite, and 503 when that entitlement cannot be read rather than admitting on an unknown. The internal service token and a platform superadmin pass straight through. The token must also carry Admin or WriteProduct.
      * Delete a product, keeping a recoverable copy
      */
@@ -634,6 +882,52 @@ export class CommerceApi extends runtime.BaseAPI {
      */
     async deleteCommerceProductByProductid(requestParameters: CommerceApiDeleteCommerceProductByProductidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.deleteCommerceProductByProductidRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Deletes the row. ARCHIVING is usually what is wanted instead — a deleted rate cannot price a historical charge, so a past invoice that has to re-resolve its rate finds nothing to read. Reach for status=archived unless the rate never priced anything. SuperAdmin only.
+     * Remove a rate outright
+     */
+    async deleteCommerceRatesEntriesBySlugRaw(requestParameters: CommerceApiDeleteCommerceRatesEntriesBySlugRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['slug'] == null) {
+            throw new runtime.RequiredError(
+                'slug',
+                'Required parameter "slug" was null or undefined when calling deleteCommerceRatesEntriesBySlug().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/rates/entries/{slug}`;
+        urlPath = urlPath.replace(`{${"slug"}}`, encodeURIComponent(String(requestParameters['slug'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Deletes the row. ARCHIVING is usually what is wanted instead — a deleted rate cannot price a historical charge, so a past invoice that has to re-resolve its rate finds nothing to read. Reach for status=archived unless the rate never priced anything. SuperAdmin only.
+     * Remove a rate outright
+     */
+    async deleteCommerceRatesEntriesBySlug(requestParameters: CommerceApiDeleteCommerceRatesEntriesBySlugRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteCommerceRatesEntriesBySlugRaw(requestParameters, initOverrides);
     }
 
     /**
@@ -772,6 +1066,106 @@ export class CommerceApi extends runtime.BaseAPI {
      */
     async deleteCommerceStocklocationByStocklocationid(requestParameters: CommerceApiDeleteCommerceStocklocationByStocklocationidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.deleteCommerceStocklocationByStocklocationidRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Removes the addressed store and answers 204 with no body. Before the live row goes, the entity is written once more under a tombstone kind, so the deletion leaves a recoverable copy rather than destroying the record outright; the store\'s listing overrides live inside that row and go with it. The id is resolved inside the caller org\'s own namespace, so an unknown or foreign id is 404. Requires an admin or store-write token.
+     * Delete a storefront, keeping a recoverable copy
+     */
+    async deleteCommerceStoreByStoreidRaw(requestParameters: CommerceApiDeleteCommerceStoreByStoreidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['storeid'] == null) {
+            throw new runtime.RequiredError(
+                'storeid',
+                'Required parameter "storeid" was null or undefined when calling deleteCommerceStoreByStoreid().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/store/{storeid}`;
+        urlPath = urlPath.replace(`{${"storeid"}}`, encodeURIComponent(String(requestParameters['storeid'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Removes the addressed store and answers 204 with no body. Before the live row goes, the entity is written once more under a tombstone kind, so the deletion leaves a recoverable copy rather than destroying the record outright; the store\'s listing overrides live inside that row and go with it. The id is resolved inside the caller org\'s own namespace, so an unknown or foreign id is 404. Requires an admin or store-write token.
+     * Delete a storefront, keeping a recoverable copy
+     */
+    async deleteCommerceStoreByStoreid(requestParameters: CommerceApiDeleteCommerceStoreByStoreidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteCommerceStoreByStoreidRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Drops the key from the store\'s listing map and re-saves the store, answering 204 with no body. It UN-OVERRIDES rather than deletes: the product, variant or bundle itself is untouched and simply reverts to its catalog values on this storefront. A key that is not present is 404, and so is a store id outside the caller org\'s namespace. Admin-gated.
+     * Remove a listing override
+     */
+    async deleteCommerceStoreByStoreidListingByKeyRaw(requestParameters: CommerceApiDeleteCommerceStoreByStoreidListingByKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['storeid'] == null) {
+            throw new runtime.RequiredError(
+                'storeid',
+                'Required parameter "storeid" was null or undefined when calling deleteCommerceStoreByStoreidListingByKey().'
+            );
+        }
+
+        if (requestParameters['key'] == null) {
+            throw new runtime.RequiredError(
+                'key',
+                'Required parameter "key" was null or undefined when calling deleteCommerceStoreByStoreidListingByKey().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/store/{storeid}/listing/{key}`;
+        urlPath = urlPath.replace(`{${"storeid"}}`, encodeURIComponent(String(requestParameters['storeid'])));
+        urlPath = urlPath.replace(`{${"key"}}`, encodeURIComponent(String(requestParameters['key'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Drops the key from the store\'s listing map and re-saves the store, answering 204 with no body. It UN-OVERRIDES rather than deletes: the product, variant or bundle itself is untouched and simply reverts to its catalog values on this storefront. A key that is not present is 404, and so is a store id outside the caller org\'s namespace. Admin-gated.
+     * Remove a listing override
+     */
+    async deleteCommerceStoreByStoreidListingByKey(requestParameters: CommerceApiDeleteCommerceStoreByStoreidListingByKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteCommerceStoreByStoreidListingByKeyRaw(requestParameters, initOverrides);
     }
 
     /**
@@ -1143,6 +1537,100 @@ export class CommerceApi extends runtime.BaseAPI {
     }
 
     /**
+     * Discards a cart the shopper abandoned, and answers it in its final state.  A discarded cart is CLOSED, not deleted: the row stays, so abandoned-basket reporting and any follow-up that keys on it still have something to read. It stops being a cart anything will check out, which is the point — it is how a storefront says \"this basket is over\" without destroying the evidence that it existed.  Discarding is idempotent: a cart already discarded answers its stored state rather than failing, so a retry is safe.  The cart is resolved inside the caller\'s own org namespace, so another tenant\'s id answers 404.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Discard a cart the shopper abandoned
+     */
+    async discardCartRaw(requestParameters: CommerceApiDiscardCartRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Cart>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling discardCart().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/cart/{id}/discard`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => CartFromJSON(jsonValue));
+    }
+
+    /**
+     * Discards a cart the shopper abandoned, and answers it in its final state.  A discarded cart is CLOSED, not deleted: the row stays, so abandoned-basket reporting and any follow-up that keys on it still have something to read. It stops being a cart anything will check out, which is the point — it is how a storefront says \"this basket is over\" without destroying the evidence that it existed.  Discarding is idempotent: a cart already discarded answers its stored state rather than failing, so a retry is safe.  The cart is resolved inside the caller\'s own org namespace, so another tenant\'s id answers 404.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Discard a cart the shopper abandoned
+     */
+    async discardCart(requestParameters: CommerceApiDiscardCartRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cart> {
+        const response = await this.discardCartRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Reads one cart: its lines, its status and what it comes to.  This is what a storefront calls to render the basket, and what a support agent calls to see what a shopper is looking at. The totals are the cart\'s STORED tally — shipping and tax stay zero until checkout resolves a shipping option and a tax region, so a cart total before checkout is the merchandise total and is meant to be.  The org scopes the read by construction: the store is namespaced to it, so a cart id belonging to another tenant is simply not found rather than found and then filtered, and answers 404 rather than 403 so the id space cannot be probed.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Read one cart with its lines and totals
+     */
+    async getCartRaw(requestParameters: CommerceApiGetCartRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Cart>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getCart().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/cart/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => CartFromJSON(jsonValue));
+    }
+
+    /**
+     * Reads one cart: its lines, its status and what it comes to.  This is what a storefront calls to render the basket, and what a support agent calls to see what a shopper is looking at. The totals are the cart\'s STORED tally — shipping and tax stay zero until checkout resolves a shipping option and a tax region, so a cart total before checkout is the merchandise total and is meant to be.  The org scopes the read by construction: the store is namespaced to it, so a cart id belonging to another tenant is simply not found rather than found and then filtered, and answers 404 rather than 403 so the id space cannot be probed.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Read one cart with its lines and totals
+     */
+    async getCart(requestParameters: CommerceApiGetCartRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cart> {
+        const response = await this.getCartRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Returns the brand-scoped catalog carrying the administrative economics the public projection withholds — upstream cost and margin percentage — for the margin surface the platform console administrates. The brand comes from the query and defaults to hanzo. PLATFORM admin only, enforced by the handler on top of the route\'s IAM gate: an ORG-level admin is refused 403 precisely so upstream cost and margin never reach a tenant.
      * The catalog projection with cost and margin included
      */
@@ -1216,6 +1704,44 @@ export class CommerceApi extends runtime.BaseAPI {
      */
     async getCommerceCatalog(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.getCommerceCatalogRaw(initOverrides);
+    }
+
+    /**
+     * Returns every catalog row as stored — the admin view, which unlike the public projection includes entries that are not published. It is cross-tenant platform data, so the gate is a PLATFORM admin: an org-level admin is refused 403 no matter how privileged they are inside their own org, enforced by the handler itself and not only by the route\'s token middleware.
+     * The raw catalog entries, including the unpublished ones
+     */
+    async getCommerceCatalogEntriesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/catalog/entries`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Returns every catalog row as stored — the admin view, which unlike the public projection includes entries that are not published. It is cross-tenant platform data, so the gate is a PLATFORM admin: an org-level admin is refused 403 no matter how privileged they are inside their own org, enforced by the handler itself and not only by the route\'s token middleware.
+     * The raw catalog entries, including the unpublished ones
+     */
+    async getCommerceCatalogEntries(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getCommerceCatalogEntriesRaw(initOverrides);
     }
 
     /**
@@ -1338,6 +1864,44 @@ export class CommerceApi extends runtime.BaseAPI {
      */
     async getCommerceCurrencies(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.getCommerceCurrenciesRaw(initOverrides);
+    }
+
+    /**
+     * Reports whether the deposit watcher is running, its poll interval, and one row per armed asset: chain, token, contract, pooled address and the last block that asset\'s cursor reached. That last block is the only way to see a watcher that is up but no longer advancing, which is what a stalled deposit rail looks like from outside. SuperAdmin only — the reserved admin org\'s owner claim; an authenticated caller without it is refused 403 and an anonymous one 401. It is READ-ONLY by design: arming an asset stays a CRYPTO_DEPOSIT_* deployment act and is deliberately not a button here, so there is nothing on this surface that can start crediting a customer\'s balance. The asset\'s RPC endpoint is reduced to scheme://host before it is returned, because a managed node URL carries its API key in the path or query and echoing it verbatim would publish that credential to every reader of this status.
+     * Read the crypto deposit watcher\'s runtime state, asset by asset
+     */
+    async getCommerceDepositsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/deposits`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Reports whether the deposit watcher is running, its poll interval, and one row per armed asset: chain, token, contract, pooled address and the last block that asset\'s cursor reached. That last block is the only way to see a watcher that is up but no longer advancing, which is what a stalled deposit rail looks like from outside. SuperAdmin only — the reserved admin org\'s owner claim; an authenticated caller without it is refused 403 and an anonymous one 401. It is READ-ONLY by design: arming an asset stays a CRYPTO_DEPOSIT_* deployment act and is deliberately not a button here, so there is nothing on this surface that can start crediting a customer\'s balance. The asset\'s RPC endpoint is reduced to scheme://host before it is returned, because a managed node URL carries its API key in the path or query and echoing it verbatim would publish that credential to every reader of this status.
+     * Read the crypto deposit watcher\'s runtime state, asset by asset
+     */
+    async getCommerceDeposits(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getCommerceDepositsRaw(initOverrides);
     }
 
     /**
@@ -1506,6 +2070,45 @@ export class CommerceApi extends runtime.BaseAPI {
      */
     async getCommerceDiscountByDiscountid(requestParameters: CommerceApiGetCommerceDiscountByDiscountidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.getCommerceDiscountByDiscountidRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Answers ok whenever the commerce subsystem is mounted. It is registered before the module embed boots, so it keeps answering even when the embed failed and every business route serves the fail-closed 503 — which is the point: it reports that the process is reachable, never that the money plane is healthy. Unauthenticated: a probe that needs a credential is a probe that reports the credential.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Answers ok whenever the commerce subsystem is mounted.
+     */
+    async getCommerceHealthRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Liveness>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/health`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => LivenessFromJSON(jsonValue));
+    }
+
+    /**
+     * Answers ok whenever the commerce subsystem is mounted. It is registered before the module embed boots, so it keeps answering even when the embed failed and every business route serves the fail-closed 503 — which is the point: it reports that the process is reachable, never that the money plane is healthy. Unauthenticated: a probe that needs a credential is a probe that reports the credential.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Answers ok whenever the commerce subsystem is mounted.
+     */
+    async getCommerceHealth(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Liveness> {
+        const response = await this.getCommerceHealthRaw(initOverrides);
+        return await response.value();
     }
 
     /**
@@ -1715,6 +2318,44 @@ export class CommerceApi extends runtime.BaseAPI {
     }
 
     /**
+     * Returns every plan row as stored — the administrative view behind the public plan catalog. The plan authority is cross-tenant pricing data, so the gate is a PLATFORM admin enforced by the handler itself: an org-level admin is refused 403 no matter what they may do inside their own org.
+     * The raw plan authority rows
+     */
+    async getCommercePlansEntriesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/plans/entries`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Returns every plan row as stored — the administrative view behind the public plan catalog. The plan authority is cross-tenant pricing data, so the gate is a PLATFORM admin enforced by the handler itself: an org-level admin is refused 403 no matter what they may do inside their own org.
+     * The raw plan authority rows
+     */
+    async getCommercePlansEntries(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getCommercePlansEntriesRaw(initOverrides);
+    }
+
+    /**
      * A product is a sellable catalog item: slug, SKU and UPC, name and copy, media, availability and preorder flags, a reservation block, and its money — currency, price, MSRP, list price and inventory cost in minor units, inventory count, taxability, and the subscription interval when it is subscribeable. Its variants and options are carried as a denormalized JSON snapshot inside the product, separate from the standalone variant rows, and nothing keeps the two in step for you. Answers a pagination envelope — the page and display echoed back, the rows under models, a total count and a facets array — read from the caller org\'s own namespaced store, so one tenant can never list another\'s. Sorting defaults to the slug and is overridable with sort. display is the page size and page applies only alongside it; either one that is not a positive integer is refused with 500 rather than silently ignored, and the limit query overrides the reported COUNT only, never the rows returned. No search backend is wired, so the datastore is the one and only list path and facets is always empty. A request resolving no org namespace is served an EMPTY page rather than an unscoped scan: the namespace IS the tenant filter, so without one there is nothing safe to return. Any valid access token reaches it. The org must also be entitled to the commerce admin: the paywall answers 402 subscription_required unless the org holds an active or trialing pro subscription, a live trial credit or a redeemed invite, and 503 when that entitlement cannot be read rather than admitting on an unknown. The internal service token and a platform superadmin pass straight through. The token must also carry Admin or the Product list scope.
      * List your org\'s products, as a page
      */
@@ -1796,6 +2437,44 @@ export class CommerceApi extends runtime.BaseAPI {
      */
     async getCommerceProductByProductid(requestParameters: CommerceApiGetCommerceProductByProductidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.getCommerceProductByProductidRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Returns the rate authority\'s rows — the prices every metered charge resolves against. Narrow with ?product= to show one surface at a time rather than every rate at once. SuperAdmin only: a rate is cross-tenant money, so the handler asks for the reserved admin org\'s owner claim itself rather than trusting the bundle\'s token gate.
+     * List what one unit of each metered thing costs
+     */
+    async getCommerceRatesEntriesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/rates/entries`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Returns the rate authority\'s rows — the prices every metered charge resolves against. Narrow with ?product= to show one surface at a time rather than every rate at once. SuperAdmin only: a rate is cross-tenant money, so the handler asks for the reserved admin org\'s owner claim itself rather than trusting the bundle\'s token gate.
+     * List what one unit of each metered thing costs
+     */
+    async getCommerceRatesEntries(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getCommerceRatesEntriesRaw(initOverrides);
     }
 
     /**
@@ -2048,6 +2727,428 @@ export class CommerceApi extends runtime.BaseAPI {
      */
     async getCommerceStocklocationByStocklocationid(requestParameters: CommerceApiGetCommerceStocklocationByStocklocationidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.getCommerceStocklocationByStocklocationidRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Answers a pagination envelope — page, display, the rows, and a total count — read from the caller org\'s OWN namespaced database, so one tenant can never list another\'s stores. Sorting defaults to the store slug and is overridable with sort; display is the page size and page applies only alongside it, and either one that is not a positive integer is refused rather than silently ignored. The limit query overrides the reported COUNT only and never the rows returned. A request that resolves no org namespace is served an empty page, never an unscoped scan. Readable with an admin token, a store-scoped token, or the anonymous published storefront key.
+     * List your org\'s storefronts as a page
+     */
+    async getCommerceStoreRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/store/`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Answers a pagination envelope — page, display, the rows, and a total count — read from the caller org\'s OWN namespaced database, so one tenant can never list another\'s stores. Sorting defaults to the store slug and is overridable with sort; display is the page size and page applies only alongside it, and either one that is not a positive integer is refused rather than silently ignored. The limit query overrides the reported COUNT only and never the rows returned. A request that resolves no org namespace is served an empty page, never an unscoped scan. Readable with an admin token, a store-scoped token, or the anonymous published storefront key.
+     * List your org\'s storefronts as a page
+     */
+    async getCommerceStore(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getCommerceStoreRaw(initOverrides);
+    }
+
+    /**
+     * Answers allowed, the store id, and a status of trial, active, payment_required, store_required or unavailable — the entitlement check a merchant surface gates on. The rule that surprises people is that entitlement is PER STORE, not per org: the store needs its own current subscription on the entry plan, either trialing with a trial end still ahead or active with a period end still ahead, so an org-wide balance or a sibling store\'s plan unlocks nothing here. The store comes from the X-Store-Id header and otherwise falls back to the org\'s first store; neither resolving is store_required with allowed false, and a backing-store failure is 503 with status unavailable — a retry signal, not a denial.
+     * Whether a store is entitled to trade, and why
+     */
+    async getCommerceStoreAccessRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/store/access`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Answers allowed, the store id, and a status of trial, active, payment_required, store_required or unavailable — the entitlement check a merchant surface gates on. The rule that surprises people is that entitlement is PER STORE, not per org: the store needs its own current subscription on the entry plan, either trialing with a trial end still ahead or active with a period end still ahead, so an org-wide balance or a sibling store\'s plan unlocks nothing here. The store comes from the X-Store-Id header and otherwise falls back to the org\'s first store; neither resolving is store_required with allowed false, and a backing-store failure is 503 with status unavailable — a retry signal, not a denial.
+     * Whether a store is entitled to trade, and why
+     */
+    async getCommerceStoreAccess(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getCommerceStoreAccessRaw(initOverrides);
+    }
+
+    /**
+     * Reads the addressed store from the caller org\'s own namespaced database, so an id belonging to another tenant is simply absent there and answers 404 rather than leaking its existence. The body is the stored entity including its embedded listing override map. Readable with an admin or store-read token and also with the anonymous published storefront key, which is what lets a logged-out storefront resolve the store it is rendering.
+     * Fetch one storefront
+     */
+    async getCommerceStoreByStoreidRaw(requestParameters: CommerceApiGetCommerceStoreByStoreidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['storeid'] == null) {
+            throw new runtime.RequiredError(
+                'storeid',
+                'Required parameter "storeid" was null or undefined when calling getCommerceStoreByStoreid().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/store/{storeid}`;
+        urlPath = urlPath.replace(`{${"storeid"}}`, encodeURIComponent(String(requestParameters['storeid'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Reads the addressed store from the caller org\'s own namespaced database, so an id belonging to another tenant is simply absent there and answers 404 rather than leaking its existence. The body is the stored entity including its embedded listing override map. Readable with an admin or store-read token and also with the anonymous published storefront key, which is what lets a logged-out storefront resolve the store it is rendering.
+     * Fetch one storefront
+     */
+    async getCommerceStoreByStoreid(requestParameters: CommerceApiGetCommerceStoreByStoreidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getCommerceStoreByStoreidRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Returns the stored bundle with the store\'s listing for it laid over the top — every non-empty listing field wins, and the currency is forced to the store\'s own — so the caller reads what this storefront actually sells rather than the catalog-wide record. The overlay is keyed by the item\'s ID: a listing filed only under a slug or SKU does not reach it, unlike the listing reads, which do fall back to those. An unknown store or key is 404. Readable with an admin token or the anonymous published storefront key.
+     * Fetch a bundle as this storefront sells it
+     */
+    async getCommerceStoreByStoreidBundleByKeyRaw(requestParameters: CommerceApiGetCommerceStoreByStoreidBundleByKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['storeid'] == null) {
+            throw new runtime.RequiredError(
+                'storeid',
+                'Required parameter "storeid" was null or undefined when calling getCommerceStoreByStoreidBundleByKey().'
+            );
+        }
+
+        if (requestParameters['key'] == null) {
+            throw new runtime.RequiredError(
+                'key',
+                'Required parameter "key" was null or undefined when calling getCommerceStoreByStoreidBundleByKey().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/store/{storeid}/bundle/{key}`;
+        urlPath = urlPath.replace(`{${"storeid"}}`, encodeURIComponent(String(requestParameters['storeid'])));
+        urlPath = urlPath.replace(`{${"key"}}`, encodeURIComponent(String(requestParameters['key'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Returns the stored bundle with the store\'s listing for it laid over the top — every non-empty listing field wins, and the currency is forced to the store\'s own — so the caller reads what this storefront actually sells rather than the catalog-wide record. The overlay is keyed by the item\'s ID: a listing filed only under a slug or SKU does not reach it, unlike the listing reads, which do fall back to those. An unknown store or key is 404. Readable with an admin token or the anonymous published storefront key.
+     * Fetch a bundle as this storefront sells it
+     */
+    async getCommerceStoreByStoreidBundleByKey(requestParameters: CommerceApiGetCommerceStoreByStoreidBundleByKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getCommerceStoreByStoreidBundleByKeyRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Returns every override this store applies to catalog items — name, price, list price, media, availability and the hidden flag — keyed by product or variant id, in one read. A listing is an OVERRIDE, not a product: the catalog item exists independently and this map only says how this storefront presents it. Read from the caller org\'s own namespaced database, so a store id belonging to another tenant is 404. Readable with an admin token or the anonymous published storefront key.
+     * The storefront\'s whole listing override map
+     */
+    async getCommerceStoreByStoreidListingRaw(requestParameters: CommerceApiGetCommerceStoreByStoreidListingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['storeid'] == null) {
+            throw new runtime.RequiredError(
+                'storeid',
+                'Required parameter "storeid" was null or undefined when calling getCommerceStoreByStoreidListing().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/store/{storeid}/listing`;
+        urlPath = urlPath.replace(`{${"storeid"}}`, encodeURIComponent(String(requestParameters['storeid'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Returns every override this store applies to catalog items — name, price, list price, media, availability and the hidden flag — keyed by product or variant id, in one read. A listing is an OVERRIDE, not a product: the catalog item exists independently and this map only says how this storefront presents it. Read from the caller org\'s own namespaced database, so a store id belonging to another tenant is 404. Readable with an admin token or the anonymous published storefront key.
+     * The storefront\'s whole listing override map
+     */
+    async getCommerceStoreByStoreidListing(requestParameters: CommerceApiGetCommerceStoreByStoreidListingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getCommerceStoreByStoreidListingRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Looks the key up in the store\'s listing map first and, failing that, matches it against each listing\'s slug and then its SKU — so a storefront holding only a product\'s URL slug can still resolve the override. That fallback is unique to the listing reads; the item overlay routes match by id alone. A key matching none of the three is 404, as is a store id outside the caller org\'s namespace. Readable with an admin token or the anonymous published storefront key.
+     * Fetch one listing override, by item id or by its slug or SKU
+     */
+    async getCommerceStoreByStoreidListingByKeyRaw(requestParameters: CommerceApiGetCommerceStoreByStoreidListingByKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['storeid'] == null) {
+            throw new runtime.RequiredError(
+                'storeid',
+                'Required parameter "storeid" was null or undefined when calling getCommerceStoreByStoreidListingByKey().'
+            );
+        }
+
+        if (requestParameters['key'] == null) {
+            throw new runtime.RequiredError(
+                'key',
+                'Required parameter "key" was null or undefined when calling getCommerceStoreByStoreidListingByKey().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/store/{storeid}/listing/{key}`;
+        urlPath = urlPath.replace(`{${"storeid"}}`, encodeURIComponent(String(requestParameters['storeid'])));
+        urlPath = urlPath.replace(`{${"key"}}`, encodeURIComponent(String(requestParameters['key'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Looks the key up in the store\'s listing map first and, failing that, matches it against each listing\'s slug and then its SKU — so a storefront holding only a product\'s URL slug can still resolve the override. That fallback is unique to the listing reads; the item overlay routes match by id alone. A key matching none of the three is 404, as is a store id outside the caller org\'s namespace. Readable with an admin token or the anonymous published storefront key.
+     * Fetch one listing override, by item id or by its slug or SKU
+     */
+    async getCommerceStoreByStoreidListingByKey(requestParameters: CommerceApiGetCommerceStoreByStoreidListingByKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getCommerceStoreByStoreidListingByKeyRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Returns the stored product with the store\'s listing for it laid over the top — non-empty listing fields replace the catalog values and the currency is forced to the store\'s own — which is what lets two storefronts sell the same catalog product at their own price, name and media. The overlay is keyed by the product\'s ID, so a listing filed only under a slug or SKU does not apply here. An unknown store or key is 404. Readable with an admin token or the anonymous published storefront key.
+     * Fetch a product as this storefront sells it
+     */
+    async getCommerceStoreByStoreidProductByKeyRaw(requestParameters: CommerceApiGetCommerceStoreByStoreidProductByKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['storeid'] == null) {
+            throw new runtime.RequiredError(
+                'storeid',
+                'Required parameter "storeid" was null or undefined when calling getCommerceStoreByStoreidProductByKey().'
+            );
+        }
+
+        if (requestParameters['key'] == null) {
+            throw new runtime.RequiredError(
+                'key',
+                'Required parameter "key" was null or undefined when calling getCommerceStoreByStoreidProductByKey().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/store/{storeid}/product/{key}`;
+        urlPath = urlPath.replace(`{${"storeid"}}`, encodeURIComponent(String(requestParameters['storeid'])));
+        urlPath = urlPath.replace(`{${"key"}}`, encodeURIComponent(String(requestParameters['key'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Returns the stored product with the store\'s listing for it laid over the top — non-empty listing fields replace the catalog values and the currency is forced to the store\'s own — which is what lets two storefronts sell the same catalog product at their own price, name and media. The overlay is keyed by the product\'s ID, so a listing filed only under a slug or SKU does not apply here. An unknown store or key is 404. Readable with an admin token or the anonymous published storefront key.
+     * Fetch a product as this storefront sells it
+     */
+    async getCommerceStoreByStoreidProductByKey(requestParameters: CommerceApiGetCommerceStoreByStoreidProductByKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getCommerceStoreByStoreidProductByKeyRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Returns the stored variant with the store\'s listing for it overlaid — non-empty listing fields replace the catalog values and the currency is forced to the store\'s own — which is what makes per-storefront pricing of a shared variant possible. The overlay is keyed by the variant\'s ID, never by its slug or SKU. An unknown store or key is 404. Readable with an admin token or the anonymous published storefront key.
+     * Fetch a variant as this storefront sells it
+     */
+    async getCommerceStoreByStoreidVariantByKeyRaw(requestParameters: CommerceApiGetCommerceStoreByStoreidVariantByKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['storeid'] == null) {
+            throw new runtime.RequiredError(
+                'storeid',
+                'Required parameter "storeid" was null or undefined when calling getCommerceStoreByStoreidVariantByKey().'
+            );
+        }
+
+        if (requestParameters['key'] == null) {
+            throw new runtime.RequiredError(
+                'key',
+                'Required parameter "key" was null or undefined when calling getCommerceStoreByStoreidVariantByKey().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/store/{storeid}/variant/{key}`;
+        urlPath = urlPath.replace(`{${"storeid"}}`, encodeURIComponent(String(requestParameters['storeid'])));
+        urlPath = urlPath.replace(`{${"key"}}`, encodeURIComponent(String(requestParameters['key'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Returns the stored variant with the store\'s listing for it overlaid — non-empty listing fields replace the catalog values and the currency is forced to the store\'s own — which is what makes per-storefront pricing of a shared variant possible. The overlay is keyed by the variant\'s ID, never by its slug or SKU. An unknown store or key is 404. Readable with an admin token or the anonymous published storefront key.
+     * Fetch a variant as this storefront sells it
+     */
+    async getCommerceStoreByStoreidVariantByKey(requestParameters: CommerceApiGetCommerceStoreByStoreidVariantByKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getCommerceStoreByStoreidVariantByKeyRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Returns the caller org\'s store resolved FROM THE AUTHENTICATED ORG rather than from a path id — which is how an admin dashboard or a storefront edge learns the store id it should then read and write against. An X-Store-Id header selects a specific store, resolved only inside the caller\'s own namespace, so a foreign id cannot cross the tenant boundary and answers 404 instead. With no header the org\'s first store is returned, and an org that has none yet has its canonical default provisioned lazily and idempotently, carrying no payment credentials. Only when there is no org in context, or provisioning fails, does it fall back to a placeholder store literally named default, which a storefront edge should treat as unconfigured.
+     * Resolve your org\'s active storefront without naming an id
+     */
+    async getCommerceStoreCurrentRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/store/current`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Returns the caller org\'s store resolved FROM THE AUTHENTICATED ORG rather than from a path id — which is how an admin dashboard or a storefront edge learns the store id it should then read and write against. An X-Store-Id header selects a specific store, resolved only inside the caller\'s own namespace, so a foreign id cannot cross the tenant boundary and answers 404 instead. With no header the org\'s first store is returned, and an org that has none yet has its canonical default provisioned lazily and idempotently, carrying no payment credentials. Only when there is no org in context, or provisioning fails, does it fall back to a placeholder store literally named default, which a storefront edge should treat as unconfigured.
+     * Resolve your org\'s active storefront without naming an id
+     */
+    async getCommerceStoreCurrent(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getCommerceStoreCurrentRaw(initOverrides);
     }
 
     /**
@@ -2723,6 +3824,102 @@ export class CommerceApi extends runtime.BaseAPI {
     }
 
     /**
+     * Reads one settled payment out of the caller\'s org ledger.  The org scopes the read by construction — the ledger is namespaced to it — so an id belonging to another tenant is simply not found rather than found and then filtered. A ledger row that is not a payment is likewise not found, so this cannot be used to walk the org\'s usage debits.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Read one settled payment by its id
+     */
+    async getPaymentRaw(requestParameters: CommerceApiGetPaymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PaymentRecord>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getPayment().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/payments/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => PaymentRecordFromJSON(jsonValue));
+    }
+
+    /**
+     * Reads one settled payment out of the caller\'s org ledger.  The org scopes the read by construction — the ledger is namespaced to it — so an id belonging to another tenant is simply not found rather than found and then filtered. A ledger row that is not a payment is likewise not found, so this cannot be used to walk the org\'s usage debits.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Read one settled payment by its id
+     */
+    async getPayment(requestParameters: CommerceApiGetPaymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PaymentRecord> {
+        const response = await this.getPaymentRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Opens an empty cart for a shopper to fill, and answers it with its new id.  This is the first step of a sale: hold the id, add items to it with setCartItem, then hand it to checkout. Every field of the request is optional — an empty body opens a perfectly good anonymous cart — and the fields exist only to pre-fill what is already known about the shopper.  The STORE defaults to the org\'s own default storefront, so a merchant selling through one storefront never has to name it. The CURRENCY defaults to usd; note that checkout overrides it with the store\'s own currency when the sale is authorized, so a currency set here is a hint rather than a commitment.  The cart is created in the CALLER\'S OWN org namespace, taken from the validated principal and never from the body, so a cart can never be opened on another tenant\'s books.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Open a cart for a shopper to fill
+     */
+    async openCartRaw(requestParameters: CommerceApiOpenCartRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Cart>> {
+        if (requestParameters['cartOpen'] == null) {
+            throw new runtime.RequiredError(
+                'cartOpen',
+                'Required parameter "cartOpen" was null or undefined when calling openCart().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/cart`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: CartOpenToJSON(requestParameters['cartOpen']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => CartFromJSON(jsonValue));
+    }
+
+    /**
+     * Opens an empty cart for a shopper to fill, and answers it with its new id.  This is the first step of a sale: hold the id, add items to it with setCartItem, then hand it to checkout. Every field of the request is optional — an empty body opens a perfectly good anonymous cart — and the fields exist only to pre-fill what is already known about the shopper.  The STORE defaults to the org\'s own default storefront, so a merchant selling through one storefront never has to name it. The CURRENCY defaults to usd; note that checkout overrides it with the store\'s own currency when the sale is authorized, so a currency set here is a hint rather than a commitment.  The cart is created in the CALLER\'S OWN org namespace, taken from the validated principal and never from the body, so a cart can never be opened on another tenant\'s books.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Open a cart for a shopper to fill
+     */
+    async openCart(requestParameters: CommerceApiOpenCartRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cart> {
+        const response = await this.openCartRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * A collection is a merchandising group a storefront renders — a slug and name, copy and media, flat lists of the product and variant ids it holds, published, preorder and out-of-stock flags, and an availability window. Membership lives on the collection as those id lists rather than as a join, so putting a product into a collection is a write here and not on the product. Loads the stored row and decodes the body OVER it, so only the fields the body names change and everything else keeps its stored value — the difference from the full replace, which clears what it is not told. Answers the merged row. An id absent from the caller org\'s namespace is 404 and a body that fails to decode is 400. Any valid access token reaches it. The org must also be entitled to the commerce admin: the paywall answers 402 subscription_required unless the org holds an active or trialing pro subscription, a live trial credit or a redeemed invite, and 503 when that entitlement cannot be read rather than admitting on an unknown. The internal service token and a platform superadmin pass straight through. The token must also carry Admin, or ReadCollection and WriteCollection together.
      * Change part of a collection
      */
@@ -3137,6 +4334,106 @@ export class CommerceApi extends runtime.BaseAPI {
     }
 
     /**
+     * Loads the stored store and decodes the body over it, so only the fields the body names change and everything else keeps its stored value — the difference from the full replace, which clears what it is not told. Answers the merged entity. The id is resolved inside the caller org\'s own namespace, so an unknown or foreign id is 404. Requires an admin token, or one holding both store read and store write.
+     * Change part of a storefront
+     */
+    async patchCommerceStoreByStoreidRaw(requestParameters: CommerceApiPatchCommerceStoreByStoreidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['storeid'] == null) {
+            throw new runtime.RequiredError(
+                'storeid',
+                'Required parameter "storeid" was null or undefined when calling patchCommerceStoreByStoreid().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/store/{storeid}`;
+        urlPath = urlPath.replace(`{${"storeid"}}`, encodeURIComponent(String(requestParameters['storeid'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Loads the stored store and decodes the body over it, so only the fields the body names change and everything else keeps its stored value — the difference from the full replace, which clears what it is not told. Answers the merged entity. The id is resolved inside the caller org\'s own namespace, so an unknown or foreign id is 404. Requires an admin token, or one holding both store read and store write.
+     * Change part of a storefront
+     */
+    async patchCommerceStoreByStoreid(requestParameters: CommerceApiPatchCommerceStoreByStoreidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.patchCommerceStoreByStoreidRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Requires the key to already be present — an absent one is 404 — and answers the store\'s listing map at 200. Read the behaviour before relying on it: the decoded body is applied to a COPY taken out of the map and is never assigned back, so the stored listing is unchanged and the map returned is exactly the map that was already there. An actual edit to an existing listing has to go through the upsert, which does write its result back into the store. A body that fails to decode is still 400. Admin-gated and namespaced to the caller\'s org.
+     * Confirm a listing override exists and re-save the store
+     */
+    async patchCommerceStoreByStoreidListingByKeyRaw(requestParameters: CommerceApiPatchCommerceStoreByStoreidListingByKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['storeid'] == null) {
+            throw new runtime.RequiredError(
+                'storeid',
+                'Required parameter "storeid" was null or undefined when calling patchCommerceStoreByStoreidListingByKey().'
+            );
+        }
+
+        if (requestParameters['key'] == null) {
+            throw new runtime.RequiredError(
+                'key',
+                'Required parameter "key" was null or undefined when calling patchCommerceStoreByStoreidListingByKey().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/store/{storeid}/listing/{key}`;
+        urlPath = urlPath.replace(`{${"storeid"}}`, encodeURIComponent(String(requestParameters['storeid'])));
+        urlPath = urlPath.replace(`{${"key"}}`, encodeURIComponent(String(requestParameters['key'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Requires the key to already be present — an absent one is 404 — and answers the store\'s listing map at 200. Read the behaviour before relying on it: the decoded body is applied to a COPY taken out of the map and is never assigned back, so the stored listing is unchanged and the map returned is exactly the map that was already there. An actual edit to an existing listing has to go through the upsert, which does write its result back into the store. A body that fails to decode is still 400. Admin-gated and namespaced to the caller\'s org.
+     * Confirm a listing override exists and re-save the store
+     */
+    async patchCommerceStoreByStoreidListingByKey(requestParameters: CommerceApiPatchCommerceStoreByStoreidListingByKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.patchCommerceStoreByStoreidListingByKeyRaw(requestParameters, initOverrides);
+    }
+
+    /**
      * A submission is one filled-in form from a site visitor — an email, an optional user id, the client details the server observed (user agent, referer, geography) and the form\'s own fields as free metadata. It carries no form id, so the link back to the form that produced it is not stored on the row. Loads the stored row and decodes the body OVER it, so only the fields the body names change and everything else keeps its stored value — the difference from the full replace, which clears what it is not told. Answers the merged row. An id absent from the caller org\'s namespace is 404 and a body that fails to decode is 400. Any valid access token reaches it. The per-kind permission table has no entry for submission, so the scaffold skips that second check with a warning and the gate above is the whole authorization story.
      * Change part of a submission
      */
@@ -3502,6 +4799,158 @@ export class CommerceApi extends runtime.BaseAPI {
      */
     async patchCommerceWebhookByWebhookid(requestParameters: CommerceApiPatchCommerceWebhookByWebhookidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.patchCommerceWebhookByWebhookidRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Creates a catalog row from the body and answers it at 201. The slug is required and is the globally-unique catalog key, so a second entry claiming a slug already in use is refused 409 rather than shadowing the first. PLATFORM admin only — this is cross-tenant pricing and packaging data, and an org-level admin is refused 403.
+     * Add a catalog entry
+     */
+    async postCommerceCatalogEntriesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/catalog/entries`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Creates a catalog row from the body and answers it at 201. The slug is required and is the globally-unique catalog key, so a second entry claiming a slug already in use is refused 409 rather than shadowing the first. PLATFORM admin only — this is cross-tenant pricing and packaging data, and an org-level admin is refused 403.
+     * Add a catalog entry
+     */
+    async postCommerceCatalogEntries(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postCommerceCatalogEntriesRaw(initOverrides);
+    }
+
+    /**
+     * Takes a batch of model rows and upserts each one\'s upstream COST and machine-observable facts, answering what was created and changed. It deliberately touches nothing a human owns — not the retail price, not the markup, not the entitlement tier — so a sync can never overwrite an administrator\'s pricing decision. The gate is a PLATFORM principal rather than a platform ADMIN, because the caller is normally a scheduled job holding the internal service token, which carries platform scope but no admin claim.
+     * Land a syncer\'s view of the model catalog: upstream costs and machine facts
+     */
+    async postCommerceCatalogModelsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/catalog/models`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Takes a batch of model rows and upserts each one\'s upstream COST and machine-observable facts, answering what was created and changed. It deliberately touches nothing a human owns — not the retail price, not the markup, not the entitlement tier — so a sync can never overwrite an administrator\'s pricing decision. The gate is a PLATFORM principal rather than a platform ADMIN, because the caller is normally a scheduled job holding the internal service token, which carries platform scope but no admin claim.
+     * Land a syncer\'s view of the model catalog: upstream costs and machine facts
+     */
+    async postCommerceCatalogModels(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postCommerceCatalogModelsRaw(initOverrides);
+    }
+
+    /**
+     * Pulls the upstream model list and lands it through the same upsert the push door uses, so the rule that a sync owns cost and an administrator owns price holds no matter which door a row came through. It takes no body — the upstream is READ rather than told. If that upstream cannot be read the call answers 502 and writes NOTHING: a sync that cannot see its source must never conclude the source is empty, because that conclusion would withdraw every model on sale. The gate is a PLATFORM principal so the scheduled job\'s service token qualifies.
+     * Refresh the model catalog by reading the upstream provider
+     */
+    async postCommerceCatalogModelsRefreshRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/catalog/models/refresh`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Pulls the upstream model list and lands it through the same upsert the push door uses, so the rule that a sync owns cost and an administrator owns price holds no matter which door a row came through. It takes no body — the upstream is READ rather than told. If that upstream cannot be read the call answers 502 and writes NOTHING: a sync that cannot see its source must never conclude the source is empty, because that conclusion would withdraw every model on sale. The gate is a PLATFORM principal so the scheduled job\'s service token qualifies.
+     * Refresh the model catalog by reading the upstream provider
+     */
+    async postCommerceCatalogModelsRefresh(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postCommerceCatalogModelsRefreshRaw(initOverrides);
+    }
+
+    /**
+     * Upserts the shipped catalog seed and answers how many entries it created. It is idempotent and non-destructive — an entry an administrator has since edited is left alone — so it is safe to run against a live catalog to fill in what is missing. PLATFORM admin only; an org-level admin is refused 403.
+     * Seed the embedded catalog, without disturbing edits already made
+     */
+    async postCommerceCatalogSeedRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/catalog/seed`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Upserts the shipped catalog seed and answers how many entries it created. It is idempotent and non-destructive — an entry an administrator has since edited is left alone — so it is safe to run against a live catalog to fill in what is missing. PLATFORM admin only; an org-level admin is refused 403.
+     * Seed the embedded catalog, without disturbing edits already made
+     */
+    async postCommerceCatalogSeed(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postCommerceCatalogSeedRaw(initOverrides);
     }
 
     /**
@@ -3925,6 +5374,82 @@ export class CommerceApi extends runtime.BaseAPI {
     }
 
     /**
+     * Creates a plan from the body and answers it at 201. The slug is required and globally unique — a duplicate is 409 — and the row is marked authoritative on creation, so the corrective seed will leave it alone. Price, annual price and the contact-sales flag are stored exactly as sent, never coerced, so the difference between a free plan and a quote-only plan survives. PLATFORM admin only.
+     * Add a subscription plan
+     */
+    async postCommercePlansEntriesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/plans/entries`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Creates a plan from the body and answers it at 201. The slug is required and globally unique — a duplicate is 409 — and the row is marked authoritative on creation, so the corrective seed will leave it alone. Price, annual price and the contact-sales flag are stored exactly as sent, never coerced, so the difference between a free plan and a quote-only plan survives. PLATFORM admin only.
+     * Add a subscription plan
+     */
+    async postCommercePlansEntries(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postCommercePlansEntriesRaw(initOverrides);
+    }
+
+    /**
+     * Upserts the shipped plan rows and answers how many were created and how many corrected. It is idempotent and non-destructive — a row an administrator authored or edited is left as it stands — so it is safe against a live authority and fills only what is missing or has drifted. PLATFORM admin only, and a deployment with no seed source wired answers 500 rather than quietly seeding nothing.
+     * Seed the embedded plan catalog, without overwriting administrative edits
+     */
+    async postCommercePlansSeedRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/plans/seed`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Upserts the shipped plan rows and answers how many were created and how many corrected. It is idempotent and non-destructive — a row an administrator authored or edited is left as it stands — so it is safe against a live authority and fills only what is missing or has drifted. PLATFORM admin only, and a deployment with no seed source wired answers 500 rather than quietly seeding nothing.
+     * Seed the embedded plan catalog, without overwriting administrative edits
+     */
+    async postCommercePlansSeed(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postCommercePlansSeedRaw(initOverrides);
+    }
+
+    /**
      * A product is a sellable catalog item: slug, SKU and UPC, name and copy, media, availability and preorder flags, a reservation block, and its money — currency, price, MSRP, list price and inventory cost in minor units, inventory count, taxability, and the subscription interval when it is subscribeable. Its variants and options are carried as a denormalized JSON snapshot inside the product, separate from the standalone variant rows, and nothing keeps the two in step for you. Decodes the body into a new row in the caller org\'s own namespaced store — isolated to that tenant from its first write — and answers the stored row at 201 with a Location header naming its id. The id is assigned by the store, not taken from the body. A body that fails to decode is 400 and a store that refuses the write is 500. Any valid access token reaches it. The org must also be entitled to the commerce admin: the paywall answers 402 subscription_required unless the org holds an active or trialing pro subscription, a live trial credit or a redeemed invite, and 503 when that entitlement cannot be read rather than admitting on an unknown. The internal service token and a platform superadmin pass straight through. The token must also carry Admin or WriteProduct.
      * Create a product
      */
@@ -4006,6 +5531,82 @@ export class CommerceApi extends runtime.BaseAPI {
      */
     async postCommerceProductByProductid(requestParameters: CommerceApiPostCommerceProductByProductidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.postCommerceProductByProductidRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Creates one rate. Product AND meter are both required, because together they are the identity: a rate keyed on the metered thing alone would let one product\'s price overwrite another\'s under the same name. A slug that already exists is refused rather than silently replaced. SuperAdmin only.
+     * Add a rate
+     */
+    async postCommerceRatesEntriesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/rates/entries`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Creates one rate. Product AND meter are both required, because together they are the identity: a rate keyed on the metered thing alone would let one product\'s price overwrite another\'s under the same name. A slug that already exists is refused rather than silently replaced. SuperAdmin only.
+     * Add a rate
+     */
+    async postCommerceRatesEntries(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postCommerceRatesEntriesRaw(initOverrides);
+    }
+
+    /**
+     * Takes an array of rates and seeds the authority from it. This is the seed, driven from admin rather than compiled in, because 506 published prices in an embed made a price change wait for a build. It RECONCILES: a row that matches is left alone, a row that has drifted is corrected, and a row an operator edited is skipped — so importing the same document twice is a no-op and importing a corrected one moves exactly the rows that changed. Answers what it received, created, corrected and left unchanged, so an import that changes nothing reads as nothing to do rather than as a failure. An empty array is refused 400. SuperAdmin only.
+     * Load the published price document, reconciling rather than replacing
+     */
+    async postCommerceRatesImportRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/rates/import`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Takes an array of rates and seeds the authority from it. This is the seed, driven from admin rather than compiled in, because 506 published prices in an embed made a price change wait for a build. It RECONCILES: a row that matches is left alone, a row that has drifted is corrected, and a row an operator edited is skipped — so importing the same document twice is a no-op and importing a corrected one moves exactly the rows that changed. Answers what it received, created, corrected and left unchanged, so an import that changes nothing reads as nothing to do rather than as a failure. An empty array is refused 400. SuperAdmin only.
+     * Load the published price document, reconciling rather than replacing
+     */
+    async postCommerceRatesImport(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postCommerceRatesImportRaw(initOverrides);
     }
 
     /**
@@ -4258,6 +5859,936 @@ export class CommerceApi extends runtime.BaseAPI {
      */
     async postCommerceStocklocationByStocklocationid(requestParameters: CommerceApiPostCommerceStocklocationByStocklocationidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.postCommerceStocklocationByStocklocationidRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Creates a store from the body inside the caller org\'s own namespaced database, so the row is physically isolated to that tenant from its first write, and answers it at 201 with a Location header naming its id. Requires an admin or store-write token: the anonymous published storefront key may READ stores but never create one. A body that fails to decode is 400.
+     * Create a storefront
+     */
+    async postCommerceStoreRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/store/`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Creates a store from the body inside the caller org\'s own namespaced database, so the row is physically isolated to that tenant from its first write, and answers it at 201 with a Location header naming its id. Requires an admin or store-write token: the anonymous published storefront key may READ stores but never create one. A body that fails to decode is 400.
+     * Create a storefront
+     */
+    async postCommerceStore(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postCommerceStoreRaw(initOverrides);
+    }
+
+    /**
+     * Re-dispatches the request into the handler the intended verb would have reached, taking that verb from a _method form value or query parameter and then from the X-HTTP-Method-Override header, the header winning when both are present. Only PUT, PATCH and DELETE are accepted; anything else resolves to 405. The trap is the default: naming NO override at all is treated as a partial update, never as a create. Authorization is whatever the underlying operation requires, since the real handler runs.
+     * Method-override tunnel for clients that cannot send PUT, PATCH or DELETE
+     */
+    async postCommerceStoreByStoreidRaw(requestParameters: CommerceApiPostCommerceStoreByStoreidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['storeid'] == null) {
+            throw new runtime.RequiredError(
+                'storeid',
+                'Required parameter "storeid" was null or undefined when calling postCommerceStoreByStoreid().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/store/{storeid}`;
+        urlPath = urlPath.replace(`{${"storeid"}}`, encodeURIComponent(String(requestParameters['storeid'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Re-dispatches the request into the handler the intended verb would have reached, taking that verb from a _method form value or query parameter and then from the X-HTTP-Method-Override header, the header winning when both are present. Only PUT, PATCH and DELETE are accepted; anything else resolves to 405. The trap is the default: naming NO override at all is treated as a partial update, never as a create. Authorization is whatever the underlying operation requires, since the real handler runs.
+     * Method-override tunnel for clients that cannot send PUT, PATCH or DELETE
+     */
+    async postCommerceStoreByStoreid(requestParameters: CommerceApiPostCommerceStoreByStoreidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postCommerceStoreByStoreidRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Tallies a new order for the addressed store from the user, payment and order body, reserves its items, runs the processor authorization and answers the saved order with a Location header pointing at it. The gate is a token carrying admin or published scope, so a published storefront key is enough; no token is 401 and a token with neither bit is 403. The store is loaded BEFORE any payment work and its currency OVERRIDES whatever the body asked for, so a store that will not load ends the call with 500 and nothing is charged. On any authorization failure the reservations are released and the order and payment are persisted as cancelled, so a failed attempt still leaves a durable record. Capture is a separate call.
+     * Authorize a new order against a storefront, holding the funds without settling them
+     */
+    async postCommerceStoreByStoreidAuthorizeRaw(requestParameters: CommerceApiPostCommerceStoreByStoreidAuthorizeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['storeid'] == null) {
+            throw new runtime.RequiredError(
+                'storeid',
+                'Required parameter "storeid" was null or undefined when calling postCommerceStoreByStoreidAuthorize().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/store/{storeid}/authorize`;
+        urlPath = urlPath.replace(`{${"storeid"}}`, encodeURIComponent(String(requestParameters['storeid'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Tallies a new order for the addressed store from the user, payment and order body, reserves its items, runs the processor authorization and answers the saved order with a Location header pointing at it. The gate is a token carrying admin or published scope, so a published storefront key is enough; no token is 401 and a token with neither bit is 403. The store is loaded BEFORE any payment work and its currency OVERRIDES whatever the body asked for, so a store that will not load ends the call with 500 and nothing is charged. On any authorization failure the reservations are released and the order and payment are persisted as cancelled, so a failed attempt still leaves a durable record. Capture is a separate call.
+     * Authorize a new order against a storefront, holding the funds without settling them
+     */
+    async postCommerceStoreByStoreidAuthorize(requestParameters: CommerceApiPostCommerceStoreByStoreidAuthorizeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postCommerceStoreByStoreidAuthorizeRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Continues the order named in the path rather than minting a new one, holding funds for it. The order is loaded from the caller org\'s own store, so an id belonging to another tenant is a 404. The rule most callers get wrong is that the body\'s order object is MERGED onto the loaded order before the tally — this is not a read-only reference, and a field sent here overwrites what is stored. The gate, the store resolution and the currency override behave exactly as on the bodiless-id sibling, and settling is still the capture call\'s job.
+     * Authorize an order that already exists, holding the funds without settling them
+     */
+    async postCommerceStoreByStoreidAuthorizeByOrderidRaw(requestParameters: CommerceApiPostCommerceStoreByStoreidAuthorizeByOrderidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['storeid'] == null) {
+            throw new runtime.RequiredError(
+                'storeid',
+                'Required parameter "storeid" was null or undefined when calling postCommerceStoreByStoreidAuthorizeByOrderid().'
+            );
+        }
+
+        if (requestParameters['orderid'] == null) {
+            throw new runtime.RequiredError(
+                'orderid',
+                'Required parameter "orderid" was null or undefined when calling postCommerceStoreByStoreidAuthorizeByOrderid().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/store/{storeid}/authorize/{orderid}`;
+        urlPath = urlPath.replace(`{${"storeid"}}`, encodeURIComponent(String(requestParameters['storeid'])));
+        urlPath = urlPath.replace(`{${"orderid"}}`, encodeURIComponent(String(requestParameters['orderid'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Continues the order named in the path rather than minting a new one, holding funds for it. The order is loaded from the caller org\'s own store, so an id belonging to another tenant is a 404. The rule most callers get wrong is that the body\'s order object is MERGED onto the loaded order before the tally — this is not a read-only reference, and a field sent here overwrites what is stored. The gate, the store resolution and the currency override behave exactly as on the bodiless-id sibling, and settling is still the capture call\'s job.
+     * Authorize an order that already exists, holding the funds without settling them
+     */
+    async postCommerceStoreByStoreidAuthorizeByOrderid(requestParameters: CommerceApiPostCommerceStoreByStoreidAuthorizeByOrderidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postCommerceStoreByStoreidAuthorizeByOrderidRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Settles the order named in the path — the second half of the two-step flow — and answers the updated order with a Location header. Dispatch follows the order\'s STORED payment type, and a successful capture is the moment the rest of the system learns about the sale: order and payment rows are updated, coupon redemptions, referral, cart and stats are written, the confirmation email goes out, and the paid and completed events are emitted. A capture failure releases the order\'s inventory reservations and answers 400, so a failed settlement never leaves items held.
+     * Capture a previously authorized order and settle the payment
+     */
+    async postCommerceStoreByStoreidCaptureByOrderidRaw(requestParameters: CommerceApiPostCommerceStoreByStoreidCaptureByOrderidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['storeid'] == null) {
+            throw new runtime.RequiredError(
+                'storeid',
+                'Required parameter "storeid" was null or undefined when calling postCommerceStoreByStoreidCaptureByOrderid().'
+            );
+        }
+
+        if (requestParameters['orderid'] == null) {
+            throw new runtime.RequiredError(
+                'orderid',
+                'Required parameter "orderid" was null or undefined when calling postCommerceStoreByStoreidCaptureByOrderid().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/store/{storeid}/capture/{orderid}`;
+        urlPath = urlPath.replace(`{${"storeid"}}`, encodeURIComponent(String(requestParameters['storeid'])));
+        urlPath = urlPath.replace(`{${"orderid"}}`, encodeURIComponent(String(requestParameters['orderid'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Settles the order named in the path — the second half of the two-step flow — and answers the updated order with a Location header. Dispatch follows the order\'s STORED payment type, and a successful capture is the moment the rest of the system learns about the sale: order and payment rows are updated, coupon redemptions, referral, cart and stats are written, the confirmation email goes out, and the paid and completed events are emitted. A capture failure releases the order\'s inventory reservations and answers 400, so a failed settlement never leaves items held.
+     * Capture a previously authorized order and settle the payment
+     */
+    async postCommerceStoreByStoreidCaptureByOrderid(requestParameters: CommerceApiPostCommerceStoreByStoreidCaptureByOrderidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postCommerceStoreByStoreidCaptureByOrderidRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Runs authorization and capture back to back against a freshly created order — the one-step flow for callers with no reason to hold funds. It takes the authorize body and inherits every authorize rule: the store\'s currency wins over the body, the items are reserved before the processor is called, and the amount bounds the processor enforces still apply. There is no order id on this address, so it can never continue an existing order. Either half failing answers 400, and the capture side effects — confirmation email, redemptions, stats, the paid and completed events — run only when both halves succeed.
+     * Authorize and capture a new order in one call
+     */
+    async postCommerceStoreByStoreidChargeRaw(requestParameters: CommerceApiPostCommerceStoreByStoreidChargeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['storeid'] == null) {
+            throw new runtime.RequiredError(
+                'storeid',
+                'Required parameter "storeid" was null or undefined when calling postCommerceStoreByStoreidCharge().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/store/{storeid}/charge`;
+        urlPath = urlPath.replace(`{${"storeid"}}`, encodeURIComponent(String(requestParameters['storeid'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Runs authorization and capture back to back against a freshly created order — the one-step flow for callers with no reason to hold funds. It takes the authorize body and inherits every authorize rule: the store\'s currency wins over the body, the items are reserved before the processor is called, and the amount bounds the processor enforces still apply. There is no order id on this address, so it can never continue an existing order. Either half failing answers 400, and the capture side effects — confirmation email, redemptions, stats, the paid and completed events — run only when both halves succeed.
+     * Authorize and capture a new order in one call
+     */
+    async postCommerceStoreByStoreidCharge(requestParameters: CommerceApiPostCommerceStoreByStoreidChargeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postCommerceStoreByStoreidChargeRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Authorizes a new order for the addressed store and holds the funds, answering the saved order with a Location header. It binds the identical handler as the shorter authorize address, so the two are ONE operation at two spellings and not two behaviours; the checkout prefix is the newer one. Every rule carries over: admin or published scope on the token, the store loaded first with its currency overriding the body, items reserved before the processor call, and reservations released with the order persisted cancelled on failure. Nothing is settled here.
+     * Authorize a new order against a storefront, holding the funds — the checkout spelling
+     */
+    async postCommerceStoreByStoreidCheckoutAuthorizeRaw(requestParameters: CommerceApiPostCommerceStoreByStoreidCheckoutAuthorizeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['storeid'] == null) {
+            throw new runtime.RequiredError(
+                'storeid',
+                'Required parameter "storeid" was null or undefined when calling postCommerceStoreByStoreidCheckoutAuthorize().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/store/{storeid}/checkout/authorize`;
+        urlPath = urlPath.replace(`{${"storeid"}}`, encodeURIComponent(String(requestParameters['storeid'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Authorizes a new order for the addressed store and holds the funds, answering the saved order with a Location header. It binds the identical handler as the shorter authorize address, so the two are ONE operation at two spellings and not two behaviours; the checkout prefix is the newer one. Every rule carries over: admin or published scope on the token, the store loaded first with its currency overriding the body, items reserved before the processor call, and reservations released with the order persisted cancelled on failure. Nothing is settled here.
+     * Authorize a new order against a storefront, holding the funds — the checkout spelling
+     */
+    async postCommerceStoreByStoreidCheckoutAuthorize(requestParameters: CommerceApiPostCommerceStoreByStoreidCheckoutAuthorizeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postCommerceStoreByStoreidCheckoutAuthorizeRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Continues the order named in the path rather than minting one, and shares its handler byte for byte with the unprefixed authorize-by-id address. The order is loaded from the caller org\'s own store, so another tenant\'s id is a 404, and the body\'s order object is merged onto the loaded row before the tally — a field sent here overwrites what is stored. Store resolution, the token gate and the currency override behave as on every other authorize address; settle with the capture address and the same order id.
+     * Authorize an existing order, holding the funds — the checkout spelling
+     */
+    async postCommerceStoreByStoreidCheckoutAuthorizeByOrderidRaw(requestParameters: CommerceApiPostCommerceStoreByStoreidCheckoutAuthorizeByOrderidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['storeid'] == null) {
+            throw new runtime.RequiredError(
+                'storeid',
+                'Required parameter "storeid" was null or undefined when calling postCommerceStoreByStoreidCheckoutAuthorizeByOrderid().'
+            );
+        }
+
+        if (requestParameters['orderid'] == null) {
+            throw new runtime.RequiredError(
+                'orderid',
+                'Required parameter "orderid" was null or undefined when calling postCommerceStoreByStoreidCheckoutAuthorizeByOrderid().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/store/{storeid}/checkout/authorize/{orderid}`;
+        urlPath = urlPath.replace(`{${"storeid"}}`, encodeURIComponent(String(requestParameters['storeid'])));
+        urlPath = urlPath.replace(`{${"orderid"}}`, encodeURIComponent(String(requestParameters['orderid'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Continues the order named in the path rather than minting one, and shares its handler byte for byte with the unprefixed authorize-by-id address. The order is loaded from the caller org\'s own store, so another tenant\'s id is a 404, and the body\'s order object is merged onto the loaded row before the tally — a field sent here overwrites what is stored. Store resolution, the token gate and the currency override behave as on every other authorize address; settle with the capture address and the same order id.
+     * Authorize an existing order, holding the funds — the checkout spelling
+     */
+    async postCommerceStoreByStoreidCheckoutAuthorizeByOrderid(requestParameters: CommerceApiPostCommerceStoreByStoreidCheckoutAuthorizeByOrderidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postCommerceStoreByStoreidCheckoutAuthorizeByOrderidRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Settles the authorized order named in the path and answers the updated order with a Location header, running the same handler as the unprefixed capture address. Dispatch follows the order\'s stored payment type. Success is what triggers the downstream work — order and payment updates, redemptions, referral, cart and stats, the confirmation email, and the paid and completed events — while a failure releases the order\'s inventory reservations and answers 400.
+     * Capture a previously authorized order and settle it — the checkout spelling
+     */
+    async postCommerceStoreByStoreidCheckoutCaptureByOrderidRaw(requestParameters: CommerceApiPostCommerceStoreByStoreidCheckoutCaptureByOrderidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['storeid'] == null) {
+            throw new runtime.RequiredError(
+                'storeid',
+                'Required parameter "storeid" was null or undefined when calling postCommerceStoreByStoreidCheckoutCaptureByOrderid().'
+            );
+        }
+
+        if (requestParameters['orderid'] == null) {
+            throw new runtime.RequiredError(
+                'orderid',
+                'Required parameter "orderid" was null or undefined when calling postCommerceStoreByStoreidCheckoutCaptureByOrderid().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/store/{storeid}/checkout/capture/{orderid}`;
+        urlPath = urlPath.replace(`{${"storeid"}}`, encodeURIComponent(String(requestParameters['storeid'])));
+        urlPath = urlPath.replace(`{${"orderid"}}`, encodeURIComponent(String(requestParameters['orderid'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Settles the authorized order named in the path and answers the updated order with a Location header, running the same handler as the unprefixed capture address. Dispatch follows the order\'s stored payment type. Success is what triggers the downstream work — order and payment updates, redemptions, referral, cart and stats, the confirmation email, and the paid and completed events — while a failure releases the order\'s inventory reservations and answers 400.
+     * Capture a previously authorized order and settle it — the checkout spelling
+     */
+    async postCommerceStoreByStoreidCheckoutCaptureByOrderid(requestParameters: CommerceApiPostCommerceStoreByStoreidCheckoutCaptureByOrderidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postCommerceStoreByStoreidCheckoutCaptureByOrderidRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Performs authorization and capture back to back against a newly created order for the addressed store, on the same handler as the unprefixed charge address. It takes the authorize body and inherits every authorize rule, including the store\'s currency winning over the body and the items being reserved before the processor is called. There is no order id on this address, so it can never continue an existing order. Either half failing answers 400, and the capture side effects run only when both succeed.
+     * Authorize and capture a new order in one call — the checkout spelling
+     */
+    async postCommerceStoreByStoreidCheckoutChargeRaw(requestParameters: CommerceApiPostCommerceStoreByStoreidCheckoutChargeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['storeid'] == null) {
+            throw new runtime.RequiredError(
+                'storeid',
+                'Required parameter "storeid" was null or undefined when calling postCommerceStoreByStoreidCheckoutCharge().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/store/{storeid}/checkout/charge`;
+        urlPath = urlPath.replace(`{${"storeid"}}`, encodeURIComponent(String(requestParameters['storeid'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Performs authorization and capture back to back against a newly created order for the addressed store, on the same handler as the unprefixed charge address. It takes the authorize body and inherits every authorize rule, including the store\'s currency winning over the body and the items being reserved before the processor is called. There is no order id on this address, so it can never continue an existing order. Either half failing answers 400, and the capture side effects run only when both succeed.
+     * Authorize and capture a new order in one call — the checkout spelling
+     */
+    async postCommerceStoreByStoreidCheckoutCharge(requestParameters: CommerceApiPostCommerceStoreByStoreidCheckoutChargeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postCommerceStoreByStoreidCheckoutChargeRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Meant to void the payments carrying the given pay key, stamp them cancelled and cancel the order, but the shared checkout handler resolves its order from an ORDER ID path parameter this route does not carry. The result is an untyped order and a cancel dispatch that refuses with 400 before the pay key lookup ever runs. Token gate, namespacing and store resolution happen first, so a missing token is still 401 and an unloadable store still 500. It is the same handler as the unprefixed cancel address, with the same outcome.
+     * PayPal cancel by pay key — refuses, exactly as the unprefixed address does
+     */
+    async postCommerceStoreByStoreidCheckoutPaypalCancelByPaykeyRaw(requestParameters: CommerceApiPostCommerceStoreByStoreidCheckoutPaypalCancelByPaykeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['storeid'] == null) {
+            throw new runtime.RequiredError(
+                'storeid',
+                'Required parameter "storeid" was null or undefined when calling postCommerceStoreByStoreidCheckoutPaypalCancelByPaykey().'
+            );
+        }
+
+        if (requestParameters['payKey'] == null) {
+            throw new runtime.RequiredError(
+                'payKey',
+                'Required parameter "payKey" was null or undefined when calling postCommerceStoreByStoreidCheckoutPaypalCancelByPaykey().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/store/{storeid}/checkout/paypal/cancel/{payKey}`;
+        urlPath = urlPath.replace(`{${"storeid"}}`, encodeURIComponent(String(requestParameters['storeid'])));
+        urlPath = urlPath.replace(`{${"payKey"}}`, encodeURIComponent(String(requestParameters['payKey'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Meant to void the payments carrying the given pay key, stamp them cancelled and cancel the order, but the shared checkout handler resolves its order from an ORDER ID path parameter this route does not carry. The result is an untyped order and a cancel dispatch that refuses with 400 before the pay key lookup ever runs. Token gate, namespacing and store resolution happen first, so a missing token is still 401 and an unloadable store still 500. It is the same handler as the unprefixed cancel address, with the same outcome.
+     * PayPal cancel by pay key — refuses, exactly as the unprefixed address does
+     */
+    async postCommerceStoreByStoreidCheckoutPaypalCancelByPaykey(requestParameters: CommerceApiPostCommerceStoreByStoreidCheckoutPaypalCancelByPaykeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postCommerceStoreByStoreidCheckoutPaypalCancelByPaykeyRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Meant to mark the payments carrying the given pay key as paid and set the order to paid, it cannot reach that work from this address: the shared checkout handler takes its order from an ORDER ID path parameter this route does not carry, so the order is always fresh and untyped and the confirm dispatch refuses with 400 before the pay key is queried. The token gate, the namespace middleware and the store lookup all run ahead of that, so authentication and store failures surface first. Behaviour is identical to the unprefixed confirm address; the checkout prefix changes nothing here.
+     * PayPal confirm by pay key — refuses, exactly as the unprefixed address does
+     */
+    async postCommerceStoreByStoreidCheckoutPaypalConfirmByPaykeyRaw(requestParameters: CommerceApiPostCommerceStoreByStoreidCheckoutPaypalConfirmByPaykeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['storeid'] == null) {
+            throw new runtime.RequiredError(
+                'storeid',
+                'Required parameter "storeid" was null or undefined when calling postCommerceStoreByStoreidCheckoutPaypalConfirmByPaykey().'
+            );
+        }
+
+        if (requestParameters['payKey'] == null) {
+            throw new runtime.RequiredError(
+                'payKey',
+                'Required parameter "payKey" was null or undefined when calling postCommerceStoreByStoreidCheckoutPaypalConfirmByPaykey().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/store/{storeid}/checkout/paypal/confirm/{payKey}`;
+        urlPath = urlPath.replace(`{${"storeid"}}`, encodeURIComponent(String(requestParameters['storeid'])));
+        urlPath = urlPath.replace(`{${"payKey"}}`, encodeURIComponent(String(requestParameters['payKey'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Meant to mark the payments carrying the given pay key as paid and set the order to paid, it cannot reach that work from this address: the shared checkout handler takes its order from an ORDER ID path parameter this route does not carry, so the order is always fresh and untyped and the confirm dispatch refuses with 400 before the pay key is queried. The token gate, the namespace middleware and the store lookup all run ahead of that, so authentication and store failures surface first. Behaviour is identical to the unprefixed confirm address; the checkout prefix changes nothing here.
+     * PayPal confirm by pay key — refuses, exactly as the unprefixed address does
+     */
+    async postCommerceStoreByStoreidCheckoutPaypalConfirmByPaykey(requestParameters: CommerceApiPostCommerceStoreByStoreidCheckoutPaypalConfirmByPaykeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postCommerceStoreByStoreidCheckoutPaypalConfirmByPaykeyRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Begins a PayPal authorization by running the ordinary store authorize flow, since the route binds that exact handler — body, store resolution, tally, reservations and failure behaviour are the authorize address\'s, unchanged. The processor is chosen from the body\'s payment type, so this path reaches PayPal only when that type says so. A successful PayPal authorization stamps a pay key onto the payment, which is the key the confirm and cancel addresses filter on. Build against the plain authorize address instead.
+     * Start a PayPal authorization for a new order — the checkout spelling
+     */
+    async postCommerceStoreByStoreidCheckoutPaypalPayRaw(requestParameters: CommerceApiPostCommerceStoreByStoreidCheckoutPaypalPayRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['storeid'] == null) {
+            throw new runtime.RequiredError(
+                'storeid',
+                'Required parameter "storeid" was null or undefined when calling postCommerceStoreByStoreidCheckoutPaypalPay().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/store/{storeid}/checkout/paypal/pay`;
+        urlPath = urlPath.replace(`{${"storeid"}}`, encodeURIComponent(String(requestParameters['storeid'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Begins a PayPal authorization by running the ordinary store authorize flow, since the route binds that exact handler — body, store resolution, tally, reservations and failure behaviour are the authorize address\'s, unchanged. The processor is chosen from the body\'s payment type, so this path reaches PayPal only when that type says so. A successful PayPal authorization stamps a pay key onto the payment, which is the key the confirm and cancel addresses filter on. Build against the plain authorize address instead.
+     * Start a PayPal authorization for a new order — the checkout spelling
+     */
+    async postCommerceStoreByStoreidCheckoutPaypalPay(requestParameters: CommerceApiPostCommerceStoreByStoreidCheckoutPaypalPayRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postCommerceStoreByStoreidCheckoutPaypalPayRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Creates the override and answers the store\'s ENTIRE listing map at 201 with a Location header — not just the entry that was added. A key already present is refused 400: creation never silently overwrites, so changing an existing listing has to be an explicit replace. The stored listing has its currency stamped from the store\'s own, which the replace path does not do. The key is matched exactly here, with none of the slug or SKU fallback the read allows. Admin-gated and resolved inside the caller org\'s namespace.
+     * Add a listing override under a new key
+     */
+    async postCommerceStoreByStoreidListingByKeyRaw(requestParameters: CommerceApiPostCommerceStoreByStoreidListingByKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['storeid'] == null) {
+            throw new runtime.RequiredError(
+                'storeid',
+                'Required parameter "storeid" was null or undefined when calling postCommerceStoreByStoreidListingByKey().'
+            );
+        }
+
+        if (requestParameters['key'] == null) {
+            throw new runtime.RequiredError(
+                'key',
+                'Required parameter "key" was null or undefined when calling postCommerceStoreByStoreidListingByKey().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/store/{storeid}/listing/{key}`;
+        urlPath = urlPath.replace(`{${"storeid"}}`, encodeURIComponent(String(requestParameters['storeid'])));
+        urlPath = urlPath.replace(`{${"key"}}`, encodeURIComponent(String(requestParameters['key'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Creates the override and answers the store\'s ENTIRE listing map at 201 with a Location header — not just the entry that was added. A key already present is refused 400: creation never silently overwrites, so changing an existing listing has to be an explicit replace. The stored listing has its currency stamped from the store\'s own, which the replace path does not do. The key is matched exactly here, with none of the slug or SKU fallback the read allows. Admin-gated and resolved inside the caller org\'s namespace.
+     * Add a listing override under a new key
+     */
+    async postCommerceStoreByStoreidListingByKey(requestParameters: CommerceApiPostCommerceStoreByStoreidListingByKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postCommerceStoreByStoreidListingByKeyRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Intended to void the payments carrying the given pay key, stamp them cancelled and cancel the order, it never reaches that work: the shared checkout handler reads its order from an ORDER ID path parameter this route does not carry, leaving an untyped order that the cancel dispatch refuses with 400 before the pay key lookup runs. Authentication, namespacing and store resolution happen ahead of the refusal, so a missing token is 401 and an unloadable store 500. Cancelling a real PayPal authorization needs an address that carries the order id.
+     * PayPal cancel by pay key — refuses, because a pay key alone does not identify the order
+     */
+    async postCommerceStoreByStoreidPaypalCancelByPaykeyRaw(requestParameters: CommerceApiPostCommerceStoreByStoreidPaypalCancelByPaykeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['storeid'] == null) {
+            throw new runtime.RequiredError(
+                'storeid',
+                'Required parameter "storeid" was null or undefined when calling postCommerceStoreByStoreidPaypalCancelByPaykey().'
+            );
+        }
+
+        if (requestParameters['payKey'] == null) {
+            throw new runtime.RequiredError(
+                'payKey',
+                'Required parameter "payKey" was null or undefined when calling postCommerceStoreByStoreidPaypalCancelByPaykey().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/store/{storeid}/paypal/cancel/{payKey}`;
+        urlPath = urlPath.replace(`{${"storeid"}}`, encodeURIComponent(String(requestParameters['storeid'])));
+        urlPath = urlPath.replace(`{${"payKey"}}`, encodeURIComponent(String(requestParameters['payKey'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Intended to void the payments carrying the given pay key, stamp them cancelled and cancel the order, it never reaches that work: the shared checkout handler reads its order from an ORDER ID path parameter this route does not carry, leaving an untyped order that the cancel dispatch refuses with 400 before the pay key lookup runs. Authentication, namespacing and store resolution happen ahead of the refusal, so a missing token is 401 and an unloadable store 500. Cancelling a real PayPal authorization needs an address that carries the order id.
+     * PayPal cancel by pay key — refuses, because a pay key alone does not identify the order
+     */
+    async postCommerceStoreByStoreidPaypalCancelByPaykey(requestParameters: CommerceApiPostCommerceStoreByStoreidPaypalCancelByPaykeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postCommerceStoreByStoreidPaypalCancelByPaykeyRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Intended to mark every payment carrying the given pay key as paid and flip the order to paid, it cannot do that from this address and does not pretend to: the shared checkout handler resolves its order from an ORDER ID path parameter that this route does not carry, so it always works against a fresh untyped order and the confirm dispatch refuses it with 400 before the pay key is ever queried. The token gate, the namespace and the store lookup all run ahead of that, so a missing token is still 401 and an unloadable store still 500. Drive a PayPal return through an address that carries the order id.
+     * PayPal confirm by pay key — refuses, because a pay key alone does not identify the order
+     */
+    async postCommerceStoreByStoreidPaypalConfirmByPaykeyRaw(requestParameters: CommerceApiPostCommerceStoreByStoreidPaypalConfirmByPaykeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['storeid'] == null) {
+            throw new runtime.RequiredError(
+                'storeid',
+                'Required parameter "storeid" was null or undefined when calling postCommerceStoreByStoreidPaypalConfirmByPaykey().'
+            );
+        }
+
+        if (requestParameters['payKey'] == null) {
+            throw new runtime.RequiredError(
+                'payKey',
+                'Required parameter "payKey" was null or undefined when calling postCommerceStoreByStoreidPaypalConfirmByPaykey().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/store/{storeid}/paypal/confirm/{payKey}`;
+        urlPath = urlPath.replace(`{${"storeid"}}`, encodeURIComponent(String(requestParameters['storeid'])));
+        urlPath = urlPath.replace(`{${"payKey"}}`, encodeURIComponent(String(requestParameters['payKey'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Intended to mark every payment carrying the given pay key as paid and flip the order to paid, it cannot do that from this address and does not pretend to: the shared checkout handler resolves its order from an ORDER ID path parameter that this route does not carry, so it always works against a fresh untyped order and the confirm dispatch refuses it with 400 before the pay key is ever queried. The token gate, the namespace and the store lookup all run ahead of that, so a missing token is still 401 and an unloadable store still 500. Drive a PayPal return through an address that carries the order id.
+     * PayPal confirm by pay key — refuses, because a pay key alone does not identify the order
+     */
+    async postCommerceStoreByStoreidPaypalConfirmByPaykey(requestParameters: CommerceApiPostCommerceStoreByStoreidPaypalConfirmByPaykeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postCommerceStoreByStoreidPaypalConfirmByPaykeyRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Runs the ordinary store authorize flow — the route binds that very handler, so the body, the store resolution, the tally, the reservations and the failure behaviour are the authorize address\'s, unchanged. It reaches PayPal only when the body\'s payment type says so; nothing about this path forces the processor, so a card-typed payment posted here authorizes on the card processor instead. A successful PayPal authorization stamps a pay key onto the payment, which is the key the confirm and cancel addresses filter on. It is the older entry point; the plain authorize address is the one to build against.
+     * Start a PayPal authorization for a new order
+     */
+    async postCommerceStoreByStoreidPaypalPayRaw(requestParameters: CommerceApiPostCommerceStoreByStoreidPaypalPayRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['storeid'] == null) {
+            throw new runtime.RequiredError(
+                'storeid',
+                'Required parameter "storeid" was null or undefined when calling postCommerceStoreByStoreidPaypalPay().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/store/{storeid}/paypal/pay`;
+        urlPath = urlPath.replace(`{${"storeid"}}`, encodeURIComponent(String(requestParameters['storeid'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Runs the ordinary store authorize flow — the route binds that very handler, so the body, the store resolution, the tally, the reservations and the failure behaviour are the authorize address\'s, unchanged. It reaches PayPal only when the body\'s payment type says so; nothing about this path forces the processor, so a card-typed payment posted here authorizes on the card processor instead. A successful PayPal authorization stamps a pay key onto the payment, which is the key the confirm and cancel addresses filter on. It is the older entry point; the plain authorize address is the one to build against.
+     * Start a PayPal authorization for a new order
+     */
+    async postCommerceStoreByStoreidPaypalPay(requestParameters: CommerceApiPostCommerceStoreByStoreidPaypalPayRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postCommerceStoreByStoreidPaypalPayRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Creates a trialing subscription for the addressed store on the entry plan and grants that plan\'s trial credit, answering 201 when this call actually started one and 200 with a reason otherwise — not_new when the store already has billing history, trial_not_configured when no entry plan is wired. The window is always the SEVEN-DAY no-card trial, because this address never presents a card; the longer card-present window is reached only by adding a card afterwards. Entitlement is per store while the billing subject is the org, so every store an org owns takes its own trial. Admin-gated and namespaced to the caller\'s org: no resolvable store is 404 with store_required, and a backing-store failure is 503.
+     * Start this store\'s no-card trial on the entry plan
+     */
+    async postCommerceStoreByStoreidTrialRaw(requestParameters: CommerceApiPostCommerceStoreByStoreidTrialRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['storeid'] == null) {
+            throw new runtime.RequiredError(
+                'storeid',
+                'Required parameter "storeid" was null or undefined when calling postCommerceStoreByStoreidTrial().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/store/{storeid}/trial`;
+        urlPath = urlPath.replace(`{${"storeid"}}`, encodeURIComponent(String(requestParameters['storeid'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Creates a trialing subscription for the addressed store on the entry plan and grants that plan\'s trial credit, answering 201 when this call actually started one and 200 with a reason otherwise — not_new when the store already has billing history, trial_not_configured when no entry plan is wired. The window is always the SEVEN-DAY no-card trial, because this address never presents a card; the longer card-present window is reached only by adding a card afterwards. Entitlement is per store while the billing subject is the org, so every store an org owns takes its own trial. Admin-gated and namespaced to the caller\'s org: no resolvable store is 404 with store_required, and a backing-store failure is 503.
+     * Start this store\'s no-card trial on the entry plan
+     */
+    async postCommerceStoreByStoreidTrial(requestParameters: CommerceApiPostCommerceStoreByStoreidTrialRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postCommerceStoreByStoreidTrialRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Answers a freshly minted token carrying ONLY the published-read permission — enough for a logged-out shopper\'s storefront to read your published catalog and nothing more, with no write and no admin scope. It is org-bound, signed with the org\'s own secret and subject to the org id, so unlike a shared service token it can never act on another tenant. Minting ROTATES rather than accumulates: the previous storefront token is dropped first and is invalid immediately, so re-minting is how you revoke. Admin is enforced by the handler as well as the route, because the route\'s token gate does not apply on the identity path and a plain member must not be able to mint their org\'s key.
+     * Mint your org\'s least-privilege storefront read key
+     */
+    async postCommerceStoreTokenRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/store/token`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Answers a freshly minted token carrying ONLY the published-read permission — enough for a logged-out shopper\'s storefront to read your published catalog and nothing more, with no write and no admin scope. It is org-bound, signed with the org\'s own secret and subject to the org id, so unlike a shared service token it can never act on another tenant. Minting ROTATES rather than accumulates: the previous storefront token is dropped first and is invalid immediately, so re-minting is how you revoke. Admin is enforced by the handler as well as the route, because the route\'s token gate does not apply on the identity path and a plain member must not be able to mint their org\'s key.
+     * Mint your org\'s least-privilege storefront read key
+     */
+    async postCommerceStoreToken(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postCommerceStoreTokenRaw(initOverrides);
     }
 
     /**
@@ -4933,6 +7464,52 @@ export class CommerceApi extends runtime.BaseAPI {
     }
 
     /**
+     * Accepts a payment provider\'s event, verifies it, records it for audit, and applies subscription lifecycle changes to the matching local row. There is no bearer here and there cannot be: the provider\'s SIGNATURE over the body IS the authentication, so a request with no recognized signature header is 400 and one whose signature does not verify is 401. The provider path segment is only a hint for dashboard configuration — verification picks the processor regardless of what the URL says. Redelivery is safe: an event id already recorded is acknowledged as a duplicate without re-applying any side effect, which matters because providers retry for days until they see a 2xx.
+     * Payment-provider webhook intake for settlement and subscription lifecycle events
+     */
+    async postCommerceWebhooksByProviderRaw(requestParameters: CommerceApiPostCommerceWebhooksByProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['provider'] == null) {
+            throw new runtime.RequiredError(
+                'provider',
+                'Required parameter "provider" was null or undefined when calling postCommerceWebhooksByProvider().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/webhooks/{provider}`;
+        urlPath = urlPath.replace(`{${"provider"}}`, encodeURIComponent(String(requestParameters['provider'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Accepts a payment provider\'s event, verifies it, records it for audit, and applies subscription lifecycle changes to the matching local row. There is no bearer here and there cannot be: the provider\'s SIGNATURE over the body IS the authentication, so a request with no recognized signature header is 400 and one whose signature does not verify is 401. The provider path segment is only a hint for dashboard configuration — verification picks the processor regardless of what the URL says. Redelivery is safe: an event id already recorded is acknowledged as a duplicate without re-applying any side effect, which matters because providers retry for days until they see a 2xx.
+     * Payment-provider webhook intake for settlement and subscription lifecycle events
+     */
+    async postCommerceWebhooksByProvider(requestParameters: CommerceApiPostCommerceWebhooksByProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postCommerceWebhooksByProviderRaw(requestParameters, initOverrides);
+    }
+
+    /**
      * A collection is a merchandising group a storefront renders — a slug and name, copy and media, flat lists of the product and variant ids it holds, published, preorder and out-of-stock flags, and an availability window. Membership lives on the collection as those id lists rather than as a join, so putting a product into a collection is a write here and not on the product. This is a true REPLACEMENT, not a merge: the stored row\'s key is preserved, but the body is decoded onto a FRESH entity, so every field the body omits is written back as its ZERO value. Patch is the verb for changing part of a row. The id is resolved inside the caller org\'s own namespace and an absent one is 404 before anything is written; a body that fails to decode is 400. Answers the stored result. Any valid access token reaches it. The org must also be entitled to the commerce admin: the paywall answers 402 subscription_required unless the org holds an active or trialing pro subscription, a live trial credit or a redeemed invite, and 503 when that entitlement cannot be read rather than admitting on an unknown. The internal service token and a platform superadmin pass straight through. The token must also carry Admin, or ReadCollection and WriteCollection together.
      * Replace a collection outright
      */
@@ -5163,6 +7740,52 @@ export class CommerceApi extends runtime.BaseAPI {
     }
 
     /**
+     * Loads the addressed plan, applies the body over it and answers the stored result, so a partial edit never silently zeroes a price or the contact-sales flag. The slug is IMMUTABLE: a body naming a different slug is rejected outright before anything is written, because a rename would orphan every subscription that stored the old id — deprecate and create instead. An admin edit marks the row authoritative so the seed stops correcting it. PLATFORM admin only; an unknown slug is 404.
+     * Edit a plan, leaving the fields you omit alone
+     */
+    async putCommercePlansEntriesBySlugRaw(requestParameters: CommerceApiPutCommercePlansEntriesBySlugRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['slug'] == null) {
+            throw new runtime.RequiredError(
+                'slug',
+                'Required parameter "slug" was null or undefined when calling putCommercePlansEntriesBySlug().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/plans/entries/{slug}`;
+        urlPath = urlPath.replace(`{${"slug"}}`, encodeURIComponent(String(requestParameters['slug'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Loads the addressed plan, applies the body over it and answers the stored result, so a partial edit never silently zeroes a price or the contact-sales flag. The slug is IMMUTABLE: a body naming a different slug is rejected outright before anything is written, because a rename would orphan every subscription that stored the old id — deprecate and create instead. An admin edit marks the row authoritative so the seed stops correcting it. PLATFORM admin only; an unknown slug is 404.
+     * Edit a plan, leaving the fields you omit alone
+     */
+    async putCommercePlansEntriesBySlug(requestParameters: CommerceApiPutCommercePlansEntriesBySlugRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putCommercePlansEntriesBySlugRaw(requestParameters, initOverrides);
+    }
+
+    /**
      * A product is a sellable catalog item: slug, SKU and UPC, name and copy, media, availability and preorder flags, a reservation block, and its money — currency, price, MSRP, list price and inventory cost in minor units, inventory count, taxability, and the subscription interval when it is subscribeable. Its variants and options are carried as a denormalized JSON snapshot inside the product, separate from the standalone variant rows, and nothing keeps the two in step for you. This is a true REPLACEMENT, not a merge: the stored row\'s key is preserved, but the body is decoded onto a FRESH entity, so every field the body omits is written back as its ZERO value. Patch is the verb for changing part of a row. The id is resolved inside the caller org\'s own namespace and an absent one is 404 before anything is written; a body that fails to decode is 400. Answers the stored result. Any valid access token reaches it. The org must also be entitled to the commerce admin: the paywall answers 402 subscription_required unless the org holds an active or trialing pro subscription, a live trial credit or a redeemed invite, and 503 when that entitlement cannot be read rather than admitting on an unknown. The internal service token and a platform superadmin pass straight through. The token must also carry Admin, or ReadProduct and WriteProduct together.
      * Replace a product outright
      */
@@ -5206,6 +7829,52 @@ export class CommerceApi extends runtime.BaseAPI {
      */
     async putCommerceProductByProductid(requestParameters: CommerceApiPutCommerceProductByProductidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.putCommerceProductByProductidRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Edits one rate and MARKS it edited, which is the whole contract with the importer: an operator\'s price outranks the document it came from, so a later import leaves this row alone. Without that mark a price set here would apply, work, and silently revert on the next import. Only the editable fields move; identity and bookkeeping are not writable from the body. SuperAdmin only.
+     * Edit a rate, and mark it as operator-set
+     */
+    async putCommerceRatesEntriesBySlugRaw(requestParameters: CommerceApiPutCommerceRatesEntriesBySlugRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['slug'] == null) {
+            throw new runtime.RequiredError(
+                'slug',
+                'Required parameter "slug" was null or undefined when calling putCommerceRatesEntriesBySlug().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/rates/entries/{slug}`;
+        urlPath = urlPath.replace(`{${"slug"}}`, encodeURIComponent(String(requestParameters['slug'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Edits one rate and MARKS it edited, which is the whole contract with the importer: an operator\'s price outranks the document it came from, so a later import leaves this row alone. Without that mark a price set here would apply, work, and silently revert on the next import. Only the editable fields move; identity and bookkeeping are not writable from the body. SuperAdmin only.
+     * Edit a rate, and mark it as operator-set
+     */
+    async putCommerceRatesEntriesBySlug(requestParameters: CommerceApiPutCommerceRatesEntriesBySlugRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putCommerceRatesEntriesBySlugRaw(requestParameters, initOverrides);
     }
 
     /**
@@ -5344,6 +8013,106 @@ export class CommerceApi extends runtime.BaseAPI {
      */
     async putCommerceStocklocationByStocklocationid(requestParameters: CommerceApiPutCommerceStocklocationByStocklocationidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.putCommerceStocklocationByStocklocationidRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * This is a true REPLACEMENT, not a merge: the stored key is preserved but the body is decoded onto a fresh entity, so every field the body omits is written back as its zero value. Use the partial update when you mean to change part of a store. The id is resolved inside the caller org\'s own namespace, so an unknown or foreign id is a 404 before anything is written. Requires an admin token, or one holding both store read and store write.
+     * Replace a storefront outright
+     */
+    async putCommerceStoreByStoreidRaw(requestParameters: CommerceApiPutCommerceStoreByStoreidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['storeid'] == null) {
+            throw new runtime.RequiredError(
+                'storeid',
+                'Required parameter "storeid" was null or undefined when calling putCommerceStoreByStoreid().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/store/{storeid}`;
+        urlPath = urlPath.replace(`{${"storeid"}}`, encodeURIComponent(String(requestParameters['storeid'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * This is a true REPLACEMENT, not a merge: the stored key is preserved but the body is decoded onto a fresh entity, so every field the body omits is written back as its zero value. Use the partial update when you mean to change part of a store. The id is resolved inside the caller org\'s own namespace, so an unknown or foreign id is a 404 before anything is written. Requires an admin token, or one holding both store read and store write.
+     * Replace a storefront outright
+     */
+    async putCommerceStoreByStoreid(requestParameters: CommerceApiPutCommerceStoreByStoreidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putCommerceStoreByStoreidRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Decodes the body over the existing listing when the key is present, so fields it omits keep their stored values, and builds the listing from the body alone when the key is new. Answers 200 when it replaced something and 201 with a Location header when it created it; either way the body is the store\'s entire listing map, not the single entry. Unlike creation, this path does NOT restamp the listing\'s currency from the store. Admin-gated, with the store resolved inside the caller org\'s namespace.
+     * Upsert a listing override
+     */
+    async putCommerceStoreByStoreidListingByKeyRaw(requestParameters: CommerceApiPutCommerceStoreByStoreidListingByKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['storeid'] == null) {
+            throw new runtime.RequiredError(
+                'storeid',
+                'Required parameter "storeid" was null or undefined when calling putCommerceStoreByStoreidListingByKey().'
+            );
+        }
+
+        if (requestParameters['key'] == null) {
+            throw new runtime.RequiredError(
+                'key',
+                'Required parameter "key" was null or undefined when calling putCommerceStoreByStoreidListingByKey().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/store/{storeid}/listing/{key}`;
+        urlPath = urlPath.replace(`{${"storeid"}}`, encodeURIComponent(String(requestParameters['storeid'])));
+        urlPath = urlPath.replace(`{${"key"}}`, encodeURIComponent(String(requestParameters['key'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Decodes the body over the existing listing when the key is present, so fields it omits keep their stored values, and builds the listing from the body alone when the key is new. Answers 200 when it replaced something and 201 with a Location header when it created it; either way the body is the store\'s entire listing map, not the single entry. Unlike creation, this path does NOT restamp the listing\'s currency from the store. Admin-gated, with the store resolved inside the caller org\'s namespace.
+     * Upsert a listing override
+     */
+    async putCommerceStoreByStoreidListingByKey(requestParameters: CommerceApiPutCommerceStoreByStoreidListingByKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putCommerceStoreByStoreidListingByKeyRaw(requestParameters, initOverrides);
     }
 
     /**
@@ -5712,6 +8481,112 @@ export class CommerceApi extends runtime.BaseAPI {
      */
     async putCommerceWebhookByWebhookid(requestParameters: CommerceApiPutCommerceWebhookByWebhookidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.putCommerceWebhookByWebhookidRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Sets how many of one item a cart holds, and answers the whole updated cart.  This is the ONE way a cart\'s contents change. The quantity is the RESULT, not a delta: sending 3 leaves 3 however many were there before, so a retry is safe and a double-submit cannot double an order. ZERO REMOVES the line — there is deliberately no separate delete, because removal is the same act at the boundary value and a second spelling would be a second set of edge cases.  Name the item with EITHER product OR variant, never both. Prefer variant for anything sold in sizes, colours or tiers: the price and the stock belong to the variant, so a product-level line on a varianted product prices the wrong thing. Either may be given as an id or as the human key — a product\'s URL slug, a variant\'s SKU — which is what lets a storefront add to cart straight from a product page URL without a lookup first.  The item\'s price and name are CACHED onto the line as it is added, so the cart keeps the price the shopper was shown even if the catalog moves underneath it.  An item that resolves to nothing in the catalog is refused 400 and the cart is left exactly as it was; nothing is partially applied.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Set one item\'s quantity in a cart; zero removes it
+     */
+    async setCartItemRaw(requestParameters: CommerceApiSetCartItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Cart>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling setCartItem().'
+            );
+        }
+
+        if (requestParameters['cartItemSet'] == null) {
+            throw new runtime.RequiredError(
+                'cartItemSet',
+                'Required parameter "cartItemSet" was null or undefined when calling setCartItem().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/cart/{id}/item`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: CartItemSetToJSON(requestParameters['cartItemSet']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => CartFromJSON(jsonValue));
+    }
+
+    /**
+     * Sets how many of one item a cart holds, and answers the whole updated cart.  This is the ONE way a cart\'s contents change. The quantity is the RESULT, not a delta: sending 3 leaves 3 however many were there before, so a retry is safe and a double-submit cannot double an order. ZERO REMOVES the line — there is deliberately no separate delete, because removal is the same act at the boundary value and a second spelling would be a second set of edge cases.  Name the item with EITHER product OR variant, never both. Prefer variant for anything sold in sizes, colours or tiers: the price and the stock belong to the variant, so a product-level line on a varianted product prices the wrong thing. Either may be given as an id or as the human key — a product\'s URL slug, a variant\'s SKU — which is what lets a storefront add to cart straight from a product page URL without a lookup first.  The item\'s price and name are CACHED onto the line as it is added, so the cart keeps the price the shopper was shown even if the catalog moves underneath it.  An item that resolves to nothing in the catalog is refused 400 and the cart is left exactly as it was; nothing is partially applied.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Set one item\'s quantity in a cart; zero removes it
+     */
+    async setCartItem(requestParameters: CommerceApiSetCartItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cart> {
+        const response = await this.setCartItemRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Takes a payment: charges a single-use card token and credits the caller\'s org balance, exactly once.  This is the operation behind \"collect money from a customer\". It runs the SAME core the console\'s card top-up runs (commerce billing.TakePayment), so the server-side amount bounds, the idempotency guard and the ledger credit are shared rather than reimplemented — a second charge path would eventually double-charge somebody.  The ORG is the caller\'s, taken from the validated principal and never from the input, so a payment can only ever credit the account of whoever made the call.  A payment is RISK-SCREENED before the card is charged, so this can be refused without any money moving: 403 means the screen did not authorise it, and 503 means the screen could not reach a decision — that one is worth retrying, and no charge was attempted either way.  Send an idempotencyKey. An agent retries by construction, and the key is what turns a retry into a replay of the first receipt instead of a second charge.  The answer states whether it settled in SANDBOX or live mode (`test`), and carries the processor\'s own reference (`processorRef`) so the charge can be reconciled against the processor rather than taken on trust.  A named builder, not a closure, so zipdoc can lift this prose into the registry.  It BUILDS the handler rather than being it, because the screen has to sit inside the value every projection of this op dispatches to — see exposePayments. `charge` is the money move, `take` is the screened door onto it, and the only registrable one is the second.
+     * Take a card payment and credit the org\'s balance
+     */
+    async takePaymentRaw(requestParameters: CommerceApiTakePaymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PaymentOut>> {
+        if (requestParameters['paymentIn'] == null) {
+            throw new runtime.RequiredError(
+                'paymentIn',
+                'Required parameter "paymentIn" was null or undefined when calling takePayment().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/commerce/payments`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: PaymentInToJSON(requestParameters['paymentIn']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => PaymentOutFromJSON(jsonValue));
+    }
+
+    /**
+     * Takes a payment: charges a single-use card token and credits the caller\'s org balance, exactly once.  This is the operation behind \"collect money from a customer\". It runs the SAME core the console\'s card top-up runs (commerce billing.TakePayment), so the server-side amount bounds, the idempotency guard and the ledger credit are shared rather than reimplemented — a second charge path would eventually double-charge somebody.  The ORG is the caller\'s, taken from the validated principal and never from the input, so a payment can only ever credit the account of whoever made the call.  A payment is RISK-SCREENED before the card is charged, so this can be refused without any money moving: 403 means the screen did not authorise it, and 503 means the screen could not reach a decision — that one is worth retrying, and no charge was attempted either way.  Send an idempotencyKey. An agent retries by construction, and the key is what turns a retry into a replay of the first receipt instead of a second charge.  The answer states whether it settled in SANDBOX or live mode (`test`), and carries the processor\'s own reference (`processorRef`) so the charge can be reconciled against the processor rather than taken on trust.  A named builder, not a closure, so zipdoc can lift this prose into the registry.  It BUILDS the handler rather than being it, because the screen has to sit inside the value every projection of this op dispatches to — see exposePayments. `charge` is the money move, `take` is the screened door onto it, and the only registrable one is the second.
+     * Take a card payment and credit the org\'s balance
+     */
+    async takePayment(requestParameters: CommerceApiTakePaymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PaymentOut> {
+        const response = await this.takePaymentRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
 }

@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -38,7 +38,8 @@ export interface Enrollment {
      */
     currentStep?: number;
     /**
-     * EnrolledAt and UpdatedAt are unix seconds.
+     * EnrolledAt is unix seconds when the contact joined the walk, and orders the
+     * enrollment list (newest first).
      * @type {number}
      * @memberof Enrollment
      */
@@ -69,7 +70,10 @@ export interface Enrollment {
      */
     status?: string;
     /**
-     * 
+     * UpdatedAt is unix seconds of the last move: the drip engine writes it each
+     * time it advances the walk a step, completes it or cancels it. Together with
+     * Status it says when the walk last did anything, which is how a stalled
+     * enrollment is told from a finished one.
      * @type {number}
      * @memberof Enrollment
      */

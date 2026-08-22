@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -15,7 +15,6 @@
 
 import * as runtime from '../runtime.js';
 import type {
-  Answer,
   AskAnswer,
   AskPostIn,
   ContextBundle,
@@ -23,13 +22,10 @@ import type {
   FileContent,
   IndexIn,
   IndexResult,
-  Query,
   RepoTree,
   SearchResults,
 } from '../models/index.js';
 import {
-    AnswerFromJSON,
-    AnswerToJSON,
     AskAnswerFromJSON,
     AskAnswerToJSON,
     AskPostInFromJSON,
@@ -44,8 +40,6 @@ import {
     IndexInToJSON,
     IndexResultFromJSON,
     IndexResultToJSON,
-    QueryFromJSON,
-    QueryToJSON,
     RepoTreeFromJSON,
     RepoTreeToJSON,
     SearchResultsFromJSON,
@@ -83,26 +77,6 @@ export interface CodeApiPostCodeContextRequest {
 
 export interface CodeApiPostCodeIndexRequest {
     indexIn: IndexIn;
-}
-
-export interface CodeApiPostCodeLspCompleteRequest {
-    query: Query;
-}
-
-export interface CodeApiPostCodeLspDiagnosticsRequest {
-    query: Query;
-}
-
-export interface CodeApiPostCodeLspHoverRequest {
-    query: Query;
-}
-
-export interface CodeApiPostCodeLspLocateRequest {
-    query: Query;
-}
-
-export interface CodeApiPostCodeLspSymbolsRequest {
-    query: Query;
 }
 
 /**
@@ -446,251 +420,6 @@ export class CodeApi extends runtime.BaseAPI {
      */
     async postCodeIndex(requestParameters: CodeApiPostCodeIndexRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IndexResult> {
         const response = await this.postCodeIndexRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Offers the candidates a language server has at a position, typed and resolved through the repository\'s dependencies rather than guessed from text.
-     * Offers the candidates a language server has at a position, typed and resolved through the repository\'s dependencies rather than guessed from text.
-     */
-    async postCodeLspCompleteRaw(requestParameters: CodeApiPostCodeLspCompleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Answer>> {
-        if (requestParameters['query'] == null) {
-            throw new runtime.RequiredError(
-                'query',
-                'Required parameter "query" was null or undefined when calling postCodeLspComplete().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/code/lsp/complete`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: QueryToJSON(requestParameters['query']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => AnswerFromJSON(jsonValue));
-    }
-
-    /**
-     * Offers the candidates a language server has at a position, typed and resolved through the repository\'s dependencies rather than guessed from text.
-     * Offers the candidates a language server has at a position, typed and resolved through the repository\'s dependencies rather than guessed from text.
-     */
-    async postCodeLspComplete(requestParameters: CodeApiPostCodeLspCompleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Answer> {
-        const response = await this.postCodeLspCompleteRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Reports every problem the language server finds in one file — compile errors, type errors and lints, each with its span and its severity (1 error, 2 warning, 3 information, 4 hint). The position is ignored.
-     * Reports every problem the language server finds in one file — compile errors, type errors and lints, each with its span and its severity (1 error, 2 warning, 3 information, 4 hint).
-     */
-    async postCodeLspDiagnosticsRaw(requestParameters: CodeApiPostCodeLspDiagnosticsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Answer>> {
-        if (requestParameters['query'] == null) {
-            throw new runtime.RequiredError(
-                'query',
-                'Required parameter "query" was null or undefined when calling postCodeLspDiagnostics().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/code/lsp/diagnostics`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: QueryToJSON(requestParameters['query']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => AnswerFromJSON(jsonValue));
-    }
-
-    /**
-     * Reports every problem the language server finds in one file — compile errors, type errors and lints, each with its span and its severity (1 error, 2 warning, 3 information, 4 hint). The position is ignored.
-     * Reports every problem the language server finds in one file — compile errors, type errors and lints, each with its span and its severity (1 error, 2 warning, 3 information, 4 hint).
-     */
-    async postCodeLspDiagnostics(requestParameters: CodeApiPostCodeLspDiagnosticsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Answer> {
-        const response = await this.postCodeLspDiagnosticsRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Renders the type and documentation of the symbol at a position, as the language server itself renders it.  Positions are the LSP\'s: line and character are 0-BASED and character counts UTF-16 code units, so an editor\'s 1-based line must have 1 subtracted before it is sent. The repository is named by slug and is always one in the caller\'s own org; rev pins a branch, tag or commit sha, and empty means the default branch.
-     * Renders the type and documentation of the symbol at a position, as the language server itself renders it.
-     */
-    async postCodeLspHoverRaw(requestParameters: CodeApiPostCodeLspHoverRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Answer>> {
-        if (requestParameters['query'] == null) {
-            throw new runtime.RequiredError(
-                'query',
-                'Required parameter "query" was null or undefined when calling postCodeLspHover().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/code/lsp/hover`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: QueryToJSON(requestParameters['query']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => AnswerFromJSON(jsonValue));
-    }
-
-    /**
-     * Renders the type and documentation of the symbol at a position, as the language server itself renders it.  Positions are the LSP\'s: line and character are 0-BASED and character counts UTF-16 code units, so an editor\'s 1-based line must have 1 subtracted before it is sent. The repository is named by slug and is always one in the caller\'s own org; rev pins a branch, tag or commit sha, and empty means the default branch.
-     * Renders the type and documentation of the symbol at a position, as the language server itself renders it.
-     */
-    async postCodeLspHover(requestParameters: CodeApiPostCodeLspHoverRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Answer> {
-        const response = await this.postCodeLspHoverRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Finds where a symbol lives: its definition, its references, its type or its implementations, chosen by relation (definition, reference, type, implementation — empty means definition).  It resolves THROUGH dependencies. An answer whose external flag is set left the repository, and its path is then the module coordinate it landed in — which is the question a static index cannot answer and this service exists for.
-     * Finds where a symbol lives: its definition, its references, its type or its implementations, chosen by relation (definition, reference, type, implementation — empty means definition).
-     */
-    async postCodeLspLocateRaw(requestParameters: CodeApiPostCodeLspLocateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Answer>> {
-        if (requestParameters['query'] == null) {
-            throw new runtime.RequiredError(
-                'query',
-                'Required parameter "query" was null or undefined when calling postCodeLspLocate().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/code/lsp/locate`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: QueryToJSON(requestParameters['query']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => AnswerFromJSON(jsonValue));
-    }
-
-    /**
-     * Finds where a symbol lives: its definition, its references, its type or its implementations, chosen by relation (definition, reference, type, implementation — empty means definition).  It resolves THROUGH dependencies. An answer whose external flag is set left the repository, and its path is then the module coordinate it landed in — which is the question a static index cannot answer and this service exists for.
-     * Finds where a symbol lives: its definition, its references, its type or its implementations, chosen by relation (definition, reference, type, implementation — empty means definition).
-     */
-    async postCodeLspLocate(requestParameters: CodeApiPostCodeLspLocateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Answer> {
-        const response = await this.postCodeLspLocateRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Outlines one file: every declaration in it, with its kind and its span. The position is ignored — the answer is the whole file.
-     * Outlines one file: every declaration in it, with its kind and its span.
-     */
-    async postCodeLspSymbolsRaw(requestParameters: CodeApiPostCodeLspSymbolsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Answer>> {
-        if (requestParameters['query'] == null) {
-            throw new runtime.RequiredError(
-                'query',
-                'Required parameter "query" was null or undefined when calling postCodeLspSymbols().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/code/lsp/symbols`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: QueryToJSON(requestParameters['query']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => AnswerFromJSON(jsonValue));
-    }
-
-    /**
-     * Outlines one file: every declaration in it, with its kind and its span. The position is ignored — the answer is the whole file.
-     * Outlines one file: every declaration in it, with its kind and its span.
-     */
-    async postCodeLspSymbols(requestParameters: CodeApiPostCodeLspSymbolsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Answer> {
-        const response = await this.postCodeLspSymbolsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,37 +20,45 @@ import { mapValues } from '../runtime.js';
  */
 export interface BoardItem {
     /**
-     * 
+     * DocType is which content type the row came from: Campaign, SocialPost or
+     * Asset. The board spans all three at once, so this is what tells them apart.
      * @type {string}
      * @memberof BoardItem
      */
     doctype?: string;
     /**
-     * 
+     * Name is the document within that type. (doctype, name) is the pair every
+     * /v1/content write addresses an item by.
      * @type {string}
      * @memberof BoardItem
      */
     name?: string;
     /**
-     * 
+     * Project is the brand/site sub-scope within the org. Absent for an item held
+     * at org level rather than under one brand.
      * @type {string}
      * @memberof BoardItem
      */
     project?: string;
     /**
-     * 
+     * Status is the lifecycle state: draft, in_review, approved, queued, published
+     * or archived. It decides what a reader may see — the public site pulls
+     * exactly "published" and nothing else — so it is a visibility fact, not a
+     * workflow label.
      * @type {string}
      * @memberof BoardItem
      */
     status?: string;
     /**
-     * 
+     * Title is the item's headline, read from its type's own title field. Empty
+     * for a document that has none.
      * @type {string}
      * @memberof BoardItem
      */
     title?: string;
     /**
-     * 
+     * UpdatedAt is unix seconds of the document's last write, and the key the
+     * board sorts on, newest first.
      * @type {number}
      * @memberof BoardItem
      */

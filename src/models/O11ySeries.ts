@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -21,34 +21,22 @@ import { mapValues } from '../runtime.js';
 export interface O11ySeries {
     /**
      * 
-     * @type {number}
+     * @type {{ [key: string]: string; }}
      * @memberof O11ySeries
      */
-    costCents?: number;
+    labels?: { [key: string]: string; };
     /**
      * 
-     * @type {number}
+     * @type {Array<{ [key: string]: string; }>}
      * @memberof O11ySeries
      */
-    errors?: number;
+    labelsArray?: Array<{ [key: string]: string; }>;
     /**
      * 
-     * @type {number}
+     * @type {Array<any>}
      * @memberof O11ySeries
      */
-    requests?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof O11ySeries
-     */
-    tokens?: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof O11ySeries
-     */
-    ts?: string;
+    values?: Array<any>;
 }
 
 /**
@@ -68,11 +56,9 @@ export function O11ySeriesFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     }
     return {
         
-        'costCents': json['costCents'] == null ? undefined : json['costCents'],
-        'errors': json['errors'] == null ? undefined : json['errors'],
-        'requests': json['requests'] == null ? undefined : json['requests'],
-        'tokens': json['tokens'] == null ? undefined : json['tokens'],
-        'ts': json['ts'] == null ? undefined : json['ts'],
+        'labels': json['labels'] == null ? undefined : json['labels'],
+        'labelsArray': json['labelsArray'] == null ? undefined : json['labelsArray'],
+        'values': json['values'] == null ? undefined : json['values'],
     };
 }
 
@@ -87,11 +73,9 @@ export function O11ySeriesToJSONTyped(value?: O11ySeries | null, ignoreDiscrimin
 
     return {
         
-        'costCents': value['costCents'],
-        'errors': value['errors'],
-        'requests': value['requests'],
-        'tokens': value['tokens'],
-        'ts': value['ts'],
+        'labels': value['labels'],
+        'labelsArray': value['labelsArray'],
+        'values': value['values'],
     };
 }
 

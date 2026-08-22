@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,31 +20,37 @@ import { mapValues } from '../runtime.js';
  */
 export interface LastEventView {
     /**
-     * 
+     * Actor is who produced the turn, defaulted to the calling principal when the
+     * writer named nobody.
      * @type {string}
      * @memberof LastEventView
      */
     actor?: string;
     /**
-     * 
+     * At is when the turn was recorded, RFC 3339 in UTC to the second.
      * @type {string}
      * @memberof LastEventView
      */
     at?: string;
     /**
-     * 
+     * Kind is what the turn was, from the log's closed six: message, tool-call,
+     * spawn, log, status, control.
      * @type {string}
      * @memberof LastEventView
      */
     kind?: string;
     /**
-     * 
+     * Preview is the first 240 bytes of the event's payload, cut without regard for
+     * the JSON inside it — it is a string to SHOW, never a value to parse. Read the
+     * detail or the stream for the whole payload.
      * @type {string}
      * @memberof LastEventView
      */
     preview?: string;
     /**
-     * 
+     * Seq is that event's position in the session's log — monotonic from 1, per
+     * session. A reader holding it can ask the detail or stream reads for
+     * everything after it, so this doubles as the list's resume cursor.
      * @type {number}
      * @memberof LastEventView
      */

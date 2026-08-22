@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -35,25 +35,28 @@ import {
  */
 export interface ArgoAppList {
     /**
-     * 
+     * APIVersion is the constant "argoproj.io/v1alpha1".
      * @type {string}
      * @memberof ArgoAppList
      */
     apiVersion?: string;
     /**
-     * 
+     * Items is one entry per operator App CR the caller may see — its own org's, or
+     * every platform namespace's for a SuperAdmin — followed, for a SuperAdmin
+     * only, by every Hanzo CD Application in the cluster. Empty (never null) rather
+     * than absent when the caller owns nothing.
      * @type {Array<ArgoApp>}
      * @memberof ArgoAppList
      */
     items?: Array<ArgoApp>;
     /**
-     * 
+     * Kind is the constant "ApplicationList".
      * @type {string}
      * @memberof ArgoAppList
      */
     kind?: string;
     /**
-     * 
+     * Metadata is the list envelope the SPA expects; it carries no resume point.
      * @type {ArgoListMeta}
      * @memberof ArgoAppList
      */

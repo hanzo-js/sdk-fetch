@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,37 +20,39 @@ import { mapValues } from '../runtime.js';
  */
 export interface SMS {
     /**
-     * 
+     * From is the sending number in E.164, and must be one this org holds.
      * @type {string}
      * @memberof SMS
      */
     from?: string;
     /**
-     * 
+     * ID is the carrier's handle for the message.
      * @type {string}
      * @memberof SMS
      */
     id?: string;
     /**
-     * 
+     * Org is the tenant the message was sent for or received by.
      * @type {string}
      * @memberof SMS
      */
     org?: string;
     /**
-     * queued | sent | delivered | failed
+     * Status is where the message is: "queued", "sent", "delivered" or "failed".
+     * "sent" means the carrier took it; "delivered" means the handset got it, and
+     * not every carrier or destination reports that.
      * @type {string}
      * @memberof SMS
      */
     status?: string;
     /**
-     * 
+     * Text is the message body. Empty is legal when the message carried only media.
      * @type {string}
      * @memberof SMS
      */
     text?: string;
     /**
-     * 
+     * To is the receiving number in E.164.
      * @type {string}
      * @memberof SMS
      */

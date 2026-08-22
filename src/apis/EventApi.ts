@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -16,14 +16,65 @@
 import * as runtime from '../runtime.js';
 import type {
   CaptureResult,
+  ErrorList,
+  EventList,
+  HealthReport,
+  InsightsStatus,
+  Overview,
   PostEventRequest,
+  ReplayBody,
+  Timeseries,
+  Top,
 } from '../models/index.js';
 import {
     CaptureResultFromJSON,
     CaptureResultToJSON,
+    ErrorListFromJSON,
+    ErrorListToJSON,
+    EventListFromJSON,
+    EventListToJSON,
+    HealthReportFromJSON,
+    HealthReportToJSON,
+    InsightsStatusFromJSON,
+    InsightsStatusToJSON,
+    OverviewFromJSON,
+    OverviewToJSON,
     PostEventRequestFromJSON,
     PostEventRequestToJSON,
+    ReplayBodyFromJSON,
+    ReplayBodyToJSON,
+    TimeseriesFromJSON,
+    TimeseriesToJSON,
+    TopFromJSON,
+    TopToJSON,
 } from '../models/index.js';
+
+export interface EventApiGetEventErrorsRequest {
+    limit?: number;
+}
+
+export interface EventApiGetEventInsightsEventsRequest {
+    limit?: number;
+}
+
+export interface EventApiGetEventOverviewRequest {
+    range?: string;
+    start?: string;
+    end?: string;
+}
+
+export interface EventApiGetEventTimeseriesRequest {
+    range?: string;
+    start?: string;
+    end?: string;
+}
+
+export interface EventApiGetEventTopRequest {
+    range?: string;
+    start?: string;
+    end?: string;
+    limit?: number;
+}
 
 export interface EventApiPostEventOperationRequest {
     postEventRequest?: PostEventRequest;
@@ -39,13 +90,377 @@ export interface EventApiPostEventByProjectStoreRequest {
     body?: Blob;
 }
 
+export interface EventApiPostEventReplayRequest {
+    replayBody?: ReplayBody;
+}
+
 /**
  * 
  */
 export class EventApi extends runtime.BaseAPI {
 
     /**
-     * Stores pageviews, browser errors, identifies and custom commerce events as rows in the caller\'s own tenant, and answers a receipt {accepted, dropped} that always totals what was sent — a beacon is never silently discarded.  THE STATUS SAYS WHETHER ANYTHING LANDED, so a green check can never mean an empty warehouse. 200 means at least one event was stored (or that nothing was sent), and a nonzero `dropped` beside a nonzero `accepted` is a PARTIAL batch, never a failed one — a batch is not refused whole for its worst element. If NOTHING was stored the request is an error, and it names the one thing that fixes it: 401 `ingest_key_required` when every event was refused for want of a credential (the same events land with a key), and 400 `unroutable_events` when the caller HAD capability and the body still named nothing storable.  ONE door for every wire a Hanzo surface emits, dispatched by the SHAPE of the body and never by a second path: a bare event object, a bare array of them, the {batch:[…]} / {events:[…]} envelope, the team console\'s snake_case array, and the PostHog wire (spelled `distinct_id`/`api_key`, which the canonical wire never uses). BATCH IS A BODY, NOT A PATH — there is no /v1/event/batch, because an array already is one.  WHAT THE CALLER PRESENTS DECIDES WHAT IT MAY WRITE, and the door itself grants nothing. A validated bearer or an org API key writes the full event at full fidelity. A PUBLISHABLE key (pk-, on Authorization: Bearer, x-hanzo-ingest-key, or ?ingest_key= for navigator.sendBeacon, which cannot set headers) does the same, and is the credential a browser bundle ships: it is deliberately NOT a secret, it resolves WHICH tenant a beacon belongs to and nothing more. A pk- never authenticates and can READ NOTHING — not this org\'s errors, not a lens, not any other route on this API — so a leaked one lets a stranger write into your stream, and never lets one read out of it. Reading these rows back always takes a real bearer. A Hanzo Team workspace token resolves its org at REDUCED capability: the signed account names the person, so a `distinctId` in the body cannot pin events on a colleague.  NO CREDENTIAL IS REFUSED: a write the server cannot attribute to a project is 401 `ingest_key_required`, and a credential that IS presented but resolves to no project is 403 `ingest_key_unknown`. Nothing is filed under a shared tenant — events nobody can read are worse than events nobody sent, because the caller is told it succeeded. A browser bundle therefore always ships a pk-, which is what /v1/event.js takes.  A REDUCED principal — a Hanzo Team workspace token — writes through the PROJECTION into its own org: narrowed to what the SERVER can name (pageviews and errors, plus the closed autocapture vocabulary $click, $input, $change, $submit, $view), where every one of those names is resolved through a server-owned table and stored as that table\'s value, so the name on the wire is never the name in the row. Stripped, too, to the fields the projection names, so revenue, personId, groupId and every property but the element annotation cannot reach a row — and an exception is carried only on an error, never on an interaction, so a click cannot ship a stack trace into a row\'s attributes. It does NOT name the person: the signed account is the identity, so a `distinctId` in the body cannot pin events on a colleague. Everything refused is counted in `dropped`.  The projected lane alone is bounded: 413 over 64 KiB, 400 over 50 events, 429 on the per-client-IP and per-peer caps, and a DNT:1 or Sec-GPC:1 request stores nothing and says so in the receipt. Two stored values carry their own bounds on top, because a request cap does not bound one value: an element annotation over 2 KiB (or a trail over 32 steps) and an exception class over 256 bytes are dropped from the row, which still lands. Authenticated bodies are offered to the observability plane first, which claims LLM-observability ingestion batches and declines everything else.
+     * Errors returns the caller org\'s most recently captured errors, newest first. The error-tracking read view over event.error — the plane table the write core\'s error facts land in (errors are DELIBERATELY not on event.event) — each with its captured exception surfaced from the attributes map as a first-class field.  The org is the validated principal\'s — never a parameter — and this read requires a real bearer, NEVER the write-only publishable key: pk- can attribute a write and can read nothing. 403 without a validated bearer, 503 when the warehouse is unreachable.
+     * Errors returns the caller org\'s most recently captured errors, newest first.
+     */
+    async getEventErrorsRaw(requestParameters: EventApiGetEventErrorsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ErrorList>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/event/errors`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ErrorListFromJSON(jsonValue));
+    }
+
+    /**
+     * Errors returns the caller org\'s most recently captured errors, newest first. The error-tracking read view over event.error — the plane table the write core\'s error facts land in (errors are DELIBERATELY not on event.event) — each with its captured exception surfaced from the attributes map as a first-class field.  The org is the validated principal\'s — never a parameter — and this read requires a real bearer, NEVER the write-only publishable key: pk- can attribute a write and can read nothing. 403 without a validated bearer, 503 when the warehouse is unreachable.
+     * Errors returns the caller org\'s most recently captured errors, newest first.
+     */
+    async getEventErrors(requestParameters: EventApiGetEventErrorsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ErrorList> {
+        const response = await this.getEventErrorsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Health reports whether the event plane can take a write and the warehouse can answer a read.  It reports the analytics subsystem\'s own liveness in BOTH directions: plane is the event plane it WRITES (the bus and the JetStream stream every accepted event is published to, both named in the report), and datastore is the warehouse it READS, with each read lens\'s table reported as it is provisioned (the LLM usage ledger and the product-event table).  EITHER ONE DOWN IS A 503, and the report says WHICH — they are probed independently and never collapse into a single bit. This endpoint used to report the read half only, and answered 200/ok while every POST /v1/event failed on a stream that could not bind: a total ingest outage behind a green probe. A readiness gate here now gates on the write path too.  plane.ready IS A REAL PROBE and walks the ingest path itself — the same connection and the same stream a publish uses — so it cannot answer ready while a publish would 503. plane.reason carries the plane\'s own error text when it is false.  datastore IS NOT PROBED WITH A QUERY. It is the state of the process\'s own shared client — established, and not since closed — so a warehouse accepting connections and failing reads still reports true. Degraded CARRIES the report (status, the failing half, reason) as its body rather than an error envelope, so a gate reads the cause off the same object it got at 200.  A MISSING LENS TABLE IS NOT A FAILURE and never moves the status: a lens reported available:false answers honest-empty rather than erroring, so a fresh deployment whose collector has not emitted yet is legitimately 200 with the product-event lens unavailable. The lens block is reported whenever the warehouse is REACHABLE — including on a report degraded by the plane, where the tables genuinely were probed — and is absent only when the warehouse is not, having nothing to say about tables it could not reach.  Unauthenticated on purpose — liveness has to be probe-able — and it reads NO tenant data: table existence and stream presence only, never a row and never an event.
+     * Health reports whether the event plane can take a write and the warehouse can answer a read.
+     */
+    async getEventHealthRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<HealthReport>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/event/health`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => HealthReportFromJSON(jsonValue));
+    }
+
+    /**
+     * Health reports whether the event plane can take a write and the warehouse can answer a read.  It reports the analytics subsystem\'s own liveness in BOTH directions: plane is the event plane it WRITES (the bus and the JetStream stream every accepted event is published to, both named in the report), and datastore is the warehouse it READS, with each read lens\'s table reported as it is provisioned (the LLM usage ledger and the product-event table).  EITHER ONE DOWN IS A 503, and the report says WHICH — they are probed independently and never collapse into a single bit. This endpoint used to report the read half only, and answered 200/ok while every POST /v1/event failed on a stream that could not bind: a total ingest outage behind a green probe. A readiness gate here now gates on the write path too.  plane.ready IS A REAL PROBE and walks the ingest path itself — the same connection and the same stream a publish uses — so it cannot answer ready while a publish would 503. plane.reason carries the plane\'s own error text when it is false.  datastore IS NOT PROBED WITH A QUERY. It is the state of the process\'s own shared client — established, and not since closed — so a warehouse accepting connections and failing reads still reports true. Degraded CARRIES the report (status, the failing half, reason) as its body rather than an error envelope, so a gate reads the cause off the same object it got at 200.  A MISSING LENS TABLE IS NOT A FAILURE and never moves the status: a lens reported available:false answers honest-empty rather than erroring, so a fresh deployment whose collector has not emitted yet is legitimately 200 with the product-event lens unavailable. The lens block is reported whenever the warehouse is REACHABLE — including on a report degraded by the plane, where the tables genuinely were probed — and is absent only when the warehouse is not, having nothing to say about tables it could not reach.  Unauthenticated on purpose — liveness has to be probe-able — and it reads NO tenant data: table existence and stream presence only, never a row and never an event.
+     * Health reports whether the event plane can take a write and the warehouse can answer a read.
+     */
+    async getEventHealth(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<HealthReport> {
+        const response = await this.getEventHealthRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns the caller org\'s most recent product events, newest first. The console\'s raw-event view over event.event — the same table the capture doors fill — one row per stored event, with the row\'s attributes returned as the properties object.  The org is the validated principal\'s — never a parameter — and a read requires a real bearer, never the write-only publishable key. 403 without a validated bearer, 503 when the warehouse is unreachable.
+     * Returns the caller org\'s most recent product events, newest first.
+     */
+    async getEventInsightsEventsRaw(requestParameters: EventApiGetEventInsightsEventsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<EventList>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/event/insights/events`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EventListFromJSON(jsonValue));
+    }
+
+    /**
+     * Returns the caller org\'s most recent product events, newest first. The console\'s raw-event view over event.event — the same table the capture doors fill — one row per stored event, with the row\'s attributes returned as the properties object.  The org is the validated principal\'s — never a parameter — and a read requires a real bearer, never the write-only publishable key. 403 without a validated bearer, 503 when the warehouse is unreachable.
+     * Returns the caller org\'s most recent product events, newest first.
+     */
+    async getEventInsightsEvents(requestParameters: EventApiGetEventInsightsEventsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<EventList> {
+        const response = await this.getEventInsightsEventsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Reports that the unified insights surface is serving. It reads no tenant data and consults no dependency, so it answers 200 unconditionally and needs no principal — liveness must be probe-able. The warehouse-connectivity probe is a different question and lives at GET /v1/event/health.
+     * Reports that the unified insights surface is serving.
+     */
+    async getEventInsightsHealthRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<InsightsStatus>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/event/insights/health`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => InsightsStatusFromJSON(jsonValue));
+    }
+
+    /**
+     * Reports that the unified insights surface is serving. It reads no tenant data and consults no dependency, so it answers 200 unconditionally and needs no principal — liveness must be probe-able. The warehouse-connectivity probe is a different question and lives at GET /v1/event/health.
+     * Reports that the unified insights surface is serving.
+     */
+    async getEventInsightsHealth(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<InsightsStatus> {
+        const response = await this.getEventInsightsHealthRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Overview returns the caller org\'s analytics KPIs for one time window. Three lenses over one warehouse: llm is the live per-org LLM usage ledger (requests, tokens, spend, models, providers, errors) and is always real; web (pageviews, visitors, sessions) and commerce (orders, revenue, AOV) read the product-event table and report available=false rather than fabricating zeros when it holds nothing yet.  The org is the validated principal\'s — never a parameter — so a caller can only ever read its own tenant. 403 without a validated bearer, 400 on an unknown range, 503 when the warehouse is unreachable.
+     * Overview returns the caller org\'s analytics KPIs for one time window.
+     */
+    async getEventOverviewRaw(requestParameters: EventApiGetEventOverviewRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Overview>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['range'] != null) {
+            queryParameters['range'] = requestParameters['range'];
+        }
+
+        if (requestParameters['start'] != null) {
+            queryParameters['start'] = requestParameters['start'];
+        }
+
+        if (requestParameters['end'] != null) {
+            queryParameters['end'] = requestParameters['end'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/event/overview`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OverviewFromJSON(jsonValue));
+    }
+
+    /**
+     * Overview returns the caller org\'s analytics KPIs for one time window. Three lenses over one warehouse: llm is the live per-org LLM usage ledger (requests, tokens, spend, models, providers, errors) and is always real; web (pageviews, visitors, sessions) and commerce (orders, revenue, AOV) read the product-event table and report available=false rather than fabricating zeros when it holds nothing yet.  The org is the validated principal\'s — never a parameter — so a caller can only ever read its own tenant. 403 without a validated bearer, 400 on an unknown range, 503 when the warehouse is unreachable.
+     * Overview returns the caller org\'s analytics KPIs for one time window.
+     */
+    async getEventOverview(requestParameters: EventApiGetEventOverviewRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Overview> {
+        const response = await this.getEventOverviewRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Serves the browser tag that autocaptures pageviews (initial and SPA) and uncaught errors onto the canonical wire at POST /v1/event.  Install is one line, and it is the same line for a Hanzo property and for a customer\'s own page:      <script defer src=\"https://api.hanzo.ai/v1/event/tag.js\" data-key=\"pk-…\"></script>  `data-key` is the publishable key the project mints; `data-product` optionally names the emitting surface. The key may also ride the src as `?key=` for a host that strips data attributes.  WITHOUT A KEY THE TAG SENDS NOTHING. A keyless beacon is accepted 200 into $public, a reserved tenant the owning org cannot read — so silence is the honest failure, and the tag picks it rather than reporting success into a tenant nobody reads.
+     * The Hanzo event tag — the one-line install for a surface with no bundler
+     */
+    async getEventTagJsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Blob>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/event/tag.js`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.BlobApiResponse(response);
+    }
+
+    /**
+     * Serves the browser tag that autocaptures pageviews (initial and SPA) and uncaught errors onto the canonical wire at POST /v1/event.  Install is one line, and it is the same line for a Hanzo property and for a customer\'s own page:      <script defer src=\"https://api.hanzo.ai/v1/event/tag.js\" data-key=\"pk-…\"></script>  `data-key` is the publishable key the project mints; `data-product` optionally names the emitting surface. The key may also ride the src as `?key=` for a host that strips data attributes.  WITHOUT A KEY THE TAG SENDS NOTHING. A keyless beacon is accepted 200 into $public, a reserved tenant the owning org cannot read — so silence is the honest failure, and the tag picks it rather than reporting success into a tenant nobody reads.
+     * The Hanzo event tag — the one-line install for a surface with no bundler
+     */
+    async getEventTagJs(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Blob> {
+        const response = await this.getEventTagJsRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Timeseries returns the caller org\'s LLM usage over time as an evenly-spaced series. One point per hour or per day — the bucket the window implies, 24h giving hours and 7d/30d giving days — carrying requests, total tokens and spend in cents. Empty buckets are filled with zeros so a client charts a continuous line.  The org is the validated principal\'s — never a parameter. 403 without a validated bearer, 400 on an unknown range, 503 when the warehouse is unreachable.
+     * Timeseries returns the caller org\'s LLM usage over time as an evenly-spaced series.
+     */
+    async getEventTimeseriesRaw(requestParameters: EventApiGetEventTimeseriesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Timeseries>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['range'] != null) {
+            queryParameters['range'] = requestParameters['range'];
+        }
+
+        if (requestParameters['start'] != null) {
+            queryParameters['start'] = requestParameters['start'];
+        }
+
+        if (requestParameters['end'] != null) {
+            queryParameters['end'] = requestParameters['end'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/event/timeseries`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TimeseriesFromJSON(jsonValue));
+    }
+
+    /**
+     * Timeseries returns the caller org\'s LLM usage over time as an evenly-spaced series. One point per hour or per day — the bucket the window implies, 24h giving hours and 7d/30d giving days — carrying requests, total tokens and spend in cents. Empty buckets are filled with zeros so a client charts a continuous line.  The org is the validated principal\'s — never a parameter. 403 without a validated bearer, 400 on an unknown range, 503 when the warehouse is unreachable.
+     * Timeseries returns the caller org\'s LLM usage over time as an evenly-spaced series.
+     */
+    async getEventTimeseries(requestParameters: EventApiGetEventTimeseriesRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Timeseries> {
+        const response = await this.getEventTimeseriesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Top returns the caller org\'s ranked lenses for one window, five of them at once. models ranks LLM models by spend and is always real; products ranks commerce orders by revenue; topPages ranks requested paths, topReferrers the external referrer domains (\"(direct)\" for a missing or same-origin one) and topSources the utm_source campaigns (\"(none)\" when absent), each by pageviews. Every lens carries each row\'s share of the in-window total, so a top-N honestly shows the long tail.  The four event lenses report available=false rather than fabricating zeros when the product-event table holds nothing yet. The org is the validated principal\'s — never a parameter. 403 without a validated bearer, 400 on an unknown range, 503 when the warehouse is unreachable.
+     * Top returns the caller org\'s ranked lenses for one window, five of them at once.
+     */
+    async getEventTopRaw(requestParameters: EventApiGetEventTopRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Top>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['range'] != null) {
+            queryParameters['range'] = requestParameters['range'];
+        }
+
+        if (requestParameters['start'] != null) {
+            queryParameters['start'] = requestParameters['start'];
+        }
+
+        if (requestParameters['end'] != null) {
+            queryParameters['end'] = requestParameters['end'];
+        }
+
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/event/top`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TopFromJSON(jsonValue));
+    }
+
+    /**
+     * Top returns the caller org\'s ranked lenses for one window, five of them at once. models ranks LLM models by spend and is always real; products ranks commerce orders by revenue; topPages ranks requested paths, topReferrers the external referrer domains (\"(direct)\" for a missing or same-origin one) and topSources the utm_source campaigns (\"(none)\" when absent), each by pageviews. Every lens carries each row\'s share of the in-window total, so a top-N honestly shows the long tail.  The four event lenses report available=false rather than fabricating zeros when the product-event table holds nothing yet. The org is the validated principal\'s — never a parameter. 403 without a validated bearer, 400 on an unknown range, 503 when the warehouse is unreachable.
+     * Top returns the caller org\'s ranked lenses for one window, five of them at once.
+     */
+    async getEventTop(requestParameters: EventApiGetEventTopRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Top> {
+        const response = await this.getEventTopRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Stores pageviews, browser errors, identifies and custom commerce events as rows in the caller\'s own tenant, and answers a receipt {accepted, dropped} that always totals what was sent — a beacon is never silently discarded.  THE STATUS SAYS WHETHER ANYTHING LANDED, so a green check can never mean an empty warehouse. 200 means at least one event was stored (or that nothing was sent), and a nonzero `dropped` beside a nonzero `accepted` is a PARTIAL batch, never a failed one — a batch is not refused whole for its worst element. If NOTHING was stored the request is an error, and it names the one thing that fixes it: 401 `ingest_key_required` when every event was refused for want of a credential (the same events land with a key), and 400 `unroutable_events` when the caller HAD capability and the body still named nothing storable.  ONE door for every wire a Hanzo surface emits, dispatched by the SHAPE of the body and never by a second path: a bare event object, a bare array of them, the {batch:[…]} / {events:[…]} envelope, the team console\'s snake_case array, and the PostHog wire (spelled `distinct_id`/`api_key`, which the canonical wire never uses). BATCH IS A BODY, NOT A PATH — there is no /v1/event/batch, because an array already is one.  WHAT THE CALLER PRESENTS DECIDES WHAT IT MAY WRITE, and the door itself grants nothing. A validated bearer or an org API key writes the full event at full fidelity. A PUBLISHABLE key (pk-, on Authorization: Bearer, x-hanzo-ingest-key, or ?ingest_key= for navigator.sendBeacon, which cannot set headers) does the same, and is the credential a browser bundle ships: it is deliberately NOT a secret, it resolves WHICH tenant a beacon belongs to and nothing more. A pk- never authenticates and can READ NOTHING — not this org\'s errors, not a lens, not any other route on this API — so a leaked one lets a stranger write into your stream, and never lets one read out of it. Reading these rows back always takes a real bearer. A Hanzo Team workspace token resolves its org at REDUCED capability: the signed account names the person, so a `distinctId` in the body cannot pin events on a colleague.  NO CREDENTIAL IS REFUSED: a write the server cannot attribute to a project is 401 `ingest_key_required`, and a credential that IS presented but resolves to no project is 403 `ingest_key_unknown`. Nothing is filed under a shared tenant — events nobody can read are worse than events nobody sent, because the caller is told it succeeded. A browser bundle therefore always ships a pk-, which is what /v1/event/tag.js takes.  A REDUCED principal — a Hanzo Team workspace token — writes through the PROJECTION into its own org: narrowed to what the SERVER can name (pageviews and errors, plus the closed autocapture vocabulary $click, $input, $change, $submit, $view), where every one of those names is resolved through a server-owned table and stored as that table\'s value, so the name on the wire is never the name in the row. Stripped, too, to the fields the projection names, so revenue, personId, groupId and every property but the element annotation cannot reach a row — and an exception is carried only on an error, never on an interaction, so a click cannot ship a stack trace into a row\'s attributes. It does NOT name the person: the signed account is the identity, so a `distinctId` in the body cannot pin events on a colleague. Everything refused is counted in `dropped`.  The projected lane alone is bounded: 413 over 64 KiB, 400 over 50 events, 429 on the per-client-IP and per-peer caps, and a DNT:1 or Sec-GPC:1 request stores nothing and says so in the receipt. Two stored values carry their own bounds on top, because a request cap does not bound one value: an element annotation over 2 KiB (or a trail over 32 steps) and an exception class over 256 bytes are dropped from the row, which still lands. Authenticated bodies are offered to the observability plane first, which claims LLM-observability ingestion batches and declines everything else.
      * Capture product events into your org\'s warehouse
      */
     async postEventRaw(requestParameters: EventApiPostEventOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CaptureResult>> {
@@ -78,7 +493,7 @@ export class EventApi extends runtime.BaseAPI {
     }
 
     /**
-     * Stores pageviews, browser errors, identifies and custom commerce events as rows in the caller\'s own tenant, and answers a receipt {accepted, dropped} that always totals what was sent — a beacon is never silently discarded.  THE STATUS SAYS WHETHER ANYTHING LANDED, so a green check can never mean an empty warehouse. 200 means at least one event was stored (or that nothing was sent), and a nonzero `dropped` beside a nonzero `accepted` is a PARTIAL batch, never a failed one — a batch is not refused whole for its worst element. If NOTHING was stored the request is an error, and it names the one thing that fixes it: 401 `ingest_key_required` when every event was refused for want of a credential (the same events land with a key), and 400 `unroutable_events` when the caller HAD capability and the body still named nothing storable.  ONE door for every wire a Hanzo surface emits, dispatched by the SHAPE of the body and never by a second path: a bare event object, a bare array of them, the {batch:[…]} / {events:[…]} envelope, the team console\'s snake_case array, and the PostHog wire (spelled `distinct_id`/`api_key`, which the canonical wire never uses). BATCH IS A BODY, NOT A PATH — there is no /v1/event/batch, because an array already is one.  WHAT THE CALLER PRESENTS DECIDES WHAT IT MAY WRITE, and the door itself grants nothing. A validated bearer or an org API key writes the full event at full fidelity. A PUBLISHABLE key (pk-, on Authorization: Bearer, x-hanzo-ingest-key, or ?ingest_key= for navigator.sendBeacon, which cannot set headers) does the same, and is the credential a browser bundle ships: it is deliberately NOT a secret, it resolves WHICH tenant a beacon belongs to and nothing more. A pk- never authenticates and can READ NOTHING — not this org\'s errors, not a lens, not any other route on this API — so a leaked one lets a stranger write into your stream, and never lets one read out of it. Reading these rows back always takes a real bearer. A Hanzo Team workspace token resolves its org at REDUCED capability: the signed account names the person, so a `distinctId` in the body cannot pin events on a colleague.  NO CREDENTIAL IS REFUSED: a write the server cannot attribute to a project is 401 `ingest_key_required`, and a credential that IS presented but resolves to no project is 403 `ingest_key_unknown`. Nothing is filed under a shared tenant — events nobody can read are worse than events nobody sent, because the caller is told it succeeded. A browser bundle therefore always ships a pk-, which is what /v1/event.js takes.  A REDUCED principal — a Hanzo Team workspace token — writes through the PROJECTION into its own org: narrowed to what the SERVER can name (pageviews and errors, plus the closed autocapture vocabulary $click, $input, $change, $submit, $view), where every one of those names is resolved through a server-owned table and stored as that table\'s value, so the name on the wire is never the name in the row. Stripped, too, to the fields the projection names, so revenue, personId, groupId and every property but the element annotation cannot reach a row — and an exception is carried only on an error, never on an interaction, so a click cannot ship a stack trace into a row\'s attributes. It does NOT name the person: the signed account is the identity, so a `distinctId` in the body cannot pin events on a colleague. Everything refused is counted in `dropped`.  The projected lane alone is bounded: 413 over 64 KiB, 400 over 50 events, 429 on the per-client-IP and per-peer caps, and a DNT:1 or Sec-GPC:1 request stores nothing and says so in the receipt. Two stored values carry their own bounds on top, because a request cap does not bound one value: an element annotation over 2 KiB (or a trail over 32 steps) and an exception class over 256 bytes are dropped from the row, which still lands. Authenticated bodies are offered to the observability plane first, which claims LLM-observability ingestion batches and declines everything else.
+     * Stores pageviews, browser errors, identifies and custom commerce events as rows in the caller\'s own tenant, and answers a receipt {accepted, dropped} that always totals what was sent — a beacon is never silently discarded.  THE STATUS SAYS WHETHER ANYTHING LANDED, so a green check can never mean an empty warehouse. 200 means at least one event was stored (or that nothing was sent), and a nonzero `dropped` beside a nonzero `accepted` is a PARTIAL batch, never a failed one — a batch is not refused whole for its worst element. If NOTHING was stored the request is an error, and it names the one thing that fixes it: 401 `ingest_key_required` when every event was refused for want of a credential (the same events land with a key), and 400 `unroutable_events` when the caller HAD capability and the body still named nothing storable.  ONE door for every wire a Hanzo surface emits, dispatched by the SHAPE of the body and never by a second path: a bare event object, a bare array of them, the {batch:[…]} / {events:[…]} envelope, the team console\'s snake_case array, and the PostHog wire (spelled `distinct_id`/`api_key`, which the canonical wire never uses). BATCH IS A BODY, NOT A PATH — there is no /v1/event/batch, because an array already is one.  WHAT THE CALLER PRESENTS DECIDES WHAT IT MAY WRITE, and the door itself grants nothing. A validated bearer or an org API key writes the full event at full fidelity. A PUBLISHABLE key (pk-, on Authorization: Bearer, x-hanzo-ingest-key, or ?ingest_key= for navigator.sendBeacon, which cannot set headers) does the same, and is the credential a browser bundle ships: it is deliberately NOT a secret, it resolves WHICH tenant a beacon belongs to and nothing more. A pk- never authenticates and can READ NOTHING — not this org\'s errors, not a lens, not any other route on this API — so a leaked one lets a stranger write into your stream, and never lets one read out of it. Reading these rows back always takes a real bearer. A Hanzo Team workspace token resolves its org at REDUCED capability: the signed account names the person, so a `distinctId` in the body cannot pin events on a colleague.  NO CREDENTIAL IS REFUSED: a write the server cannot attribute to a project is 401 `ingest_key_required`, and a credential that IS presented but resolves to no project is 403 `ingest_key_unknown`. Nothing is filed under a shared tenant — events nobody can read are worse than events nobody sent, because the caller is told it succeeded. A browser bundle therefore always ships a pk-, which is what /v1/event/tag.js takes.  A REDUCED principal — a Hanzo Team workspace token — writes through the PROJECTION into its own org: narrowed to what the SERVER can name (pageviews and errors, plus the closed autocapture vocabulary $click, $input, $change, $submit, $view), where every one of those names is resolved through a server-owned table and stored as that table\'s value, so the name on the wire is never the name in the row. Stripped, too, to the fields the projection names, so revenue, personId, groupId and every property but the element annotation cannot reach a row — and an exception is carried only on an error, never on an interaction, so a click cannot ship a stack trace into a row\'s attributes. It does NOT name the person: the signed account is the identity, so a `distinctId` in the body cannot pin events on a colleague. Everything refused is counted in `dropped`.  The projected lane alone is bounded: 413 over 64 KiB, 400 over 50 events, 429 on the per-client-IP and per-peer caps, and a DNT:1 or Sec-GPC:1 request stores nothing and says so in the receipt. Two stored values carry their own bounds on top, because a request cap does not bound one value: an element annotation over 2 KiB (or a trail over 32 steps) and an exception class over 256 bytes are dropped from the row, which still lands. Authenticated bodies are offered to the observability plane first, which claims LLM-observability ingestion batches and declines everything else.
      * Capture product events into your org\'s warehouse
      */
     async postEvent(requestParameters: EventApiPostEventOperationRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CaptureResult> {
@@ -182,6 +597,48 @@ export class EventApi extends runtime.BaseAPI {
      */
     async postEventByProjectStore(requestParameters: EventApiPostEventByProjectStoreRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.postEventByProjectStoreRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Accepts a batch of rrweb events from a browser recorder and hands it to the session-replay pipeline, which stores the recording and derives the session summary a player reads back.  ONE REQUEST IS ONE BATCH, and it is all-or-nothing: the recording is made durable before this answers, so a 200 {\"accepted\":1} means stored and never \"buffered somewhere\". There is no partial count, because a half-written recording is not a recording.  `sessionId` is REQUIRED and bounded — at most 70 characters of ASCII letters, digits or \'-\'. It is the key every batch of one visit is grouped and ordered by, so an id outside that grammar is refused 400 here rather than accepted and dropped further down. `windowId` separates two tabs of one session and `distinctId` attributes the recording to a person; both are optional. `events` is the rrweb batch, each element a raw eventWithTime object, carried VERBATIM — the summary (click, keypress and mouse-activity counts, size) is derived downstream from exactly these bytes, so nothing is re-encoded or dropped.  THE CALLER\'S CREDENTIAL DECIDES THE TENANT, and the body never does: the recording lands in the org the presented credential resolves to. It takes the SAME credentials as /v1/event — a validated bearer, an org API key, or a publishable pk- key on Authorization: Bearer, x-hanzo-ingest-key or ?ingest_key= — so a browser bundle already holding a pk- for events needs nothing new to record. A caller that presents nothing is 401 `ingest_key_required`; one whose key resolves to no project is 403 `ingest_key_unknown`; a reduced principal (a Hanzo Team workspace token) is 403 `insufficient_capability`, because a full-fidelity screen recording has no projected form that is safe for a guest to write into a host org.  BOUNDS: 413 over 512 KiB of body, and that is the only bound on one batch — a recorder is expected to chunk a long session rather than send it whole, and the cap is the size one message can carry rather than an arbitrary number. 503 when the pipeline cannot take the batch: honest unavailability the caller can retry, never a 200 over a discarded recording.
+     * Record a session-replay snapshot batch
+     */
+    async postEventReplayRaw(requestParameters: EventApiPostEventReplayRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CaptureResult>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/event/replay`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: ReplayBodyToJSON(requestParameters['replayBody']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => CaptureResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Accepts a batch of rrweb events from a browser recorder and hands it to the session-replay pipeline, which stores the recording and derives the session summary a player reads back.  ONE REQUEST IS ONE BATCH, and it is all-or-nothing: the recording is made durable before this answers, so a 200 {\"accepted\":1} means stored and never \"buffered somewhere\". There is no partial count, because a half-written recording is not a recording.  `sessionId` is REQUIRED and bounded — at most 70 characters of ASCII letters, digits or \'-\'. It is the key every batch of one visit is grouped and ordered by, so an id outside that grammar is refused 400 here rather than accepted and dropped further down. `windowId` separates two tabs of one session and `distinctId` attributes the recording to a person; both are optional. `events` is the rrweb batch, each element a raw eventWithTime object, carried VERBATIM — the summary (click, keypress and mouse-activity counts, size) is derived downstream from exactly these bytes, so nothing is re-encoded or dropped.  THE CALLER\'S CREDENTIAL DECIDES THE TENANT, and the body never does: the recording lands in the org the presented credential resolves to. It takes the SAME credentials as /v1/event — a validated bearer, an org API key, or a publishable pk- key on Authorization: Bearer, x-hanzo-ingest-key or ?ingest_key= — so a browser bundle already holding a pk- for events needs nothing new to record. A caller that presents nothing is 401 `ingest_key_required`; one whose key resolves to no project is 403 `ingest_key_unknown`; a reduced principal (a Hanzo Team workspace token) is 403 `insufficient_capability`, because a full-fidelity screen recording has no projected form that is safe for a guest to write into a host org.  BOUNDS: 413 over 512 KiB of body, and that is the only bound on one batch — a recorder is expected to chunk a long session rather than send it whole, and the cap is the size one message can carry rather than an arbitrary number. 503 when the pipeline cannot take the batch: honest unavailability the caller can retry, never a 200 over a discarded recording.
+     * Record a session-replay snapshot batch
+     */
+    async postEventReplay(requestParameters: EventApiPostEventReplayRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CaptureResult> {
+        const response = await this.postEventReplayRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
 }

@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,13 +20,19 @@ import { mapValues } from '../runtime.js';
  */
 export interface Leased {
     /**
-     * 
+     * Class is what was actually leased, from the closed set LeaseIn.Class names:
+     * exec | dev | desktop | android. A request that named none leased an `exec`,
+     * so this is where a caller learns which kind of computer it is holding, and it
+     * is what Workdir below follows from.
      * @type {string}
      * @memberof Leased
      */
     _class?: string;
     /**
-     * 
+     * ID names this computer for every later call — run, read, write, stop and end
+     * all take it, and a LeaseIn carrying it resumes THIS sandbox instead of leasing
+     * a second one. Minted here; a caller cannot choose it, and a resumed lease that
+     * had expired comes back under a new one.
      * @type {string}
      * @memberof Leased
      */
@@ -41,13 +47,21 @@ export interface Leased {
      */
     runtime?: string;
     /**
-     * 
+     * Status is where the pod stands, from the store's three: pending | running |
+     * error. A lease that ANSWERS has already waited for the pod, so this reads
+     * `running` — a start that failed is a 503 and no sandbox at all. Read it
+     * anyway: exec refuses a sandbox that is not running, so anything else here is
+     * the reason the next call will not work.
      * @type {string}
      * @memberof Leased
      */
     status?: string;
     /**
-     * 
+     * Workdir is the absolute directory this sandbox keeps files in, and what a
+     * relative path in a later read, write or run resolves against — /work for dev,
+     * desktop and android (the project volume's mount point), /mnt/data for exec
+     * (the artifact directory the code tool tells the model to write to). A path
+     * that climbs above it is refused rather than rewritten.
      * @type {string}
      * @memberof Leased
      */

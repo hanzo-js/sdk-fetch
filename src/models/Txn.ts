@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,49 +20,59 @@ import { mapValues } from '../runtime.js';
  */
 export interface Txn {
     /**
-     * 
+     * AmountCents is the voucher's total, in whole cents — its total debit, which
+     * equals its total credit because every voucher balances. It is the size of the
+     * entry and carries no direction; the category says which way it went.
      * @type {number}
      * @memberof Txn
      */
     amountCents?: number;
     /**
-     * COA account number of the P&L line
+     * Category is the chart-of-accounts NUMBER of the income or expense account this
+     * voucher touched — where it lands on the P&L, not a free-text label.
      * @type {string}
      * @memberof Txn
      */
     category?: string;
     /**
-     * 
+     * CategoryName is that account's human name, so a caller need not carry the
+     * chart to render the row.
      * @type {string}
      * @memberof Txn
      */
     categoryName?: string;
     /**
-     * 
+     * Date is when the voucher POSTED — the accounting date the reports window on,
+     * which for an imported bank row is the bank's date and not the day it landed
+     * here.
      * @type {string}
      * @memberof Txn
      */
     date?: string;
     /**
-     * 
+     * Description is the line a person reads: the memo carried in from the source.
      * @type {string}
      * @memberof Txn
      */
     description?: string;
     /**
-     * source_kind: bank_txn | scan | commerce_txn
+     * Source is where the entry came from: bank_txn for an imported statement line,
+     * scan for a receipt or bill read by the scanner, commerce_txn for a sale
+     * booked by the store.
      * @type {string}
      * @memberof Txn
      */
     source?: string;
     /**
-     * 
+     * Vendor is the counterparty, resolved from whatever the source knew — a bank
+     * row's merchant, a scanned bill's supplier. Absent when the source named none.
      * @type {string}
      * @memberof Txn
      */
     vendor?: string;
     /**
-     * 
+     * VoucherID identifies the underlying double-entry voucher, so a caller can open
+     * the full set of legs behind this single register line.
      * @type {number}
      * @memberof Txn
      */

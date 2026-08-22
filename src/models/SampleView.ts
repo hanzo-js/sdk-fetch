@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,97 +20,107 @@ import { mapValues } from '../runtime.js';
  */
 export interface SampleView {
     /**
-     * 
+     * At is when the reading was MEASURED, RFC 3339 in UTC — the x-axis a chart
+     * plots against. The series is returned oldest first, so it only increases.
      * @type {string}
      * @memberof SampleView
      */
     at?: string;
     /**
-     * 
+     * CostCents is what this unit resold for over the hour the reading falls in, in
+     * whole US cents. 0 means UNPRICED, not free: the operator's own machines — a
+     * linked run-target, a dialed-in BYO worker — are metered for utilization and
+     * never resold, so only a priced source ever fills it.
      * @type {number}
      * @memberof SampleView
      */
     costCents?: number;
     /**
-     * 
+     * CPUs is logical cores. The static capability rides every row on purpose: a
+     * chart can size load against cores without joining a registry whose row may
+     * since have been rewritten or the unit deregistered.
      * @type {number}
      * @memberof SampleView
      */
     cpus?: number;
     /**
-     * 
+     * GPUModel names the representative accelerator ("GB10"); GPUs carries how many.
      * @type {string}
      * @memberof SampleView
      */
     gpuModel?: string;
     /**
-     * 
+     * GPUUtil is aggregate accelerator utilization as a FRACTION of 1 — 0.42 is
+     * 42% busy. Anything a reporter sends outside 0..1 is clamped into it on write.
      * @type {number}
      * @memberof SampleView
      */
     gpuUtil?: number;
     /**
-     * 
+     * GPUs is how many accelerators the reading covers.
      * @type {number}
      * @memberof SampleView
      */
     gpus?: number;
     /**
-     * 
+     * Host is the hostname the unit reported at the time of the reading.
      * @type {string}
      * @memberof SampleView
      */
     host?: string;
     /**
-     * 
+     * Kind is what the measured unit is: laptop, cloud, gpu, cluster, machine or
+     * worker.
      * @type {string}
      * @memberof SampleView
      */
     kind?: string;
     /**
-     * 
+     * Load1 is the 1-minute load average — runnable processes, not a percentage.
      * @type {number}
      * @memberof SampleView
      */
     load1?: number;
     /**
-     * 
+     * Load5 is the 5-minute load average, the same units as Load1.
      * @type {number}
      * @memberof SampleView
      */
     load5?: number;
     /**
-     * 
+     * Load15 is the 15-minute load average, the same units as Load1.
      * @type {number}
      * @memberof SampleView
      */
     load15?: number;
     /**
-     * 
+     * MemFree is host memory available, in BYTES, as reported rather than derived.
      * @type {number}
      * @memberof SampleView
      */
     memFree?: number;
     /**
-     * 
+     * MemUsed is host memory in use, in BYTES.
      * @type {number}
      * @memberof SampleView
      */
     memUsed?: number;
     /**
-     * 
+     * Memory is total system RAM in BYTES at the time of the reading.
      * @type {number}
      * @memberof SampleView
      */
     memory?: number;
     /**
-     * 
+     * Source is the plane that reported the reading: "agent", "byo" or "visor" —
+     * the same vocabulary the board's rows carry, and what ?source= narrows on.
      * @type {string}
      * @memberof SampleView
      */
     source?: string;
     /**
-     * 
+     * Unit is the source's own id for the measured unit. With Source it is the key
+     * the chart groups by, and the key the board joins a unit's latest reading on.
      * @type {string}
      * @memberof SampleView
      */

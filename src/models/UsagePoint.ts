@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,25 +20,25 @@ import { mapValues } from '../runtime.js';
  */
 export interface UsagePoint {
     /**
-     * 
-     * @type {string}
-     * @memberof UsagePoint
-     */
-    date?: string;
-    /**
-     * 
+     * Requests is how many LLM calls fell in this bucket.
      * @type {number}
      * @memberof UsagePoint
      */
     requests?: number;
     /**
-     * 
+     * SpendCents is what they cost, in cents.
      * @type {number}
      * @memberof UsagePoint
      */
     spendCents?: number;
     /**
-     * 
+     * T is the bucket's start, RFC3339 UTC, aligned to the interval.
+     * @type {string}
+     * @memberof UsagePoint
+     */
+    t?: string;
+    /**
+     * Tokens is prompt plus completion tokens over those calls.
      * @type {number}
      * @memberof UsagePoint
      */
@@ -62,9 +62,9 @@ export function UsagePointFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     }
     return {
         
-        'date': json['date'] == null ? undefined : json['date'],
         'requests': json['requests'] == null ? undefined : json['requests'],
         'spendCents': json['spendCents'] == null ? undefined : json['spendCents'],
+        't': json['t'] == null ? undefined : json['t'],
         'tokens': json['tokens'] == null ? undefined : json['tokens'],
     };
 }
@@ -80,9 +80,9 @@ export function UsagePointToJSONTyped(value?: UsagePoint | null, ignoreDiscrimin
 
     return {
         
-        'date': value['date'],
         'requests': value['requests'],
         'spendCents': value['spendCents'],
+        't': value['t'],
         'tokens': value['tokens'],
     };
 }

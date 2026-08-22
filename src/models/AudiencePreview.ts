@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -35,16 +35,18 @@ export interface AudiencePreview {
      */
     count?: number;
     /**
-     * Deliverable is how many de-duplicated addresses a send would reach, and
-     * Unmatched how many cohort identifiers named no customer. Unmatched is
-     * reported rather than hidden: it is the honest explanation for a cohort of
-     * 500 that mails 3.
+     * Deliverable is how many de-duplicated mailboxes a send would reach. Two
+     * customers sharing an address count once, so it is <= Count.
      * @type {number}
      * @memberof AudiencePreview
      */
     deliverable?: number;
     /**
-     * 
+     * Reason is the error text of the read that failed: the org's roster could
+     * not be loaded ("identity store unavailable…"), or the cohort query had no
+     * warehouse to run against ("analytics warehouse not configured"). Absent
+     * when the evaluation succeeded, so its presence and Available=false are one
+     * fact seen twice.
      * @type {string}
      * @memberof AudiencePreview
      */
@@ -64,7 +66,11 @@ export interface AudiencePreview {
      */
     source?: string;
     /**
-     * 
+     * Unmatched is how many cohort identifiers named nobody on the org's roster
+     * and so have no address to mail. It is reported rather than hidden: it is
+     * the honest explanation for a cohort of 500 that mails 3. Always 0 for an
+     * event-less (whole-org) audience, which starts from the roster and has
+     * nothing to match.
      * @type {number}
      * @memberof AudiencePreview
      */

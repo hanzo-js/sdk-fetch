@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -15,10 +15,13 @@
 
 import * as runtime from '../runtime.js';
 import type {
+  MlCreate,
   MlResource,
   MlResourceList,
 } from '../models/index.js';
 import {
+    MlCreateFromJSON,
+    MlCreateToJSON,
     MlResourceFromJSON,
     MlResourceToJSON,
     MlResourceListFromJSON,
@@ -35,6 +38,10 @@ export interface MlApiGetMlModelsByNameRequest {
 
 export interface MlApiPatchMlModelsByNameRequest {
     name: string;
+}
+
+export interface MlApiPostMlModelsRequest {
+    mlCreate: MlCreate;
 }
 
 export interface MlApiPostMlModelsByNamePredictRequest {
@@ -263,13 +270,22 @@ export class MlApi extends runtime.BaseAPI {
     }
 
     /**
-     * Deploys a model into the caller\'s own tenant namespace and answers the created resource, 201. The spec is the kserve InferenceService spec, relayed as given, so anything kserve serves is deployable here without this layer knowing what it is.  THE BALANCE GATE RUNS FIRST, before a namespace or a resource exists, so an unfunded org cannot start GPU compute and then be billed for it. It fails CLOSED: a commerce that cannot be reached refuses rather than admits. The refusal carries the fleet\'s nested error body — the 402 shape a funded-balance client already parses — which is precisely why this route is not a typed op. On success the submission fee is debited from the caller org\'s own ledger, asynchronously and best-effort; ongoing GPU-hour cost is metered elsewhere.  The tenant namespace is derived from the VALIDATED org and project — never from a field — and the mapping is injective in both, so two tenants can never land in one namespace. An unvalidated caller is refused before any of that. The name must be a DNS-1123 label; a name already taken in the tenant\'s namespace is a 409.
-     * Deploy an inference model
+     * Deploys one inference model for the caller\'s org, and answers 201 with the model as Kubernetes admitted it.  The `spec` is a kserve InferenceService spec, passed through unchanged — this plane owns the tenancy, the billing and the namespace, and kserve owns what a model IS. An unfunded org is refused BEFORE anything is created, so nobody runs free GPU compute and nobody is charged for a resource that was never made.
+     * Deploys one inference model for the caller\'s org, and answers 201 with the model as Kubernetes admitted it.
      */
-    async postMlModelsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postMlModelsRaw(requestParameters: MlApiPostMlModelsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MlResource>> {
+        if (requestParameters['mlCreate'] == null) {
+            throw new runtime.RequiredError(
+                'mlCreate',
+                'Required parameter "mlCreate" was null or undefined when calling postMlModels().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -287,17 +303,19 @@ export class MlApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: MlCreateToJSON(requestParameters['mlCreate']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => MlResourceFromJSON(jsonValue));
     }
 
     /**
-     * Deploys a model into the caller\'s own tenant namespace and answers the created resource, 201. The spec is the kserve InferenceService spec, relayed as given, so anything kserve serves is deployable here without this layer knowing what it is.  THE BALANCE GATE RUNS FIRST, before a namespace or a resource exists, so an unfunded org cannot start GPU compute and then be billed for it. It fails CLOSED: a commerce that cannot be reached refuses rather than admits. The refusal carries the fleet\'s nested error body — the 402 shape a funded-balance client already parses — which is precisely why this route is not a typed op. On success the submission fee is debited from the caller org\'s own ledger, asynchronously and best-effort; ongoing GPU-hour cost is metered elsewhere.  The tenant namespace is derived from the VALIDATED org and project — never from a field — and the mapping is injective in both, so two tenants can never land in one namespace. An unvalidated caller is refused before any of that. The name must be a DNS-1123 label; a name already taken in the tenant\'s namespace is a 409.
-     * Deploy an inference model
+     * Deploys one inference model for the caller\'s org, and answers 201 with the model as Kubernetes admitted it.  The `spec` is a kserve InferenceService spec, passed through unchanged — this plane owns the tenancy, the billing and the namespace, and kserve owns what a model IS. An unfunded org is refused BEFORE anything is created, so nobody runs free GPU compute and nobody is charged for a resource that was never made.
+     * Deploys one inference model for the caller\'s org, and answers 201 with the model as Kubernetes admitted it.
      */
-    async postMlModels(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postMlModelsRaw(initOverrides);
+    async postMlModels(requestParameters: MlApiPostMlModelsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MlResource> {
+        const response = await this.postMlModelsRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**

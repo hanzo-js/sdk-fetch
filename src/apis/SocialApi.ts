@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -14,6 +14,40 @@
 
 
 import * as runtime from '../runtime.js';
+import type {
+  SocialAccount,
+  SocialAccountBody,
+  SocialAccountWrite,
+  SocialAccounts,
+  SocialPost,
+  SocialPostBody,
+  SocialPostWrite,
+  SocialPosts,
+  SocialProviders,
+  SocialSummary,
+} from '../models/index.js';
+import {
+    SocialAccountFromJSON,
+    SocialAccountToJSON,
+    SocialAccountBodyFromJSON,
+    SocialAccountBodyToJSON,
+    SocialAccountWriteFromJSON,
+    SocialAccountWriteToJSON,
+    SocialAccountsFromJSON,
+    SocialAccountsToJSON,
+    SocialPostFromJSON,
+    SocialPostToJSON,
+    SocialPostBodyFromJSON,
+    SocialPostBodyToJSON,
+    SocialPostWriteFromJSON,
+    SocialPostWriteToJSON,
+    SocialPostsFromJSON,
+    SocialPostsToJSON,
+    SocialProvidersFromJSON,
+    SocialProvidersToJSON,
+    SocialSummaryFromJSON,
+    SocialSummaryToJSON,
+} from '../models/index.js';
 
 export interface SocialApiDeleteSocialAccountsByIdRequest {
     id: string;
@@ -23,12 +57,30 @@ export interface SocialApiDeleteSocialPostsByIdRequest {
     id: string;
 }
 
+export interface SocialApiGetSocialAccountsRequest {
+    provider?: string;
+    limit?: string;
+}
+
 export interface SocialApiGetSocialAccountsByIdRequest {
     id: string;
 }
 
+export interface SocialApiGetSocialPostsRequest {
+    status?: string;
+    limit?: string;
+}
+
 export interface SocialApiGetSocialPostsByIdRequest {
     id: string;
+}
+
+export interface SocialApiPostSocialAccountsRequest {
+    socialAccountBody: SocialAccountBody;
+}
+
+export interface SocialApiPostSocialPostsRequest {
+    socialPostBody: SocialPostBody;
 }
 
 export interface SocialApiPostSocialPostsByIdPublishRequest {
@@ -37,10 +89,12 @@ export interface SocialApiPostSocialPostsByIdPublishRequest {
 
 export interface SocialApiPutSocialAccountsByIdRequest {
     id: string;
+    socialAccountWrite: SocialAccountWrite;
 }
 
 export interface SocialApiPutSocialPostsByIdRequest {
     id: string;
+    socialPostWrite: SocialPostWrite;
 }
 
 /**
@@ -49,8 +103,8 @@ export interface SocialApiPutSocialPostsByIdRequest {
 export class SocialApi extends runtime.BaseAPI {
 
     /**
-     * Removes one connected account from the org and answers 204 with no body; an id that is not there is 404.  It removes the account record only. Posts that already published through it keep their published state and their recorded external ids — this does not retract anything from the network.  A validated principal is required; 403 without one. Every row is keyed by the caller\'s org taken from that principal and never from the request, so an id belonging to another tenant reads as not found rather than as a refusal.
-     * Disconnect one account
+     * Removes one connected account from the org and answers 204 with no body; an id that is not there is 404.  It removes the account record only. Posts that already published through it keep their published state and their recorded external ids — this does not retract anything from the network.
+     * Removes one connected account from the org and answers 204 with no body; an id that is not there is 404.
      */
     async deleteSocialAccountsByIdRaw(requestParameters: SocialApiDeleteSocialAccountsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['id'] == null) {
@@ -87,16 +141,16 @@ export class SocialApi extends runtime.BaseAPI {
     }
 
     /**
-     * Removes one connected account from the org and answers 204 with no body; an id that is not there is 404.  It removes the account record only. Posts that already published through it keep their published state and their recorded external ids — this does not retract anything from the network.  A validated principal is required; 403 without one. Every row is keyed by the caller\'s org taken from that principal and never from the request, so an id belonging to another tenant reads as not found rather than as a refusal.
-     * Disconnect one account
+     * Removes one connected account from the org and answers 204 with no body; an id that is not there is 404.  It removes the account record only. Posts that already published through it keep their published state and their recorded external ids — this does not retract anything from the network.
+     * Removes one connected account from the org and answers 204 with no body; an id that is not there is 404.
      */
     async deleteSocialAccountsById(requestParameters: SocialApiDeleteSocialAccountsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.deleteSocialAccountsByIdRaw(requestParameters, initOverrides);
     }
 
     /**
-     * Removes one post from the org and answers 204 with no body; an id that is not there is 404.  It deletes the record here only. A post that has already published is not retracted from the network by deleting it.  A validated principal is required; 403 without one. Every row is keyed by the caller\'s org taken from that principal and never from the request, so an id belonging to another tenant reads as not found rather than as a refusal.
-     * Delete one post
+     * Removes one post from the org and answers 204 with no body; an id that is not there is 404.  It deletes the record here only. A post that has already published is not retracted from the network by deleting it.
+     * Removes one post from the org and answers 204 with no body; an id that is not there is 404.
      */
     async deleteSocialPostsByIdRaw(requestParameters: SocialApiDeleteSocialPostsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['id'] == null) {
@@ -133,19 +187,27 @@ export class SocialApi extends runtime.BaseAPI {
     }
 
     /**
-     * Removes one post from the org and answers 204 with no body; an id that is not there is 404.  It deletes the record here only. A post that has already published is not retracted from the network by deleting it.  A validated principal is required; 403 without one. Every row is keyed by the caller\'s org taken from that principal and never from the request, so an id belonging to another tenant reads as not found rather than as a refusal.
-     * Delete one post
+     * Removes one post from the org and answers 204 with no body; an id that is not there is 404.  It deletes the record here only. A post that has already published is not retracted from the network by deleting it.
+     * Removes one post from the org and answers 204 with no body; an id that is not there is 404.
      */
     async deleteSocialPostsById(requestParameters: SocialApiDeleteSocialPostsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.deleteSocialPostsByIdRaw(requestParameters, initOverrides);
     }
 
     /**
-     * Returns the org\'s connected accounts — each one\'s id, network, handle, status and timestamps. `provider` filters to one network; `limit` bounds the page, defaulting to 200 and capped at 1000.  An account\'s provider access token is NEVER included in any response on this surface. Only the publisher reads it.  A validated principal is required; 403 without one. Every row is keyed by the caller\'s org taken from that principal and never from the request, so an id belonging to another tenant reads as not found rather than as a refusal.
-     * List the social accounts connected to your org
+     * Returns the org\'s connected accounts — each one\'s id, network, handle, status and timestamps, most-recently-updated first.  An account\'s provider access token is NEVER included in any response on this surface. Only the publisher reads it.
+     * Returns the org\'s connected accounts — each one\'s id, network, handle, status and timestamps, most-recently-updated first.
      */
-    async getSocialAccountsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getSocialAccountsRaw(requestParameters: SocialApiGetSocialAccountsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SocialAccounts>> {
         const queryParameters: any = {};
+
+        if (requestParameters['provider'] != null) {
+            queryParameters['provider'] = requestParameters['provider'];
+        }
+
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -167,22 +229,23 @@ export class SocialApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => SocialAccountsFromJSON(jsonValue));
     }
 
     /**
-     * Returns the org\'s connected accounts — each one\'s id, network, handle, status and timestamps. `provider` filters to one network; `limit` bounds the page, defaulting to 200 and capped at 1000.  An account\'s provider access token is NEVER included in any response on this surface. Only the publisher reads it.  A validated principal is required; 403 without one. Every row is keyed by the caller\'s org taken from that principal and never from the request, so an id belonging to another tenant reads as not found rather than as a refusal.
-     * List the social accounts connected to your org
+     * Returns the org\'s connected accounts — each one\'s id, network, handle, status and timestamps, most-recently-updated first.  An account\'s provider access token is NEVER included in any response on this surface. Only the publisher reads it.
+     * Returns the org\'s connected accounts — each one\'s id, network, handle, status and timestamps, most-recently-updated first.
      */
-    async getSocialAccounts(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getSocialAccountsRaw(initOverrides);
+    async getSocialAccounts(requestParameters: SocialApiGetSocialAccountsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SocialAccounts> {
+        const response = await this.getSocialAccountsRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Returns one of the org\'s connected accounts by id — its network, handle, status and timestamps — or 404. The provider access token is not part of the response.  A validated principal is required; 403 without one. Every row is keyed by the caller\'s org taken from that principal and never from the request, so an id belonging to another tenant reads as not found rather than as a refusal.
-     * Read one connected account
+     * Returns one of the org\'s connected accounts by id — its network, handle, status and timestamps — or 404. The provider access token is not part of the response.
+     * Returns one of the org\'s connected accounts by id — its network, handle, status and timestamps — or 404.
      */
-    async getSocialAccountsByIdRaw(requestParameters: SocialApiGetSocialAccountsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getSocialAccountsByIdRaw(requestParameters: SocialApiGetSocialAccountsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SocialAccount>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -213,23 +276,32 @@ export class SocialApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => SocialAccountFromJSON(jsonValue));
     }
 
     /**
-     * Returns one of the org\'s connected accounts by id — its network, handle, status and timestamps — or 404. The provider access token is not part of the response.  A validated principal is required; 403 without one. Every row is keyed by the caller\'s org taken from that principal and never from the request, so an id belonging to another tenant reads as not found rather than as a refusal.
-     * Read one connected account
+     * Returns one of the org\'s connected accounts by id — its network, handle, status and timestamps — or 404. The provider access token is not part of the response.
+     * Returns one of the org\'s connected accounts by id — its network, handle, status and timestamps — or 404.
      */
-    async getSocialAccountsById(requestParameters: SocialApiGetSocialAccountsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getSocialAccountsByIdRaw(requestParameters, initOverrides);
+    async getSocialAccountsById(requestParameters: SocialApiGetSocialAccountsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SocialAccount> {
+        const response = await this.getSocialAccountsByIdRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Returns the org\'s posts — content, channel, status, scheduled time, media and timestamps. `status` filters to one of draft, scheduled, published or failed; `limit` bounds the page, defaulting to 200 and capped at 1000.  A validated principal is required; 403 without one. Every row is keyed by the caller\'s org taken from that principal and never from the request, so an id belonging to another tenant reads as not found rather than as a refusal.
-     * List your org\'s posts
+     * Returns the org\'s posts — content, channel, status, scheduled time, media and timestamps — most-recently-updated first.
+     * Returns the org\'s posts — content, channel, status, scheduled time, media and timestamps — most-recently-updated first.
      */
-    async getSocialPostsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getSocialPostsRaw(requestParameters: SocialApiGetSocialPostsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SocialPosts>> {
         const queryParameters: any = {};
+
+        if (requestParameters['status'] != null) {
+            queryParameters['status'] = requestParameters['status'];
+        }
+
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -251,22 +323,23 @@ export class SocialApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => SocialPostsFromJSON(jsonValue));
     }
 
     /**
-     * Returns the org\'s posts — content, channel, status, scheduled time, media and timestamps. `status` filters to one of draft, scheduled, published or failed; `limit` bounds the page, defaulting to 200 and capped at 1000.  A validated principal is required; 403 without one. Every row is keyed by the caller\'s org taken from that principal and never from the request, so an id belonging to another tenant reads as not found rather than as a refusal.
-     * List your org\'s posts
+     * Returns the org\'s posts — content, channel, status, scheduled time, media and timestamps — most-recently-updated first.
+     * Returns the org\'s posts — content, channel, status, scheduled time, media and timestamps — most-recently-updated first.
      */
-    async getSocialPosts(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getSocialPostsRaw(initOverrides);
+    async getSocialPosts(requestParameters: SocialApiGetSocialPostsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SocialPosts> {
+        const response = await this.getSocialPostsRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Returns one of the org\'s posts by id, with its current status, scheduled time, media and — once it has published — the account and external id it published under. 404 when there is no such post for this org.  A validated principal is required; 403 without one. Every row is keyed by the caller\'s org taken from that principal and never from the request, so an id belonging to another tenant reads as not found rather than as a refusal.
-     * Read one post
+     * Returns one of the org\'s posts by id, with its current status, scheduled time, media and — once it has published — the account and external id it published under. 404 when there is no such post for this org.
+     * Returns one of the org\'s posts by id, with its current status, scheduled time, media and — once it has published — the account and external id it published under.
      */
-    async getSocialPostsByIdRaw(requestParameters: SocialApiGetSocialPostsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getSocialPostsByIdRaw(requestParameters: SocialApiGetSocialPostsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SocialPost>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -297,22 +370,23 @@ export class SocialApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => SocialPostFromJSON(jsonValue));
     }
 
     /**
-     * Returns one of the org\'s posts by id, with its current status, scheduled time, media and — once it has published — the account and external id it published under. 404 when there is no such post for this org.  A validated principal is required; 403 without one. Every row is keyed by the caller\'s org taken from that principal and never from the request, so an id belonging to another tenant reads as not found rather than as a refusal.
-     * Read one post
+     * Returns one of the org\'s posts by id, with its current status, scheduled time, media and — once it has published — the account and external id it published under. 404 when there is no such post for this org.
+     * Returns one of the org\'s posts by id, with its current status, scheduled time, media and — once it has published — the account and external id it published under.
      */
-    async getSocialPostsById(requestParameters: SocialApiGetSocialPostsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getSocialPostsByIdRaw(requestParameters, initOverrides);
+    async getSocialPostsById(requestParameters: SocialApiGetSocialPostsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SocialPost> {
+        const response = await this.getSocialPostsByIdRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Reports each supported network\'s publish-readiness: whether this deployment holds the OAuth application credentials for it and, when it does not, exactly which environment variables are missing.  This is a live read of the deployment\'s own configuration, not a static list of networks — it answers \"can I connect this today\", which is what a connect affordance and a pre-cutover checklist both need. It says nothing about whether the caller has connected an account; that is the accounts listing.  A validated principal is required; 403 without one. Every row is keyed by the caller\'s org taken from that principal and never from the request, so an id belonging to another tenant reads as not found rather than as a refusal.
-     * Which networks this deployment can actually publish to
+     * Reports each supported network\'s publish-readiness: whether this deployment holds the OAuth application credentials for it and, when it does not, exactly which environment variables are missing.  This is a live read of the deployment\'s own configuration, not a static list of networks — it answers \"can I connect this today\", which is what a connect affordance and a pre-cutover checklist both need. It says nothing about whether the caller has connected an account; that is the accounts listing.
+     * Reports each supported network\'s publish-readiness: whether this deployment holds the OAuth application credentials for it and, when it does not, exactly which environment variables are missing.
      */
-    async getSocialProvidersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getSocialProvidersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SocialProviders>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -335,22 +409,23 @@ export class SocialApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => SocialProvidersFromJSON(jsonValue));
     }
 
     /**
-     * Reports each supported network\'s publish-readiness: whether this deployment holds the OAuth application credentials for it and, when it does not, exactly which environment variables are missing.  This is a live read of the deployment\'s own configuration, not a static list of networks — it answers \"can I connect this today\", which is what a connect affordance and a pre-cutover checklist both need. It says nothing about whether the caller has connected an account; that is the accounts listing.  A validated principal is required; 403 without one. Every row is keyed by the caller\'s org taken from that principal and never from the request, so an id belonging to another tenant reads as not found rather than as a refusal.
-     * Which networks this deployment can actually publish to
+     * Reports each supported network\'s publish-readiness: whether this deployment holds the OAuth application credentials for it and, when it does not, exactly which environment variables are missing.  This is a live read of the deployment\'s own configuration, not a static list of networks — it answers \"can I connect this today\", which is what a connect affordance and a pre-cutover checklist both need. It says nothing about whether the caller has connected an account; that is the accounts listing.
+     * Reports each supported network\'s publish-readiness: whether this deployment holds the OAuth application credentials for it and, when it does not, exactly which environment variables are missing.
      */
-    async getSocialProviders(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getSocialProvidersRaw(initOverrides);
+    async getSocialProviders(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SocialProviders> {
+        const response = await this.getSocialProvidersRaw(initOverrides);
+        return await response.value();
     }
 
     /**
-     * Returns four counts for the caller\'s org: total posts, how many are scheduled, how many have published, and how many accounts are connected. It is the dashboard roll-up, computed over the org\'s own rows in one read.  A validated principal is required; 403 without one. Every row is keyed by the caller\'s org taken from that principal and never from the request, so an id belonging to another tenant reads as not found rather than as a refusal.
-     * Counts across your org\'s social presence
+     * Returns four counts for the caller\'s org: total posts, how many are scheduled, how many have published, and how many accounts are connected. It is the dashboard roll-up, computed over the org\'s own rows in one read.
+     * Returns four counts for the caller\'s org: total posts, how many are scheduled, how many have published, and how many accounts are connected.
      */
-    async getSocialSummaryRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getSocialSummaryRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SocialSummary>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -373,25 +448,35 @@ export class SocialApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => SocialSummaryFromJSON(jsonValue));
     }
 
     /**
-     * Returns four counts for the caller\'s org: total posts, how many are scheduled, how many have published, and how many accounts are connected. It is the dashboard roll-up, computed over the org\'s own rows in one read.  A validated principal is required; 403 without one. Every row is keyed by the caller\'s org taken from that principal and never from the request, so an id belonging to another tenant reads as not found rather than as a refusal.
-     * Counts across your org\'s social presence
+     * Returns four counts for the caller\'s org: total posts, how many are scheduled, how many have published, and how many accounts are connected. It is the dashboard roll-up, computed over the org\'s own rows in one read.
+     * Returns four counts for the caller\'s org: total posts, how many are scheduled, how many have published, and how many accounts are connected.
      */
-    async getSocialSummary(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getSocialSummaryRaw(initOverrides);
+    async getSocialSummary(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SocialSummary> {
+        const response = await this.getSocialSummaryRaw(initOverrides);
+        return await response.value();
     }
 
     /**
-     * Records a social account for the org and answers 201 with the stored row, including the generated id later calls address it by.  `provider` must be one of x, facebook, instagram, linkedin, tiktok, youtube or threads, defaulting to x when omitted. `status` is one of connected, disconnected or error, defaulting to connected. The handle is trimmed and bounded at 1024 characters.  A validated principal is required; 403 without one. Every row is keyed by the caller\'s org taken from that principal and never from the request, so an id belonging to another tenant reads as not found rather than as a refusal.
-     * Connect a social account to your org
+     * Records a social account for the org and answers 201 with the stored row, including the generated id later calls address it by.
+     * Records a social account for the org and answers 201 with the stored row, including the generated id later calls address it by.
      */
-    async postSocialAccountsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postSocialAccountsRaw(requestParameters: SocialApiPostSocialAccountsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SocialAccount>> {
+        if (requestParameters['socialAccountBody'] == null) {
+            throw new runtime.RequiredError(
+                'socialAccountBody',
+                'Required parameter "socialAccountBody" was null or undefined when calling postSocialAccounts().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -409,27 +494,38 @@ export class SocialApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: SocialAccountBodyToJSON(requestParameters['socialAccountBody']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => SocialAccountFromJSON(jsonValue));
     }
 
     /**
-     * Records a social account for the org and answers 201 with the stored row, including the generated id later calls address it by.  `provider` must be one of x, facebook, instagram, linkedin, tiktok, youtube or threads, defaulting to x when omitted. `status` is one of connected, disconnected or error, defaulting to connected. The handle is trimmed and bounded at 1024 characters.  A validated principal is required; 403 without one. Every row is keyed by the caller\'s org taken from that principal and never from the request, so an id belonging to another tenant reads as not found rather than as a refusal.
-     * Connect a social account to your org
+     * Records a social account for the org and answers 201 with the stored row, including the generated id later calls address it by.
+     * Records a social account for the org and answers 201 with the stored row, including the generated id later calls address it by.
      */
-    async postSocialAccounts(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postSocialAccountsRaw(initOverrides);
+    async postSocialAccounts(requestParameters: SocialApiPostSocialAccountsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SocialAccount> {
+        const response = await this.postSocialAccountsRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Stores a post for the org and answers 201 with the stored row.  A post created as scheduled for a time that has already passed is published IMMEDIATELY, and the row returned carries that outcome — this is the one behaviour a reader would otherwise miss. A future-scheduled post is left for the scheduler, and a draft is left alone. Publishing never fails the creation: the post is stored either way, and a publish that could not run leaves the row for the scheduler to retry.  `content` is required and bounded at 8192 characters; `channel` is one of the seven supported networks, defaulting to x; `status` is one of draft, scheduled, published or failed, defaulting to draft; up to 10 media URLs are kept, each bounded at 1024 characters.  A validated principal is required; 403 without one. Every row is keyed by the caller\'s org taken from that principal and never from the request, so an id belonging to another tenant reads as not found rather than as a refusal.
-     * Create a post, and publish it if it is already due
+     * Stores a post for the org and answers 201 with the stored row.  A post created as scheduled for a time that has already passed is published IMMEDIATELY, and the row returned carries that outcome — this is the one behaviour a reader would otherwise miss. A future-scheduled post is left for the scheduler, and a draft is left alone. Publishing never fails the creation: the post is stored either way, and a publish that could not run leaves the row for the scheduler to retry.
+     * Stores a post for the org and answers 201 with the stored row.
      */
-    async postSocialPostsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postSocialPostsRaw(requestParameters: SocialApiPostSocialPostsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SocialPost>> {
+        if (requestParameters['socialPostBody'] == null) {
+            throw new runtime.RequiredError(
+                'socialPostBody',
+                'Required parameter "socialPostBody" was null or undefined when calling postSocialPosts().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -447,24 +543,26 @@ export class SocialApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: SocialPostBodyToJSON(requestParameters['socialPostBody']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => SocialPostFromJSON(jsonValue));
     }
 
     /**
-     * Stores a post for the org and answers 201 with the stored row.  A post created as scheduled for a time that has already passed is published IMMEDIATELY, and the row returned carries that outcome — this is the one behaviour a reader would otherwise miss. A future-scheduled post is left for the scheduler, and a draft is left alone. Publishing never fails the creation: the post is stored either way, and a publish that could not run leaves the row for the scheduler to retry.  `content` is required and bounded at 8192 characters; `channel` is one of the seven supported networks, defaulting to x; `status` is one of draft, scheduled, published or failed, defaulting to draft; up to 10 media URLs are kept, each bounded at 1024 characters.  A validated principal is required; 403 without one. Every row is keyed by the caller\'s org taken from that principal and never from the request, so an id belonging to another tenant reads as not found rather than as a refusal.
-     * Create a post, and publish it if it is already due
+     * Stores a post for the org and answers 201 with the stored row.  A post created as scheduled for a time that has already passed is published IMMEDIATELY, and the row returned carries that outcome — this is the one behaviour a reader would otherwise miss. A future-scheduled post is left for the scheduler, and a draft is left alone. Publishing never fails the creation: the post is stored either way, and a publish that could not run leaves the row for the scheduler to retry.
+     * Stores a post for the org and answers 201 with the stored row.
      */
-    async postSocialPosts(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postSocialPostsRaw(initOverrides);
+    async postSocialPosts(requestParameters: SocialApiPostSocialPostsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SocialPost> {
+        const response = await this.postSocialPostsRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Publishes the post immediately to the connected accounts on its channel and answers with the updated row, carrying the account and external id it published under.  It is IDEMPOTENT: a post that has already published, or that another caller is publishing right now, comes back unchanged rather than being posted twice. That claim is taken before any network call, which is what makes a double submit safe.  The two failure shapes differ on purpose. Having no connected account for the channel is the caller\'s to fix, so it is recorded ON the post as failed with the reason and answers normally. A deployment that lacks the network\'s own credentials cannot publish for anyone, so that is a 503 naming exactly what is missing.  A validated principal is required; 403 without one. Every row is keyed by the caller\'s org taken from that principal and never from the request, so an id belonging to another tenant reads as not found rather than as a refusal.
-     * Publish one post now
+     * Publishes the post immediately to the connected accounts on its channel and answers with the updated row, carrying the account and external id it published under.  It is IDEMPOTENT: a post that has already published, or that another caller is publishing right now, comes back unchanged rather than being posted twice. That claim is taken before any network call, which is what makes a double submit safe.  The two failure shapes differ on purpose. Having no connected account for the channel is the caller\'s to fix, so it is recorded ON the post as failed with the reason and answers normally. A deployment that lacks the network\'s own credentials cannot publish for anyone, so that is a 503 naming exactly what is missing.
+     * Publishes the post immediately to the connected accounts on its channel and answers with the updated row, carrying the account and external id it published under.
      */
-    async postSocialPostsByIdPublishRaw(requestParameters: SocialApiPostSocialPostsByIdPublishRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postSocialPostsByIdPublishRaw(requestParameters: SocialApiPostSocialPostsByIdPublishRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SocialPost>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -495,22 +593,23 @@ export class SocialApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => SocialPostFromJSON(jsonValue));
     }
 
     /**
-     * Publishes the post immediately to the connected accounts on its channel and answers with the updated row, carrying the account and external id it published under.  It is IDEMPOTENT: a post that has already published, or that another caller is publishing right now, comes back unchanged rather than being posted twice. That claim is taken before any network call, which is what makes a double submit safe.  The two failure shapes differ on purpose. Having no connected account for the channel is the caller\'s to fix, so it is recorded ON the post as failed with the reason and answers normally. A deployment that lacks the network\'s own credentials cannot publish for anyone, so that is a 503 naming exactly what is missing.  A validated principal is required; 403 without one. Every row is keyed by the caller\'s org taken from that principal and never from the request, so an id belonging to another tenant reads as not found rather than as a refusal.
-     * Publish one post now
+     * Publishes the post immediately to the connected accounts on its channel and answers with the updated row, carrying the account and external id it published under.  It is IDEMPOTENT: a post that has already published, or that another caller is publishing right now, comes back unchanged rather than being posted twice. That claim is taken before any network call, which is what makes a double submit safe.  The two failure shapes differ on purpose. Having no connected account for the channel is the caller\'s to fix, so it is recorded ON the post as failed with the reason and answers normally. A deployment that lacks the network\'s own credentials cannot publish for anyone, so that is a 503 naming exactly what is missing.
+     * Publishes the post immediately to the connected accounts on its channel and answers with the updated row, carrying the account and external id it published under.
      */
-    async postSocialPostsByIdPublish(requestParameters: SocialApiPostSocialPostsByIdPublishRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postSocialPostsByIdPublishRaw(requestParameters, initOverrides);
+    async postSocialPostsByIdPublish(requestParameters: SocialApiPostSocialPostsByIdPublishRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SocialPost> {
+        const response = await this.postSocialPostsByIdPublishRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Replaces the account\'s network, handle and status with what the body carries, and answers with the stored row.  This is a REPLACEMENT, not a merge, which is the rule most easily got wrong: a field the body omits is written as its default, so leaving out the handle blanks it and leaving out the status resets it to connected. Send the whole record. The same vocabularies as create apply, and an unknown network or status is refused rather than coerced.  A validated principal is required; 403 without one. Every row is keyed by the caller\'s org taken from that principal and never from the request, so an id belonging to another tenant reads as not found rather than as a refusal.
-     * Replace one connected account
+     * Replaces the account\'s network, handle and status with what the body carries, and answers with the stored row.  This is a REPLACEMENT, not a merge, which is the rule most easily got wrong: a field the body omits is written as its default, so leaving out the handle blanks it and leaving out the status resets it to connected. Send the whole record. The same vocabularies as create apply, and an unknown network or status is refused rather than coerced.
+     * Replaces the account\'s network, handle and status with what the body carries, and answers with the stored row.
      */
-    async putSocialAccountsByIdRaw(requestParameters: SocialApiPutSocialAccountsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async putSocialAccountsByIdRaw(requestParameters: SocialApiPutSocialAccountsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SocialAccount>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -518,9 +617,18 @@ export class SocialApi extends runtime.BaseAPI {
             );
         }
 
+        if (requestParameters['socialAccountWrite'] == null) {
+            throw new runtime.RequiredError(
+                'socialAccountWrite',
+                'Required parameter "socialAccountWrite" was null or undefined when calling putSocialAccountsById().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -539,24 +647,26 @@ export class SocialApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
+            body: SocialAccountWriteToJSON(requestParameters['socialAccountWrite']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => SocialAccountFromJSON(jsonValue));
     }
 
     /**
-     * Replaces the account\'s network, handle and status with what the body carries, and answers with the stored row.  This is a REPLACEMENT, not a merge, which is the rule most easily got wrong: a field the body omits is written as its default, so leaving out the handle blanks it and leaving out the status resets it to connected. Send the whole record. The same vocabularies as create apply, and an unknown network or status is refused rather than coerced.  A validated principal is required; 403 without one. Every row is keyed by the caller\'s org taken from that principal and never from the request, so an id belonging to another tenant reads as not found rather than as a refusal.
-     * Replace one connected account
+     * Replaces the account\'s network, handle and status with what the body carries, and answers with the stored row.  This is a REPLACEMENT, not a merge, which is the rule most easily got wrong: a field the body omits is written as its default, so leaving out the handle blanks it and leaving out the status resets it to connected. Send the whole record. The same vocabularies as create apply, and an unknown network or status is refused rather than coerced.
+     * Replaces the account\'s network, handle and status with what the body carries, and answers with the stored row.
      */
-    async putSocialAccountsById(requestParameters: SocialApiPutSocialAccountsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.putSocialAccountsByIdRaw(requestParameters, initOverrides);
+    async putSocialAccountsById(requestParameters: SocialApiPutSocialAccountsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SocialAccount> {
+        const response = await this.putSocialAccountsByIdRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Replaces the post\'s content, channel, status, scheduled time and media with what the body carries, and answers with the stored row.  A REPLACEMENT, not a merge: an omitted field is written as its default, so omitting media clears it and omitting the status resets the post to draft. `content` is required on every update. Unlike create, this never triggers a publish — moving a post\'s scheduled time into the past here leaves it for the scheduler; publish now is its own operation.  A validated principal is required; 403 without one. Every row is keyed by the caller\'s org taken from that principal and never from the request, so an id belonging to another tenant reads as not found rather than as a refusal.
-     * Replace one post
+     * Replaces the post\'s content, channel, status, scheduled time and media with what the body carries, and answers with the stored row.  A REPLACEMENT, not a merge: an omitted field is written as its default, so omitting media clears it and omitting the status resets the post to draft. `content` is required on every update. Unlike create, this never triggers a publish — moving a post\'s scheduled time into the past here leaves it for the scheduler; publish now is its own operation.
+     * Replaces the post\'s content, channel, status, scheduled time and media with what the body carries, and answers with the stored row.
      */
-    async putSocialPostsByIdRaw(requestParameters: SocialApiPutSocialPostsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async putSocialPostsByIdRaw(requestParameters: SocialApiPutSocialPostsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SocialPost>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -564,9 +674,18 @@ export class SocialApi extends runtime.BaseAPI {
             );
         }
 
+        if (requestParameters['socialPostWrite'] == null) {
+            throw new runtime.RequiredError(
+                'socialPostWrite',
+                'Required parameter "socialPostWrite" was null or undefined when calling putSocialPostsById().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -585,17 +704,19 @@ export class SocialApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
+            body: SocialPostWriteToJSON(requestParameters['socialPostWrite']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => SocialPostFromJSON(jsonValue));
     }
 
     /**
-     * Replaces the post\'s content, channel, status, scheduled time and media with what the body carries, and answers with the stored row.  A REPLACEMENT, not a merge: an omitted field is written as its default, so omitting media clears it and omitting the status resets the post to draft. `content` is required on every update. Unlike create, this never triggers a publish — moving a post\'s scheduled time into the past here leaves it for the scheduler; publish now is its own operation.  A validated principal is required; 403 without one. Every row is keyed by the caller\'s org taken from that principal and never from the request, so an id belonging to another tenant reads as not found rather than as a refusal.
-     * Replace one post
+     * Replaces the post\'s content, channel, status, scheduled time and media with what the body carries, and answers with the stored row.  A REPLACEMENT, not a merge: an omitted field is written as its default, so omitting media clears it and omitting the status resets the post to draft. `content` is required on every update. Unlike create, this never triggers a publish — moving a post\'s scheduled time into the past here leaves it for the scheduler; publish now is its own operation.
+     * Replaces the post\'s content, channel, status, scheduled time and media with what the body carries, and answers with the stored row.
      */
-    async putSocialPostsById(requestParameters: SocialApiPutSocialPostsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.putSocialPostsByIdRaw(requestParameters, initOverrides);
+    async putSocialPostsById(requestParameters: SocialApiPutSocialPostsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SocialPost> {
+        const response = await this.putSocialPostsByIdRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
 }

@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -22,10 +22,6 @@ import {
     CatalogPageToJSON,
 } from '../models/index.js';
 
-export interface CatalogApiDeleteCatalogEntriesByWildcard1Request {
-    wildcard1: string;
-}
-
 export interface CatalogApiGetCatalogRequest {
     q?: string;
     org?: string;
@@ -39,60 +35,10 @@ export interface CatalogApiGetCatalogRequest {
     offset?: string;
 }
 
-export interface CatalogApiPutCatalogEntriesByWildcard1Request {
-    wildcard1: string;
-}
-
 /**
  * 
  */
 export class CatalogApi extends runtime.BaseAPI {
-
-    /**
-     * Deletes the entry with the addressed slug and answers 204. The slug is matched as a trailing wildcard, not a single segment, because a model slug contains a slash. PLATFORM admin only — an org-level admin is refused 403 — and an unknown slug is 404, so the call is safe to repeat but not silently idempotent.
-     * Remove a catalog entry
-     */
-    async deleteCatalogEntriesByWildcard1Raw(requestParameters: CatalogApiDeleteCatalogEntriesByWildcard1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters['wildcard1'] == null) {
-            throw new runtime.RequiredError(
-                'wildcard1',
-                'Required parameter "wildcard1" was null or undefined when calling deleteCatalogEntriesByWildcard1().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/catalog/entries/{wildcard1}`;
-        urlPath = urlPath.replace(`{${"wildcard1"}}`, encodeURIComponent(String(requestParameters['wildcard1'])));
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'DELETE',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Deletes the entry with the addressed slug and answers 204. The slug is matched as a trailing wildcard, not a single segment, because a model slug contains a slash. PLATFORM admin only — an org-level admin is refused 403 — and an unknown slug is 404, so the call is safe to repeat but not silently idempotent.
-     * Remove a catalog entry
-     */
-    async deleteCatalogEntriesByWildcard1(requestParameters: CatalogApiDeleteCatalogEntriesByWildcard1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.deleteCatalogEntriesByWildcard1Raw(requestParameters, initOverrides);
-    }
 
     /**
      * Browse searches AND browses the cross-org catalog: every project, app and site the fleet has built, whichever org built it.  It reads TWO corpora and returns them as one page — the published, world-readable catalog that every caller sees, plus the caller\'s OWN org\'s private entries when the request carries a validated principal. Each row says which it came from in `scope`, so a client can warn before sharing a link. An anonymous caller simply gets the published one; no filter can ever widen a caller into another tenant\'s corpus, because the query that would return it is never run for them.  A request with no q is a browse rather than a search, and both answer the same shape: the page, the total before paging, and the facet counts over the whole matching set.
@@ -171,242 +117,6 @@ export class CatalogApi extends runtime.BaseAPI {
     async getCatalog(requestParameters: CatalogApiGetCatalogRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CatalogPage> {
         const response = await this.getCatalogRaw(requestParameters, initOverrides);
         return await response.value();
-    }
-
-    /**
-     * Returns every catalog row as stored — the admin view, which unlike the public projection includes entries that are not published. It is cross-tenant platform data, so the gate is a PLATFORM admin: an org-level admin is refused 403 no matter how privileged they are inside their own org, enforced by the handler itself and not only by the route\'s token middleware.
-     * The raw catalog entries, including the unpublished ones
-     */
-    async getCatalogEntriesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/catalog/entries`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Returns every catalog row as stored — the admin view, which unlike the public projection includes entries that are not published. It is cross-tenant platform data, so the gate is a PLATFORM admin: an org-level admin is refused 403 no matter how privileged they are inside their own org, enforced by the handler itself and not only by the route\'s token middleware.
-     * The raw catalog entries, including the unpublished ones
-     */
-    async getCatalogEntries(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getCatalogEntriesRaw(initOverrides);
-    }
-
-    /**
-     * Creates a catalog row from the body and answers it at 201. The slug is required and is the globally-unique catalog key, so a second entry claiming a slug already in use is refused 409 rather than shadowing the first. PLATFORM admin only — this is cross-tenant pricing and packaging data, and an org-level admin is refused 403.
-     * Add a catalog entry
-     */
-    async postCatalogEntriesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/catalog/entries`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Creates a catalog row from the body and answers it at 201. The slug is required and is the globally-unique catalog key, so a second entry claiming a slug already in use is refused 409 rather than shadowing the first. PLATFORM admin only — this is cross-tenant pricing and packaging data, and an org-level admin is refused 403.
-     * Add a catalog entry
-     */
-    async postCatalogEntries(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postCatalogEntriesRaw(initOverrides);
-    }
-
-    /**
-     * Takes a batch of model rows and upserts each one\'s upstream COST and machine-observable facts, answering what was created and changed. It deliberately touches nothing a human owns — not the retail price, not the markup, not the entitlement tier — so a sync can never overwrite an administrator\'s pricing decision. The gate is a PLATFORM principal rather than a platform ADMIN, because the caller is normally a scheduled job holding the internal service token, which carries platform scope but no admin claim.
-     * Land a syncer\'s view of the model catalog: upstream costs and machine facts
-     */
-    async postCatalogModelsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/catalog/models`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Takes a batch of model rows and upserts each one\'s upstream COST and machine-observable facts, answering what was created and changed. It deliberately touches nothing a human owns — not the retail price, not the markup, not the entitlement tier — so a sync can never overwrite an administrator\'s pricing decision. The gate is a PLATFORM principal rather than a platform ADMIN, because the caller is normally a scheduled job holding the internal service token, which carries platform scope but no admin claim.
-     * Land a syncer\'s view of the model catalog: upstream costs and machine facts
-     */
-    async postCatalogModels(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postCatalogModelsRaw(initOverrides);
-    }
-
-    /**
-     * Pulls the upstream model list and lands it through the same upsert the push door uses, so the rule that a sync owns cost and an administrator owns price holds no matter which door a row came through. It takes no body — the upstream is READ rather than told. If that upstream cannot be read the call answers 502 and writes NOTHING: a sync that cannot see its source must never conclude the source is empty, because that conclusion would withdraw every model on sale. The gate is a PLATFORM principal so the scheduled job\'s service token qualifies.
-     * Refresh the model catalog by reading the upstream provider
-     */
-    async postCatalogModelsRefreshRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/catalog/models/refresh`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Pulls the upstream model list and lands it through the same upsert the push door uses, so the rule that a sync owns cost and an administrator owns price holds no matter which door a row came through. It takes no body — the upstream is READ rather than told. If that upstream cannot be read the call answers 502 and writes NOTHING: a sync that cannot see its source must never conclude the source is empty, because that conclusion would withdraw every model on sale. The gate is a PLATFORM principal so the scheduled job\'s service token qualifies.
-     * Refresh the model catalog by reading the upstream provider
-     */
-    async postCatalogModelsRefresh(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postCatalogModelsRefreshRaw(initOverrides);
-    }
-
-    /**
-     * Upserts the shipped catalog seed and answers how many entries it created. It is idempotent and non-destructive — an entry an administrator has since edited is left alone — so it is safe to run against a live catalog to fill in what is missing. PLATFORM admin only; an org-level admin is refused 403.
-     * Seed the embedded catalog, without disturbing edits already made
-     */
-    async postCatalogSeedRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/catalog/seed`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Upserts the shipped catalog seed and answers how many entries it created. It is idempotent and non-destructive — an entry an administrator has since edited is left alone — so it is safe to run against a live catalog to fill in what is missing. PLATFORM admin only; an org-level admin is refused 403.
-     * Seed the embedded catalog, without disturbing edits already made
-     */
-    async postCatalogSeed(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postCatalogSeedRaw(initOverrides);
-    }
-
-    /**
-     * Loads the addressed entry, applies the body over it and answers the stored result. The slug is the entry\'s IDENTITY and is re-stamped from the path after decoding, so a slug in the body is ignored and a rename is impossible through this address. The slug is matched as a trailing wildcard rather than one path segment because a model\'s slug IS its callable id and those contain a slash — a segment parameter would stop at it and leave most catalog rows unaddressable. PLATFORM admin only; an unknown slug is 404.
-     * Replace a catalog entry, keeping its slug
-     */
-    async putCatalogEntriesByWildcard1Raw(requestParameters: CatalogApiPutCatalogEntriesByWildcard1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters['wildcard1'] == null) {
-            throw new runtime.RequiredError(
-                'wildcard1',
-                'Required parameter "wildcard1" was null or undefined when calling putCatalogEntriesByWildcard1().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/catalog/entries/{wildcard1}`;
-        urlPath = urlPath.replace(`{${"wildcard1"}}`, encodeURIComponent(String(requestParameters['wildcard1'])));
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'PUT',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Loads the addressed entry, applies the body over it and answers the stored result. The slug is the entry\'s IDENTITY and is re-stamped from the path after decoding, so a slug in the body is ignored and a rename is impossible through this address. The slug is matched as a trailing wildcard rather than one path segment because a model\'s slug IS its callable id and those contain a slash — a segment parameter would stop at it and leave most catalog rows unaddressable. PLATFORM admin only; an unknown slug is 404.
-     * Replace a catalog entry, keeping its slug
-     */
-    async putCatalogEntriesByWildcard1(requestParameters: CatalogApiPutCatalogEntriesByWildcard1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.putCatalogEntriesByWildcard1Raw(requestParameters, initOverrides);
     }
 
 }

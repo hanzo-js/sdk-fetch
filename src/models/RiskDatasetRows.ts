@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -28,7 +28,7 @@ import {
  */
 export interface RiskDatasetRows {
     /**
-     * 
+     * Dataset is the dataset the page was read from.
      * @type {string}
      * @memberof RiskDatasetRows
      */
@@ -47,14 +47,15 @@ export interface RiskDatasetRows {
      */
     dims?: Array<string>;
     /**
-     * 
+     * Limit is the page size actually served: the one asked for, clamped to the
+     * plane's own bound of 5000. Fewer rows than Limit means the version ended.
      * @type {number}
      * @memberof RiskDatasetRows
      */
     limit?: number;
     /**
-     * Offset and Limit are the page actually served, which may be smaller than the
-     * one asked for.
+     * Offset is where this page starts in the version's own row order, which is by
+     * row id and therefore stable forever.
      * @type {number}
      * @memberof RiskDatasetRows
      */
@@ -66,7 +67,8 @@ export interface RiskDatasetRows {
      */
     rows?: Array<RiskDatasetRow>;
     /**
-     * 
+     * Version is which published version it was read from — the one asked for, or
+     * the newest published one when the request named none.
      * @type {number}
      * @memberof RiskDatasetRows
      */

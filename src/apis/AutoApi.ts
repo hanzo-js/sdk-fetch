@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -15,53 +15,117 @@
 
 import * as runtime from '../runtime.js';
 import type {
-  AutoCreate,
-  AutoStart,
-  AutoStatus,
-  AutoUpdate,
+  Catalog,
+  CreateFlowReq,
+  CreateVersionIn,
+  Flow,
+  FlowPage,
+  FlowRun,
+  FlowVersion,
+  PatchFlowIn,
+  PopulatedFlow,
+  RunIn,
+  RunPage,
+  RunResp,
+  VersionPage,
 } from '../models/index.js';
 import {
-    AutoCreateFromJSON,
-    AutoCreateToJSON,
-    AutoStartFromJSON,
-    AutoStartToJSON,
-    AutoStatusFromJSON,
-    AutoStatusToJSON,
-    AutoUpdateFromJSON,
-    AutoUpdateToJSON,
+    CatalogFromJSON,
+    CatalogToJSON,
+    CreateFlowReqFromJSON,
+    CreateFlowReqToJSON,
+    CreateVersionInFromJSON,
+    CreateVersionInToJSON,
+    FlowFromJSON,
+    FlowToJSON,
+    FlowPageFromJSON,
+    FlowPageToJSON,
+    FlowRunFromJSON,
+    FlowRunToJSON,
+    FlowVersionFromJSON,
+    FlowVersionToJSON,
+    PatchFlowInFromJSON,
+    PatchFlowInToJSON,
+    PopulatedFlowFromJSON,
+    PopulatedFlowToJSON,
+    RunInFromJSON,
+    RunInToJSON,
+    RunPageFromJSON,
+    RunPageToJSON,
+    RunRespFromJSON,
+    RunRespToJSON,
+    VersionPageFromJSON,
+    VersionPageToJSON,
 } from '../models/index.js';
 
-export interface AutoApiDeleteAutoFlowsByFlowRequest {
-    flow: string;
+export interface AutoApiDeleteAutoFlowsByIdRequest {
+    id: string;
 }
 
-export interface AutoApiGetAutoFlowsByFlowRequest {
-    flow: string;
+export interface AutoApiGetAutoFlowsRequest {
+    limit?: number;
+}
+
+export interface AutoApiGetAutoFlowsByIdRequest {
+    id: string;
+}
+
+export interface AutoApiGetAutoFlowsByIdVersionsRequest {
+    id: string;
+    limit?: number;
 }
 
 export interface AutoApiGetAutoRunsRequest {
-    flow?: string;
+    flowId?: string;
+    limit?: number;
 }
 
-export interface AutoApiGetAutoRunsByRunRequest {
-    run: string;
+export interface AutoApiGetAutoRunsByIdRequest {
+    id: string;
 }
 
-export interface AutoApiPatchAutoFlowsByFlowRequest {
-    flow: string;
-    autoUpdate: AutoUpdate;
+export interface AutoApiPatchAutoFlowsByIdRequest {
+    id: string;
+    patchFlowIn: PatchFlowIn;
+}
+
+export interface AutoApiPostAutoConnectorsByIdRunRequest {
+    id: string;
+    runIn: RunIn;
 }
 
 export interface AutoApiPostAutoFlowsRequest {
-    autoCreate: AutoCreate;
+    createFlowReq: CreateFlowReq;
 }
 
-export interface AutoApiPostAutoFlowsByFlowPublishRequest {
-    flow: string;
+export interface AutoApiPostAutoFlowsByIdDisableRequest {
+    id: string;
 }
 
-export interface AutoApiPostAutoRunsRequest {
-    autoStart: AutoStart;
+export interface AutoApiPostAutoFlowsByIdEnableRequest {
+    id: string;
+}
+
+export interface AutoApiPostAutoFlowsByIdOperationsRequest {
+    id: string;
+}
+
+export interface AutoApiPostAutoFlowsByIdRunRequest {
+    id: string;
+}
+
+export interface AutoApiPostAutoFlowsByIdVersionsRequest {
+    id: string;
+    createVersionIn: CreateVersionIn;
+}
+
+export interface AutoApiPostAutoHooksBySourceByEventRequest {
+    source: string;
+    event: string;
+}
+
+export interface AutoApiPostAutoRunsByIdResumeRequest {
+    id: string;
 }
 
 /**
@@ -70,14 +134,14 @@ export interface AutoApiPostAutoRunsRequest {
 export class AutoApi extends runtime.BaseAPI {
 
     /**
-     * Deletes one of the caller\'s flows. A foreign id answers 404 and deletes nothing.
-     * Deletes one of the caller\'s flows.
+     * Deletes one automation, its versions and its run history. It answers no content, and a flow of another org answers not-found.
+     * Deletes one automation, its versions and its run history.
      */
-    async deleteAutoFlowsByFlowRaw(requestParameters: AutoApiDeleteAutoFlowsByFlowRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
-        if (requestParameters['flow'] == null) {
+    async deleteAutoFlowsByIdRaw(requestParameters: AutoApiDeleteAutoFlowsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
-                'flow',
-                'Required parameter "flow" was null or undefined when calling deleteAutoFlowsByFlow().'
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteAutoFlowsById().'
             );
         }
 
@@ -94,8 +158,8 @@ export class AutoApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/auto/flows/{flow}`;
-        urlPath = urlPath.replace(`{${"flow"}}`, encodeURIComponent(String(requestParameters['flow'])));
+        let urlPath = `/v1/auto/flows/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
         const response = await this.request({
             path: urlPath,
@@ -104,28 +168,66 @@ export class AutoApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return new runtime.JSONApiResponse<any>(response);
-        } else {
-            return new runtime.TextApiResponse(response) as any;
-        }
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
-     * Deletes one of the caller\'s flows. A foreign id answers 404 and deletes nothing.
-     * Deletes one of the caller\'s flows.
+     * Deletes one automation, its versions and its run history. It answers no content, and a flow of another org answers not-found.
+     * Deletes one automation, its versions and its run history.
      */
-    async deleteAutoFlowsByFlow(requestParameters: AutoApiDeleteAutoFlowsByFlowRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
-        const response = await this.deleteAutoFlowsByFlowRaw(requestParameters, initOverrides);
+    async deleteAutoFlowsById(requestParameters: AutoApiDeleteAutoFlowsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteAutoFlowsByIdRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Connectors returns the connector catalogue. Each entry is an external service a flow step can invoke, carrying its auth descriptor and the input properties of its actions and triggers. The catalogue is the same for every tenant, so the gate is a validated principal rather than a per-org view.
+     * Connectors returns the connector catalogue.
+     */
+    async getAutoConnectorsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Catalog>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/auto/connectors`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => CatalogFromJSON(jsonValue));
+    }
+
+    /**
+     * Connectors returns the connector catalogue. Each entry is an external service a flow step can invoke, carrying its auth descriptor and the input properties of its actions and triggers. The catalogue is the same for every tenant, so the gate is a validated principal rather than a per-org view.
+     * Connectors returns the connector catalogue.
+     */
+    async getAutoConnectors(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Catalog> {
+        const response = await this.getAutoConnectorsRaw(initOverrides);
         return await response.value();
     }
 
     /**
-     * Flows lists the caller\'s flows, newest first. The list is scoped by the product to the caller\'s org — it can only ever hold the caller\'s own flows.
-     * Flows lists the caller\'s flows, newest first.
+     * Returns the caller org\'s automations, most-recently-updated first. The optional `limit` query bounds the page.
+     * Returns the caller org\'s automations, most-recently-updated first.
      */
-    async getAutoFlowsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
+    async getAutoFlowsRaw(requestParameters: AutoApiGetAutoFlowsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<FlowPage>> {
         const queryParameters: any = {};
+
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -147,31 +249,27 @@ export class AutoApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return new runtime.JSONApiResponse<any>(response);
-        } else {
-            return new runtime.TextApiResponse(response) as any;
-        }
+        return new runtime.JSONApiResponse(response, (jsonValue) => FlowPageFromJSON(jsonValue));
     }
 
     /**
-     * Flows lists the caller\'s flows, newest first. The list is scoped by the product to the caller\'s org — it can only ever hold the caller\'s own flows.
-     * Flows lists the caller\'s flows, newest first.
+     * Returns the caller org\'s automations, most-recently-updated first. The optional `limit` query bounds the page.
+     * Returns the caller org\'s automations, most-recently-updated first.
      */
-    async getAutoFlows(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
-        const response = await this.getAutoFlowsRaw(initOverrides);
+    async getAutoFlows(requestParameters: AutoApiGetAutoFlowsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<FlowPage> {
+        const response = await this.getAutoFlowsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Flow reads one of the caller\'s flows — the full record, graph included. A flow outside the caller\'s org answers 404, indistinguishable from one that does not exist.
-     * Flow reads one of the caller\'s flows — the full record, graph included.
+     * Returns one automation and its latest version. That is the flow record plus the step tree the builder edits; a flow of another org answers not-found.
+     * Returns one automation and its latest version.
      */
-    async getAutoFlowsByFlowRaw(requestParameters: AutoApiGetAutoFlowsByFlowRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
-        if (requestParameters['flow'] == null) {
+    async getAutoFlowsByIdRaw(requestParameters: AutoApiGetAutoFlowsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PopulatedFlow>> {
+        if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
-                'flow',
-                'Required parameter "flow" was null or undefined when calling getAutoFlowsByFlow().'
+                'id',
+                'Required parameter "id" was null or undefined when calling getAutoFlowsById().'
             );
         }
 
@@ -188,8 +286,8 @@ export class AutoApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/auto/flows/{flow}`;
-        urlPath = urlPath.replace(`{${"flow"}}`, encodeURIComponent(String(requestParameters['flow'])));
+        let urlPath = `/v1/auto/flows/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
         const response = await this.request({
             path: urlPath,
@@ -198,28 +296,35 @@ export class AutoApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return new runtime.JSONApiResponse<any>(response);
-        } else {
-            return new runtime.TextApiResponse(response) as any;
-        }
+        return new runtime.JSONApiResponse(response, (jsonValue) => PopulatedFlowFromJSON(jsonValue));
     }
 
     /**
-     * Flow reads one of the caller\'s flows — the full record, graph included. A flow outside the caller\'s org answers 404, indistinguishable from one that does not exist.
-     * Flow reads one of the caller\'s flows — the full record, graph included.
+     * Returns one automation and its latest version. That is the flow record plus the step tree the builder edits; a flow of another org answers not-found.
+     * Returns one automation and its latest version.
      */
-    async getAutoFlowsByFlow(requestParameters: AutoApiGetAutoFlowsByFlowRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
-        const response = await this.getAutoFlowsByFlowRaw(requestParameters, initOverrides);
+    async getAutoFlowsById(requestParameters: AutoApiGetAutoFlowsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PopulatedFlow> {
+        const response = await this.getAutoFlowsByIdRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Pieces lists the product\'s built-in piece catalog: the trigger and action types a flow\'s nodes can use (webhook, schedule, http, set, branch), each with its input descriptors. The catalog is compiled into the product — adding a piece is a product release, not a platform call.
-     * Pieces lists the product\'s built-in piece catalog: the trigger and action types a flow\'s nodes can use (webhook, schedule, http, set, branch), each with its input descriptors.
+     * Returns one flow\'s versions, newest first. The optional `limit` query bounds the page.
+     * Returns one flow\'s versions, newest first.
      */
-    async getAutoPiecesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
+    async getAutoFlowsByIdVersionsRaw(requestParameters: AutoApiGetAutoFlowsByIdVersionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VersionPage>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getAutoFlowsByIdVersions().'
+            );
+        }
+
         const queryParameters: any = {};
+
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -232,7 +337,8 @@ export class AutoApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/auto/pieces`;
+        let urlPath = `/v1/auto/flows/{id}/versions`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
         const response = await this.request({
             path: urlPath,
@@ -241,31 +347,31 @@ export class AutoApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return new runtime.JSONApiResponse<any>(response);
-        } else {
-            return new runtime.TextApiResponse(response) as any;
-        }
+        return new runtime.JSONApiResponse(response, (jsonValue) => VersionPageFromJSON(jsonValue));
     }
 
     /**
-     * Pieces lists the product\'s built-in piece catalog: the trigger and action types a flow\'s nodes can use (webhook, schedule, http, set, branch), each with its input descriptors. The catalog is compiled into the product — adding a piece is a product release, not a platform call.
-     * Pieces lists the product\'s built-in piece catalog: the trigger and action types a flow\'s nodes can use (webhook, schedule, http, set, branch), each with its input descriptors.
+     * Returns one flow\'s versions, newest first. The optional `limit` query bounds the page.
+     * Returns one flow\'s versions, newest first.
      */
-    async getAutoPieces(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
-        const response = await this.getAutoPiecesRaw(initOverrides);
+    async getAutoFlowsByIdVersions(requestParameters: AutoApiGetAutoFlowsByIdVersionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VersionPage> {
+        const response = await this.getAutoFlowsByIdVersionsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Runs lists the caller\'s run records, newest first — optionally one flow\'s. Each record carries the run\'s status (queued, running, completed, failed), its input, and its output once the run finished.
-     * Runs lists the caller\'s run records, newest first — optionally one flow\'s.
+     * Returns the caller org\'s run history, newest first. The optional `flowId` query narrows it to one flow and `limit` bounds the page.
+     * Returns the caller org\'s run history, newest first.
      */
-    async getAutoRunsRaw(requestParameters: AutoApiGetAutoRunsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
+    async getAutoRunsRaw(requestParameters: AutoApiGetAutoRunsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RunPage>> {
         const queryParameters: any = {};
 
-        if (requestParameters['flow'] != null) {
-            queryParameters['flow'] = requestParameters['flow'];
+        if (requestParameters['flowId'] != null) {
+            queryParameters['flowId'] = requestParameters['flowId'];
+        }
+
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -288,31 +394,27 @@ export class AutoApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return new runtime.JSONApiResponse<any>(response);
-        } else {
-            return new runtime.TextApiResponse(response) as any;
-        }
+        return new runtime.JSONApiResponse(response, (jsonValue) => RunPageFromJSON(jsonValue));
     }
 
     /**
-     * Runs lists the caller\'s run records, newest first — optionally one flow\'s. Each record carries the run\'s status (queued, running, completed, failed), its input, and its output once the run finished.
-     * Runs lists the caller\'s run records, newest first — optionally one flow\'s.
+     * Returns the caller org\'s run history, newest first. The optional `flowId` query narrows it to one flow and `limit` bounds the page.
+     * Returns the caller org\'s run history, newest first.
      */
-    async getAutoRuns(requestParameters: AutoApiGetAutoRunsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
+    async getAutoRuns(requestParameters: AutoApiGetAutoRunsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RunPage> {
         const response = await this.getAutoRunsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Run reads one run record: status, input, output (each executed node\'s result keyed by node id once completed), error detail if it failed, and timestamps. A run outside the caller\'s org answers 404.
-     * Run reads one run record: status, input, output (each executed node\'s result keyed by node id once completed), error detail if it failed, and timestamps.
+     * Returns one run. A run that has not reached a terminal status is refreshed from the durable engine first — scoped to the org\'s own namespace — so the caller sees live progress rather than the last status that happened to be persisted.
+     * Returns one run.
      */
-    async getAutoRunsByRunRaw(requestParameters: AutoApiGetAutoRunsByRunRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
-        if (requestParameters['run'] == null) {
+    async getAutoRunsByIdRaw(requestParameters: AutoApiGetAutoRunsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<FlowRun>> {
+        if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
-                'run',
-                'Required parameter "run" was null or undefined when calling getAutoRunsByRun().'
+                'id',
+                'Required parameter "id" was null or undefined when calling getAutoRunsById().'
             );
         }
 
@@ -329,8 +431,8 @@ export class AutoApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/auto/runs/{run}`;
-        urlPath = urlPath.replace(`{${"run"}}`, encodeURIComponent(String(requestParameters['run'])));
+        let urlPath = `/v1/auto/runs/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
         const response = await this.request({
             path: urlPath,
@@ -339,77 +441,34 @@ export class AutoApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return new runtime.JSONApiResponse<any>(response);
-        } else {
-            return new runtime.TextApiResponse(response) as any;
-        }
+        return new runtime.JSONApiResponse(response, (jsonValue) => FlowRunFromJSON(jsonValue));
     }
 
     /**
-     * Run reads one run record: status, input, output (each executed node\'s result keyed by node id once completed), error detail if it failed, and timestamps. A run outside the caller\'s org answers 404.
-     * Run reads one run record: status, input, output (each executed node\'s result keyed by node id once completed), error detail if it failed, and timestamps.
+     * Returns one run. A run that has not reached a terminal status is refreshed from the durable engine first — scoped to the org\'s own namespace — so the caller sees live progress rather than the last status that happened to be persisted.
+     * Returns one run.
      */
-    async getAutoRunsByRun(requestParameters: AutoApiGetAutoRunsByRunRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
-        const response = await this.getAutoRunsByRunRaw(requestParameters, initOverrides);
+    async getAutoRunsById(requestParameters: AutoApiGetAutoRunsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<FlowRun> {
+        const response = await this.getAutoRunsByIdRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Status reports whether the auto service is reachable — its own health endpoint as an honest lens for \"is the automation plane up\".
-     * Status reports whether the auto service is reachable — its own health endpoint as an honest lens for \"is the automation plane up\".
+     * Updates one automation\'s metadata in place. Every field is optional; a field the request omits is left alone. Publishing a version pins which one runs, and is refused unless that version belongs to this flow.
+     * Updates one automation\'s metadata in place.
      */
-    async getAutoStatusRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AutoStatus>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/auto/status`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => AutoStatusFromJSON(jsonValue));
-    }
-
-    /**
-     * Status reports whether the auto service is reachable — its own health endpoint as an honest lens for \"is the automation plane up\".
-     * Status reports whether the auto service is reachable — its own health endpoint as an honest lens for \"is the automation plane up\".
-     */
-    async getAutoStatus(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AutoStatus> {
-        const response = await this.getAutoStatusRaw(initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Patches one of the caller\'s flows: the name, the graph, or both — only the stated fields move.
-     * Patches one of the caller\'s flows: the name, the graph, or both — only the stated fields move.
-     */
-    async patchAutoFlowsByFlowRaw(requestParameters: AutoApiPatchAutoFlowsByFlowRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
-        if (requestParameters['flow'] == null) {
+    async patchAutoFlowsByIdRaw(requestParameters: AutoApiPatchAutoFlowsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Flow>> {
+        if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
-                'flow',
-                'Required parameter "flow" was null or undefined when calling patchAutoFlowsByFlow().'
+                'id',
+                'Required parameter "id" was null or undefined when calling patchAutoFlowsById().'
             );
         }
 
-        if (requestParameters['autoUpdate'] == null) {
+        if (requestParameters['patchFlowIn'] == null) {
             throw new runtime.RequiredError(
-                'autoUpdate',
-                'Required parameter "autoUpdate" was null or undefined when calling patchAutoFlowsByFlow().'
+                'patchFlowIn',
+                'Required parameter "patchFlowIn" was null or undefined when calling patchAutoFlowsById().'
             );
         }
 
@@ -428,42 +487,95 @@ export class AutoApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/auto/flows/{flow}`;
-        urlPath = urlPath.replace(`{${"flow"}}`, encodeURIComponent(String(requestParameters['flow'])));
+        let urlPath = `/v1/auto/flows/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
         const response = await this.request({
             path: urlPath,
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: AutoUpdateToJSON(requestParameters['autoUpdate']),
+            body: PatchFlowInToJSON(requestParameters['patchFlowIn']),
         }, initOverrides);
 
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return new runtime.JSONApiResponse<any>(response);
-        } else {
-            return new runtime.TextApiResponse(response) as any;
-        }
+        return new runtime.JSONApiResponse(response, (jsonValue) => FlowFromJSON(jsonValue));
     }
 
     /**
-     * Patches one of the caller\'s flows: the name, the graph, or both — only the stated fields move.
-     * Patches one of the caller\'s flows: the name, the graph, or both — only the stated fields move.
+     * Updates one automation\'s metadata in place. Every field is optional; a field the request omits is left alone. Publishing a version pins which one runs, and is refused unless that version belongs to this flow.
+     * Updates one automation\'s metadata in place.
      */
-    async patchAutoFlowsByFlow(requestParameters: AutoApiPatchAutoFlowsByFlowRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
-        const response = await this.patchAutoFlowsByFlowRaw(requestParameters, initOverrides);
+    async patchAutoFlowsById(requestParameters: AutoApiPatchAutoFlowsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Flow> {
+        const response = await this.patchAutoFlowsByIdRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Creates a flow in the caller\'s org. The org is stamped server-side from the validated principal — there is no field by which a caller could place a flow in another org.
-     * Creates a flow in the caller\'s org.
+     * Run executes one connector action in-process and answers the outcome. The caller\'s resolved credential travels in `auth`, delivered to the action verbatim — the runtime resolves no credential itself. An action that ran and failed (or an action name the connector does not have) answers ok:false with the failure message, not an HTTP error; an unknown connector is 404 and a missing action 422.
+     * Run executes one connector action in-process and answers the outcome.
      */
-    async postAutoFlowsRaw(requestParameters: AutoApiPostAutoFlowsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
-        if (requestParameters['autoCreate'] == null) {
+    async postAutoConnectorsByIdRunRaw(requestParameters: AutoApiPostAutoConnectorsByIdRunRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RunResp>> {
+        if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
-                'autoCreate',
-                'Required parameter "autoCreate" was null or undefined when calling postAutoFlows().'
+                'id',
+                'Required parameter "id" was null or undefined when calling postAutoConnectorsByIdRun().'
+            );
+        }
+
+        if (requestParameters['runIn'] == null) {
+            throw new runtime.RequiredError(
+                'runIn',
+                'Required parameter "runIn" was null or undefined when calling postAutoConnectorsByIdRun().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/auto/connectors/{id}/run`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: RunInToJSON(requestParameters['runIn']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => RunRespFromJSON(jsonValue));
+    }
+
+    /**
+     * Run executes one connector action in-process and answers the outcome. The caller\'s resolved credential travels in `auth`, delivered to the action verbatim — the runtime resolves no credential itself. An action that ran and failed (or an action name the connector does not have) answers ok:false with the failure message, not an HTTP error; an unknown connector is 404 and a missing action 422.
+     * Run executes one connector action in-process and answers the outcome.
+     */
+    async postAutoConnectorsByIdRun(requestParameters: AutoApiPostAutoConnectorsByIdRunRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RunResp> {
+        const response = await this.postAutoConnectorsByIdRunRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates an automation and its initial DRAFT version in one call. The new flow is DISABLED — creating it does not arm its trigger; POST /v1/auto/flows/{id}/enable does that.
+     * Creates an automation and its initial DRAFT version in one call.
+     */
+    async postAutoFlowsRaw(requestParameters: AutoApiPostAutoFlowsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PopulatedFlow>> {
+        if (requestParameters['createFlowReq'] == null) {
+            throw new runtime.RequiredError(
+                'createFlowReq',
+                'Required parameter "createFlowReq" was null or undefined when calling postAutoFlows().'
             );
         }
 
@@ -489,34 +601,30 @@ export class AutoApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: AutoCreateToJSON(requestParameters['autoCreate']),
+            body: CreateFlowReqToJSON(requestParameters['createFlowReq']),
         }, initOverrides);
 
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return new runtime.JSONApiResponse<any>(response);
-        } else {
-            return new runtime.TextApiResponse(response) as any;
-        }
+        return new runtime.JSONApiResponse(response, (jsonValue) => PopulatedFlowFromJSON(jsonValue));
     }
 
     /**
-     * Creates a flow in the caller\'s org. The org is stamped server-side from the validated principal — there is no field by which a caller could place a flow in another org.
-     * Creates a flow in the caller\'s org.
+     * Creates an automation and its initial DRAFT version in one call. The new flow is DISABLED — creating it does not arm its trigger; POST /v1/auto/flows/{id}/enable does that.
+     * Creates an automation and its initial DRAFT version in one call.
      */
-    async postAutoFlows(requestParameters: AutoApiPostAutoFlowsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
+    async postAutoFlows(requestParameters: AutoApiPostAutoFlowsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PopulatedFlow> {
         const response = await this.postAutoFlowsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Publish snapshots the flow\'s current graph as its next immutable version and arms the flow\'s triggers. Past versions stay addressable in the product for rollback; runs always execute the graph as it was dispatched.
-     * Publish snapshots the flow\'s current graph as its next immutable version and arms the flow\'s triggers.
+     * Disarms a flow\'s trigger and marks it DISABLED. Its schedule and its event subscriptions are dropped, so a disabled flow is never a live target; runs already in flight are unaffected, and it can still be started on demand.
+     * Disarms a flow\'s trigger and marks it DISABLED.
      */
-    async postAutoFlowsByFlowPublishRaw(requestParameters: AutoApiPostAutoFlowsByFlowPublishRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
-        if (requestParameters['flow'] == null) {
+    async postAutoFlowsByIdDisableRaw(requestParameters: AutoApiPostAutoFlowsByIdDisableRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Flow>> {
+        if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
-                'flow',
-                'Required parameter "flow" was null or undefined when calling postAutoFlowsByFlowPublish().'
+                'id',
+                'Required parameter "id" was null or undefined when calling postAutoFlowsByIdDisable().'
             );
         }
 
@@ -533,8 +641,8 @@ export class AutoApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/auto/flows/{flow}/publish`;
-        urlPath = urlPath.replace(`{${"flow"}}`, encodeURIComponent(String(requestParameters['flow'])));
+        let urlPath = `/v1/auto/flows/{id}/disable`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
         const response = await this.request({
             path: urlPath,
@@ -543,31 +651,174 @@ export class AutoApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return new runtime.JSONApiResponse<any>(response);
-        } else {
-            return new runtime.TextApiResponse(response) as any;
-        }
+        return new runtime.JSONApiResponse(response, (jsonValue) => FlowFromJSON(jsonValue));
     }
 
     /**
-     * Publish snapshots the flow\'s current graph as its next immutable version and arms the flow\'s triggers. Past versions stay addressable in the product for rollback; runs always execute the graph as it was dispatched.
-     * Publish snapshots the flow\'s current graph as its next immutable version and arms the flow\'s triggers.
+     * Disarms a flow\'s trigger and marks it DISABLED. Its schedule and its event subscriptions are dropped, so a disabled flow is never a live target; runs already in flight are unaffected, and it can still be started on demand.
+     * Disarms a flow\'s trigger and marks it DISABLED.
      */
-    async postAutoFlowsByFlowPublish(requestParameters: AutoApiPostAutoFlowsByFlowPublishRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
-        const response = await this.postAutoFlowsByFlowPublishRaw(requestParameters, initOverrides);
+    async postAutoFlowsByIdDisable(requestParameters: AutoApiPostAutoFlowsByIdDisableRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Flow> {
+        const response = await this.postAutoFlowsByIdDisableRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Start begins one asynchronous run of a flow: the product dispatches the graph to its durable execution engine (the hanzo tasks plane) and answers immediately with the run record in status running. Poll the run until it reaches completed — its output then holds each node\'s result keyed by node id — or failed, with the error. A flow whose engine is unreachable answers the product\'s 503: dispatch is real or it is refused, never queued into the void.
-     * Start begins one asynchronous run of a flow: the product dispatches the graph to its durable execution engine (the hanzo tasks plane) and answers immediately with the run record in status running.
+     * Arms a flow\'s trigger and marks it ENABLED. A POLLING trigger gets a cron schedule on the durable engine; a WEBHOOK trigger gets a subscription in the routing index, so an inbound event starts it; a MANUAL trigger arms nothing and still runs on demand.
+     * Arms a flow\'s trigger and marks it ENABLED.
      */
-    async postAutoRunsRaw(requestParameters: AutoApiPostAutoRunsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
-        if (requestParameters['autoStart'] == null) {
+    async postAutoFlowsByIdEnableRaw(requestParameters: AutoApiPostAutoFlowsByIdEnableRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Flow>> {
+        if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
-                'autoStart',
-                'Required parameter "autoStart" was null or undefined when calling postAutoRuns().'
+                'id',
+                'Required parameter "id" was null or undefined when calling postAutoFlowsByIdEnable().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/auto/flows/{id}/enable`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => FlowFromJSON(jsonValue));
+    }
+
+    /**
+     * Arms a flow\'s trigger and marks it ENABLED. A POLLING trigger gets a cron schedule on the durable engine; a WEBHOOK trigger gets a subscription in the routing index, so an inbound event starts it; a MANUAL trigger arms nothing and still runs on demand.
+     * Arms a flow\'s trigger and marks it ENABLED.
+     */
+    async postAutoFlowsByIdEnable(requestParameters: AutoApiPostAutoFlowsByIdEnableRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Flow> {
+        const response = await this.postAutoFlowsByIdEnableRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Applies ONE flow operation and answers the thing it changed. The operation is named by `type`, with its arguments under `request`: `CHANGE_NAME`, `UPDATE_TRIGGER`, `ADD_ACTION`, `UPDATE_ACTION`, `MOVE_ACTION`, `DELETE_ACTION` edit the flow\'s LATEST version and answer with that version, and `CHANGE_STATUS` instead enables or disables the flow and answers with the FLOW. Two response shapes on one address is the rule a reader would otherwise get wrong, and it is why this route is not a typed op.  Edits land on the latest version only — the published version a run executes is untouched until it is republished — and the whole resulting step tree is re-validated against the step-count and size caps after every operation, so a long sequence of `ADD_ACTION` calls cannot grow a flow past a bound one step at a time (422 when it would). Org-scoped and fails closed: a validated principal is required (403 without one), the flow and its version are read under the caller\'s OWN org so another tenant\'s id is a 404, and an operation whose `request` does not decode is a 400.
+     * Edit a flow — rename it, retarget its trigger, or add, move and delete steps
+     */
+    async postAutoFlowsByIdOperationsRaw(requestParameters: AutoApiPostAutoFlowsByIdOperationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling postAutoFlowsByIdOperations().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/auto/flows/{id}/operations`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Applies ONE flow operation and answers the thing it changed. The operation is named by `type`, with its arguments under `request`: `CHANGE_NAME`, `UPDATE_TRIGGER`, `ADD_ACTION`, `UPDATE_ACTION`, `MOVE_ACTION`, `DELETE_ACTION` edit the flow\'s LATEST version and answer with that version, and `CHANGE_STATUS` instead enables or disables the flow and answers with the FLOW. Two response shapes on one address is the rule a reader would otherwise get wrong, and it is why this route is not a typed op.  Edits land on the latest version only — the published version a run executes is untouched until it is republished — and the whole resulting step tree is re-validated against the step-count and size caps after every operation, so a long sequence of `ADD_ACTION` calls cannot grow a flow past a bound one step at a time (422 when it would). Org-scoped and fails closed: a validated principal is required (403 without one), the flow and its version are read under the caller\'s OWN org so another tenant\'s id is a 404, and an operation whose `request` does not decode is a 400.
+     * Edit a flow — rename it, retarget its trigger, or add, move and delete steps
+     */
+    async postAutoFlowsByIdOperations(requestParameters: AutoApiPostAutoFlowsByIdOperationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAutoFlowsByIdOperationsRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Starts one durable run of a flow now. It runs the flow\'s published version if one is pinned, else its latest, and answers the run record it created. The run is bounded by the org\'s per-minute run-start budget and its in-flight concurrency ceiling; over either, or with the engine not ready, no run is started and no run id is burned.
+     * Starts one durable run of a flow now.
+     */
+    async postAutoFlowsByIdRunRaw(requestParameters: AutoApiPostAutoFlowsByIdRunRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<FlowRun>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling postAutoFlowsByIdRun().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/auto/flows/{id}/run`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => FlowRunFromJSON(jsonValue));
+    }
+
+    /**
+     * Starts one durable run of a flow now. It runs the flow\'s published version if one is pinned, else its latest, and answers the run record it created. The run is bounded by the org\'s per-minute run-start budget and its in-flight concurrency ceiling; over either, or with the engine not ready, no run is started and no run id is burned.
+     * Starts one durable run of a flow now.
+     */
+    async postAutoFlowsByIdRun(requestParameters: AutoApiPostAutoFlowsByIdRunRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<FlowRun> {
+        const response = await this.postAutoFlowsByIdRunRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Adds a new DRAFT version to a flow. The version is created invalid unless it carries a trigger, and it does not become the running version until it is published (PATCH the flow\'s publishedVersionId) or becomes the latest.
+     * Adds a new DRAFT version to a flow.
+     */
+    async postAutoFlowsByIdVersionsRaw(requestParameters: AutoApiPostAutoFlowsByIdVersionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<FlowVersion>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling postAutoFlowsByIdVersions().'
+            );
+        }
+
+        if (requestParameters['createVersionIn'] == null) {
+            throw new runtime.RequiredError(
+                'createVersionIn',
+                'Required parameter "createVersionIn" was null or undefined when calling postAutoFlowsByIdVersions().'
             );
         }
 
@@ -586,30 +837,127 @@ export class AutoApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/auto/runs`;
+        let urlPath = `/v1/auto/flows/{id}/versions`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
         const response = await this.request({
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: AutoStartToJSON(requestParameters['autoStart']),
+            body: CreateVersionInToJSON(requestParameters['createVersionIn']),
         }, initOverrides);
 
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return new runtime.JSONApiResponse<any>(response);
-        } else {
-            return new runtime.TextApiResponse(response) as any;
-        }
+        return new runtime.JSONApiResponse(response, (jsonValue) => FlowVersionFromJSON(jsonValue));
     }
 
     /**
-     * Start begins one asynchronous run of a flow: the product dispatches the graph to its durable execution engine (the hanzo tasks plane) and answers immediately with the run record in status running. Poll the run until it reaches completed — its output then holds each node\'s result keyed by node id — or failed, with the error. A flow whose engine is unreachable answers the product\'s 503: dispatch is real or it is refused, never queued into the void.
-     * Start begins one asynchronous run of a flow: the product dispatches the graph to its durable execution engine (the hanzo tasks plane) and answers immediately with the run record in status running.
+     * Adds a new DRAFT version to a flow. The version is created invalid unless it carries a trigger, and it does not become the running version until it is published (PATCH the flow\'s publishedVersionId) or becomes the latest.
+     * Adds a new DRAFT version to a flow.
      */
-    async postAutoRuns(requestParameters: AutoApiPostAutoRunsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
-        const response = await this.postAutoRunsRaw(requestParameters, initOverrides);
+    async postAutoFlowsByIdVersions(requestParameters: AutoApiPostAutoFlowsByIdVersionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<FlowVersion> {
+        const response = await this.postAutoFlowsByIdVersionsRaw(requestParameters, initOverrides);
         return await response.value();
+    }
+
+    /**
+     * Delivers one event to the org\'s automation triggers and answers `{matched:n}` — how many enabled flows had a webhook trigger on this `(source, event)` key and were started by it. A zero match is a success, not an error: nothing was subscribed.  The path is the trigger key and the JSON object body is the event payload, threaded into each started run as `{{trigger.*}}` with all of its keys intact — which is why this is not a typed op, since a declared input struct would silently DISCARD every payload key it had no field for. Re-delivery is a no-op: an `X-Idempotency-Key` header dedupes, and with none the body is content-hashed instead, so a hammer of identical posts collapses to ONE run rather than minting a fresh one per post. An in-platform producer may propagate `X-Causation-Depth` so a firing that a flow caused is bounded against a loop; an absent or invalid header reads as depth 0, an external origin.  Authenticated and org-scoped, unlike a provider\'s public webhook URL: a validated principal is required (403 without one) and the org is that principal\'s, never the body\'s, so a producer can only fire into its own tenant\'s flows. Both path segments are required (400) and a payload over the size limit is a 413.
+     * Fire an event that starts every enabled flow subscribed to it
+     */
+    async postAutoHooksBySourceByEventRaw(requestParameters: AutoApiPostAutoHooksBySourceByEventRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['source'] == null) {
+            throw new runtime.RequiredError(
+                'source',
+                'Required parameter "source" was null or undefined when calling postAutoHooksBySourceByEvent().'
+            );
+        }
+
+        if (requestParameters['event'] == null) {
+            throw new runtime.RequiredError(
+                'event',
+                'Required parameter "event" was null or undefined when calling postAutoHooksBySourceByEvent().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/auto/hooks/{source}/{event}`;
+        urlPath = urlPath.replace(`{${"source"}}`, encodeURIComponent(String(requestParameters['source'])));
+        urlPath = urlPath.replace(`{${"event"}}`, encodeURIComponent(String(requestParameters['event'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Delivers one event to the org\'s automation triggers and answers `{matched:n}` — how many enabled flows had a webhook trigger on this `(source, event)` key and were started by it. A zero match is a success, not an error: nothing was subscribed.  The path is the trigger key and the JSON object body is the event payload, threaded into each started run as `{{trigger.*}}` with all of its keys intact — which is why this is not a typed op, since a declared input struct would silently DISCARD every payload key it had no field for. Re-delivery is a no-op: an `X-Idempotency-Key` header dedupes, and with none the body is content-hashed instead, so a hammer of identical posts collapses to ONE run rather than minting a fresh one per post. An in-platform producer may propagate `X-Causation-Depth` so a firing that a flow caused is bounded against a loop; an absent or invalid header reads as depth 0, an external origin.  Authenticated and org-scoped, unlike a provider\'s public webhook URL: a validated principal is required (403 without one) and the org is that principal\'s, never the body\'s, so a producer can only fire into its own tenant\'s flows. Both path segments are required (400) and a payload over the size limit is a 413.
+     * Fire an event that starts every enabled flow subscribed to it
+     */
+    async postAutoHooksBySourceByEvent(requestParameters: AutoApiPostAutoHooksBySourceByEventRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAutoHooksBySourceByEventRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Delivers the durable `resume` signal to a run parked on a `wait_for_approval` waitpoint and answers `{resumed:true}` once the engine has taken it.  The body is an ARBITRARY JSON value — object, array, string, number — delivered VERBATIM into the workflow as that waitpoint\'s output, so it is what the steps after the approval read as their input. An empty body resumes with no payload. That open shape is why this route is not a typed op: an operation\'s input can carry the payload or the run address, never both.  Org-scoped and fails closed: a validated principal is required (403 without one), the run is read under the caller\'s OWN org so another tenant\'s run id is a 404, a body that is not JSON is a 400, and a payload over the size limit is a 413 — it becomes durable engine state, so it is bounded here rather than after it lands. The resume is audited as `automations.run.resume`.
+     * Release a run waiting at an approval step, with the approval payload
+     */
+    async postAutoRunsByIdResumeRaw(requestParameters: AutoApiPostAutoRunsByIdResumeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling postAutoRunsByIdResume().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/auto/runs/{id}/resume`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Delivers the durable `resume` signal to a run parked on a `wait_for_approval` waitpoint and answers `{resumed:true}` once the engine has taken it.  The body is an ARBITRARY JSON value — object, array, string, number — delivered VERBATIM into the workflow as that waitpoint\'s output, so it is what the steps after the approval read as their input. An empty body resumes with no payload. That open shape is why this route is not a typed op: an operation\'s input can carry the payload or the run address, never both.  Org-scoped and fails closed: a validated principal is required (403 without one), the run is read under the caller\'s OWN org so another tenant\'s run id is a 404, a body that is not JSON is a 400, and a payload over the size limit is a 413 — it becomes durable engine state, so it is bounded here rather than after it lands. The resume is audited as `automations.run.resume`.
+     * Release a run waiting at an approval step, with the approval payload
+     */
+    async postAutoRunsByIdResume(requestParameters: AutoApiPostAutoRunsByIdResumeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAutoRunsByIdResumeRaw(requestParameters, initOverrides);
     }
 
 }

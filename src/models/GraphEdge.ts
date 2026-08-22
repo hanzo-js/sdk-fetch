@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,7 +20,9 @@ import { mapValues } from '../runtime.js';
  */
 export interface GraphEdge {
     /**
-     * 
+     * From is the id of the node the edge starts at: the child page for a parent
+     * edge, the page holding the wikilink for a link edge, the kb-source for a
+     * provenance edge. Always one of Nodes.
      * @type {string}
      * @memberof GraphEdge
      */
@@ -32,7 +34,10 @@ export interface GraphEdge {
      */
     kind?: string;
     /**
-     * 
+     * To is the id of the node the edge points at: the parent page, the linked
+     * page, the kb-connector. Always one of Nodes — a wikilink matching no page
+     * points at a synthetic "unresolved:<lowercased title>" node rather than
+     * dangling.
      * @type {string}
      * @memberof GraphEdge
      */

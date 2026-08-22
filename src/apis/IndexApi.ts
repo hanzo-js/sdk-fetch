@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -14,6 +14,52 @@
 
 
 import * as runtime from '../runtime.js';
+import type {
+  IndexDocuments,
+  IndexEnqueued,
+  IndexFilter,
+  IndexHealth,
+  IndexHits,
+  IndexList,
+  IndexNew,
+  IndexQuery,
+  IndexSettings,
+  IndexStats,
+  IndexTask,
+  IndexVersion,
+  IndexView,
+  PostIndexIndexesByUidDocumentsDeleteBatchRequest,
+} from '../models/index.js';
+import {
+    IndexDocumentsFromJSON,
+    IndexDocumentsToJSON,
+    IndexEnqueuedFromJSON,
+    IndexEnqueuedToJSON,
+    IndexFilterFromJSON,
+    IndexFilterToJSON,
+    IndexHealthFromJSON,
+    IndexHealthToJSON,
+    IndexHitsFromJSON,
+    IndexHitsToJSON,
+    IndexListFromJSON,
+    IndexListToJSON,
+    IndexNewFromJSON,
+    IndexNewToJSON,
+    IndexQueryFromJSON,
+    IndexQueryToJSON,
+    IndexSettingsFromJSON,
+    IndexSettingsToJSON,
+    IndexStatsFromJSON,
+    IndexStatsToJSON,
+    IndexTaskFromJSON,
+    IndexTaskToJSON,
+    IndexVersionFromJSON,
+    IndexVersionToJSON,
+    IndexViewFromJSON,
+    IndexViewToJSON,
+    PostIndexIndexesByUidDocumentsDeleteBatchRequestFromJSON,
+    PostIndexIndexesByUidDocumentsDeleteBatchRequestToJSON,
+} from '../models/index.js';
 
 export interface IndexApiDeleteIndexIndexesByUidRequest {
     uid: string;
@@ -30,6 +76,8 @@ export interface IndexApiGetIndexIndexesByUidRequest {
 
 export interface IndexApiGetIndexIndexesByUidDocumentsRequest {
     uid: string;
+    limit?: string;
+    offset?: string;
 }
 
 export interface IndexApiGetIndexIndexesByUidDocumentsByIdRequest {
@@ -42,27 +90,36 @@ export interface IndexApiGetIndexIndexesByUidSettingsRequest {
 }
 
 export interface IndexApiGetIndexTasksByUidRequest {
-    uid: string;
+    uid: number;
 }
 
 export interface IndexApiPatchIndexIndexesByUidSettingsRequest {
     uid: string;
+    indexFilter: IndexFilter;
+}
+
+export interface IndexApiPostIndexIndexesRequest {
+    indexNew: IndexNew;
 }
 
 export interface IndexApiPostIndexIndexesByUidDocumentsRequest {
     uid: string;
+    requestBody?: Array<any> | null;
 }
 
-export interface IndexApiPostIndexIndexesByUidDocumentsDeleteBatchRequest {
+export interface IndexApiPostIndexIndexesByUidDocumentsDeleteBatchOperationRequest {
     uid: string;
+    arraystringArraynumber?: Array<string> | Array<number> | null;
 }
 
 export interface IndexApiPostIndexIndexesByUidSearchRequest {
     uid: string;
+    indexQuery: IndexQuery;
 }
 
 export interface IndexApiPutIndexIndexesByUidDocumentsRequest {
     uid: string;
+    requestBody?: Array<any> | null;
 }
 
 /**
@@ -71,10 +128,10 @@ export interface IndexApiPutIndexIndexesByUidDocumentsRequest {
 export class IndexApi extends runtime.BaseAPI {
 
     /**
-     * Drops one index in the caller\'s org together with all of its documents. This is the only way to retire an index; without it a mistaken uid would be permanent. It is idempotent — dropping an index that is not there still succeeds. The tenant is the org minted from the VALIDATED bearer\'s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \"messages\" and neither can see the other\'s documents. Without a validated principal the answer is 403 carrying Meilisearch\'s `invalid_api_key` body. Errors use Meilisearch\'s {message, code, type, link} shape rather than cloud\'s, because that `code` is a wire contract a Meilisearch client branches on.  The 202 and its `enqueued` task are DIALECT COMPATIBILITY, not a promise of later work: the write is already applied when this answers, and the task it names is already complete. A client that polls waitForTask resolves immediately rather than waiting, and a client that does not poll has still had its write committed.
-     * Delete an index and everything in it
+     * Deletes an index and everything in it.  Drops the index and every document in it from the caller\'s own org, and answers the dialect\'s EnqueuedTask. This is the only way to retire an index; without it a mistaken uid is permanent. Deleting an index that is not there succeeds, so a cleanup pass is safe to re-run.  The 202 and its `enqueued` task are DIALECT COMPATIBILITY, not a promise of later work: the documents are already gone when this answers.
+     * Deletes an index and everything in it.
      */
-    async deleteIndexIndexesByUidRaw(requestParameters: IndexApiDeleteIndexIndexesByUidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async deleteIndexIndexesByUidRaw(requestParameters: IndexApiDeleteIndexIndexesByUidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IndexEnqueued>> {
         if (requestParameters['uid'] == null) {
             throw new runtime.RequiredError(
                 'uid',
@@ -105,22 +162,23 @@ export class IndexApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => IndexEnqueuedFromJSON(jsonValue));
     }
 
     /**
-     * Drops one index in the caller\'s org together with all of its documents. This is the only way to retire an index; without it a mistaken uid would be permanent. It is idempotent — dropping an index that is not there still succeeds. The tenant is the org minted from the VALIDATED bearer\'s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \"messages\" and neither can see the other\'s documents. Without a validated principal the answer is 403 carrying Meilisearch\'s `invalid_api_key` body. Errors use Meilisearch\'s {message, code, type, link} shape rather than cloud\'s, because that `code` is a wire contract a Meilisearch client branches on.  The 202 and its `enqueued` task are DIALECT COMPATIBILITY, not a promise of later work: the write is already applied when this answers, and the task it names is already complete. A client that polls waitForTask resolves immediately rather than waiting, and a client that does not poll has still had its write committed.
-     * Delete an index and everything in it
+     * Deletes an index and everything in it.  Drops the index and every document in it from the caller\'s own org, and answers the dialect\'s EnqueuedTask. This is the only way to retire an index; without it a mistaken uid is permanent. Deleting an index that is not there succeeds, so a cleanup pass is safe to re-run.  The 202 and its `enqueued` task are DIALECT COMPATIBILITY, not a promise of later work: the documents are already gone when this answers.
+     * Deletes an index and everything in it.
      */
-    async deleteIndexIndexesByUid(requestParameters: IndexApiDeleteIndexIndexesByUidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.deleteIndexIndexesByUidRaw(requestParameters, initOverrides);
+    async deleteIndexIndexesByUid(requestParameters: IndexApiDeleteIndexIndexesByUidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IndexEnqueued> {
+        const response = await this.deleteIndexIndexesByUidRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Removes one document from an index. It is IDEMPOTENT: deleting a key that is not there succeeds rather than 404, so a retry after a lost response is safe. The tenant is the org minted from the VALIDATED bearer\'s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \"messages\" and neither can see the other\'s documents. Without a validated principal the answer is 403 carrying Meilisearch\'s `invalid_api_key` body. Errors use Meilisearch\'s {message, code, type, link} shape rather than cloud\'s, because that `code` is a wire contract a Meilisearch client branches on.  The 202 and its `enqueued` task are DIALECT COMPATIBILITY, not a promise of later work: the write is already applied when this answers, and the task it names is already complete. A client that polls waitForTask resolves immediately rather than waiting, and a client that does not poll has still had its write committed.
-     * Delete one document by its primary key
+     * Deletes one document by its primary key.  Removes the document from the caller\'s own org and answers the dialect\'s EnqueuedTask. Deleting a key that is not there succeeds, so a client reconciling its own corpus can delete without checking first.  The 202 and its `enqueued` task are DIALECT COMPATIBILITY, not a promise of later work: the document is already gone when this answers.
+     * Deletes one document by its primary key.
      */
-    async deleteIndexIndexesByUidDocumentsByIdRaw(requestParameters: IndexApiDeleteIndexIndexesByUidDocumentsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async deleteIndexIndexesByUidDocumentsByIdRaw(requestParameters: IndexApiDeleteIndexIndexesByUidDocumentsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IndexEnqueued>> {
         if (requestParameters['uid'] == null) {
             throw new runtime.RequiredError(
                 'uid',
@@ -159,22 +217,23 @@ export class IndexApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => IndexEnqueuedFromJSON(jsonValue));
     }
 
     /**
-     * Removes one document from an index. It is IDEMPOTENT: deleting a key that is not there succeeds rather than 404, so a retry after a lost response is safe. The tenant is the org minted from the VALIDATED bearer\'s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \"messages\" and neither can see the other\'s documents. Without a validated principal the answer is 403 carrying Meilisearch\'s `invalid_api_key` body. Errors use Meilisearch\'s {message, code, type, link} shape rather than cloud\'s, because that `code` is a wire contract a Meilisearch client branches on.  The 202 and its `enqueued` task are DIALECT COMPATIBILITY, not a promise of later work: the write is already applied when this answers, and the task it names is already complete. A client that polls waitForTask resolves immediately rather than waiting, and a client that does not poll has still had its write committed.
-     * Delete one document by its primary key
+     * Deletes one document by its primary key.  Removes the document from the caller\'s own org and answers the dialect\'s EnqueuedTask. Deleting a key that is not there succeeds, so a client reconciling its own corpus can delete without checking first.  The 202 and its `enqueued` task are DIALECT COMPATIBILITY, not a promise of later work: the document is already gone when this answers.
+     * Deletes one document by its primary key.
      */
-    async deleteIndexIndexesByUidDocumentsById(requestParameters: IndexApiDeleteIndexIndexesByUidDocumentsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.deleteIndexIndexesByUidDocumentsByIdRaw(requestParameters, initOverrides);
+    async deleteIndexIndexesByUidDocumentsById(requestParameters: IndexApiDeleteIndexIndexesByUidDocumentsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IndexEnqueued> {
+        const response = await this.deleteIndexIndexesByUidDocumentsByIdRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Answers Meilisearch\'s `{\"status\":\"available\"}` when the index store is readable. It FAILS CLOSED — an unreadable store answers 503 and `unavailable` — so a replica whose volume has gone bad stops taking traffic instead of answering every search with nothing found. It touches no tenant data and needs no credential.
-     * Report whether the search plane can serve
+     * Reports whether the search plane can serve.  Answers the dialect\'s `{\"status\":\"available\"}` when the index store is readable. It FAILS CLOSED — an unreadable store answers 503 with `{\"status\":\"unavailable\"}` rather than an empty result set, because a Meilisearch client probes this before it will use a server at all and a cheerful 200 over a broken volume turns \"search is down\" into \"nothing matched\". It requires no principal and reads no tenant data.
+     * Reports whether the search plane can serve.
      */
-    async getIndexHealthRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getIndexHealthRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IndexHealth>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -197,22 +256,23 @@ export class IndexApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => IndexHealthFromJSON(jsonValue));
     }
 
     /**
-     * Answers Meilisearch\'s `{\"status\":\"available\"}` when the index store is readable. It FAILS CLOSED — an unreadable store answers 503 and `unavailable` — so a replica whose volume has gone bad stops taking traffic instead of answering every search with nothing found. It touches no tenant data and needs no credential.
-     * Report whether the search plane can serve
+     * Reports whether the search plane can serve.  Answers the dialect\'s `{\"status\":\"available\"}` when the index store is readable. It FAILS CLOSED — an unreadable store answers 503 with `{\"status\":\"unavailable\"}` rather than an empty result set, because a Meilisearch client probes this before it will use a server at all and a cheerful 200 over a broken volume turns \"search is down\" into \"nothing matched\". It requires no principal and reads no tenant data.
+     * Reports whether the search plane can serve.
      */
-    async getIndexHealth(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getIndexHealthRaw(initOverrides);
+    async getIndexHealth(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IndexHealth> {
+        const response = await this.getIndexHealthRaw(initOverrides);
+        return await response.value();
     }
 
     /**
-     * Answers every index in the caller\'s org with its primary key and timestamps. It is the only way to enumerate what an org holds — without it an index whose uid a caller has forgotten is unreachable. The tenant is the org minted from the VALIDATED bearer\'s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \"messages\" and neither can see the other\'s documents. Without a validated principal the answer is 403 carrying Meilisearch\'s `invalid_api_key` body. Errors use Meilisearch\'s {message, code, type, link} shape rather than cloud\'s, because that `code` is a wire contract a Meilisearch client branches on.
-     * List the indexes your org holds
+     * Lists the indexes your org holds.  Answers every index in the caller\'s own org with its primary key and timestamps. Without it an index whose uid a caller has forgotten is unreachable — there is no other way to enumerate what an org holds. The page is the whole set: an org\'s index count is small by construction, so `limit` and `total` both report it.  The tenant is the org minted from the VALIDATED bearer\'s owner claim, never a client-supplied header, and two orgs may both hold an index named \"messages\" without either seeing the other. Without a validated principal the answer is 403 carrying the dialect\'s `invalid_api_key` body.
+     * Lists the indexes your org holds.
      */
-    async getIndexIndexesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getIndexIndexesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IndexList>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -235,22 +295,23 @@ export class IndexApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => IndexListFromJSON(jsonValue));
     }
 
     /**
-     * Answers every index in the caller\'s org with its primary key and timestamps. It is the only way to enumerate what an org holds — without it an index whose uid a caller has forgotten is unreachable. The tenant is the org minted from the VALIDATED bearer\'s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \"messages\" and neither can see the other\'s documents. Without a validated principal the answer is 403 carrying Meilisearch\'s `invalid_api_key` body. Errors use Meilisearch\'s {message, code, type, link} shape rather than cloud\'s, because that `code` is a wire contract a Meilisearch client branches on.
-     * List the indexes your org holds
+     * Lists the indexes your org holds.  Answers every index in the caller\'s own org with its primary key and timestamps. Without it an index whose uid a caller has forgotten is unreachable — there is no other way to enumerate what an org holds. The page is the whole set: an org\'s index count is small by construction, so `limit` and `total` both report it.  The tenant is the org minted from the VALIDATED bearer\'s owner claim, never a client-supplied header, and two orgs may both hold an index named \"messages\" without either seeing the other. Without a validated principal the answer is 403 carrying the dialect\'s `invalid_api_key` body.
+     * Lists the indexes your org holds.
      */
-    async getIndexIndexes(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getIndexIndexesRaw(initOverrides);
+    async getIndexIndexes(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IndexList> {
+        const response = await this.getIndexIndexesRaw(initOverrides);
+        return await response.value();
     }
 
     /**
-     * Answers a single index\'s uid, primary key and timestamps. An index the caller\'s org does not hold is 404 `index_not_found` — which is the same answer another org\'s index gives, since the org is a bound predicate on the read. The tenant is the org minted from the VALIDATED bearer\'s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \"messages\" and neither can see the other\'s documents. Without a validated principal the answer is 403 carrying Meilisearch\'s `invalid_api_key` body. Errors use Meilisearch\'s {message, code, type, link} shape rather than cloud\'s, because that `code` is a wire contract a Meilisearch client branches on.
-     * Read one index\'s definition
+     * Reads one index\'s definition.  Answers the index\'s uid, primary key and timestamps. An index this org does not hold answers 404 carrying the dialect\'s `index_not_found` — the code a Meilisearch client reads as permission to create it, which is why this is a refusal rather than an empty object.  The uid is scoped to the caller\'s own org, so another tenant\'s index is indistinguishable from one that never existed: this surface is not an existence oracle.
+     * Reads one index\'s definition.
      */
-    async getIndexIndexesByUidRaw(requestParameters: IndexApiGetIndexIndexesByUidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getIndexIndexesByUidRaw(requestParameters: IndexApiGetIndexIndexesByUidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IndexView>> {
         if (requestParameters['uid'] == null) {
             throw new runtime.RequiredError(
                 'uid',
@@ -281,22 +342,23 @@ export class IndexApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => IndexViewFromJSON(jsonValue));
     }
 
     /**
-     * Answers a single index\'s uid, primary key and timestamps. An index the caller\'s org does not hold is 404 `index_not_found` — which is the same answer another org\'s index gives, since the org is a bound predicate on the read. The tenant is the org minted from the VALIDATED bearer\'s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \"messages\" and neither can see the other\'s documents. Without a validated principal the answer is 403 carrying Meilisearch\'s `invalid_api_key` body. Errors use Meilisearch\'s {message, code, type, link} shape rather than cloud\'s, because that `code` is a wire contract a Meilisearch client branches on.
-     * Read one index\'s definition
+     * Reads one index\'s definition.  Answers the index\'s uid, primary key and timestamps. An index this org does not hold answers 404 carrying the dialect\'s `index_not_found` — the code a Meilisearch client reads as permission to create it, which is why this is a refusal rather than an empty object.  The uid is scoped to the caller\'s own org, so another tenant\'s index is indistinguishable from one that never existed: this surface is not an existence oracle.
+     * Reads one index\'s definition.
      */
-    async getIndexIndexesByUid(requestParameters: IndexApiGetIndexIndexesByUidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getIndexIndexesByUidRaw(requestParameters, initOverrides);
+    async getIndexIndexesByUid(requestParameters: IndexApiGetIndexIndexesByUidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IndexView> {
+        const response = await this.getIndexIndexesByUidRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Answers the documents in one index with a total count. `limit` defaults to 20 and is capped at 1000, `offset` pages, and the response echoes both back so a pager knows what it actually got. An index the caller\'s org does not hold is 404 `index_not_found`. The tenant is the org minted from the VALIDATED bearer\'s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \"messages\" and neither can see the other\'s documents. Without a validated principal the answer is 403 carrying Meilisearch\'s `invalid_api_key` body. Errors use Meilisearch\'s {message, code, type, link} shape rather than cloud\'s, because that `code` is a wire contract a Meilisearch client branches on.
-     * Page through the documents in an index
+     * Pages through the documents in an index.  Answers the org\'s stored documents in insertion order, whole, with the page\'s bounds and the index\'s total. It is the enumeration surface — search ranks by relevance and cannot walk a corpus — so a caller reconciling what it has written reads it here.  An index this org does not hold answers 404 carrying the dialect\'s `index_not_found`.
+     * Pages through the documents in an index.
      */
-    async getIndexIndexesByUidDocumentsRaw(requestParameters: IndexApiGetIndexIndexesByUidDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getIndexIndexesByUidDocumentsRaw(requestParameters: IndexApiGetIndexIndexesByUidDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IndexDocuments>> {
         if (requestParameters['uid'] == null) {
             throw new runtime.RequiredError(
                 'uid',
@@ -305,6 +367,14 @@ export class IndexApi extends runtime.BaseAPI {
         }
 
         const queryParameters: any = {};
+
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
+        }
+
+        if (requestParameters['offset'] != null) {
+            queryParameters['offset'] = requestParameters['offset'];
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -327,22 +397,23 @@ export class IndexApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => IndexDocumentsFromJSON(jsonValue));
     }
 
     /**
-     * Answers the documents in one index with a total count. `limit` defaults to 20 and is capped at 1000, `offset` pages, and the response echoes both back so a pager knows what it actually got. An index the caller\'s org does not hold is 404 `index_not_found`. The tenant is the org minted from the VALIDATED bearer\'s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \"messages\" and neither can see the other\'s documents. Without a validated principal the answer is 403 carrying Meilisearch\'s `invalid_api_key` body. Errors use Meilisearch\'s {message, code, type, link} shape rather than cloud\'s, because that `code` is a wire contract a Meilisearch client branches on.
-     * Page through the documents in an index
+     * Pages through the documents in an index.  Answers the org\'s stored documents in insertion order, whole, with the page\'s bounds and the index\'s total. It is the enumeration surface — search ranks by relevance and cannot walk a corpus — so a caller reconciling what it has written reads it here.  An index this org does not hold answers 404 carrying the dialect\'s `index_not_found`.
+     * Pages through the documents in an index.
      */
-    async getIndexIndexesByUidDocuments(requestParameters: IndexApiGetIndexIndexesByUidDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getIndexIndexesByUidDocumentsRaw(requestParameters, initOverrides);
+    async getIndexIndexesByUidDocuments(requestParameters: IndexApiGetIndexIndexesByUidDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IndexDocuments> {
+        const response = await this.getIndexIndexesByUidDocumentsRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Answers the stored document whose primary key matches, exactly as it was written. A missing document is 404 `document_not_found` and a missing index is 404 `index_not_found` — two different codes, because a client that branches on them treats the cases differently. The tenant is the org minted from the VALIDATED bearer\'s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \"messages\" and neither can see the other\'s documents. Without a validated principal the answer is 403 carrying Meilisearch\'s `invalid_api_key` body. Errors use Meilisearch\'s {message, code, type, link} shape rather than cloud\'s, because that `code` is a wire contract a Meilisearch client branches on.
-     * Read one document by its primary key
+     * Reads one document by its primary key.  Answers the stored document exactly as it was written — this surface keeps documents whole rather than projecting them, so what comes back is what went in. A primary key this index does not hold answers 404 carrying the dialect\'s `document_not_found`; an index this org does not hold answers `index_not_found`, and the two are different facts a client acts on differently.
+     * Reads one document by its primary key.
      */
-    async getIndexIndexesByUidDocumentsByIdRaw(requestParameters: IndexApiGetIndexIndexesByUidDocumentsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getIndexIndexesByUidDocumentsByIdRaw(requestParameters: IndexApiGetIndexIndexesByUidDocumentsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
         if (requestParameters['uid'] == null) {
             throw new runtime.RequiredError(
                 'uid',
@@ -381,22 +452,27 @@ export class IndexApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return new runtime.JSONApiResponse<any>(response);
+        } else {
+            return new runtime.TextApiResponse(response) as any;
+        }
     }
 
     /**
-     * Answers the stored document whose primary key matches, exactly as it was written. A missing document is 404 `document_not_found` and a missing index is 404 `index_not_found` — two different codes, because a client that branches on them treats the cases differently. The tenant is the org minted from the VALIDATED bearer\'s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \"messages\" and neither can see the other\'s documents. Without a validated principal the answer is 403 carrying Meilisearch\'s `invalid_api_key` body. Errors use Meilisearch\'s {message, code, type, link} shape rather than cloud\'s, because that `code` is a wire contract a Meilisearch client branches on.
-     * Read one document by its primary key
+     * Reads one document by its primary key.  Answers the stored document exactly as it was written — this surface keeps documents whole rather than projecting them, so what comes back is what went in. A primary key this index does not hold answers 404 carrying the dialect\'s `document_not_found`; an index this org does not hold answers `index_not_found`, and the two are different facts a client acts on differently.
+     * Reads one document by its primary key.
      */
-    async getIndexIndexesByUidDocumentsById(requestParameters: IndexApiGetIndexIndexesByUidDocumentsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getIndexIndexesByUidDocumentsByIdRaw(requestParameters, initOverrides);
+    async getIndexIndexesByUidDocumentsById(requestParameters: IndexApiGetIndexIndexesByUidDocumentsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
+        const response = await this.getIndexIndexesByUidDocumentsByIdRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Answers the attributes an index allows filtering on. This dialect implements the filterable-attributes setting and no other, so that is the whole of what comes back. An index the caller\'s org does not hold is 404 `index_not_found`. The tenant is the org minted from the VALIDATED bearer\'s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \"messages\" and neither can see the other\'s documents. Without a validated principal the answer is 403 carrying Meilisearch\'s `invalid_api_key` body. Errors use Meilisearch\'s {message, code, type, link} shape rather than cloud\'s, because that `code` is a wire contract a Meilisearch client branches on.
-     * Read an index\'s filterable attributes
+     * Reads an index\'s filterable attributes.  Answers the settings subset this surface implements: the attributes a search `filter` may constrain. An index this org does not hold answers 404 carrying the dialect\'s `index_not_found`.
+     * Reads an index\'s filterable attributes.
      */
-    async getIndexIndexesByUidSettingsRaw(requestParameters: IndexApiGetIndexIndexesByUidSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getIndexIndexesByUidSettingsRaw(requestParameters: IndexApiGetIndexIndexesByUidSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IndexSettings>> {
         if (requestParameters['uid'] == null) {
             throw new runtime.RequiredError(
                 'uid',
@@ -427,22 +503,23 @@ export class IndexApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => IndexSettingsFromJSON(jsonValue));
     }
 
     /**
-     * Answers the attributes an index allows filtering on. This dialect implements the filterable-attributes setting and no other, so that is the whole of what comes back. An index the caller\'s org does not hold is 404 `index_not_found`. The tenant is the org minted from the VALIDATED bearer\'s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \"messages\" and neither can see the other\'s documents. Without a validated principal the answer is 403 carrying Meilisearch\'s `invalid_api_key` body. Errors use Meilisearch\'s {message, code, type, link} shape rather than cloud\'s, because that `code` is a wire contract a Meilisearch client branches on.
-     * Read an index\'s filterable attributes
+     * Reads an index\'s filterable attributes.  Answers the settings subset this surface implements: the attributes a search `filter` may constrain. An index this org does not hold answers 404 carrying the dialect\'s `index_not_found`.
+     * Reads an index\'s filterable attributes.
      */
-    async getIndexIndexesByUidSettings(requestParameters: IndexApiGetIndexIndexesByUidSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getIndexIndexesByUidSettingsRaw(requestParameters, initOverrides);
+    async getIndexIndexesByUidSettings(requestParameters: IndexApiGetIndexIndexesByUidSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IndexSettings> {
+        const response = await this.getIndexIndexesByUidSettingsRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Answers a document count per index for the caller\'s org, plus their sum. `isIndexing` is always false, which is the honest answer here rather than a stub: writes are applied before their response, so there is never a backlog in progress to report. The tenant is the org minted from the VALIDATED bearer\'s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \"messages\" and neither can see the other\'s documents. Without a validated principal the answer is 403 carrying Meilisearch\'s `invalid_api_key` body. Errors use Meilisearch\'s {message, code, type, link} shape rather than cloud\'s, because that `code` is a wire contract a Meilisearch client branches on.
-     * Count the documents in each of your indexes
+     * Counts the documents in each of your indexes.  Reports every index the caller\'s own org holds with its document count, plus the org\'s total. `isIndexing` is always false because writes here are applied before their response — there is never a background pass to wait on.  The tenant is the org minted from the VALIDATED bearer\'s owner claim, never a client-supplied header, so this counts the caller\'s own documents and no other tenant\'s. Without a validated principal the answer is 403 carrying the dialect\'s `invalid_api_key` body.
+     * Counts the documents in each of your indexes.
      */
-    async getIndexStatsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getIndexStatsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IndexStats>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -465,22 +542,23 @@ export class IndexApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => IndexStatsFromJSON(jsonValue));
     }
 
     /**
-     * Answers a document count per index for the caller\'s org, plus their sum. `isIndexing` is always false, which is the honest answer here rather than a stub: writes are applied before their response, so there is never a backlog in progress to report. The tenant is the org minted from the VALIDATED bearer\'s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \"messages\" and neither can see the other\'s documents. Without a validated principal the answer is 403 carrying Meilisearch\'s `invalid_api_key` body. Errors use Meilisearch\'s {message, code, type, link} shape rather than cloud\'s, because that `code` is a wire contract a Meilisearch client branches on.
-     * Count the documents in each of your indexes
+     * Counts the documents in each of your indexes.  Reports every index the caller\'s own org holds with its document count, plus the org\'s total. `isIndexing` is always false because writes here are applied before their response — there is never a background pass to wait on.  The tenant is the org minted from the VALIDATED bearer\'s owner claim, never a client-supplied header, so this counts the caller\'s own documents and no other tenant\'s. Without a validated principal the answer is 403 carrying the dialect\'s `invalid_api_key` body.
+     * Counts the documents in each of your indexes.
      */
-    async getIndexStats(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getIndexStatsRaw(initOverrides);
+    async getIndexStats(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IndexStats> {
+        const response = await this.getIndexStatsRaw(initOverrides);
+        return await response.value();
     }
 
     /**
-     * Answers `succeeded` for the task id given. It ALWAYS answers succeeded, and that is honest rather than a stub: writes on this surface are applied before their response returns, so by the time any task id exists to ask about, its work is done. It exists so a Meilisearch client\'s waitForTask resolves at once instead of polling forever for a queue that was never there. It requires a validated principal but reads no tenant data.
-     * Check a write task, which has already finished
+     * Checks a write task, which has already finished.  Always reports `succeeded`. Writes here are applied to SQLite before their EnqueuedTask is returned, so a client polling waitForTask resolves on its first call rather than waiting for a queue that was never there. The three timestamps are the same instant for the same reason.  It requires a validated principal but reads no tenant data: the task id it echoes was minted by this process and names nothing about any org.
+     * Checks a write task, which has already finished.
      */
-    async getIndexTasksByUidRaw(requestParameters: IndexApiGetIndexTasksByUidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getIndexTasksByUidRaw(requestParameters: IndexApiGetIndexTasksByUidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IndexTask>> {
         if (requestParameters['uid'] == null) {
             throw new runtime.RequiredError(
                 'uid',
@@ -511,22 +589,23 @@ export class IndexApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => IndexTaskFromJSON(jsonValue));
     }
 
     /**
-     * Answers `succeeded` for the task id given. It ALWAYS answers succeeded, and that is honest rather than a stub: writes on this surface are applied before their response returns, so by the time any task id exists to ask about, its work is done. It exists so a Meilisearch client\'s waitForTask resolves at once instead of polling forever for a queue that was never there. It requires a validated principal but reads no tenant data.
-     * Check a write task, which has already finished
+     * Checks a write task, which has already finished.  Always reports `succeeded`. Writes here are applied to SQLite before their EnqueuedTask is returned, so a client polling waitForTask resolves on its first call rather than waiting for a queue that was never there. The three timestamps are the same instant for the same reason.  It requires a validated principal but reads no tenant data: the task id it echoes was minted by this process and names nothing about any org.
+     * Checks a write task, which has already finished.
      */
-    async getIndexTasksByUid(requestParameters: IndexApiGetIndexTasksByUidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getIndexTasksByUidRaw(requestParameters, initOverrides);
+    async getIndexTasksByUid(requestParameters: IndexApiGetIndexTasksByUidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IndexTask> {
+        const response = await this.getIndexTasksByUidRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Answers the version shape a Meilisearch client expects. It names THIS implementation rather than a Meilisearch release — the commit field reads `hanzo-cloud` — so a client that logs it records which server actually answered instead of implying a Meilisearch build. Needs no credential.
-     * Identify the search implementation answering
+     * Identifies the search implementation answering.  Reports the dialect\'s version shape with `commitSha` naming this implementation rather than a Meilisearch build, so a client that logs the version records which server answered instead of implying a release of software this is not. It requires no principal and reads no tenant data.
+     * Identifies the search implementation answering.
      */
-    async getIndexVersionRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getIndexVersionRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IndexVersion>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -549,22 +628,23 @@ export class IndexApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => IndexVersionFromJSON(jsonValue));
     }
 
     /**
-     * Answers the version shape a Meilisearch client expects. It names THIS implementation rather than a Meilisearch release — the commit field reads `hanzo-cloud` — so a client that logs it records which server actually answered instead of implying a Meilisearch build. Needs no credential.
-     * Identify the search implementation answering
+     * Identifies the search implementation answering.  Reports the dialect\'s version shape with `commitSha` naming this implementation rather than a Meilisearch build, so a client that logs the version records which server answered instead of implying a release of software this is not. It requires no principal and reads no tenant data.
+     * Identifies the search implementation answering.
      */
-    async getIndexVersion(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getIndexVersionRaw(initOverrides);
+    async getIndexVersion(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IndexVersion> {
+        const response = await this.getIndexVersionRaw(initOverrides);
+        return await response.value();
     }
 
     /**
-     * Replaces an index\'s filterable attributes with the list in `filterableAttributes`; omitting the field leaves them as they are. The index is CREATED ON DEMAND rather than 404\'d, because a client that configures an index it has just asked for should not have to create it first — this is the one read-shaped path on the surface that writes. The tenant is the org minted from the VALIDATED bearer\'s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \"messages\" and neither can see the other\'s documents. Without a validated principal the answer is 403 carrying Meilisearch\'s `invalid_api_key` body. Errors use Meilisearch\'s {message, code, type, link} shape rather than cloud\'s, because that `code` is a wire contract a Meilisearch client branches on.  The 202 and its `enqueued` task are DIALECT COMPATIBILITY, not a promise of later work: the write is already applied when this answers, and the task it names is already complete. A client that polls waitForTask resolves immediately rather than waiting, and a client that does not poll has still had its write committed.
-     * Set which attributes an index can be filtered on
+     * Sets which attributes an index can be filtered on.  Replaces the whole filterable set. An attribute not listed here cannot be used in a search `filter`, so this is what makes a per-user or per-tag narrowing possible at all.  It CREATES the index when it is missing rather than answering 404, because a Meilisearch client configures settings on an index it has just asked for and a refusal there leaves the client with no index at all.  The 202 and its `enqueued` task are DIALECT COMPATIBILITY, not a promise of later work: the setting is already applied when this answers.
+     * Sets which attributes an index can be filtered on.
      */
-    async patchIndexIndexesByUidSettingsRaw(requestParameters: IndexApiPatchIndexIndexesByUidSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async patchIndexIndexesByUidSettingsRaw(requestParameters: IndexApiPatchIndexIndexesByUidSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IndexEnqueued>> {
         if (requestParameters['uid'] == null) {
             throw new runtime.RequiredError(
                 'uid',
@@ -572,9 +652,18 @@ export class IndexApi extends runtime.BaseAPI {
             );
         }
 
+        if (requestParameters['indexFilter'] == null) {
+            throw new runtime.RequiredError(
+                'indexFilter',
+                'Required parameter "indexFilter" was null or undefined when calling patchIndexIndexesByUidSettings().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -593,27 +682,38 @@ export class IndexApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
+            body: IndexFilterToJSON(requestParameters['indexFilter']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => IndexEnqueuedFromJSON(jsonValue));
     }
 
     /**
-     * Replaces an index\'s filterable attributes with the list in `filterableAttributes`; omitting the field leaves them as they are. The index is CREATED ON DEMAND rather than 404\'d, because a client that configures an index it has just asked for should not have to create it first — this is the one read-shaped path on the surface that writes. The tenant is the org minted from the VALIDATED bearer\'s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \"messages\" and neither can see the other\'s documents. Without a validated principal the answer is 403 carrying Meilisearch\'s `invalid_api_key` body. Errors use Meilisearch\'s {message, code, type, link} shape rather than cloud\'s, because that `code` is a wire contract a Meilisearch client branches on.  The 202 and its `enqueued` task are DIALECT COMPATIBILITY, not a promise of later work: the write is already applied when this answers, and the task it names is already complete. A client that polls waitForTask resolves immediately rather than waiting, and a client that does not poll has still had its write committed.
-     * Set which attributes an index can be filtered on
+     * Sets which attributes an index can be filtered on.  Replaces the whole filterable set. An attribute not listed here cannot be used in a search `filter`, so this is what makes a per-user or per-tag narrowing possible at all.  It CREATES the index when it is missing rather than answering 404, because a Meilisearch client configures settings on an index it has just asked for and a refusal there leaves the client with no index at all.  The 202 and its `enqueued` task are DIALECT COMPATIBILITY, not a promise of later work: the setting is already applied when this answers.
+     * Sets which attributes an index can be filtered on.
      */
-    async patchIndexIndexesByUidSettings(requestParameters: IndexApiPatchIndexIndexesByUidSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.patchIndexIndexesByUidSettingsRaw(requestParameters, initOverrides);
+    async patchIndexIndexesByUidSettings(requestParameters: IndexApiPatchIndexIndexesByUidSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IndexEnqueued> {
+        const response = await this.patchIndexIndexesByUidSettingsRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Creates an index named by `uid` in the caller\'s org. `primaryKey` names the document field that identifies a document and defaults to `id`. Creating an index that already exists is not an error — it settles on the existing one, primary key included — so a client that creates before every write is safe to run repeatedly. A missing or over-long uid is 400 `invalid_index_uid`. A new index starts with `user` filterable, which is what lets a multi-user app narrow searches to one end user without configuring anything. The tenant is the org minted from the VALIDATED bearer\'s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \"messages\" and neither can see the other\'s documents. Without a validated principal the answer is 403 carrying Meilisearch\'s `invalid_api_key` body. Errors use Meilisearch\'s {message, code, type, link} shape rather than cloud\'s, because that `code` is a wire contract a Meilisearch client branches on.  The 202 and its `enqueued` task are DIALECT COMPATIBILITY, not a promise of later work: the write is already applied when this answers, and the task it names is already complete. A client that polls waitForTask resolves immediately rather than waiting, and a client that does not poll has still had its write committed.
-     * Create an index
+     * Creates an index.  Registers a named index in the caller\'s own org and answers the dialect\'s EnqueuedTask. It is idempotent: creating an index that already exists returns the same receipt and changes nothing, which is what lets a client create on startup without checking first.  `primaryKey` is optional — the first write establishes one when it is omitted. An index is a ROW here rather than a table, so an unusual uid is stored verbatim instead of being sanitised into a schema name.  The 202 and its `enqueued` task are DIALECT COMPATIBILITY, not a promise of later work: the write is already applied when this answers. A client that polls waitForTask resolves immediately.
+     * Creates an index.
      */
-    async postIndexIndexesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postIndexIndexesRaw(requestParameters: IndexApiPostIndexIndexesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IndexEnqueued>> {
+        if (requestParameters['indexNew'] == null) {
+            throw new runtime.RequiredError(
+                'indexNew',
+                'Required parameter "indexNew" was null or undefined when calling postIndexIndexes().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -631,24 +731,26 @@ export class IndexApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: IndexNewToJSON(requestParameters['indexNew']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => IndexEnqueuedFromJSON(jsonValue));
     }
 
     /**
-     * Creates an index named by `uid` in the caller\'s org. `primaryKey` names the document field that identifies a document and defaults to `id`. Creating an index that already exists is not an error — it settles on the existing one, primary key included — so a client that creates before every write is safe to run repeatedly. A missing or over-long uid is 400 `invalid_index_uid`. A new index starts with `user` filterable, which is what lets a multi-user app narrow searches to one end user without configuring anything. The tenant is the org minted from the VALIDATED bearer\'s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \"messages\" and neither can see the other\'s documents. Without a validated principal the answer is 403 carrying Meilisearch\'s `invalid_api_key` body. Errors use Meilisearch\'s {message, code, type, link} shape rather than cloud\'s, because that `code` is a wire contract a Meilisearch client branches on.  The 202 and its `enqueued` task are DIALECT COMPATIBILITY, not a promise of later work: the write is already applied when this answers, and the task it names is already complete. A client that polls waitForTask resolves immediately rather than waiting, and a client that does not poll has still had its write committed.
-     * Create an index
+     * Creates an index.  Registers a named index in the caller\'s own org and answers the dialect\'s EnqueuedTask. It is idempotent: creating an index that already exists returns the same receipt and changes nothing, which is what lets a client create on startup without checking first.  `primaryKey` is optional — the first write establishes one when it is omitted. An index is a ROW here rather than a table, so an unusual uid is stored verbatim instead of being sanitised into a schema name.  The 202 and its `enqueued` task are DIALECT COMPATIBILITY, not a promise of later work: the write is already applied when this answers. A client that polls waitForTask resolves immediately.
+     * Creates an index.
      */
-    async postIndexIndexes(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postIndexIndexesRaw(initOverrides);
+    async postIndexIndexes(requestParameters: IndexApiPostIndexIndexesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IndexEnqueued> {
+        const response = await this.postIndexIndexesRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Upserts documents into one index, keyed by the index\'s primary key: a document whose key is already present is REPLACED, one that is not is added, and it becomes searchable immediately. Send an array, or a single object — a hand-rolled caller sending one document is accepted rather than 400\'d. The index is created on demand, so a first write needs no create call.  This and the PUT on the same path are the SAME operation: both are a whole document upsert, which is what a Meilisearch client\'s addDocuments and updateDocuments both reduce to here. A body that is neither an array nor an object is 400. The tenant is the org minted from the VALIDATED bearer\'s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \"messages\" and neither can see the other\'s documents. Without a validated principal the answer is 403 carrying Meilisearch\'s `invalid_api_key` body. Errors use Meilisearch\'s {message, code, type, link} shape rather than cloud\'s, because that `code` is a wire contract a Meilisearch client branches on.  The 202 and its `enqueued` task are DIALECT COMPATIBILITY, not a promise of later work: the write is already applied when this answers, and the task it names is already complete. A client that polls waitForTask resolves immediately rather than waiting, and a client that does not poll has still had its write committed.
+     * Writes documents into the caller\'s own index, keyed by the index\'s primary key: a document whose key is already present is REPLACED whole. The body is the dialect\'s own — an array of documents, or a single document — and each is stored verbatim, so a read gives back exactly what was written.  The index is CREATED when it is missing rather than refused, because a Meilisearch client writes before it configures.  The tenant is the org minted from the VALIDATED bearer\'s owner claim, never a client-supplied header, so two orgs may both hold an index named \"messages\" and neither can see the other\'s documents. Without a validated principal the answer is 403 carrying the dialect\'s `invalid_api_key` body.  The 202 and its `enqueued` task are DIALECT COMPATIBILITY, not a promise of later work: the documents are searchable when this answers, and a client that polls waitForTask resolves immediately.
      * Add or replace documents in an index
      */
-    async postIndexIndexesByUidDocumentsRaw(requestParameters: IndexApiPostIndexIndexesByUidDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postIndexIndexesByUidDocumentsRaw(requestParameters: IndexApiPostIndexIndexesByUidDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IndexEnqueued>> {
         if (requestParameters['uid'] == null) {
             throw new runtime.RequiredError(
                 'uid',
@@ -659,6 +761,8 @@ export class IndexApi extends runtime.BaseAPI {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -677,24 +781,26 @@ export class IndexApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: requestParameters['requestBody'],
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => IndexEnqueuedFromJSON(jsonValue));
     }
 
     /**
-     * Upserts documents into one index, keyed by the index\'s primary key: a document whose key is already present is REPLACED, one that is not is added, and it becomes searchable immediately. Send an array, or a single object — a hand-rolled caller sending one document is accepted rather than 400\'d. The index is created on demand, so a first write needs no create call.  This and the PUT on the same path are the SAME operation: both are a whole document upsert, which is what a Meilisearch client\'s addDocuments and updateDocuments both reduce to here. A body that is neither an array nor an object is 400. The tenant is the org minted from the VALIDATED bearer\'s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \"messages\" and neither can see the other\'s documents. Without a validated principal the answer is 403 carrying Meilisearch\'s `invalid_api_key` body. Errors use Meilisearch\'s {message, code, type, link} shape rather than cloud\'s, because that `code` is a wire contract a Meilisearch client branches on.  The 202 and its `enqueued` task are DIALECT COMPATIBILITY, not a promise of later work: the write is already applied when this answers, and the task it names is already complete. A client that polls waitForTask resolves immediately rather than waiting, and a client that does not poll has still had its write committed.
+     * Writes documents into the caller\'s own index, keyed by the index\'s primary key: a document whose key is already present is REPLACED whole. The body is the dialect\'s own — an array of documents, or a single document — and each is stored verbatim, so a read gives back exactly what was written.  The index is CREATED when it is missing rather than refused, because a Meilisearch client writes before it configures.  The tenant is the org minted from the VALIDATED bearer\'s owner claim, never a client-supplied header, so two orgs may both hold an index named \"messages\" and neither can see the other\'s documents. Without a validated principal the answer is 403 carrying the dialect\'s `invalid_api_key` body.  The 202 and its `enqueued` task are DIALECT COMPATIBILITY, not a promise of later work: the documents are searchable when this answers, and a client that polls waitForTask resolves immediately.
      * Add or replace documents in an index
      */
-    async postIndexIndexesByUidDocuments(requestParameters: IndexApiPostIndexIndexesByUidDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postIndexIndexesByUidDocumentsRaw(requestParameters, initOverrides);
+    async postIndexIndexesByUidDocuments(requestParameters: IndexApiPostIndexIndexesByUidDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IndexEnqueued> {
+        const response = await this.postIndexIndexesByUidDocumentsRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Removes every document named by an array of primary keys. Keys may be sent as strings or numbers — a number keeps its exact decimal form, so an integer key round-trips as `42` and never as scientific notation. Keys that are absent from the index are skipped rather than failing the batch, so this is idempotent. A body that is not an array is 400. The tenant is the org minted from the VALIDATED bearer\'s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \"messages\" and neither can see the other\'s documents. Without a validated principal the answer is 403 carrying Meilisearch\'s `invalid_api_key` body. Errors use Meilisearch\'s {message, code, type, link} shape rather than cloud\'s, because that `code` is a wire contract a Meilisearch client branches on.  The 202 and its `enqueued` task are DIALECT COMPATIBILITY, not a promise of later work: the write is already applied when this answers, and the task it names is already complete. A client that polls waitForTask resolves immediately rather than waiting, and a client that does not poll has still had its write committed.
+     * Removes every named document from the caller\'s own index. The body is the dialect\'s own: a bare array of primary keys, which may be strings or numbers. A key that is not there is not an error, so a client reconciling its own corpus can send one list rather than checking each key first.  The tenant is the org minted from the VALIDATED bearer\'s owner claim, never a client-supplied header. Without a validated principal the answer is 403 carrying the dialect\'s `invalid_api_key` body.  The 202 and its `enqueued` task are DIALECT COMPATIBILITY, not a promise of later work: the documents are already gone when this answers.
      * Delete many documents by primary key in one call
      */
-    async postIndexIndexesByUidDocumentsDeleteBatchRaw(requestParameters: IndexApiPostIndexIndexesByUidDocumentsDeleteBatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postIndexIndexesByUidDocumentsDeleteBatchRaw(requestParameters: IndexApiPostIndexIndexesByUidDocumentsDeleteBatchOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IndexEnqueued>> {
         if (requestParameters['uid'] == null) {
             throw new runtime.RequiredError(
                 'uid',
@@ -705,6 +811,8 @@ export class IndexApi extends runtime.BaseAPI {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -723,24 +831,26 @@ export class IndexApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: Array&lt;string&gt; | Array&lt;number&gt;ToJSON(requestParameters['arraystringArraynumber']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => IndexEnqueuedFromJSON(jsonValue));
     }
 
     /**
-     * Removes every document named by an array of primary keys. Keys may be sent as strings or numbers — a number keeps its exact decimal form, so an integer key round-trips as `42` and never as scientific notation. Keys that are absent from the index are skipped rather than failing the batch, so this is idempotent. A body that is not an array is 400. The tenant is the org minted from the VALIDATED bearer\'s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \"messages\" and neither can see the other\'s documents. Without a validated principal the answer is 403 carrying Meilisearch\'s `invalid_api_key` body. Errors use Meilisearch\'s {message, code, type, link} shape rather than cloud\'s, because that `code` is a wire contract a Meilisearch client branches on.  The 202 and its `enqueued` task are DIALECT COMPATIBILITY, not a promise of later work: the write is already applied when this answers, and the task it names is already complete. A client that polls waitForTask resolves immediately rather than waiting, and a client that does not poll has still had its write committed.
+     * Removes every named document from the caller\'s own index. The body is the dialect\'s own: a bare array of primary keys, which may be strings or numbers. A key that is not there is not an error, so a client reconciling its own corpus can send one list rather than checking each key first.  The tenant is the org minted from the VALIDATED bearer\'s owner claim, never a client-supplied header. Without a validated principal the answer is 403 carrying the dialect\'s `invalid_api_key` body.  The 202 and its `enqueued` task are DIALECT COMPATIBILITY, not a promise of later work: the documents are already gone when this answers.
      * Delete many documents by primary key in one call
      */
-    async postIndexIndexesByUidDocumentsDeleteBatch(requestParameters: IndexApiPostIndexIndexesByUidDocumentsDeleteBatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postIndexIndexesByUidDocumentsDeleteBatchRaw(requestParameters, initOverrides);
+    async postIndexIndexesByUidDocumentsDeleteBatch(requestParameters: IndexApiPostIndexIndexesByUidDocumentsDeleteBatchOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IndexEnqueued> {
+        const response = await this.postIndexIndexesByUidDocumentsDeleteBatchRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Answers the documents in one index matching `q`, ranked by how many of the query\'s terms they match, with prefix matching so a partial word still finds its document. `limit` defaults to 20 and is capped at 1000, `offset` pages; a negative value falls back to the default rather than erroring.  `filter` takes a Meilisearch filter expression, or an array of them, and the `user = \"…\"` and `user IN […]` forms are honoured — that is how an app with many end users narrows results to one of them WITHIN the org. `estimatedTotalHits` is exact for the page returned, not an estimate, because every hit is materialised. An index the caller\'s org does not hold is 404 `index_not_found`. The tenant is the org minted from the VALIDATED bearer\'s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \"messages\" and neither can see the other\'s documents. Without a validated principal the answer is 403 carrying Meilisearch\'s `invalid_api_key` body. Errors use Meilisearch\'s {message, code, type, link} shape rather than cloud\'s, because that `code` is a wire contract a Meilisearch client branches on.
-     * Search an index, forgiving typos
+     * Searches an index, forgiving typos.  Ranks the org\'s documents in one index against `q` and answers the matching documents whole, most relevant first. A prefix matches, so a partial word finds the documents containing it, and `filter` narrows the result to documents whose filterable attributes match — which is how a caller scopes results to one end user within its own org.  `estimatedTotalHits` is the dialect\'s name for the count; every hit is materialised here, so for this page it is exact. An index this org does not hold answers 404 carrying the dialect\'s `index_not_found`.
+     * Searches an index, forgiving typos.
      */
-    async postIndexIndexesByUidSearchRaw(requestParameters: IndexApiPostIndexIndexesByUidSearchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postIndexIndexesByUidSearchRaw(requestParameters: IndexApiPostIndexIndexesByUidSearchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IndexHits>> {
         if (requestParameters['uid'] == null) {
             throw new runtime.RequiredError(
                 'uid',
@@ -748,9 +858,18 @@ export class IndexApi extends runtime.BaseAPI {
             );
         }
 
+        if (requestParameters['indexQuery'] == null) {
+            throw new runtime.RequiredError(
+                'indexQuery',
+                'Required parameter "indexQuery" was null or undefined when calling postIndexIndexesByUidSearch().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -769,24 +888,26 @@ export class IndexApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: IndexQueryToJSON(requestParameters['indexQuery']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => IndexHitsFromJSON(jsonValue));
     }
 
     /**
-     * Answers the documents in one index matching `q`, ranked by how many of the query\'s terms they match, with prefix matching so a partial word still finds its document. `limit` defaults to 20 and is capped at 1000, `offset` pages; a negative value falls back to the default rather than erroring.  `filter` takes a Meilisearch filter expression, or an array of them, and the `user = \"…\"` and `user IN […]` forms are honoured — that is how an app with many end users narrows results to one of them WITHIN the org. `estimatedTotalHits` is exact for the page returned, not an estimate, because every hit is materialised. An index the caller\'s org does not hold is 404 `index_not_found`. The tenant is the org minted from the VALIDATED bearer\'s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \"messages\" and neither can see the other\'s documents. Without a validated principal the answer is 403 carrying Meilisearch\'s `invalid_api_key` body. Errors use Meilisearch\'s {message, code, type, link} shape rather than cloud\'s, because that `code` is a wire contract a Meilisearch client branches on.
-     * Search an index, forgiving typos
+     * Searches an index, forgiving typos.  Ranks the org\'s documents in one index against `q` and answers the matching documents whole, most relevant first. A prefix matches, so a partial word finds the documents containing it, and `filter` narrows the result to documents whose filterable attributes match — which is how a caller scopes results to one end user within its own org.  `estimatedTotalHits` is the dialect\'s name for the count; every hit is materialised here, so for this page it is exact. An index this org does not hold answers 404 carrying the dialect\'s `index_not_found`.
+     * Searches an index, forgiving typos.
      */
-    async postIndexIndexesByUidSearch(requestParameters: IndexApiPostIndexIndexesByUidSearchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postIndexIndexesByUidSearchRaw(requestParameters, initOverrides);
+    async postIndexIndexesByUidSearch(requestParameters: IndexApiPostIndexIndexesByUidSearchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IndexHits> {
+        const response = await this.postIndexIndexesByUidSearchRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Upserts documents into one index, keyed by the index\'s primary key: a document whose key is already present is REPLACED, one that is not is added, and it becomes searchable immediately. Send an array, or a single object — a hand-rolled caller sending one document is accepted rather than 400\'d. The index is created on demand, so a first write needs no create call.  This and the POST on the same path are the SAME operation, served by one handler. Both exist because the Meilisearch dialect has both verbs; there is no partial-update semantics on this one — a document is replaced whole either way. The tenant is the org minted from the VALIDATED bearer\'s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \"messages\" and neither can see the other\'s documents. Without a validated principal the answer is 403 carrying Meilisearch\'s `invalid_api_key` body. Errors use Meilisearch\'s {message, code, type, link} shape rather than cloud\'s, because that `code` is a wire contract a Meilisearch client branches on.  The 202 and its `enqueued` task are DIALECT COMPATIBILITY, not a promise of later work: the write is already applied when this answers, and the task it names is already complete. A client that polls waitForTask resolves immediately rather than waiting, and a client that does not poll has still had its write committed.
+     * The dialect\'s update spelling of the write above, and the same act: an upsert keyed by the index\'s primary key. The JS client\'s addDocuments and updateDocuments both reduce to this for whole documents, so both spellings are served and both behave identically.  The tenant is the org minted from the VALIDATED bearer\'s owner claim, never a client-supplied header. Without a validated principal the answer is 403 carrying the dialect\'s `invalid_api_key` body.  The 202 and its `enqueued` task are DIALECT COMPATIBILITY, not a promise of later work: the write is already applied when this answers.
      * Add or update documents in an index
      */
-    async putIndexIndexesByUidDocumentsRaw(requestParameters: IndexApiPutIndexIndexesByUidDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async putIndexIndexesByUidDocumentsRaw(requestParameters: IndexApiPutIndexIndexesByUidDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IndexEnqueued>> {
         if (requestParameters['uid'] == null) {
             throw new runtime.RequiredError(
                 'uid',
@@ -797,6 +918,8 @@ export class IndexApi extends runtime.BaseAPI {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -815,17 +938,19 @@ export class IndexApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
+            body: requestParameters['requestBody'],
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => IndexEnqueuedFromJSON(jsonValue));
     }
 
     /**
-     * Upserts documents into one index, keyed by the index\'s primary key: a document whose key is already present is REPLACED, one that is not is added, and it becomes searchable immediately. Send an array, or a single object — a hand-rolled caller sending one document is accepted rather than 400\'d. The index is created on demand, so a first write needs no create call.  This and the POST on the same path are the SAME operation, served by one handler. Both exist because the Meilisearch dialect has both verbs; there is no partial-update semantics on this one — a document is replaced whole either way. The tenant is the org minted from the VALIDATED bearer\'s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \"messages\" and neither can see the other\'s documents. Without a validated principal the answer is 403 carrying Meilisearch\'s `invalid_api_key` body. Errors use Meilisearch\'s {message, code, type, link} shape rather than cloud\'s, because that `code` is a wire contract a Meilisearch client branches on.  The 202 and its `enqueued` task are DIALECT COMPATIBILITY, not a promise of later work: the write is already applied when this answers, and the task it names is already complete. A client that polls waitForTask resolves immediately rather than waiting, and a client that does not poll has still had its write committed.
+     * The dialect\'s update spelling of the write above, and the same act: an upsert keyed by the index\'s primary key. The JS client\'s addDocuments and updateDocuments both reduce to this for whole documents, so both spellings are served and both behave identically.  The tenant is the org minted from the VALIDATED bearer\'s owner claim, never a client-supplied header. Without a validated principal the answer is 403 carrying the dialect\'s `invalid_api_key` body.  The 202 and its `enqueued` task are DIALECT COMPATIBILITY, not a promise of later work: the write is already applied when this answers.
      * Add or update documents in an index
      */
-    async putIndexIndexesByUidDocuments(requestParameters: IndexApiPutIndexIndexesByUidDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.putIndexIndexesByUidDocumentsRaw(requestParameters, initOverrides);
+    async putIndexIndexesByUidDocuments(requestParameters: IndexApiPutIndexIndexesByUidDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IndexEnqueued> {
+        const response = await this.putIndexIndexesByUidDocumentsRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
 }

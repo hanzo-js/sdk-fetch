@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,13 +20,18 @@ import { mapValues } from '../runtime.js';
  */
 export interface ImageView {
     /**
-     * 
+     * Repository is the image path without a tag (ghcr.io/acme/api). Required for
+     * source `image`, which runs it as-is. A git app's built image is NOT this: the
+     * build pushes to a path derived from the org and slug, and the deployment
+     * records that full ref.
      * @type {string}
      * @memberof ImageView
      */
     repository?: string;
     /**
-     * 
+     * Tag is the tag to run: what the create declared, then RE-STAMPED on every
+     * transition to live with the tag that actually went live. So after a deploy
+     * it names what is running, not what was asked for.
      * @type {string}
      * @memberof ImageView
      */

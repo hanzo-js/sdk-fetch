@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,37 +20,42 @@ import { mapValues } from '../runtime.js';
  */
 export interface ActivityRow {
     /**
-     * 
+     * Action is one of created, updated, deleted.
      * @type {string}
      * @memberof ActivityRow
      */
     action?: string;
     /**
-     * 
+     * Actor is the email of the principal who made the change. Empty for a write
+     * by an in-process composer; a project key can never appear here, because
+     * evaluating flags is all a key may do.
      * @type {string}
      * @memberof ActivityRow
      */
     actor?: string;
     /**
-     * 
+     * At is when the change was made, RFC 3339 UTC.
      * @type {string}
      * @memberof ActivityRow
      */
     at?: string;
     /**
-     * 
+     * Detail is free-form context about the change. Nothing writes it today, so
+     * it is absent from every row the store serves.
      * @type {string}
      * @memberof ActivityRow
      */
     detail?: string;
     /**
-     * 
+     * ID is the log's own sequence number, rising with each entry. The log is
+     * served newest-first, which is this descending.
      * @type {number}
      * @memberof ActivityRow
      */
     id?: number;
     /**
-     * 
+     * Key is the flag that changed. It survives a delete, so the log still names
+     * flags the definition store no longer holds.
      * @type {string}
      * @memberof ActivityRow
      */

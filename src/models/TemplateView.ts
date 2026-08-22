@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -28,43 +28,54 @@ import {
  */
 export interface TemplateView {
     /**
-     * 
+     * Category is the corporate need the template serves: formation, equity, ops or
+     * sales. Formation and equity are the securities-class categories, which is what
+     * forces counselReview.
      * @type {string}
      * @memberof TemplateView
      */
     category?: string;
     /**
-     * 
+     * CounselReview marks a template whose rendered documents open with the counsel
+     * notice. True for every formation and equity template whatever an override
+     * sends: the engine prepends the notice and no caller can suppress it.
      * @type {boolean}
      * @memberof TemplateView
      */
     counselReview?: boolean;
     /**
-     * 
+     * Fields declares the merge fields the body consumes — every key a generation
+     * must supply, each with its human label. All are REQUIRED: a missing one is
+     * refused rather than rendered as a blank into a contract.
      * @type {Array<Field>}
      * @memberof TemplateView
      */
     fields?: Array<Field>;
     /**
-     * 
+     * ID is the template's stable id and the path segment that fetches its body —
+     * "nda", "msa", "safe". An override keeps the built-in's id.
      * @type {string}
      * @memberof TemplateView
      */
     id?: string;
     /**
-     * 
+     * Origin is "builtin" for a template the platform ships or "org" for one this
+     * org saved. It separates the catalog every tenant sees from this tenant's own.
      * @type {string}
      * @memberof TemplateView
      */
     origin?: string;
     /**
-     * 
+     * Title is the display name, e.g. "Mutual Non-Disclosure Agreement". A generated
+     * document inherits it.
      * @type {string}
      * @memberof TemplateView
      */
     title?: string;
     /**
-     * 
+     * Version is which version of this template the caller's org resolves to. A
+     * built-in is version 1; the org's first override is 2 and each save increments,
+     * so an override version never collides with the built-in's.
      * @type {number}
      * @memberof TemplateView
      */

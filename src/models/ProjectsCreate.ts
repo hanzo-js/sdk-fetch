@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -36,25 +36,28 @@ export interface ProjectsCreate {
      */
     analytics?: boolean;
     /**
-     * 
+     * Description is the one-line summary, copied onto anything forked from this
+     * project.
      * @type {string}
      * @memberof ProjectsCreate
      */
     description?: string;
     /**
-     * 
+     * Framework is a BUILD HINT from a closed set, defaulting to static. It tells CI
+     * how to build a linked repo and never gates a deploy.
      * @type {string}
      * @memberof ProjectsCreate
      */
     framework?: string;
     /**
-     * 
+     * License is the terms that upstream work carries.
      * @type {string}
      * @memberof ProjectsCreate
      */
     license?: string;
     /**
-     * 
+     * Name is the project's display name and the only REQUIRED field. When slug is
+     * omitted it is also what the slug is derived from.
      * @type {string}
      * @memberof ProjectsCreate
      */
@@ -66,15 +69,18 @@ export interface ProjectsCreate {
      */
     repo?: ProjectsCreateRepo;
     /**
-     * 
+     * Slug is the handle everything else addresses this project by: the public host
+     * `<slug>.hanzo.app`, the object-store key segment, and the path parameter of
+     * every later call. Derived from the name when omitted. It is a hostname label,
+     * so it is constrained and reserved labels such as `api` or `admin` are refused.
      * @type {string}
      * @memberof ProjectsCreate
      */
     slug?: string;
     /**
-     * Upstream/License credit the third-party work this project was published
-     * from. Taken from any caller: disclaiming authorship can only cost the
-     * publisher credit, so it needs no gate (see Project.Upstream).
+     * Upstream credits the third-party work this project was published from. It is
+     * accepted from any caller: giving away credit can only cost the publisher, so
+     * it needs no gate.
      * @type {string}
      * @memberof ProjectsCreate
      */

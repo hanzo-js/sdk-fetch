@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -34,7 +34,10 @@ export interface SeriesLine {
      */
     key?: string;
     /**
-     * 
+     * Points is one bucket per interval across the whole window, in time order and
+     * never sparse: a bucket with no runs is present with v 0, so two lines drawn
+     * from two agents share an x-axis without the client aligning anything. The
+     * window decides the count — 24 hourly for 24H, 7 daily, 30 daily.
      * @type {Array<SeriesPoint>}
      * @memberof SeriesLine
      */

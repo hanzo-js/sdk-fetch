@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -28,37 +28,44 @@ import {
  */
 export interface O11yStatusResult {
     /**
-     * 
+     * CheckedAt is when this answer was measured, RFC3339 UTC.
      * @type {string}
      * @memberof O11yStatusResult
      */
     checkedAt?: string;
     /**
-     * 
+     * Deployments is the per-replica inventory behind the verdict. Empty means the
+     * telemetry store reported none, not that the service runs on none.
      * @type {Array<O11yDeployment>}
      * @memberof O11yStatusResult
      */
     deployments?: Array<O11yDeployment>;
     /**
-     * 
+     * LatencyMs is the health probe's round trip in MILLISECONDS, time-boxed at two
+     * seconds. It is 0 when no probe answered, which is not a fast service.
      * @type {number}
      * @memberof O11yStatusResult
      */
     latencyMs?: number;
     /**
-     * 
+     * Product is the service this answer is about, echoed back.
      * @type {string}
      * @memberof O11yStatusResult
      */
     product?: string;
     /**
-     * 
+     * Source is where the verdict came from: "probe" (we asked and it answered),
+     * "datastore" (the probe did not answer and the replica inventory decided it),
+     * "unreachable" (neither), or "unknown-service" for a well-formed product name
+     * nothing backs — which is answered without probing, since dialling an
+     * arbitrary host on a caller's say-so is the request forgery this refuses.
      * @type {string}
      * @memberof O11yStatusResult
      */
     source?: string;
     /**
-     * 
+     * Up is true when the health probe succeeded OR any replica reports up, so a
+     * service reachable by either route reads up. Read Source to know which.
      * @type {boolean}
      * @memberof O11yStatusResult
      */

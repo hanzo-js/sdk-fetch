@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -71,7 +71,7 @@ export interface ProductEvent {
     /**
      * Type is the row's kind — the plane's discriminator: page, track, identify or
      * group. (Errors are not here at all: they land on event.error and are read at
-     * /v1/errors.)
+     * /v1/event/errors.)
      * @type {string}
      * @memberof ProductEvent
      */

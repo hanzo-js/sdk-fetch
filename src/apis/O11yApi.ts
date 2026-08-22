@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -90,6 +90,8 @@ import type {
   O11yO11yDeprecatedUserOut,
   O11yO11yDeprecatedUserUpdate,
   O11yO11yDeprecatedUsersOut,
+  O11yO11yDiscoverIn,
+  O11yO11yDiscoverOut,
   O11yO11yDisk,
   O11yO11yDomainsIn,
   O11yO11yDomainsOut,
@@ -173,6 +175,7 @@ import type {
   O11yO11yLogPromotePath,
   O11yO11yLogPromotedOut,
   O11yO11yLogRecordsOut,
+  O11yO11yLogsOut,
   O11yO11yMessage,
   O11yO11yMetricAckOut,
   O11yO11yMetricAlertsOut,
@@ -263,6 +266,12 @@ import type {
   O11yO11ySavedViewListOut,
   O11yO11ySavedViewOut,
   O11yO11ySavedViewUpdateIn,
+  O11yO11ySentryEventOut,
+  O11yO11ySentryIssueEventsOut,
+  O11yO11ySentryPostableProject,
+  O11yO11ySentryProjectOut,
+  O11yO11ySentryProjectsOut,
+  O11yO11ySentryUpdateIssueIn,
   O11yO11yServiceAccountCreateIn,
   O11yO11yServiceAccountCreateOut,
   O11yO11yServiceAccountOut,
@@ -287,6 +296,7 @@ import type {
   O11yO11ySpanPercentileIn,
   O11yO11ySpanPercentileOut,
   O11yO11yStatefulSetListOut,
+  O11yO11yStatsOut,
   O11yO11ySubstituteVarsOut,
   O11yO11yTestNotificationOut,
   O11yO11yTestRuleOut,
@@ -296,9 +306,11 @@ import type {
   O11yO11yTraceAggregationsOut,
   O11yO11yTraceFlamegraphIn,
   O11yO11yTraceFlamegraphOut,
+  O11yO11yTraceOut,
   O11yO11yTraceSpanWindow,
   O11yO11yTraceWaterfallIn,
   O11yO11yTraceWaterfallOut,
+  O11yO11yTracesOut,
   O11yO11yTransaction,
   O11yO11yUpdatableAuthDomain,
   O11yO11yUpdatablePreference,
@@ -338,6 +350,7 @@ import type {
   O11ySavedView,
   O11yStatefulSetListRequest,
   O11yStatusResult,
+  O11yStatusSummary,
   O11yTracesOut,
   O11yUninstallIntegrationRequest,
   O11yUpdateItemIn,
@@ -495,6 +508,10 @@ import {
     O11yO11yDeprecatedUserUpdateToJSON,
     O11yO11yDeprecatedUsersOutFromJSON,
     O11yO11yDeprecatedUsersOutToJSON,
+    O11yO11yDiscoverInFromJSON,
+    O11yO11yDiscoverInToJSON,
+    O11yO11yDiscoverOutFromJSON,
+    O11yO11yDiscoverOutToJSON,
     O11yO11yDiskFromJSON,
     O11yO11yDiskToJSON,
     O11yO11yDomainsInFromJSON,
@@ -661,6 +678,8 @@ import {
     O11yO11yLogPromotedOutToJSON,
     O11yO11yLogRecordsOutFromJSON,
     O11yO11yLogRecordsOutToJSON,
+    O11yO11yLogsOutFromJSON,
+    O11yO11yLogsOutToJSON,
     O11yO11yMessageFromJSON,
     O11yO11yMessageToJSON,
     O11yO11yMetricAckOutFromJSON,
@@ -841,6 +860,18 @@ import {
     O11yO11ySavedViewOutToJSON,
     O11yO11ySavedViewUpdateInFromJSON,
     O11yO11ySavedViewUpdateInToJSON,
+    O11yO11ySentryEventOutFromJSON,
+    O11yO11ySentryEventOutToJSON,
+    O11yO11ySentryIssueEventsOutFromJSON,
+    O11yO11ySentryIssueEventsOutToJSON,
+    O11yO11ySentryPostableProjectFromJSON,
+    O11yO11ySentryPostableProjectToJSON,
+    O11yO11ySentryProjectOutFromJSON,
+    O11yO11ySentryProjectOutToJSON,
+    O11yO11ySentryProjectsOutFromJSON,
+    O11yO11ySentryProjectsOutToJSON,
+    O11yO11ySentryUpdateIssueInFromJSON,
+    O11yO11ySentryUpdateIssueInToJSON,
     O11yO11yServiceAccountCreateInFromJSON,
     O11yO11yServiceAccountCreateInToJSON,
     O11yO11yServiceAccountCreateOutFromJSON,
@@ -889,6 +920,8 @@ import {
     O11yO11ySpanPercentileOutToJSON,
     O11yO11yStatefulSetListOutFromJSON,
     O11yO11yStatefulSetListOutToJSON,
+    O11yO11yStatsOutFromJSON,
+    O11yO11yStatsOutToJSON,
     O11yO11ySubstituteVarsOutFromJSON,
     O11yO11ySubstituteVarsOutToJSON,
     O11yO11yTestNotificationOutFromJSON,
@@ -907,12 +940,16 @@ import {
     O11yO11yTraceFlamegraphInToJSON,
     O11yO11yTraceFlamegraphOutFromJSON,
     O11yO11yTraceFlamegraphOutToJSON,
+    O11yO11yTraceOutFromJSON,
+    O11yO11yTraceOutToJSON,
     O11yO11yTraceSpanWindowFromJSON,
     O11yO11yTraceSpanWindowToJSON,
     O11yO11yTraceWaterfallInFromJSON,
     O11yO11yTraceWaterfallInToJSON,
     O11yO11yTraceWaterfallOutFromJSON,
     O11yO11yTraceWaterfallOutToJSON,
+    O11yO11yTracesOutFromJSON,
+    O11yO11yTracesOutToJSON,
     O11yO11yTransactionFromJSON,
     O11yO11yTransactionToJSON,
     O11yO11yUpdatableAuthDomainFromJSON,
@@ -991,6 +1028,8 @@ import {
     O11yStatefulSetListRequestToJSON,
     O11yStatusResultFromJSON,
     O11yStatusResultToJSON,
+    O11yStatusSummaryFromJSON,
+    O11yStatusSummaryToJSON,
     O11yTracesOutFromJSON,
     O11yTracesOutToJSON,
     O11yUninstallIntegrationRequestFromJSON,
@@ -1180,6 +1219,10 @@ export interface O11yApiDeleteO11yExplorerViewsByViewidRequest {
 }
 
 export interface O11yApiDeleteO11yReviewsByIdRequest {
+    id: string;
+}
+
+export interface O11yApiDeleteO11ySentinelProjectsByIdRequest {
     id: string;
 }
 
@@ -1720,6 +1763,62 @@ export interface O11yApiGetO11yReviewsByIdItemsRequest {
     status?: string;
     page?: number;
     limit?: number;
+}
+
+export interface O11yApiGetO11ySentinelEventsByIdRequest {
+    id: string;
+    project: string;
+}
+
+export interface O11yApiGetO11ySentinelIssuesRequest {
+    status?: string;
+    level?: string;
+    environment?: string;
+    serviceName?: string;
+    query?: string;
+    sort?: string;
+    offset?: number;
+    limit?: number;
+    project?: string;
+    period?: string;
+}
+
+export interface O11yApiGetO11ySentinelIssuesByIdRequest {
+    id: string;
+}
+
+export interface O11yApiGetO11ySentinelIssuesByIdEventsRequest {
+    id: string;
+    project: string;
+    limit?: number;
+}
+
+export interface O11yApiGetO11ySentinelLogsRequest {
+    project: string;
+    query?: string;
+    period?: string;
+    limit?: number;
+}
+
+export interface O11yApiGetO11ySentinelProjectsByIdRequest {
+    id: string;
+}
+
+export interface O11yApiGetO11ySentinelStatsRequest {
+    project: string;
+    field?: string;
+    period?: string;
+}
+
+export interface O11yApiGetO11ySentinelTracesRequest {
+    project: string;
+    period?: string;
+    limit?: number;
+}
+
+export interface O11yApiGetO11ySentinelTracesByIdRequest {
+    id: string;
+    project: string;
 }
 
 export interface O11yApiGetO11ySettingsApdexRequest {
@@ -2350,6 +2449,18 @@ export interface O11yApiPostO11yReviewsByIdItemsRequest {
     o11yAddItemsIn: O11yAddItemsIn;
 }
 
+export interface O11yApiPostO11ySentinelDiscoverRequest {
+    o11yO11yDiscoverIn: O11yO11yDiscoverIn;
+}
+
+export interface O11yApiPostO11ySentinelProjectsRequest {
+    o11yO11ySentryPostableProject: O11yO11ySentryPostableProject;
+}
+
+export interface O11yApiPostO11ySentinelProjectsByIdKeysRotateRequest {
+    id: string;
+}
+
 export interface O11yApiPostO11yServiceEntryPointOperationsRequest {
     o11yO11yOperationsIn: O11yO11yOperationsIn;
 }
@@ -2409,6 +2520,11 @@ export interface O11yApiPutHostRequest {
 export interface O11yApiPutO11yExplorerViewsByViewidRequest {
     viewId: string;
     o11yO11ySavedViewUpdateIn: O11yO11ySavedViewUpdateIn;
+}
+
+export interface O11yApiPutO11ySentinelIssuesByIdRequest {
+    id: string;
+    o11yO11ySentryUpdateIssueIn: O11yO11ySentryUpdateIssueIn;
 }
 
 export interface O11yApiPutProfileRequest {
@@ -4779,6 +4895,52 @@ export class O11yApi extends runtime.BaseAPI {
     async deleteO11yReviewsById(requestParameters: O11yApiDeleteO11yReviewsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<O11yAnnQueueDeleted> {
         const response = await this.deleteO11yReviewsByIdRaw(requestParameters, initOverrides);
         return await response.value();
+    }
+
+    /**
+     * Deletes one Sentry project of the caller\'s org. Its DSN stops resolving immediately, so ingest for that id fails closed exactly as an unknown project does; retained events are not touched. Answers 204.  Callers need the editor role; the runtime\'s own gate enforces it.
+     * Deletes one Sentry project of the caller\'s org.
+     */
+    async deleteO11ySentinelProjectsByIdRaw(requestParameters: O11yApiDeleteO11ySentinelProjectsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteO11ySentinelProjectsById().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/o11y/sentinel/projects/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Deletes one Sentry project of the caller\'s org. Its DSN stops resolving immediately, so ingest for that id fails closed exactly as an unknown project does; retained events are not touched. Answers 204.  Callers need the editor role; the runtime\'s own gate enforces it.
+     * Deletes one Sentry project of the caller\'s org.
+     */
+    async deleteO11ySentinelProjectsById(requestParameters: O11yApiDeleteO11ySentinelProjectsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteO11ySentinelProjectsByIdRaw(requestParameters, initOverrides);
     }
 
     /**
@@ -10319,7 +10481,7 @@ export class O11yApi extends runtime.BaseAPI {
     }
 
     /**
-     * Reports how far a submitted query has got — rows scanned, bytes read, elapsed — and HOLDS the connection until the next update rather than answering immediately.  The long poll is the whole point, and the reason this cannot be a typed operation: an answer that arrived only when the query finished would report progress on nothing. The websocket form of the same read is /ws/query_progress.  A validated, org-scoped principal is required; a query id belonging to another tenant is simply not found.
+     * Reports how far a submitted query has got — rows scanned, bytes read, elapsed — and HOLDS the connection until the next update rather than answering immediately.  ONE ADDRESS, TWO PROTOCOLS. Send an Upgrade and this is a websocket carrying the same progress; send an ordinary GET and it is a long poll. The Upgrade is a property of the request, not of the address, so the read that used to answer at /ws/query_progress answers here.  The long poll is the whole point, and the reason this cannot be a typed operation: an answer that arrived only when the query finished would report progress on nothing, and an upgraded connection has no JSON response to declare.  A validated, org-scoped principal is required; a query id belonging to another tenant is simply not found.
      * Watch one running query\'s progress
      */
     async getO11yQueryProgressRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -10349,7 +10511,7 @@ export class O11yApi extends runtime.BaseAPI {
     }
 
     /**
-     * Reports how far a submitted query has got — rows scanned, bytes read, elapsed — and HOLDS the connection until the next update rather than answering immediately.  The long poll is the whole point, and the reason this cannot be a typed operation: an answer that arrived only when the query finished would report progress on nothing. The websocket form of the same read is /ws/query_progress.  A validated, org-scoped principal is required; a query id belonging to another tenant is simply not found.
+     * Reports how far a submitted query has got — rows scanned, bytes read, elapsed — and HOLDS the connection until the next update rather than answering immediately.  ONE ADDRESS, TWO PROTOCOLS. Send an Upgrade and this is a websocket carrying the same progress; send an ordinary GET and it is a long poll. The Upgrade is a property of the request, not of the address, so the read that used to answer at /ws/query_progress answers here.  The long poll is the whole point, and the reason this cannot be a typed operation: an answer that arrived only when the query finished would report progress on nothing, and an upgraded connection has no JSON response to declare.  A validated, org-scoped principal is required; a query id belonging to another tenant is simply not found.
      * Watch one running query\'s progress
      */
     async getO11yQueryProgress(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
@@ -10635,6 +10797,574 @@ export class O11yApi extends runtime.BaseAPI {
      */
     async getO11yReviewsByIdItems(requestParameters: O11yApiGetO11yReviewsByIdItemsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<O11yAnnItemList> {
         const response = await this.getO11yReviewsByIdItemsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns one captured error event of a project, by its id.  Callers need the viewer role; the runtime\'s own gate enforces it.
+     * Returns one captured error event of a project, by its id.
+     */
+    async getO11ySentinelEventsByIdRaw(requestParameters: O11yApiGetO11ySentinelEventsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<O11yO11ySentryEventOut>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getO11ySentinelEventsById().'
+            );
+        }
+
+        if (requestParameters['project'] == null) {
+            throw new runtime.RequiredError(
+                'project',
+                'Required parameter "project" was null or undefined when calling getO11ySentinelEventsById().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['project'] != null) {
+            queryParameters['project'] = requestParameters['project'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/o11y/sentinel/events/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => O11yO11ySentryEventOutFromJSON(jsonValue));
+    }
+
+    /**
+     * Returns one captured error event of a project, by its id.  Callers need the viewer role; the runtime\'s own gate enforces it.
+     * Returns one captured error event of a project, by its id.
+     */
+    async getO11ySentinelEventsById(requestParameters: O11yApiGetO11ySentinelEventsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<O11yO11ySentryEventOut> {
+        const response = await this.getO11ySentinelEventsByIdRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Lists the caller\'s org\'s grouped error issues, optionally narrowed to one project and one time window, and filtered by status, level, environment, service, a free-text query and a sort.  Callers need the viewer role; the runtime\'s own gate enforces it.
+     * Lists the caller\'s org\'s grouped error issues, optionally narrowed to one project and one time window, and filtered by status, level, environment, service, a free-text query and a sort.
+     */
+    async getO11ySentinelIssuesRaw(requestParameters: O11yApiGetO11ySentinelIssuesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<O11yO11yErrorIssuesOut>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['status'] != null) {
+            queryParameters['status'] = requestParameters['status'];
+        }
+
+        if (requestParameters['level'] != null) {
+            queryParameters['level'] = requestParameters['level'];
+        }
+
+        if (requestParameters['environment'] != null) {
+            queryParameters['environment'] = requestParameters['environment'];
+        }
+
+        if (requestParameters['serviceName'] != null) {
+            queryParameters['serviceName'] = requestParameters['serviceName'];
+        }
+
+        if (requestParameters['query'] != null) {
+            queryParameters['query'] = requestParameters['query'];
+        }
+
+        if (requestParameters['sort'] != null) {
+            queryParameters['sort'] = requestParameters['sort'];
+        }
+
+        if (requestParameters['offset'] != null) {
+            queryParameters['offset'] = requestParameters['offset'];
+        }
+
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
+        }
+
+        if (requestParameters['project'] != null) {
+            queryParameters['project'] = requestParameters['project'];
+        }
+
+        if (requestParameters['period'] != null) {
+            queryParameters['period'] = requestParameters['period'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/o11y/sentinel/issues`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => O11yO11yErrorIssuesOutFromJSON(jsonValue));
+    }
+
+    /**
+     * Lists the caller\'s org\'s grouped error issues, optionally narrowed to one project and one time window, and filtered by status, level, environment, service, a free-text query and a sort.  Callers need the viewer role; the runtime\'s own gate enforces it.
+     * Lists the caller\'s org\'s grouped error issues, optionally narrowed to one project and one time window, and filtered by status, level, environment, service, a free-text query and a sort.
+     */
+    async getO11ySentinelIssues(requestParameters: O11yApiGetO11ySentinelIssuesRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<O11yO11yErrorIssuesOut> {
+        const response = await this.getO11ySentinelIssuesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns one grouped issue of the caller\'s org with its latest occurrence sample.  Callers need the viewer role; the runtime\'s own gate enforces it.
+     * Returns one grouped issue of the caller\'s org with its latest occurrence sample.
+     */
+    async getO11ySentinelIssuesByIdRaw(requestParameters: O11yApiGetO11ySentinelIssuesByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<O11yO11yErrorGettableIssueOut>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getO11ySentinelIssuesById().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/o11y/sentinel/issues/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => O11yO11yErrorGettableIssueOutFromJSON(jsonValue));
+    }
+
+    /**
+     * Returns one grouped issue of the caller\'s org with its latest occurrence sample.  Callers need the viewer role; the runtime\'s own gate enforces it.
+     * Returns one grouped issue of the caller\'s org with its latest occurrence sample.
+     */
+    async getO11ySentinelIssuesById(requestParameters: O11yApiGetO11ySentinelIssuesByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<O11yO11yErrorGettableIssueOut> {
+        const response = await this.getO11ySentinelIssuesByIdRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Lists one issue\'s captured occurrences, scoped to a project — a project is an isolation unit, so the caller declares which project\'s occurrences to read.  Callers need the viewer role; the runtime\'s own gate enforces it.
+     * Lists one issue\'s captured occurrences, scoped to a project — a project is an isolation unit, so the caller declares which project\'s occurrences to read.
+     */
+    async getO11ySentinelIssuesByIdEventsRaw(requestParameters: O11yApiGetO11ySentinelIssuesByIdEventsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<O11yO11ySentryIssueEventsOut>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getO11ySentinelIssuesByIdEvents().'
+            );
+        }
+
+        if (requestParameters['project'] == null) {
+            throw new runtime.RequiredError(
+                'project',
+                'Required parameter "project" was null or undefined when calling getO11ySentinelIssuesByIdEvents().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['project'] != null) {
+            queryParameters['project'] = requestParameters['project'];
+        }
+
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/o11y/sentinel/issues/{id}/events`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => O11yO11ySentryIssueEventsOutFromJSON(jsonValue));
+    }
+
+    /**
+     * Lists one issue\'s captured occurrences, scoped to a project — a project is an isolation unit, so the caller declares which project\'s occurrences to read.  Callers need the viewer role; the runtime\'s own gate enforces it.
+     * Lists one issue\'s captured occurrences, scoped to a project — a project is an isolation unit, so the caller declares which project\'s occurrences to read.
+     */
+    async getO11ySentinelIssuesByIdEvents(requestParameters: O11yApiGetO11ySentinelIssuesByIdEventsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<O11yO11ySentryIssueEventsOut> {
+        const response = await this.getO11ySentinelIssuesByIdEventsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Lists a project\'s captured error events, newest first, optionally narrowed to those whose message or exception text contains a search string.
+     * Lists a project\'s captured error events, newest first, optionally narrowed to those whose message or exception text contains a search string.
+     */
+    async getO11ySentinelLogsRaw(requestParameters: O11yApiGetO11ySentinelLogsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<O11yO11yLogsOut>> {
+        if (requestParameters['project'] == null) {
+            throw new runtime.RequiredError(
+                'project',
+                'Required parameter "project" was null or undefined when calling getO11ySentinelLogs().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['project'] != null) {
+            queryParameters['project'] = requestParameters['project'];
+        }
+
+        if (requestParameters['query'] != null) {
+            queryParameters['query'] = requestParameters['query'];
+        }
+
+        if (requestParameters['period'] != null) {
+            queryParameters['period'] = requestParameters['period'];
+        }
+
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/o11y/sentinel/logs`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => O11yO11yLogsOutFromJSON(jsonValue));
+    }
+
+    /**
+     * Lists a project\'s captured error events, newest first, optionally narrowed to those whose message or exception text contains a search string.
+     * Lists a project\'s captured error events, newest first, optionally narrowed to those whose message or exception text contains a search string.
+     */
+    async getO11ySentinelLogs(requestParameters: O11yApiGetO11ySentinelLogsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<O11yO11yLogsOut> {
+        const response = await this.getO11ySentinelLogsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Lists the caller\'s org\'s Sentry projects, each with its freshly-derived DSN.  Callers need the viewer role; the runtime\'s own gate enforces it.
+     * Lists the caller\'s org\'s Sentry projects, each with its freshly-derived DSN.
+     */
+    async getO11ySentinelProjectsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<O11yO11ySentryProjectsOut>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/o11y/sentinel/projects`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => O11yO11ySentryProjectsOutFromJSON(jsonValue));
+    }
+
+    /**
+     * Lists the caller\'s org\'s Sentry projects, each with its freshly-derived DSN.  Callers need the viewer role; the runtime\'s own gate enforces it.
+     * Lists the caller\'s org\'s Sentry projects, each with its freshly-derived DSN.
+     */
+    async getO11ySentinelProjects(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<O11yO11ySentryProjectsOut> {
+        const response = await this.getO11ySentinelProjectsRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns one Sentry project of the caller\'s org, DSN included.  Callers need the viewer role; the runtime\'s own gate enforces it.
+     * Returns one Sentry project of the caller\'s org, DSN included.
+     */
+    async getO11ySentinelProjectsByIdRaw(requestParameters: O11yApiGetO11ySentinelProjectsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<O11yO11ySentryProjectOut>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getO11ySentinelProjectsById().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/o11y/sentinel/projects/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => O11yO11ySentryProjectOutFromJSON(jsonValue));
+    }
+
+    /**
+     * Returns one Sentry project of the caller\'s org, DSN included.  Callers need the viewer role; the runtime\'s own gate enforces it.
+     * Returns one Sentry project of the caller\'s org, DSN included.
+     */
+    async getO11ySentinelProjectsById(requestParameters: O11yApiGetO11ySentinelProjectsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<O11yO11ySentryProjectOut> {
+        const response = await this.getO11ySentinelProjectsByIdRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns a project\'s event-rate timeseries: one bucket per interval over the requested period, counting the events in it.
+     * Returns a project\'s event-rate timeseries: one bucket per interval over the requested period, counting the events in it.
+     */
+    async getO11ySentinelStatsRaw(requestParameters: O11yApiGetO11ySentinelStatsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<O11yO11yStatsOut>> {
+        if (requestParameters['project'] == null) {
+            throw new runtime.RequiredError(
+                'project',
+                'Required parameter "project" was null or undefined when calling getO11ySentinelStats().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['project'] != null) {
+            queryParameters['project'] = requestParameters['project'];
+        }
+
+        if (requestParameters['field'] != null) {
+            queryParameters['field'] = requestParameters['field'];
+        }
+
+        if (requestParameters['period'] != null) {
+            queryParameters['period'] = requestParameters['period'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/o11y/sentinel/stats`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => O11yO11yStatsOutFromJSON(jsonValue));
+    }
+
+    /**
+     * Returns a project\'s event-rate timeseries: one bucket per interval over the requested period, counting the events in it.
+     * Returns a project\'s event-rate timeseries: one bucket per interval over the requested period, counting the events in it.
+     */
+    async getO11ySentinelStats(requestParameters: O11yApiGetO11ySentinelStatsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<O11yO11yStatsOut> {
+        const response = await this.getO11ySentinelStatsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Lists the traces a project\'s captured errors reference, each with how many errors landed on it, when they started and stopped, and the latest message seen — the entry point for \"which requests are failing\".
+     * Lists the traces a project\'s captured errors reference, each with how many errors landed on it, when they started and stopped, and the latest message seen — the entry point for \"which requests are failing\".
+     */
+    async getO11ySentinelTracesRaw(requestParameters: O11yApiGetO11ySentinelTracesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<O11yO11yTracesOut>> {
+        if (requestParameters['project'] == null) {
+            throw new runtime.RequiredError(
+                'project',
+                'Required parameter "project" was null or undefined when calling getO11ySentinelTraces().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['project'] != null) {
+            queryParameters['project'] = requestParameters['project'];
+        }
+
+        if (requestParameters['period'] != null) {
+            queryParameters['period'] = requestParameters['period'];
+        }
+
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/o11y/sentinel/traces`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => O11yO11yTracesOutFromJSON(jsonValue));
+    }
+
+    /**
+     * Lists the traces a project\'s captured errors reference, each with how many errors landed on it, when they started and stopped, and the latest message seen — the entry point for \"which requests are failing\".
+     * Lists the traces a project\'s captured errors reference, each with how many errors landed on it, when they started and stopped, and the latest message seen — the entry point for \"which requests are failing\".
+     */
+    async getO11ySentinelTraces(requestParameters: O11yApiGetO11ySentinelTracesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<O11yO11yTracesOut> {
+        const response = await this.getO11ySentinelTracesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns one trace\'s captured errors for a project — every error event that carried the trace id, in the order the events plane holds them.
+     * Returns one trace\'s captured errors for a project — every error event that carried the trace id, in the order the events plane holds them.
+     */
+    async getO11ySentinelTracesByIdRaw(requestParameters: O11yApiGetO11ySentinelTracesByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<O11yO11yTraceOut>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getO11ySentinelTracesById().'
+            );
+        }
+
+        if (requestParameters['project'] == null) {
+            throw new runtime.RequiredError(
+                'project',
+                'Required parameter "project" was null or undefined when calling getO11ySentinelTracesById().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['project'] != null) {
+            queryParameters['project'] = requestParameters['project'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/o11y/sentinel/traces/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => O11yO11yTraceOutFromJSON(jsonValue));
+    }
+
+    /**
+     * Returns one trace\'s captured errors for a project — every error event that carried the trace id, in the order the events plane holds them.
+     * Returns one trace\'s captured errors for a project — every error event that carried the trace id, in the order the events plane holds them.
+     */
+    async getO11ySentinelTracesById(requestParameters: O11yApiGetO11ySentinelTracesByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<O11yO11yTraceOut> {
+        const response = await this.getO11ySentinelTracesByIdRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -11010,6 +11740,45 @@ export class O11yApi extends runtime.BaseAPI {
      */
     async getO11yStatus(requestParameters: O11yApiGetO11yStatusRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<O11yStatusResult> {
         const response = await this.getO11yStatusRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Reports whether the platform is up. It returns the public status document: the incidents currently open against Hanzo\'s own services, derived from the fleet health probes, plus the address of the human status page. No authentication is required and no tenant data is involved — the answer is the same for every caller.  A service that fails its health probe becomes one incident naming that service. When the availability source itself cannot be read the endpoint answers 503 rather than an empty incident list, because \"we cannot tell\" and \"everything is fine\" are different answers and only one of them is true.
+     * Reports whether the platform is up.
+     */
+    async getO11ySummaryRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<O11yStatusSummary>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/o11y/summary`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => O11yStatusSummaryFromJSON(jsonValue));
+    }
+
+    /**
+     * Reports whether the platform is up. It returns the public status document: the incidents currently open against Hanzo\'s own services, derived from the fleet health probes, plus the address of the human status page. No authentication is required and no tenant data is involved — the answer is the same for every caller.  A service that fails its health probe becomes one incident naming that service. When the availability source itself cannot be read the endpoint answers 503 rather than an empty incident list, because \"we cannot tell\" and \"everything is fine\" are different answers and only one of them is true.
+     * Reports whether the platform is up.
+     */
+    async getO11ySummary(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<O11yStatusSummary> {
+        const response = await this.getO11ySummaryRaw(initOverrides);
         return await response.value();
     }
 
@@ -15225,7 +15994,7 @@ export class O11yApi extends runtime.BaseAPI {
     }
 
     /**
-     * Accepts an application/x-sentry-envelope frame from a Sentry SDK — the batched wire format carrying events, sessions and attachments — and ingests it against the project named in the path.  THE /api/ SEGMENT IS NOT OURS TO NAME. An SDK appends its own fixed /api/<project>/envelope/ suffix to whatever DSN it is given, so this address is the SDK\'s, received verbatim. We receive this shape; we do not publish it. The clean spelling of the same wire is /v1/sentry/{project}/envelope/.  AUTHENTICATED BY THE DSN PUBLIC KEY, never a Hanzo session, and therefore exempt from the principal gate: the ingest verifier checks the key in constant time, fails closed, and derives the org from it. A keyless submission is a 401 from that verifier — not a 403 from the gate, and not a 404 — which is how you tell the hops apart. The exemption is matched by method plus prefix plus suffix, never a bare prefix, so no read is reachable through it.
+     * Accepts an application/x-sentry-envelope frame from a Sentry SDK — the batched wire format carrying events, sessions and attachments — and ingests it against the project named in the path.  THE /api/ SEGMENT IS NOT OURS TO NAME. An SDK appends its own fixed /api/<project>/envelope/ suffix to whatever DSN it is given, so this address is the SDK\'s, received verbatim. We receive this shape; we do not publish it. The clean spelling of the same wire is /v1/event/{project}/envelope/.  AUTHENTICATED BY THE DSN PUBLIC KEY, never a Hanzo session, and therefore exempt from the principal gate: the ingest verifier checks the key in constant time, fails closed, and derives the org from it. A keyless submission is a 401 from that verifier — not a 403 from the gate, and not a 404 — which is how you tell the hops apart. The exemption is matched by method plus prefix plus suffix, never a bare prefix, so no read is reachable through it.
      * Receive a Sentry envelope on the SDK\'s own DSN path
      */
     async postO11yApiByProjectIdEnvelopeRaw(requestParameters: O11yApiPostO11yApiByProjectIdEnvelopeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -15263,7 +16032,7 @@ export class O11yApi extends runtime.BaseAPI {
     }
 
     /**
-     * Accepts an application/x-sentry-envelope frame from a Sentry SDK — the batched wire format carrying events, sessions and attachments — and ingests it against the project named in the path.  THE /api/ SEGMENT IS NOT OURS TO NAME. An SDK appends its own fixed /api/<project>/envelope/ suffix to whatever DSN it is given, so this address is the SDK\'s, received verbatim. We receive this shape; we do not publish it. The clean spelling of the same wire is /v1/sentry/{project}/envelope/.  AUTHENTICATED BY THE DSN PUBLIC KEY, never a Hanzo session, and therefore exempt from the principal gate: the ingest verifier checks the key in constant time, fails closed, and derives the org from it. A keyless submission is a 401 from that verifier — not a 403 from the gate, and not a 404 — which is how you tell the hops apart. The exemption is matched by method plus prefix plus suffix, never a bare prefix, so no read is reachable through it.
+     * Accepts an application/x-sentry-envelope frame from a Sentry SDK — the batched wire format carrying events, sessions and attachments — and ingests it against the project named in the path.  THE /api/ SEGMENT IS NOT OURS TO NAME. An SDK appends its own fixed /api/<project>/envelope/ suffix to whatever DSN it is given, so this address is the SDK\'s, received verbatim. We receive this shape; we do not publish it. The clean spelling of the same wire is /v1/event/{project}/envelope/.  AUTHENTICATED BY THE DSN PUBLIC KEY, never a Hanzo session, and therefore exempt from the principal gate: the ingest verifier checks the key in constant time, fails closed, and derives the org from it. A keyless submission is a 401 from that verifier — not a 403 from the gate, and not a 404 — which is how you tell the hops apart. The exemption is matched by method plus prefix plus suffix, never a bare prefix, so no read is reachable through it.
      * Receive a Sentry envelope on the SDK\'s own DSN path
      */
     async postO11yApiByProjectIdEnvelope(requestParameters: O11yApiPostO11yApiByProjectIdEnvelopeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
@@ -17961,6 +18730,151 @@ export class O11yApi extends runtime.BaseAPI {
     }
 
     /**
+     * Aggregates a project\'s captured errors into a table — the caller names the filters, the groupings and the aggregations, and gets back the columns and rows they asked for.  The project is mandatory and is checked against the caller\'s own org before it scopes anything, so a project id belonging to someone else reads as absent rather than as data.
+     * Aggregates a project\'s captured errors into a table — the caller names the filters, the groupings and the aggregations, and gets back the columns and rows they asked for.
+     */
+    async postO11ySentinelDiscoverRaw(requestParameters: O11yApiPostO11ySentinelDiscoverRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<O11yO11yDiscoverOut>> {
+        if (requestParameters['o11yO11yDiscoverIn'] == null) {
+            throw new runtime.RequiredError(
+                'o11yO11yDiscoverIn',
+                'Required parameter "o11yO11yDiscoverIn" was null or undefined when calling postO11ySentinelDiscover().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/o11y/sentinel/discover`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: O11yO11yDiscoverInToJSON(requestParameters['o11yO11yDiscoverIn']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => O11yO11yDiscoverOutFromJSON(jsonValue));
+    }
+
+    /**
+     * Aggregates a project\'s captured errors into a table — the caller names the filters, the groupings and the aggregations, and gets back the columns and rows they asked for.  The project is mandatory and is checked against the caller\'s own org before it scopes anything, so a project id belonging to someone else reads as absent rather than as data.
+     * Aggregates a project\'s captured errors into a table — the caller names the filters, the groupings and the aggregations, and gets back the columns and rows they asked for.
+     */
+    async postO11ySentinelDiscover(requestParameters: O11yApiPostO11ySentinelDiscoverRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<O11yO11yDiscoverOut> {
+        const response = await this.postO11ySentinelDiscoverRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates a Sentry project under the caller\'s org and returns it, DSN included. Only the name, and optionally a slug and platform, are the caller\'s to set; the org, id and key are server-assigned.  Callers need the editor role; the runtime\'s own gate enforces it.
+     * Creates a Sentry project under the caller\'s org and returns it, DSN included.
+     */
+    async postO11ySentinelProjectsRaw(requestParameters: O11yApiPostO11ySentinelProjectsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<O11yO11ySentryProjectOut>> {
+        if (requestParameters['o11yO11ySentryPostableProject'] == null) {
+            throw new runtime.RequiredError(
+                'o11yO11ySentryPostableProject',
+                'Required parameter "o11yO11ySentryPostableProject" was null or undefined when calling postO11ySentinelProjects().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/o11y/sentinel/projects`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: O11yO11ySentryPostableProjectToJSON(requestParameters['o11yO11ySentryPostableProject']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => O11yO11ySentryProjectOutFromJSON(jsonValue));
+    }
+
+    /**
+     * Creates a Sentry project under the caller\'s org and returns it, DSN included. Only the name, and optionally a slug and platform, are the caller\'s to set; the org, id and key are server-assigned.  Callers need the editor role; the runtime\'s own gate enforces it.
+     * Creates a Sentry project under the caller\'s org and returns it, DSN included.
+     */
+    async postO11ySentinelProjects(requestParameters: O11yApiPostO11ySentinelProjectsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<O11yO11ySentryProjectOut> {
+        const response = await this.postO11ySentinelProjectsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Rotates a project\'s DSN key — bumping its rotation watermark so keys below it stop verifying — and returns the project with its new DSN.  Callers need the editor role; the runtime\'s own gate enforces it.
+     * Rotates a project\'s DSN key — bumping its rotation watermark so keys below it stop verifying — and returns the project with its new DSN.
+     */
+    async postO11ySentinelProjectsByIdKeysRotateRaw(requestParameters: O11yApiPostO11ySentinelProjectsByIdKeysRotateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<O11yO11ySentryProjectOut>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling postO11ySentinelProjectsByIdKeysRotate().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/o11y/sentinel/projects/{id}/keys/rotate`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => O11yO11ySentryProjectOutFromJSON(jsonValue));
+    }
+
+    /**
+     * Rotates a project\'s DSN key — bumping its rotation watermark so keys below it stop verifying — and returns the project with its new DSN.  Callers need the editor role; the runtime\'s own gate enforces it.
+     * Rotates a project\'s DSN key — bumping its rotation watermark so keys below it stop verifying — and returns the project with its new DSN.
+     */
+    async postO11ySentinelProjectsByIdKeysRotate(requestParameters: O11yApiPostO11ySentinelProjectsByIdKeysRotateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<O11yO11ySentryProjectOut> {
+        const response = await this.postO11ySentinelProjectsByIdKeysRotateRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Returns one service\'s entry-point operations with the same latency and error profile topOperations reports.
      * Returns one service\'s entry-point operations with the same latency and error profile topOperations reports.
      */
@@ -18699,6 +19613,63 @@ export class O11yApi extends runtime.BaseAPI {
      */
     async putO11yExplorerViewsByViewid(requestParameters: O11yApiPutO11yExplorerViewsByViewidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<O11yO11ySavedViewOut> {
         const response = await this.putO11yExplorerViewsByViewidRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Changes an issue\'s lifecycle — resolve, ignore, reopen or assign — and returns the updated issue. Fields left unset are left unchanged.  Callers need the editor role; the runtime\'s own gate enforces it.
+     * Changes an issue\'s lifecycle — resolve, ignore, reopen or assign — and returns the updated issue.
+     */
+    async putO11ySentinelIssuesByIdRaw(requestParameters: O11yApiPutO11ySentinelIssuesByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<O11yO11yErrorIssueOut>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling putO11ySentinelIssuesById().'
+            );
+        }
+
+        if (requestParameters['o11yO11ySentryUpdateIssueIn'] == null) {
+            throw new runtime.RequiredError(
+                'o11yO11ySentryUpdateIssueIn',
+                'Required parameter "o11yO11ySentryUpdateIssueIn" was null or undefined when calling putO11ySentinelIssuesById().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/o11y/sentinel/issues/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: O11yO11ySentryUpdateIssueInToJSON(requestParameters['o11yO11ySentryUpdateIssueIn']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => O11yO11yErrorIssueOutFromJSON(jsonValue));
+    }
+
+    /**
+     * Changes an issue\'s lifecycle — resolve, ignore, reopen or assign — and returns the updated issue. Fields left unset are left unchanged.  Callers need the editor role; the runtime\'s own gate enforces it.
+     * Changes an issue\'s lifecycle — resolve, ignore, reopen or assign — and returns the updated issue.
+     */
+    async putO11ySentinelIssuesById(requestParameters: O11yApiPutO11ySentinelIssuesByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<O11yO11yErrorIssueOut> {
+        const response = await this.putO11ySentinelIssuesByIdRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

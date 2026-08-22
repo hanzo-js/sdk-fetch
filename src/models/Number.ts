@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,49 +20,58 @@ import { mapValues } from '../runtime.js';
  */
 export interface Number {
     /**
-     * voice | sms | mms | fax
+     * Capable is what the number can carry: any of "voice", "sms", "mms", "fax". A
+     * number missing "sms" cannot send one no matter what this platform does.
      * @type {Array<string>}
      * @memberof Number
      */
     capable?: Array<string>;
     /**
-     * 
+     * Country is the ISO 3166-1 alpha-2 code the number is issued under. Numbering is
+     * national, so this is what makes a search answerable at all.
      * @type {string}
      * @memberof Number
      */
     country?: string;
     /**
-     * 
+     * Currency is the ISO 4217 code Monthly is denominated in. Without it the number
+     * beside it means nothing, so the two are always read together.
      * @type {string}
      * @memberof Number
      */
     currency?: string;
     /**
-     * 
+     * E164 is the number in E.164: a leading + and digits only, no spaces or dashes.
+     * That is what a carrier accepts and what a search result must be bought by.
      * @type {string}
      * @memberof Number
      */
     e164?: string;
     /**
-     * 
+     * ID is the carrier's handle for the number, and the id every route here
+     * addresses it by. It is not the number itself — see E164.
      * @type {string}
      * @memberof Number
      */
     id?: string;
     /**
-     * minor units, as the carrier quoted it
+     * Monthly is the recurring rental in the MINOR unit of Currency (cents for USD),
+     * exactly as the carrier quoted it. It is a price, not a charge: nothing is billed
+     * by this field.
      * @type {number}
      * @memberof Number
      */
     monthly?: number;
     /**
-     * 
+     * Org is the tenant holding the number. A search result carries none — nobody
+     * holds it yet — which is how an available number is told from a held one.
      * @type {string}
      * @memberof Number
      */
     org?: string;
     /**
-     * 
+     * Type is what kind of number it is: "local", "national", "tollfree" or "mobile".
+     * It decides both price and what a carrier will let it originate.
      * @type {string}
      * @memberof Number
      */

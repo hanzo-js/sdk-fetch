@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -42,7 +42,8 @@ import {
  */
 export interface ArgoNode {
     /**
-     * 
+     * CreatedAt is the object's creationTimestamp, RFC 3339 UTC to the second.
+     * Absent when the object carries none.
      * @type {string}
      * @memberof ArgoNode
      */
@@ -54,19 +55,25 @@ export interface ArgoNode {
      */
     group?: string;
     /**
-     * 
+     * Health is the node's own derived health. Always present on a node of this
+     * tree; a kind with no health signal of its own reports Healthy, since a
+     * ConfigMap existing IS its healthy state.
      * @type {ArgoHealth}
      * @memberof ArgoNode
      */
     health?: ArgoHealth;
     /**
-     * 
+     * Images are the container images running on this node. Always absent — the tag
+     * travels as the "Image Tag" chip in Info instead, which is where the SPA reads
+     * it on a node.
      * @type {Array<string>}
      * @memberof ArgoNode
      */
     images?: Array<string>;
     /**
-     * 
+     * Info are the chips shown on the node. At most one: the image tag — the
+     * RUNNING tag on a Deployment, ReplicaSet or Pod, and the DECLARED tag on the
+     * App CR at the root. Absent on a node that carries no image at all.
      * @type {Array<ArgoInfoItem>}
      * @memberof ArgoNode
      */
@@ -90,13 +97,19 @@ export interface ArgoNode {
      */
     namespace?: string;
     /**
-     * 
+     * ParentRefs are the node's edges UPWARD, which is how the SPA draws the DAG
+     * from this flat list. Exactly one entry where present: a depth-1 object points
+     * at the App CR, a ReplicaSet at its Deployment, a Pod at its ReplicaSet (or at
+     * the Deployment whose selector matches it, when the ReplicaSet is gone).
+     * Absent on the root.
      * @type {Array<ArgoResourceRef>}
      * @memberof ArgoNode
      */
     parentRefs?: Array<ArgoResourceRef>;
     /**
-     * 
+     * ResourceVersion is the k8s version a watch would resume from. Always empty:
+     * the tree is rebuilt from live reads on every request, including on every
+     * frame of the SSE stream, so there is no revision to resume from.
      * @type {string}
      * @memberof ArgoNode
      */

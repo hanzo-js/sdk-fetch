@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -28,49 +28,56 @@ import {
  */
 export interface Extracted {
     /**
-     * proposed slug (software|cloud|office|…)
+     * Category is the expense bucket the SCANNER guessed, as a slug — a hint only.
+     * Vendor rules override it whenever they know better, so this is the model's
+     * reading and not the account the entry will land on.
      * @type {string}
      * @memberof Extracted
      */
     category?: string;
     /**
-     * 
+     * Currency is the ISO code the document is denominated in.
      * @type {string}
      * @memberof Extracted
      */
     currency?: string;
     /**
-     * YYYY-MM-DD
+     * IssuedAt is the document's OWN date as YYYY-MM-DD — when the bill was issued,
+     * which is not when it was uploaded or when it will post.
      * @type {string}
      * @memberof Extracted
      */
     issuedAt?: string;
     /**
-     * 
+     * LineItems are the individual lines read off the document, where it had any.
+     * They need not sum to totalCents: a document may carry lines the scanner could
+     * not read, and the total is taken from the total.
      * @type {Array<LineItem>}
      * @memberof Extracted
      */
     lineItems?: Array<LineItem>;
     /**
-     * 
+     * Merchant is the supplier as printed on the document.
      * @type {string}
      * @memberof Extracted
      */
     merchant?: string;
     /**
-     * 
+     * Note is anything else worth carrying from the document that has no field of
+     * its own.
      * @type {string}
      * @memberof Extracted
      */
     note?: string;
     /**
-     * 
+     * TaxCents is how much of that total is tax, in cents. It is part of totalCents,
+     * not additional to it.
      * @type {number}
      * @memberof Extracted
      */
     taxCents?: number;
     /**
-     * 
+     * TotalCents is the document total in whole cents, tax INCLUDED.
      * @type {number}
      * @memberof Extracted
      */

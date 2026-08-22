@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -60,7 +60,9 @@ export interface SessionDetail {
      */
     agent?: string;
     /**
-     * 
+     * Children is the session's DIRECT children, one level down, each with its own
+     * counts. The promoted `children` integer beside it is how many there are; this
+     * is who they are. For the whole subtree, read the tree.
      * @type {Array<SessionView>}
      * @memberof SessionDetail
      */
@@ -144,7 +146,9 @@ export interface SessionDetail {
      */
     published?: boolean;
     /**
-     * 
+     * RecentEvents is the 50 most recent turns, OLDEST of those first — a transcript
+     * to read down, not a feed. The promoted `events` integer says how many the log
+     * holds in total; page the rest from a seq.
      * @type {Array<EventView>}
      * @memberof SessionDetail
      */

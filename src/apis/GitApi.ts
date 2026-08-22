@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -124,6 +124,16 @@ export interface GitApiDeleteGitReposByNameSubscriptionsByIdRequest {
 export interface GitApiGetGitByOrgByProjectByRepoInfoRefsRequest {
     org: string;
     project: string;
+    repo: string;
+}
+
+export interface GitApiGetGitByOrgByRepoRequest {
+    org: string;
+    repo: string;
+}
+
+export interface GitApiGetGitByOrgByRepoCommitsRequest {
+    org: string;
     repo: string;
 }
 
@@ -479,6 +489,44 @@ export class GitApi extends runtime.BaseAPI {
     }
 
     /**
+     * The repository list for the signed-in caller\'s org — each repo with its description, default branch, size and last update. SIGNED OUT it renders the public explore page instead of refusing, because most Hanzo repos are open source and the open face is the default one; signed in, the caller\'s own org shows its private repositories alongside its public ones. This is a server-rendered browser page, not JSON — the console repo-browser reads the same repository through the JSON ops under /v1/git/repos. Repository names, paths and file contents all render through auto-escaping templates rather than being concatenated into HTML.
+     * Browse your org\'s repositories
+     */
+    async getGitRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/git`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The repository list for the signed-in caller\'s org — each repo with its description, default branch, size and last update. SIGNED OUT it renders the public explore page instead of refusing, because most Hanzo repos are open source and the open face is the default one; signed in, the caller\'s own org shows its private repositories alongside its public ones. This is a server-rendered browser page, not JSON — the console repo-browser reads the same repository through the JSON ops under /v1/git/repos. Repository names, paths and file contents all render through auto-escaping templates rather than being concatenated into HTML.
+     * Browse your org\'s repositories
+     */
+    async getGit(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getGitRaw(initOverrides);
+    }
+
+    /**
      * The ref-advertisement phase of git\'s smart-HTTP protocol — the first request a clone, a fetch and a push all make. `?service=` selects which: `git-upload-pack` advertises for a fetch, `git-receive-pack` for a push, and any other value is 400.  ANONYMOUS ONLY FOR FETCH, AND ONLY ON A PUBLIC REPOSITORY. The push advertisement always requires an authenticated org, and where a path org is present it must equal the authenticated one. A private repository reached without its org is 404, indistinguishable from one that does not exist. Addressed under the API prefix, with the PROJECT as a middle path segment: project scope otherwise rides a header a git client cannot send, so this path is the only usable remote for a project-scoped repository. This is git\'s own wire protocol, not an API call to make by hand: point a git client at the clone URL and it makes this request itself.
      * Advertise a repository\'s refs to a git client
      */
@@ -541,6 +589,114 @@ export class GitApi extends runtime.BaseAPI {
     }
 
     /**
+     * A repository at a glance: its branches, the tree at the tip, its most recent commits, its README rendered, and the HTTPS and SSH clone URLs. `?ref=` selects a branch, tag or commit; the default branch is used when it is omitted. A repository with no commits yet renders its clone instructions rather than an error, which is what a caller who has just created one needs to see. A public repository is readable by anyone; a private one only by its own org. A repository that does not exist and one belonging to another org answer the SAME 404, so the page is never an existence oracle. This is a server-rendered browser page, not JSON — the console repo-browser reads the same repository through the JSON ops under /v1/git/repos. Repository names, paths and file contents all render through auto-escaping templates rather than being concatenated into HTML.
+     * Open a repository\'s home page
+     */
+    async getGitByOrgByRepoRaw(requestParameters: GitApiGetGitByOrgByRepoRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['org'] == null) {
+            throw new runtime.RequiredError(
+                'org',
+                'Required parameter "org" was null or undefined when calling getGitByOrgByRepo().'
+            );
+        }
+
+        if (requestParameters['repo'] == null) {
+            throw new runtime.RequiredError(
+                'repo',
+                'Required parameter "repo" was null or undefined when calling getGitByOrgByRepo().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/git/{org}/{repo}`;
+        urlPath = urlPath.replace(`{${"org"}}`, encodeURIComponent(String(requestParameters['org'])));
+        urlPath = urlPath.replace(`{${"repo"}}`, encodeURIComponent(String(requestParameters['repo'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * A repository at a glance: its branches, the tree at the tip, its most recent commits, its README rendered, and the HTTPS and SSH clone URLs. `?ref=` selects a branch, tag or commit; the default branch is used when it is omitted. A repository with no commits yet renders its clone instructions rather than an error, which is what a caller who has just created one needs to see. A public repository is readable by anyone; a private one only by its own org. A repository that does not exist and one belonging to another org answer the SAME 404, so the page is never an existence oracle. This is a server-rendered browser page, not JSON — the console repo-browser reads the same repository through the JSON ops under /v1/git/repos. Repository names, paths and file contents all render through auto-escaping templates rather than being concatenated into HTML.
+     * Open a repository\'s home page
+     */
+    async getGitByOrgByRepo(requestParameters: GitApiGetGitByOrgByRepoRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getGitByOrgByRepoRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * The hundred most recent commits on one ref, each with its author, message and date. `?ref=` selects the branch, tag or commit, defaulting to the repository\'s default branch; an unknown one is 404. A public repository is readable by anyone; a private one only by its own org. A repository that does not exist and one belonging to another org answer the SAME 404, so the page is never an existence oracle. This is a server-rendered browser page, not JSON — the console repo-browser reads the same repository through the JSON ops under /v1/git/repos. Repository names, paths and file contents all render through auto-escaping templates rather than being concatenated into HTML.
+     * Read a repository\'s commit log
+     */
+    async getGitByOrgByRepoCommitsRaw(requestParameters: GitApiGetGitByOrgByRepoCommitsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['org'] == null) {
+            throw new runtime.RequiredError(
+                'org',
+                'Required parameter "org" was null or undefined when calling getGitByOrgByRepoCommits().'
+            );
+        }
+
+        if (requestParameters['repo'] == null) {
+            throw new runtime.RequiredError(
+                'repo',
+                'Required parameter "repo" was null or undefined when calling getGitByOrgByRepoCommits().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/git/{org}/{repo}/commits`;
+        urlPath = urlPath.replace(`{${"org"}}`, encodeURIComponent(String(requestParameters['org'])));
+        urlPath = urlPath.replace(`{${"repo"}}`, encodeURIComponent(String(requestParameters['repo'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The hundred most recent commits on one ref, each with its author, message and date. `?ref=` selects the branch, tag or commit, defaulting to the repository\'s default branch; an unknown one is 404. A public repository is readable by anyone; a private one only by its own org. A repository that does not exist and one belonging to another org answer the SAME 404, so the page is never an existence oracle. This is a server-rendered browser page, not JSON — the console repo-browser reads the same repository through the JSON ops under /v1/git/repos. Repository names, paths and file contents all render through auto-escaping templates rather than being concatenated into HTML.
+     * Read a repository\'s commit log
+     */
+    async getGitByOrgByRepoCommits(requestParameters: GitApiGetGitByOrgByRepoCommitsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getGitByOrgByRepoCommitsRaw(requestParameters, initOverrides);
+    }
+
+    /**
      * The ref-advertisement phase of git\'s smart-HTTP protocol — the first request a clone, a fetch and a push all make. `?service=` selects which: `git-upload-pack` advertises for a fetch, `git-receive-pack` for a push, and any other value is 400.  ANONYMOUS ONLY FOR FETCH, AND ONLY ON A PUBLIC REPOSITORY. The push advertisement always requires an authenticated org, and where a path org is present it must equal the authenticated one. A private repository reached without its org is 404, indistinguishable from one that does not exist. Addressed under the API prefix, so `git clone https://<host>/v1/git/<org>/<repo>.git` works on any host the binary serves. This is git\'s own wire protocol, not an API call to make by hand: point a git client at the clone URL and it makes this request itself.
      * Advertise a repository\'s refs to a git client
      */
@@ -592,6 +748,44 @@ export class GitApi extends runtime.BaseAPI {
      */
     async getGitByOrgByRepoInfoRefs(requestParameters: GitApiGetGitByOrgByRepoInfoRefsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.getGitByOrgByRepoInfoRefsRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * The open, unauthenticated face of the git host: every PUBLIC repository in the fleet, org-qualified, so a project can be found and cloned with no account at all — signing in is for private repos and for writes. Repositories live in per-org stores with no global index, so this unions each org\'s public rows and is bounded to a fixed number of stores per request, keeping discovery quick however many orgs exist. A fleet with no orgs yet is an empty page, not an error. This is a server-rendered browser page, not JSON — the console repo-browser reads the same repository through the JSON ops under /v1/git/repos. Repository names, paths and file contents all render through auto-escaping templates rather than being concatenated into HTML.
+     * Discover public repositories across every org
+     */
+    async getGitExploreRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/git/explore`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The open, unauthenticated face of the git host: every PUBLIC repository in the fleet, org-qualified, so a project can be found and cloned with no account at all — signing in is for private repos and for writes. Repositories live in per-org stores with no global index, so this unions each org\'s public rows and is bounded to a fixed number of stores per request, keeping discovery quick however many orgs exist. A fleet with no orgs yet is an empty page, not an error. This is a server-rendered browser page, not JSON — the console repo-browser reads the same repository through the JSON ops under /v1/git/repos. Repository names, paths and file contents all render through auto-escaping templates rather than being concatenated into HTML.
+     * Discover public repositories across every org
+     */
+    async getGitExplore(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getGitExploreRaw(initOverrides);
     }
 
     /**

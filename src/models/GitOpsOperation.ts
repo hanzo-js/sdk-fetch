@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,31 +20,37 @@ import { mapValues } from '../runtime.js';
  */
 export interface GitOpsOperation {
     /**
-     * 
+     * FinishedAt is when it ended, RFC 3339. Absent while the phase is Running.
      * @type {string}
      * @memberof GitOpsOperation
      */
     finishedAt?: string;
     /**
-     * 
+     * Message is CD's account of the phase — "successfully synced (all tasks run)"
+     * for a Succeeded operation, the reason it stopped for a Failed one.
      * @type {string}
      * @memberof GitOpsOperation
      */
     message?: string;
     /**
-     * 
+     * Phase is how the last sync operation ended, in CD's own vocabulary: Running,
+     * Succeeded or Failed. It is never empty — an Application whose phase is empty
+     * has no operation at all and omits this whole object.
      * @type {string}
      * @memberof GitOpsOperation
      */
     phase?: string;
     /**
-     * 
+     * Revision is the commit this operation ATTEMPTED (operationState.syncResult).
+     * It differs from the Application's own revision exactly when the attempt did
+     * not land: revision is the last commit CD got applied, this is the last one it
+     * tried.
      * @type {string}
      * @memberof GitOpsOperation
      */
     revision?: string;
     /**
-     * 
+     * StartedAt is when the operation began, RFC 3339.
      * @type {string}
      * @memberof GitOpsOperation
      */

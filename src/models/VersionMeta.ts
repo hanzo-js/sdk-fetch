@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,19 +20,24 @@ import { mapValues } from '../runtime.js';
  */
 export interface VersionMeta {
     /**
-     * 
+     * Brand is the white-label key this revision was authored under; empty is the
+     * shared base playbook. Revisions of two brands never share a number line.
      * @type {string}
      * @memberof VersionMeta
      */
     brand?: string;
     /**
-     * 
+     * UpdatedAt is when this revision was written, as Unix seconds — the "who
+     * changed the playbook, and when" half of the audit trail.
      * @type {number}
      * @memberof VersionMeta
      */
     updatedAt?: number;
     /**
-     * 
+     * Version is the store's own revision counter for that brand, starting at 1 for
+     * the seeded playbook and incrementing on every edit. Nothing is overwritten, so
+     * the highest number is the live one and every lower number is still readable.
+     * It is not the playbook's authored `version` string.
      * @type {number}
      * @memberof VersionMeta
      */

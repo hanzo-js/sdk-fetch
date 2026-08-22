@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -28,19 +28,20 @@ import {
  */
 export interface ProjectsDeploySite {
     /**
-     * 
+     * Files is the whole site, inline — every file it consists of. It REPLACES what
+     * is there rather than merging, so an omitted file is a deleted one.
      * @type {Array<ProjectsFile>}
      * @memberof ProjectsDeploySite
      */
     files?: Array<ProjectsFile>;
     /**
-     * 
+     * Name is the site's display name.
      * @type {string}
      * @memberof ProjectsDeploySite
      */
     name?: string;
     /**
-     * 
+     * Slug is the handle and public host label to publish under.
      * @type {string}
      * @memberof ProjectsDeploySite
      */

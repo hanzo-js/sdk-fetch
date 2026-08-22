@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -28,55 +28,61 @@ import {
  */
 export interface SyncView {
     /**
-     * 
+     * Actor is the identity a reconcile writes AS. It is the loop guard: a change
+     * this identity made is one we already have, so it is not synced back.
      * @type {string}
      * @memberof SyncView
      */
     actor?: string;
     /**
-     * 
+     * CreatedAt is when the link was first declared, RFC3339 in UTC.
      * @type {string}
      * @memberof SyncView
      */
     createdAt?: string;
     /**
-     * 
+     * Direction is which way work flows: "both", "pull" (target ← source), "push"
+     * (source → target), or "off" — which keeps the link declared and moves nothing.
      * @type {string}
      * @memberof SyncView
      */
     direction?: string;
     /**
-     * 
+     * ID is the link's handle, derived from its source and target — which is what
+     * makes re-declaring the same pair an update rather than a duplicate.
      * @type {string}
      * @memberof SyncView
      */
     id?: string;
     /**
-     * 
+     * Kind is what is being synced. "git" today; the field exists so a storage or
+     * database link is a value here rather than a second route family.
      * @type {string}
      * @memberof SyncView
      */
     kind?: string;
     /**
-     * 
+     * Source is the side read FROM on a pull.
      * @type {EndpointView}
      * @memberof SyncView
      */
     source?: EndpointView;
     /**
-     * 
+     * Target is the side written TO on a push.
      * @type {EndpointView}
      * @memberof SyncView
      */
     target?: EndpointView;
     /**
-     * 
+     * Trigger is what starts a reconcile: "webhook" (the provider tells us),
+     * "poll" (we ask on a schedule), or "manual" (only an explicit call).
      * @type {string}
      * @memberof SyncView
      */
     trigger?: string;
     /**
-     * bumped on every reconcile — the last-synced time
+     * UpdatedAt is bumped by every reconcile, so it reads as the LAST-SYNCED time
+     * rather than the last edit. Absent until the first one runs.
      * @type {string}
      * @memberof SyncView
      */

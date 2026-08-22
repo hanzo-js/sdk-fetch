@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -35,25 +35,29 @@ import {
  */
 export interface ArgoCluster {
     /**
-     * 
+     * ConnectionState is whether the destination is reachable.
      * @type {ArgoConnectionState}
      * @memberof ArgoCluster
      */
     connectionState?: ArgoConnectionState;
     /**
-     * 
+     * Info is the connection state again plus the count of applications targeting
+     * this destination.
      * @type {ArgoClusterInfo}
      * @memberof ArgoCluster
      */
     info?: ArgoClusterInfo;
     /**
-     * 
+     * Name is what the Destination column shows: "in-cluster" for this cluster,
+     * otherwise whatever spec.destination.name declares, falling back to the server
+     * URL when it declares none.
      * @type {string}
      * @memberof ArgoCluster
      */
     name?: string;
     /**
-     * 
+     * Server is the destination's API URL, and the key the list is deduplicated by.
+     * https://kubernetes.default.svc is this cluster.
      * @type {string}
      * @memberof ArgoCluster
      */

@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,31 +20,36 @@ import { mapValues } from '../runtime.js';
  */
 export interface FleetMetrics {
     /**
-     * 
+     * At is when this reading was MEASURED, RFC 3339 in UTC — not when the board
+     * was built. A console decides staleness by comparing it to now; the board
+     * deliberately does not decide that for it.
      * @type {string}
      * @memberof FleetMetrics
      */
     at?: string;
     /**
-     * 
+     * GPUUtil is aggregate accelerator utilization as a FRACTION of 1 — 0.42 is
+     * 42% busy, never 42. Across all of the unit's cards, not one of them.
      * @type {number}
      * @memberof FleetMetrics
      */
     gpuUtil?: number;
     /**
-     * 
+     * Load1 is the host's 1-minute load average — runnable processes, not a
+     * percentage, so it is read against the unit's core count and can exceed 1.
      * @type {number}
      * @memberof FleetMetrics
      */
     load1?: number;
     /**
-     * 
+     * MemFree is host memory still available, in BYTES. It is what the source
+     * reported, not fleetSpec.Memory minus MemUsed.
      * @type {number}
      * @memberof FleetMetrics
      */
     memFree?: number;
     /**
-     * 
+     * MemUsed is host memory in use, in BYTES.
      * @type {number}
      * @memberof FleetMetrics
      */

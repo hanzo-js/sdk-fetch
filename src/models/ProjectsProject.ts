@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -28,41 +28,43 @@ import {
  */
 export interface ProjectsProject {
     /**
-     * Analytics is the wired-by-default web-analytics flag (default true). It is the
-     * value the app's static-builder reads as deployment.analytics to inject the
-     * beacon. Space is the project's Base data space ("<org>/<slug>") a deployed
-     * site posts form/forum/data submissions to under /v1/base.
+     * Analytics is whether the web-analytics beacon is injected into this site's
+     * pages. It is ON by default — a project has to opt out — and it is what the
+     * static builder reads to decide whether to inject at all.
      * @type {boolean}
      * @memberof ProjectsProject
      */
     analytics?: boolean;
     /**
-     * 
+     * Bucket is the object-store bucket the site's files are served out of.
      * @type {string}
      * @memberof ProjectsProject
      */
     bucket?: string;
     /**
-     * Cache is the site's edge-cache state: the HTML/document Cache-Control policy
-     * in effect (TTL) and the last edge-purge time, so a console can show freshness.
+     * CacheControl is the Cache-Control policy the edge serves this site's HTML
+     * under — how long a reader may hold a stale page before asking again. Assets
+     * are content-addressed and are not governed by it.
      * @type {string}
      * @memberof ProjectsProject
      */
     cacheControl?: string;
     /**
-     * 
+     * CreatedAt is when the project was created, as Unix seconds.
      * @type {number}
      * @memberof ProjectsProject
      */
     createdAt?: number;
     /**
-     * 
+     * CurrentDeploymentID names the deployment currently serving, so a caller can
+     * ask what is live without scanning the history.
      * @type {string}
      * @memberof ProjectsProject
      */
     currentDeploymentId?: string;
     /**
-     * 
+     * Description is the one-line summary, which is copied onto forks of this
+     * project and shown on a gallery card.
      * @type {string}
      * @memberof ProjectsProject
      */
@@ -76,25 +78,32 @@ export interface ProjectsProject {
      */
     forkedFrom?: string;
     /**
-     * 
+     * Framework is a BUILD HINT from a closed set, defaulting to static. It tells CI
+     * how to build a linked repo and never gates a deploy, so a wrong value costs a
+     * build rather than access.
      * @type {string}
      * @memberof ProjectsProject
      */
     framework?: string;
     /**
-     * 
+     * Hidden is PLATFORM MODERATION, and it is a different axis from visibility: it
+     * pulls a public project out of the catalogue without editing the publisher's
+     * own choice, so un-hiding restores exactly what they asked for. A project is
+     * listed only when it is public AND not hidden. Always present, never omitted,
+     * for the same reason as visibility.
      * @type {boolean}
      * @memberof ProjectsProject
      */
     hidden?: boolean;
     /**
-     * 
+     * HiddenReason is why moderation hid it. Absent when it is not hidden.
      * @type {string}
      * @memberof ProjectsProject
      */
     hiddenReason?: string;
     /**
-     * 
+     * ID is the project's internal identifier. It is stable across a rename, but it
+     * is not what the API addresses this project by — `slug` is.
      * @type {string}
      * @memberof ProjectsProject
      */
@@ -113,55 +122,75 @@ export interface ProjectsProject {
      */
     key?: string;
     /**
-     * 
+     * LastPurgeAt is when the edge cache was last cleared, as Unix seconds, so a
+     * console can say how fresh what readers see actually is. Absent means never.
      * @type {number}
      * @memberof ProjectsProject
      */
     lastPurgeAt?: number;
     /**
-     * 
+     * License is the terms that upstream work carries. Absent has the same reading:
+     * undeclared, not unencumbered.
      * @type {string}
      * @memberof ProjectsProject
      */
     license?: string;
     /**
-     * 
+     * LiveURL is where the site answers today. Absent until something has been
+     * deployed.
      * @type {string}
      * @memberof ProjectsProject
      */
     liveUrl?: string;
     /**
-     * 
+     * Name is the project's display name, free text a person chose.
      * @type {string}
      * @memberof ProjectsProject
      */
     name?: string;
     /**
-     * 
+     * Org is the organisation that owns the project, and therefore who pays for it
+     * and who may change it. It is also the AUTHORSHIP line a gallery credits;
+     * there is no separate author field.
      * @type {string}
      * @memberof ProjectsProject
      */
     org?: string;
     /**
-     * 
+     * Repo is the git source this project builds from, empty when it is deployed by
+     * uploading an artifact instead.
      * @type {ProjectsRepo}
      * @memberof ProjectsProject
      */
     repo?: ProjectsRepo;
     /**
-     * 
+     * Slug is the identifier that MATTERS: the handle every later call addresses,
+     * the S3 key segment the site's objects live under, and the label of the public
+     * host `<slug>.hanzo.app`. Because it is a hostname it is constrained and
+     * reserved labels such as `api` are refused.
      * @type {string}
      * @memberof ProjectsProject
      */
     slug?: string;
     /**
-     * 
+     * Space is the project's Base data space, which is where a deployed site's form,
+     * forum and data submissions land. Absent means the site stores nothing.
      * @type {string}
      * @memberof ProjectsProject
      */
     space?: string;
     /**
-     * 
+     * Starred is THIS CALLER's star, not a property of the project — two people
+     * in the same org see different values for the same row, which is the whole
+     * point of it. Always present so a client can tell "not starred" from "this
+     * API is too old to say", the same reason visibility and hidden are.
+     * @type {boolean}
+     * @memberof ProjectsProject
+     */
+    starred?: boolean;
+    /**
+     * Status is where the project stands — whether a build has ever succeeded and
+     * whether anything is serving right now.
      * @type {string}
      * @memberof ProjectsProject
      */
@@ -175,15 +204,16 @@ export interface ProjectsProject {
      */
     tags?: { [key: string]: string; };
     /**
-     * 
+     * UpdatedAt is when the project's own record last changed, as Unix seconds. A
+     * deploy is not an edit of the project, so this does not move on every publish.
      * @type {number}
      * @memberof ProjectsProject
      */
     updatedAt?: number;
     /**
-     * Upstream/License credit the third-party work this project was published
-     * from, and the terms it carries. Omitted when nothing is declared: an absent
-     * credit means "nobody has said", not "there is nothing to say".
+     * Upstream credits the third-party work this project was published from — a
+     * free-text line, because the honest answer is a name and a title that no enum
+     * could hold. Absent means NOBODY HAS SAID, not that there is nothing to say.
      * @type {string}
      * @memberof ProjectsProject
      */
@@ -238,6 +268,7 @@ export function ProjectsProjectFromJSONTyped(json: any, ignoreDiscriminator: boo
         'repo': json['repo'] == null ? undefined : ProjectsRepoFromJSON(json['repo']),
         'slug': json['slug'] == null ? undefined : json['slug'],
         'space': json['space'] == null ? undefined : json['space'],
+        'starred': json['starred'] == null ? undefined : json['starred'],
         'status': json['status'] == null ? undefined : json['status'],
         'tags': json['tags'] == null ? undefined : json['tags'],
         'updatedAt': json['updatedAt'] == null ? undefined : json['updatedAt'],
@@ -277,6 +308,7 @@ export function ProjectsProjectToJSONTyped(value?: ProjectsProject | null, ignor
         'repo': ProjectsRepoToJSON(value['repo']),
         'slug': value['slug'],
         'space': value['space'],
+        'starred': value['starred'],
         'status': value['status'],
         'tags': value['tags'],
         'updatedAt': value['updatedAt'],

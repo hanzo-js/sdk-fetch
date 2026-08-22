@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,49 +20,56 @@ import { mapValues } from '../runtime.js';
  */
 export interface ProjectsRelease {
     /**
-     * 
+     * Active is whether this is the release the site is SERVING right now. Exactly
+     * one release of a site is active; the others are kept so they can be activated
+     * again, until retention reclaims them.
      * @type {boolean}
      * @memberof ProjectsRelease
      */
     active?: boolean;
     /**
-     * 
+     * Bytes is their total size in bytes.
      * @type {number}
      * @memberof ProjectsRelease
      */
     bytes?: number;
     /**
-     * 
+     * CreatedAt is when the release was cut, as Unix seconds — not when it was last
+     * activated.
      * @type {number}
      * @memberof ProjectsRelease
      */
     createdAt?: number;
     /**
-     * 
+     * Objects is how many files the release holds.
      * @type {number}
      * @memberof ProjectsRelease
      */
     objects?: number;
     /**
-     * 
+     * ReleaseID is derived from a DIGEST of the release's own manifest, so identical
+     * content is the same release and a release can never be confused with another
+     * one. Activating an older id IS the rollback.
      * @type {string}
      * @memberof ProjectsRelease
      */
     releaseId?: string;
     /**
-     * 
+     * Slug is the site this release belongs to.
      * @type {string}
      * @memberof ProjectsRelease
      */
     slug?: string;
     /**
-     * 
+     * Source is what the release was cut from — the build output or upload it was
+     * promoted out of.
      * @type {string}
      * @memberof ProjectsRelease
      */
     source?: string;
     /**
-     * 
+     * URL is where the site serves. Present only on the ACTIVE release, since an
+     * inactive one is not answering anywhere.
      * @type {string}
      * @memberof ProjectsRelease
      */

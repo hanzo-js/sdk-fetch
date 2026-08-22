@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -55,30 +55,30 @@ import {
     StreamsToJSON,
 } from '../models/index.js';
 
-export interface MqApiDeleteMqStreamsByNameRequest {
+export interface MqApiDeleteMqStreamByNameRequest {
     name: string;
 }
 
-export interface MqApiDeleteMqStreamsByNameMessagesBySeqRequest {
+export interface MqApiDeleteMqStreamByNameMessageBySeqRequest {
     name: string;
     seq: number;
 }
 
-export interface MqApiDeleteMqStreamsByStreamConsumersByNameRequest {
+export interface MqApiDeleteMqStreamByStreamConsumerByNameRequest {
     stream: string;
     name: string;
 }
 
-export interface MqApiGetMqStreamsRequest {
+export interface MqApiGetMqStreamRequest {
     limit?: number;
     offset?: number;
 }
 
-export interface MqApiGetMqStreamsByNameRequest {
+export interface MqApiGetMqStreamByNameRequest {
     name: string;
 }
 
-export interface MqApiGetMqStreamsByNameMessagesRequest {
+export interface MqApiGetMqStreamByNameMessageRequest {
     name: string;
     seq?: number;
     lastBySubject?: string;
@@ -86,38 +86,38 @@ export interface MqApiGetMqStreamsByNameMessagesRequest {
     limit?: number;
 }
 
-export interface MqApiGetMqStreamsByStreamConsumersRequest {
+export interface MqApiGetMqStreamByStreamConsumerRequest {
     stream: string;
     limit?: number;
     offset?: number;
 }
 
-export interface MqApiGetMqStreamsByStreamConsumersByNameRequest {
+export interface MqApiGetMqStreamByStreamConsumerByNameRequest {
     stream: string;
     name: string;
 }
 
-export interface MqApiPostMqStreamsRequest {
+export interface MqApiPostMqStreamRequest {
     config: Config;
 }
 
-export interface MqApiPostMqStreamsByNamePurgeRequest {
+export interface MqApiPostMqStreamByNamePurgeRequest {
     name: string;
     purge: Purge;
 }
 
-export interface MqApiPostMqStreamsByStreamConsumersRequest {
+export interface MqApiPostMqStreamByStreamConsumerRequest {
     stream: string;
     makeIn: MakeIn;
 }
 
-export interface MqApiPostMqStreamsByStreamConsumersByNameNextRequest {
+export interface MqApiPostMqStreamByStreamConsumerByNameNextRequest {
     stream: string;
     name: string;
     nextIn: NextIn;
 }
 
-export interface MqApiPutMqStreamsByNameRequest {
+export interface MqApiPutMqStreamByNameRequest {
     name: string;
     config: Config;
 }
@@ -131,11 +131,11 @@ export class MqApi extends runtime.BaseAPI {
      * Removes a stream with all its messages and consumers. Irreversible.
      * Removes a stream with all its messages and consumers.
      */
-    async deleteMqStreamsByNameRaw(requestParameters: MqApiDeleteMqStreamsByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async deleteMqStreamByNameRaw(requestParameters: MqApiDeleteMqStreamByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['name'] == null) {
             throw new runtime.RequiredError(
                 'name',
-                'Required parameter "name" was null or undefined when calling deleteMqStreamsByName().'
+                'Required parameter "name" was null or undefined when calling deleteMqStreamByName().'
             );
         }
 
@@ -152,7 +152,7 @@ export class MqApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/mq/streams/{name}`;
+        let urlPath = `/v1/mq/stream/{name}`;
         urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
 
         const response = await this.request({
@@ -169,26 +169,26 @@ export class MqApi extends runtime.BaseAPI {
      * Removes a stream with all its messages and consumers. Irreversible.
      * Removes a stream with all its messages and consumers.
      */
-    async deleteMqStreamsByName(requestParameters: MqApiDeleteMqStreamsByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.deleteMqStreamsByNameRaw(requestParameters, initOverrides);
+    async deleteMqStreamByName(requestParameters: MqApiDeleteMqStreamByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteMqStreamByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Erases one message by sequence; the sequence gap remains.
      * Erases one message by sequence; the sequence gap remains.
      */
-    async deleteMqStreamsByNameMessagesBySeqRaw(requestParameters: MqApiDeleteMqStreamsByNameMessagesBySeqRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async deleteMqStreamByNameMessageBySeqRaw(requestParameters: MqApiDeleteMqStreamByNameMessageBySeqRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['name'] == null) {
             throw new runtime.RequiredError(
                 'name',
-                'Required parameter "name" was null or undefined when calling deleteMqStreamsByNameMessagesBySeq().'
+                'Required parameter "name" was null or undefined when calling deleteMqStreamByNameMessageBySeq().'
             );
         }
 
         if (requestParameters['seq'] == null) {
             throw new runtime.RequiredError(
                 'seq',
-                'Required parameter "seq" was null or undefined when calling deleteMqStreamsByNameMessagesBySeq().'
+                'Required parameter "seq" was null or undefined when calling deleteMqStreamByNameMessageBySeq().'
             );
         }
 
@@ -205,7 +205,7 @@ export class MqApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/mq/streams/{name}/messages/{seq}`;
+        let urlPath = `/v1/mq/stream/{name}/message/{seq}`;
         urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
         urlPath = urlPath.replace(`{${"seq"}}`, encodeURIComponent(String(requestParameters['seq'])));
 
@@ -223,26 +223,26 @@ export class MqApi extends runtime.BaseAPI {
      * Erases one message by sequence; the sequence gap remains.
      * Erases one message by sequence; the sequence gap remains.
      */
-    async deleteMqStreamsByNameMessagesBySeq(requestParameters: MqApiDeleteMqStreamsByNameMessagesBySeqRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.deleteMqStreamsByNameMessagesBySeqRaw(requestParameters, initOverrides);
+    async deleteMqStreamByNameMessageBySeq(requestParameters: MqApiDeleteMqStreamByNameMessageBySeqRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteMqStreamByNameMessageBySeqRaw(requestParameters, initOverrides);
     }
 
     /**
      * Removes a consumer and its delivery state; unacknowledged messages stay in the stream.
      * Removes a consumer and its delivery state; unacknowledged messages stay in the stream.
      */
-    async deleteMqStreamsByStreamConsumersByNameRaw(requestParameters: MqApiDeleteMqStreamsByStreamConsumersByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async deleteMqStreamByStreamConsumerByNameRaw(requestParameters: MqApiDeleteMqStreamByStreamConsumerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['stream'] == null) {
             throw new runtime.RequiredError(
                 'stream',
-                'Required parameter "stream" was null or undefined when calling deleteMqStreamsByStreamConsumersByName().'
+                'Required parameter "stream" was null or undefined when calling deleteMqStreamByStreamConsumerByName().'
             );
         }
 
         if (requestParameters['name'] == null) {
             throw new runtime.RequiredError(
                 'name',
-                'Required parameter "name" was null or undefined when calling deleteMqStreamsByStreamConsumersByName().'
+                'Required parameter "name" was null or undefined when calling deleteMqStreamByStreamConsumerByName().'
             );
         }
 
@@ -259,7 +259,7 @@ export class MqApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/mq/streams/{stream}/consumers/{name}`;
+        let urlPath = `/v1/mq/stream/{stream}/consumer/{name}`;
         urlPath = urlPath.replace(`{${"stream"}}`, encodeURIComponent(String(requestParameters['stream'])));
         urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
 
@@ -277,8 +277,8 @@ export class MqApi extends runtime.BaseAPI {
      * Removes a consumer and its delivery state; unacknowledged messages stay in the stream.
      * Removes a consumer and its delivery state; unacknowledged messages stay in the stream.
      */
-    async deleteMqStreamsByStreamConsumersByName(requestParameters: MqApiDeleteMqStreamsByStreamConsumersByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.deleteMqStreamsByStreamConsumersByNameRaw(requestParameters, initOverrides);
+    async deleteMqStreamByStreamConsumerByName(requestParameters: MqApiDeleteMqStreamByStreamConsumerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteMqStreamByStreamConsumerByNameRaw(requestParameters, initOverrides);
     }
 
     /**
@@ -363,7 +363,7 @@ export class MqApi extends runtime.BaseAPI {
      * Returns the org\'s streams, name-ordered, with their live state.
      * Returns the org\'s streams, name-ordered, with their live state.
      */
-    async getMqStreamsRaw(requestParameters: MqApiGetMqStreamsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Streams>> {
+    async getMqStreamRaw(requestParameters: MqApiGetMqStreamRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Streams>> {
         const queryParameters: any = {};
 
         if (requestParameters['limit'] != null) {
@@ -385,7 +385,7 @@ export class MqApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/mq/streams`;
+        let urlPath = `/v1/mq/stream`;
 
         const response = await this.request({
             path: urlPath,
@@ -401,8 +401,8 @@ export class MqApi extends runtime.BaseAPI {
      * Returns the org\'s streams, name-ordered, with their live state.
      * Returns the org\'s streams, name-ordered, with their live state.
      */
-    async getMqStreams(requestParameters: MqApiGetMqStreamsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Streams> {
-        const response = await this.getMqStreamsRaw(requestParameters, initOverrides);
+    async getMqStream(requestParameters: MqApiGetMqStreamRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Streams> {
+        const response = await this.getMqStreamRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -410,11 +410,11 @@ export class MqApi extends runtime.BaseAPI {
      * Returns one stream\'s configuration and live state.
      * Returns one stream\'s configuration and live state.
      */
-    async getMqStreamsByNameRaw(requestParameters: MqApiGetMqStreamsByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Stream>> {
+    async getMqStreamByNameRaw(requestParameters: MqApiGetMqStreamByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Stream>> {
         if (requestParameters['name'] == null) {
             throw new runtime.RequiredError(
                 'name',
-                'Required parameter "name" was null or undefined when calling getMqStreamsByName().'
+                'Required parameter "name" was null or undefined when calling getMqStreamByName().'
             );
         }
 
@@ -431,7 +431,7 @@ export class MqApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/mq/streams/{name}`;
+        let urlPath = `/v1/mq/stream/{name}`;
         urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
 
         const response = await this.request({
@@ -448,8 +448,8 @@ export class MqApi extends runtime.BaseAPI {
      * Returns one stream\'s configuration and live state.
      * Returns one stream\'s configuration and live state.
      */
-    async getMqStreamsByName(requestParameters: MqApiGetMqStreamsByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stream> {
-        const response = await this.getMqStreamsByNameRaw(requestParameters, initOverrides);
+    async getMqStreamByName(requestParameters: MqApiGetMqStreamByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stream> {
+        const response = await this.getMqStreamByNameRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -457,11 +457,11 @@ export class MqApi extends runtime.BaseAPI {
      * Reads stored messages without a consumer: by sequence, by newest on a subject, or walking a subject forward from a sequence.
      * Reads stored messages without a consumer: by sequence, by newest on a subject, or walking a subject forward from a sequence.
      */
-    async getMqStreamsByNameMessagesRaw(requestParameters: MqApiGetMqStreamsByNameMessagesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ReadOut>> {
+    async getMqStreamByNameMessageRaw(requestParameters: MqApiGetMqStreamByNameMessageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ReadOut>> {
         if (requestParameters['name'] == null) {
             throw new runtime.RequiredError(
                 'name',
-                'Required parameter "name" was null or undefined when calling getMqStreamsByNameMessages().'
+                'Required parameter "name" was null or undefined when calling getMqStreamByNameMessage().'
             );
         }
 
@@ -494,7 +494,7 @@ export class MqApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/mq/streams/{name}/messages`;
+        let urlPath = `/v1/mq/stream/{name}/message`;
         urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
 
         const response = await this.request({
@@ -511,8 +511,8 @@ export class MqApi extends runtime.BaseAPI {
      * Reads stored messages without a consumer: by sequence, by newest on a subject, or walking a subject forward from a sequence.
      * Reads stored messages without a consumer: by sequence, by newest on a subject, or walking a subject forward from a sequence.
      */
-    async getMqStreamsByNameMessages(requestParameters: MqApiGetMqStreamsByNameMessagesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ReadOut> {
-        const response = await this.getMqStreamsByNameMessagesRaw(requestParameters, initOverrides);
+    async getMqStreamByNameMessage(requestParameters: MqApiGetMqStreamByNameMessageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ReadOut> {
+        const response = await this.getMqStreamByNameMessageRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -520,11 +520,11 @@ export class MqApi extends runtime.BaseAPI {
      * Returns a stream\'s consumers, name-ordered, with delivery state.
      * Returns a stream\'s consumers, name-ordered, with delivery state.
      */
-    async getMqStreamsByStreamConsumersRaw(requestParameters: MqApiGetMqStreamsByStreamConsumersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PickOut>> {
+    async getMqStreamByStreamConsumerRaw(requestParameters: MqApiGetMqStreamByStreamConsumerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PickOut>> {
         if (requestParameters['stream'] == null) {
             throw new runtime.RequiredError(
                 'stream',
-                'Required parameter "stream" was null or undefined when calling getMqStreamsByStreamConsumers().'
+                'Required parameter "stream" was null or undefined when calling getMqStreamByStreamConsumer().'
             );
         }
 
@@ -549,7 +549,7 @@ export class MqApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/mq/streams/{stream}/consumers`;
+        let urlPath = `/v1/mq/stream/{stream}/consumer`;
         urlPath = urlPath.replace(`{${"stream"}}`, encodeURIComponent(String(requestParameters['stream'])));
 
         const response = await this.request({
@@ -566,8 +566,8 @@ export class MqApi extends runtime.BaseAPI {
      * Returns a stream\'s consumers, name-ordered, with delivery state.
      * Returns a stream\'s consumers, name-ordered, with delivery state.
      */
-    async getMqStreamsByStreamConsumers(requestParameters: MqApiGetMqStreamsByStreamConsumersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PickOut> {
-        const response = await this.getMqStreamsByStreamConsumersRaw(requestParameters, initOverrides);
+    async getMqStreamByStreamConsumer(requestParameters: MqApiGetMqStreamByStreamConsumerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PickOut> {
+        const response = await this.getMqStreamByStreamConsumerRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -575,18 +575,18 @@ export class MqApi extends runtime.BaseAPI {
      * Returns one consumer\'s configuration and delivery state.
      * Returns one consumer\'s configuration and delivery state.
      */
-    async getMqStreamsByStreamConsumersByNameRaw(requestParameters: MqApiGetMqStreamsByStreamConsumersByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Consumer>> {
+    async getMqStreamByStreamConsumerByNameRaw(requestParameters: MqApiGetMqStreamByStreamConsumerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Consumer>> {
         if (requestParameters['stream'] == null) {
             throw new runtime.RequiredError(
                 'stream',
-                'Required parameter "stream" was null or undefined when calling getMqStreamsByStreamConsumersByName().'
+                'Required parameter "stream" was null or undefined when calling getMqStreamByStreamConsumerByName().'
             );
         }
 
         if (requestParameters['name'] == null) {
             throw new runtime.RequiredError(
                 'name',
-                'Required parameter "name" was null or undefined when calling getMqStreamsByStreamConsumersByName().'
+                'Required parameter "name" was null or undefined when calling getMqStreamByStreamConsumerByName().'
             );
         }
 
@@ -603,7 +603,7 @@ export class MqApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/mq/streams/{stream}/consumers/{name}`;
+        let urlPath = `/v1/mq/stream/{stream}/consumer/{name}`;
         urlPath = urlPath.replace(`{${"stream"}}`, encodeURIComponent(String(requestParameters['stream'])));
         urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
 
@@ -621,8 +621,8 @@ export class MqApi extends runtime.BaseAPI {
      * Returns one consumer\'s configuration and delivery state.
      * Returns one consumer\'s configuration and delivery state.
      */
-    async getMqStreamsByStreamConsumersByName(requestParameters: MqApiGetMqStreamsByStreamConsumersByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Consumer> {
-        const response = await this.getMqStreamsByStreamConsumersByNameRaw(requestParameters, initOverrides);
+    async getMqStreamByStreamConsumerByName(requestParameters: MqApiGetMqStreamByStreamConsumerByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Consumer> {
+        const response = await this.getMqStreamByStreamConsumerByNameRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -630,11 +630,11 @@ export class MqApi extends runtime.BaseAPI {
      * Creates a durable stream in the org\'s namespace and returns it.
      * Creates a durable stream in the org\'s namespace and returns it.
      */
-    async postMqStreamsRaw(requestParameters: MqApiPostMqStreamsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Stream>> {
+    async postMqStreamRaw(requestParameters: MqApiPostMqStreamRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Stream>> {
         if (requestParameters['config'] == null) {
             throw new runtime.RequiredError(
                 'config',
-                'Required parameter "config" was null or undefined when calling postMqStreams().'
+                'Required parameter "config" was null or undefined when calling postMqStream().'
             );
         }
 
@@ -653,7 +653,7 @@ export class MqApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/mq/streams`;
+        let urlPath = `/v1/mq/stream`;
 
         const response = await this.request({
             path: urlPath,
@@ -670,8 +670,8 @@ export class MqApi extends runtime.BaseAPI {
      * Creates a durable stream in the org\'s namespace and returns it.
      * Creates a durable stream in the org\'s namespace and returns it.
      */
-    async postMqStreams(requestParameters: MqApiPostMqStreamsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stream> {
-        const response = await this.postMqStreamsRaw(requestParameters, initOverrides);
+    async postMqStream(requestParameters: MqApiPostMqStreamRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stream> {
+        const response = await this.postMqStreamRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -679,18 +679,18 @@ export class MqApi extends runtime.BaseAPI {
      * Removes messages from a stream, leaving its consumers in place.
      * Removes messages from a stream, leaving its consumers in place.
      */
-    async postMqStreamsByNamePurgeRaw(requestParameters: MqApiPostMqStreamsByNamePurgeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PurgeOut>> {
+    async postMqStreamByNamePurgeRaw(requestParameters: MqApiPostMqStreamByNamePurgeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PurgeOut>> {
         if (requestParameters['name'] == null) {
             throw new runtime.RequiredError(
                 'name',
-                'Required parameter "name" was null or undefined when calling postMqStreamsByNamePurge().'
+                'Required parameter "name" was null or undefined when calling postMqStreamByNamePurge().'
             );
         }
 
         if (requestParameters['purge'] == null) {
             throw new runtime.RequiredError(
                 'purge',
-                'Required parameter "purge" was null or undefined when calling postMqStreamsByNamePurge().'
+                'Required parameter "purge" was null or undefined when calling postMqStreamByNamePurge().'
             );
         }
 
@@ -709,7 +709,7 @@ export class MqApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/mq/streams/{name}/purge`;
+        let urlPath = `/v1/mq/stream/{name}/purge`;
         urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
 
         const response = await this.request({
@@ -727,8 +727,8 @@ export class MqApi extends runtime.BaseAPI {
      * Removes messages from a stream, leaving its consumers in place.
      * Removes messages from a stream, leaving its consumers in place.
      */
-    async postMqStreamsByNamePurge(requestParameters: MqApiPostMqStreamsByNamePurgeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PurgeOut> {
-        const response = await this.postMqStreamsByNamePurgeRaw(requestParameters, initOverrides);
+    async postMqStreamByNamePurge(requestParameters: MqApiPostMqStreamByNamePurgeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PurgeOut> {
+        const response = await this.postMqStreamByNamePurgeRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -736,18 +736,18 @@ export class MqApi extends runtime.BaseAPI {
      * Creates a durable pull consumer on a stream and returns it.
      * Creates a durable pull consumer on a stream and returns it.
      */
-    async postMqStreamsByStreamConsumersRaw(requestParameters: MqApiPostMqStreamsByStreamConsumersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Consumer>> {
+    async postMqStreamByStreamConsumerRaw(requestParameters: MqApiPostMqStreamByStreamConsumerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Consumer>> {
         if (requestParameters['stream'] == null) {
             throw new runtime.RequiredError(
                 'stream',
-                'Required parameter "stream" was null or undefined when calling postMqStreamsByStreamConsumers().'
+                'Required parameter "stream" was null or undefined when calling postMqStreamByStreamConsumer().'
             );
         }
 
         if (requestParameters['makeIn'] == null) {
             throw new runtime.RequiredError(
                 'makeIn',
-                'Required parameter "makeIn" was null or undefined when calling postMqStreamsByStreamConsumers().'
+                'Required parameter "makeIn" was null or undefined when calling postMqStreamByStreamConsumer().'
             );
         }
 
@@ -766,7 +766,7 @@ export class MqApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/mq/streams/{stream}/consumers`;
+        let urlPath = `/v1/mq/stream/{stream}/consumer`;
         urlPath = urlPath.replace(`{${"stream"}}`, encodeURIComponent(String(requestParameters['stream'])));
 
         const response = await this.request({
@@ -784,8 +784,8 @@ export class MqApi extends runtime.BaseAPI {
      * Creates a durable pull consumer on a stream and returns it.
      * Creates a durable pull consumer on a stream and returns it.
      */
-    async postMqStreamsByStreamConsumers(requestParameters: MqApiPostMqStreamsByStreamConsumersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Consumer> {
-        const response = await this.postMqStreamsByStreamConsumersRaw(requestParameters, initOverrides);
+    async postMqStreamByStreamConsumer(requestParameters: MqApiPostMqStreamByStreamConsumerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Consumer> {
+        const response = await this.postMqStreamByStreamConsumerRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -793,25 +793,25 @@ export class MqApi extends runtime.BaseAPI {
      * Pulls the consumer\'s next batch. Delivered messages are acknowledged on delivery — the broker will not redeliver what this call returns; an empty wait answers 408.
      * Pulls the consumer\'s next batch.
      */
-    async postMqStreamsByStreamConsumersByNameNextRaw(requestParameters: MqApiPostMqStreamsByStreamConsumersByNameNextRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ReadOut>> {
+    async postMqStreamByStreamConsumerByNameNextRaw(requestParameters: MqApiPostMqStreamByStreamConsumerByNameNextRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ReadOut>> {
         if (requestParameters['stream'] == null) {
             throw new runtime.RequiredError(
                 'stream',
-                'Required parameter "stream" was null or undefined when calling postMqStreamsByStreamConsumersByNameNext().'
+                'Required parameter "stream" was null or undefined when calling postMqStreamByStreamConsumerByNameNext().'
             );
         }
 
         if (requestParameters['name'] == null) {
             throw new runtime.RequiredError(
                 'name',
-                'Required parameter "name" was null or undefined when calling postMqStreamsByStreamConsumersByNameNext().'
+                'Required parameter "name" was null or undefined when calling postMqStreamByStreamConsumerByNameNext().'
             );
         }
 
         if (requestParameters['nextIn'] == null) {
             throw new runtime.RequiredError(
                 'nextIn',
-                'Required parameter "nextIn" was null or undefined when calling postMqStreamsByStreamConsumersByNameNext().'
+                'Required parameter "nextIn" was null or undefined when calling postMqStreamByStreamConsumerByNameNext().'
             );
         }
 
@@ -830,7 +830,7 @@ export class MqApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/mq/streams/{stream}/consumers/{name}/next`;
+        let urlPath = `/v1/mq/stream/{stream}/consumer/{name}/next`;
         urlPath = urlPath.replace(`{${"stream"}}`, encodeURIComponent(String(requestParameters['stream'])));
         urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
 
@@ -849,8 +849,8 @@ export class MqApi extends runtime.BaseAPI {
      * Pulls the consumer\'s next batch. Delivered messages are acknowledged on delivery — the broker will not redeliver what this call returns; an empty wait answers 408.
      * Pulls the consumer\'s next batch.
      */
-    async postMqStreamsByStreamConsumersByNameNext(requestParameters: MqApiPostMqStreamsByStreamConsumersByNameNextRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ReadOut> {
-        const response = await this.postMqStreamsByStreamConsumersByNameNextRaw(requestParameters, initOverrides);
+    async postMqStreamByStreamConsumerByNameNext(requestParameters: MqApiPostMqStreamByStreamConsumerByNameNextRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ReadOut> {
+        const response = await this.postMqStreamByStreamConsumerByNameNextRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -858,18 +858,18 @@ export class MqApi extends runtime.BaseAPI {
      * Reconfigures an existing stream; the path names the stream, and the immutable fields (storage, retention) must restate what they are.
      * Reconfigures an existing stream; the path names the stream, and the immutable fields (storage, retention) must restate what they are.
      */
-    async putMqStreamsByNameRaw(requestParameters: MqApiPutMqStreamsByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Stream>> {
+    async putMqStreamByNameRaw(requestParameters: MqApiPutMqStreamByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Stream>> {
         if (requestParameters['name'] == null) {
             throw new runtime.RequiredError(
                 'name',
-                'Required parameter "name" was null or undefined when calling putMqStreamsByName().'
+                'Required parameter "name" was null or undefined when calling putMqStreamByName().'
             );
         }
 
         if (requestParameters['config'] == null) {
             throw new runtime.RequiredError(
                 'config',
-                'Required parameter "config" was null or undefined when calling putMqStreamsByName().'
+                'Required parameter "config" was null or undefined when calling putMqStreamByName().'
             );
         }
 
@@ -888,7 +888,7 @@ export class MqApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/mq/streams/{name}`;
+        let urlPath = `/v1/mq/stream/{name}`;
         urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
 
         const response = await this.request({
@@ -906,8 +906,8 @@ export class MqApi extends runtime.BaseAPI {
      * Reconfigures an existing stream; the path names the stream, and the immutable fields (storage, retention) must restate what they are.
      * Reconfigures an existing stream; the path names the stream, and the immutable fields (storage, retention) must restate what they are.
      */
-    async putMqStreamsByName(requestParameters: MqApiPutMqStreamsByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stream> {
-        const response = await this.putMqStreamsByNameRaw(requestParameters, initOverrides);
+    async putMqStreamByName(requestParameters: MqApiPutMqStreamByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stream> {
+        const response = await this.putMqStreamByNameRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
