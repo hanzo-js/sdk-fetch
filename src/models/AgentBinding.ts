@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,73 +20,89 @@ import { mapValues } from '../runtime.js';
  */
 export interface AgentBinding {
     /**
-     * 
+     * AgentName is the cloud Agent (/v1/agents) this machine runs — the agent a
+     * message to the bot is actually run against. It is the one field that decides
+     * what the bot DOES.
      * @type {string}
      * @memberof AgentBinding
      */
     agentName?: string;
     /**
-     * 
+     * BotVersion pins the @hanzo/bot runtime version the machine runs. Empty means
+     * the machine took the default in force when it was bound.
      * @type {string}
      * @memberof AgentBinding
      */
     botVersion?: string;
     /**
-     * 
+     * CreatedTime is when the binding was first made.
      * @type {string}
      * @memberof AgentBinding
      */
     createdTime?: string;
     /**
-     * 
+     * MachineId is the bound machine as vm addresses it, owner-qualified
+     * ("<org>/<machine>"). The unqualified half is what this surface's :id routes
+     * take.
      * @type {string}
      * @memberof AgentBinding
      */
     machineId?: string;
     /**
-     * 
+     * Message is vm's human-readable detail on Status ("machine provisioning;
+     * @hanzo/bot runtime not yet confirmed") — the reason behind the state, not a
+     * second state.
      * @type {string}
      * @memberof AgentBinding
      */
     message?: string;
     /**
-     * 
+     * Name is the binding's own key, which is the machine's id: a machine hosts at
+     * most one agent, so the binding is named for it. This is the key a bots list
+     * joins bindings onto machines by.
      * @type {string}
      * @memberof AgentBinding
      */
     name?: string;
     /**
-     * 
+     * Org is the Hanzo tenant the binding belongs to.
      * @type {string}
      * @memberof AgentBinding
      */
     org?: string;
     /**
-     * 
+     * Owner is the tenant vm filed the binding under, resolved from the ?owner it
+     * was called with — which is the caller's validated org and never a body field.
      * @type {string}
      * @memberof AgentBinding
      */
     owner?: string;
     /**
-     * 
+     * Provider is the cloud the bound machine runs on, carried here so a bindings
+     * list says where each bot lives without a second read per machine.
      * @type {string}
      * @memberof AgentBinding
      */
     provider?: string;
     /**
-     * 
+     * PublicIp is the bound machine's public address as vm recorded it on the
+     * binding. Empty while the machine has none yet.
      * @type {string}
      * @memberof AgentBinding
      */
     publicIp?: string;
     /**
-     * 
+     * Status is the binding's lifecycle in VM's OWN words — "Pending" while the
+     * machine provisions and the runtime is unconfirmed, "running" once vm has
+     * confirmed it. The vocabulary is vm's and passes through unmapped, which is
+     * why its capitalization does not match the machine states beside it, and it is
+     * vm's reconciled reading rather than anything asserted here.
      * @type {string}
      * @memberof AgentBinding
      */
     status?: string;
     /**
-     * 
+     * UpdatedTime is when vm last reconciled it — the age of Status.
      * @type {string}
      * @memberof AgentBinding
      */

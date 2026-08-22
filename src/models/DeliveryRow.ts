@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,55 +20,62 @@ import { mapValues } from '../runtime.js';
  */
 export interface DeliveryRow {
     /**
-     * 
+     * Attempt is which try this row is, starting at 1. The ladder waits 1s, then 5s,
+     * then 25s before the next one.
      * @type {number}
      * @memberof DeliveryRow
      */
     attempt?: number;
     /**
-     * 
+     * Created is when the attempt was made, RFC3339 in UTC.
      * @type {string}
      * @memberof DeliveryRow
      */
     created?: string;
     /**
-     * 
+     * DeliveryID groups the attempts for ONE event to ONE endpoint. Rows sharing it
+     * are the same delivery being retried, not separate events.
      * @type {string}
      * @memberof DeliveryRow
      */
     delivery?: string;
     /**
-     * 
+     * DurationMs is how long this attempt took end to end, in MILLISECONDS.
      * @type {number}
      * @memberof DeliveryRow
      */
     durationMs?: number;
     /**
-     * 
+     * EndpointID is which subscriber this attempt was for.
      * @type {string}
      * @memberof DeliveryRow
      */
     endpoint?: string;
     /**
-     * 
+     * Error says what went wrong on a non-ok attempt. Empty on success.
      * @type {string}
      * @memberof DeliveryRow
      */
     error?: string;
     /**
-     * 
+     * HTTPStatus is what the subscriber answered. ZERO means it never answered — a
+     * refused connection, a DNS failure or a timeout — which is why a zero here is
+     * not a 200.
      * @type {number}
      * @memberof DeliveryRow
      */
     httpStatus?: number;
     /**
-     * 
+     * Status is "ok" when the subscriber accepted it, "retrying" while a further
+     * attempt will follow, and "failed" when none will. Exactly one row of a delivery
+     * is terminal.
      * @type {string}
      * @memberof DeliveryRow
      */
     status?: string;
     /**
-     * 
+     * Subject is the event that was delivered ("commerce.order.created"). A manual
+     * test send carries "webhook.test".
      * @type {string}
      * @memberof DeliveryRow
      */

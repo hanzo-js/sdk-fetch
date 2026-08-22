@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -15,39 +15,16 @@
 
 import * as runtime from '../runtime.js';
 import type {
-  ActivityView,
-  BackfillQuery,
-  BackfillResult,
   DashResp,
-  LeaderboardView,
-  OptinView,
-  OrgOptinReq,
-  OrgOptinView,
   ReportReq,
   ReportResp,
   UsageAnalyticsAccess,
   UsageAnalyticsView,
   UsageSummary,
-  UserOptinReq,
-  UserOptinView,
 } from '../models/index.js';
 import {
-    ActivityViewFromJSON,
-    ActivityViewToJSON,
-    BackfillQueryFromJSON,
-    BackfillQueryToJSON,
-    BackfillResultFromJSON,
-    BackfillResultToJSON,
     DashRespFromJSON,
     DashRespToJSON,
-    LeaderboardViewFromJSON,
-    LeaderboardViewToJSON,
-    OptinViewFromJSON,
-    OptinViewToJSON,
-    OrgOptinReqFromJSON,
-    OrgOptinReqToJSON,
-    OrgOptinViewFromJSON,
-    OrgOptinViewToJSON,
     ReportReqFromJSON,
     ReportReqToJSON,
     ReportRespFromJSON,
@@ -58,18 +35,7 @@ import {
     UsageAnalyticsViewToJSON,
     UsageSummaryFromJSON,
     UsageSummaryToJSON,
-    UserOptinReqFromJSON,
-    UserOptinReqToJSON,
-    UserOptinViewFromJSON,
-    UserOptinViewToJSON,
 } from '../models/index.js';
-
-export interface UsageApiGetUsageActivityRequest {
-    subject?: string;
-    id?: string;
-    from?: string;
-    to?: string;
-}
 
 export interface UsageApiGetUsageAnalyticsRequest {
     end?: string;
@@ -80,13 +46,6 @@ export interface UsageApiGetUsageAnalyticsRequest {
 
 export interface UsageApiGetUsageAnalyticsAccessRequest {
     plan?: string;
-}
-
-export interface UsageApiGetUsageLeaderboardRequest {
-    scope?: string;
-    metric?: string;
-    period?: string;
-    limit?: number;
 }
 
 export interface UsageApiGetUsageSamplesRequest {
@@ -106,77 +65,10 @@ export interface UsageApiPostUsageRequest {
     reportReq: ReportReq;
 }
 
-export interface UsageApiPostUsageRollupBackfillRequest {
-    backfillQuery: BackfillQuery;
-}
-
-export interface UsageApiPutUsageLeaderboardOptinRequest {
-    userOptinReq: UserOptinReq;
-}
-
-export interface UsageApiPutUsageLeaderboardOptinOrgRequest {
-    orgOptinReq: OrgOptinReq;
-}
-
 /**
  * 
  */
 export class UsageApi extends runtime.BaseAPI {
-
-    /**
-     * Activity returns the per-day usage series for ONE authorized subject — the points a contribution heatmap and a timeline are drawn from, gap-filled so every day in the range is present. Authorization is resolved server-side from the validated principal, so a caller can never widen the subject past what they are entitled to: a non-admin reads only themselves and their own org. subject=project answers empty with a note, because the usage ledger records no project column yet. When the warehouse is not connected the series answers empty with available=false rather than fabricated days.
-     * Activity returns the per-day usage series for ONE authorized subject — the points a contribution heatmap and a timeline are drawn from, gap-filled so every day in the range is present.
-     */
-    async getUsageActivityRaw(requestParameters: UsageApiGetUsageActivityRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ActivityView>> {
-        const queryParameters: any = {};
-
-        if (requestParameters['subject'] != null) {
-            queryParameters['subject'] = requestParameters['subject'];
-        }
-
-        if (requestParameters['id'] != null) {
-            queryParameters['id'] = requestParameters['id'];
-        }
-
-        if (requestParameters['from'] != null) {
-            queryParameters['from'] = requestParameters['from'];
-        }
-
-        if (requestParameters['to'] != null) {
-            queryParameters['to'] = requestParameters['to'];
-        }
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/usage/activity`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => ActivityViewFromJSON(jsonValue));
-    }
-
-    /**
-     * Activity returns the per-day usage series for ONE authorized subject — the points a contribution heatmap and a timeline are drawn from, gap-filled so every day in the range is present. Authorization is resolved server-side from the validated principal, so a caller can never widen the subject past what they are entitled to: a non-admin reads only themselves and their own org. subject=project answers empty with a note, because the usage ledger records no project column yet. When the warehouse is not connected the series answers empty with available=false rather than fabricated days.
-     * Activity returns the per-day usage series for ONE authorized subject — the points a contribution heatmap and a timeline are drawn from, gap-filled so every day in the range is present.
-     */
-    async getUsageActivity(requestParameters: UsageApiGetUsageActivityRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ActivityView> {
-        const response = await this.getUsageActivityRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
 
     /**
      * Is the entitlement-GATED per-provider breakdown of the caller org\'s LLM usage — the paid lens over the same warehouse ledger GET /v1/usage/summary reads its totals from. Basic own-org usage stays ungated at /v1/usage/summary.  A plan that does not grant the analytics datastore is refused with 402, and an unresolvable plan fails closed to the free floor, which does not grant it. The window is clamped forward to the plan\'s retention entitlement, so a tenant can never read older than its plan allows even with a custom start. The response is marked no-store.  INTERIM (mirrors apps/world\'s limits echo): no org→plan resolver exists in cloud yet — the subscription lookup is owned by the billing plane and the gateway principal carries no plan claim — so the caller passes the plan and the gate resolves THAT plan\'s access.
@@ -273,100 +165,6 @@ export class UsageApi extends runtime.BaseAPI {
      */
     async getUsageAnalyticsAccess(requestParameters: UsageApiGetUsageAnalyticsAccessRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UsageAnalyticsAccess> {
         const response = await this.getUsageAnalyticsAccessRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Leaderboard ranks AI usage over a window, either the users of the caller\'s own org or organizations against each other, and always reports the caller\'s own standing even when it falls outside the returned page. Identities are private by default: a caller sees themselves, plus the peers or orgs that opted into public listing, and only an admin sees their own org\'s members named. Cross-org spend is restricted to platform admins. When the warehouse is not connected the board answers empty with available=false rather than a fabricated rank.
-     * Leaderboard ranks AI usage over a window, either the users of the caller\'s own org or organizations against each other, and always reports the caller\'s own standing even when it falls outside the returned page.
-     */
-    async getUsageLeaderboardRaw(requestParameters: UsageApiGetUsageLeaderboardRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LeaderboardView>> {
-        const queryParameters: any = {};
-
-        if (requestParameters['scope'] != null) {
-            queryParameters['scope'] = requestParameters['scope'];
-        }
-
-        if (requestParameters['metric'] != null) {
-            queryParameters['metric'] = requestParameters['metric'];
-        }
-
-        if (requestParameters['period'] != null) {
-            queryParameters['period'] = requestParameters['period'];
-        }
-
-        if (requestParameters['limit'] != null) {
-            queryParameters['limit'] = requestParameters['limit'];
-        }
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/usage/leaderboard`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => LeaderboardViewFromJSON(jsonValue));
-    }
-
-    /**
-     * Leaderboard ranks AI usage over a window, either the users of the caller\'s own org or organizations against each other, and always reports the caller\'s own standing even when it falls outside the returned page. Identities are private by default: a caller sees themselves, plus the peers or orgs that opted into public listing, and only an admin sees their own org\'s members named. Cross-org spend is restricted to platform admins. When the warehouse is not connected the board answers empty with available=false rather than a fabricated rank.
-     * Leaderboard ranks AI usage over a window, either the users of the caller\'s own org or organizations against each other, and always reports the caller\'s own standing even when it falls outside the returned page.
-     */
-    async getUsageLeaderboard(requestParameters: UsageApiGetUsageLeaderboardRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LeaderboardView> {
-        const response = await this.getUsageLeaderboardRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Returns the caller\'s own public-listing preference and their org\'s, each with whether the caller may change it. Public listing is opt-in and private by default, so a fresh caller reads listed=false for both.
-     * Returns the caller\'s own public-listing preference and their org\'s, each with whether the caller may change it.
-     */
-    async getUsageLeaderboardOptinRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OptinView>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/usage/leaderboard/optin`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => OptinViewFromJSON(jsonValue));
-    }
-
-    /**
-     * Returns the caller\'s own public-listing preference and their org\'s, each with whether the caller may change it. Public listing is opt-in and private by default, so a fresh caller reads listed=false for both.
-     * Returns the caller\'s own public-listing preference and their org\'s, each with whether the caller may change it.
-     */
-    async getUsageLeaderboardOptin(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OptinView> {
-        const response = await this.getUsageLeaderboardOptinRaw(initOverrides);
         return await response.value();
     }
 
@@ -477,7 +275,7 @@ export class UsageApi extends runtime.BaseAPI {
     }
 
     /**
-     * Ingests a batch of account-usage samples — what a developer\'s OWN AI accounts have consumed of their OWN plans, metered from each provider\'s own login — and appends them to the warehouse series. Answers 202.  Send either a `samples` array or one sample\'s fields at the top level. Every sample needs a provider, a machine and a known window class; an unknown window or kind is refused rather than silently rewritten, because a dash filled with a class nobody reported is worse than an error. There is no timestamp field: the server owns the observation clock, and a sample says which window it measured with windowStart or resetsAt.  It is FAIL-SOFT on storage: a warehouse outage costs a poll of history (stored:false), never a failed request. It records usage ONLY — the link registry is refreshed separately via POST /v1/links, so there is one and only one way to update an account row.
+     * Ingests a batch of account-usage samples — what a developer\'s OWN AI accounts have consumed of their OWN plans, metered from each provider\'s own login — and appends them to the warehouse series. Answers 202.  Send either a `samples` array or one sample\'s fields at the top level. Every sample needs a provider, a machine and a known window class; an unknown window or kind is refused rather than silently rewritten, because a dash filled with a class nobody reported is worse than an error. There is no timestamp field: the server owns the observation clock, and a sample says which window it measured with windowStart or resetsAt.  It is FAIL-SOFT on storage: a warehouse outage costs a poll of history (stored:false), never a failed request. It records usage ONLY — the link registry is refreshed separately via POST /v1/link, so there is one and only one way to update an account row.
      * Ingests a batch of account-usage samples — what a developer\'s OWN AI accounts have consumed of their OWN plans, metered from each provider\'s own login — and appends them to the warehouse series.
      */
     async postUsageRaw(requestParameters: UsageApiPostUsageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ReportResp>> {
@@ -517,158 +315,11 @@ export class UsageApi extends runtime.BaseAPI {
     }
 
     /**
-     * Ingests a batch of account-usage samples — what a developer\'s OWN AI accounts have consumed of their OWN plans, metered from each provider\'s own login — and appends them to the warehouse series. Answers 202.  Send either a `samples` array or one sample\'s fields at the top level. Every sample needs a provider, a machine and a known window class; an unknown window or kind is refused rather than silently rewritten, because a dash filled with a class nobody reported is worse than an error. There is no timestamp field: the server owns the observation clock, and a sample says which window it measured with windowStart or resetsAt.  It is FAIL-SOFT on storage: a warehouse outage costs a poll of history (stored:false), never a failed request. It records usage ONLY — the link registry is refreshed separately via POST /v1/links, so there is one and only one way to update an account row.
+     * Ingests a batch of account-usage samples — what a developer\'s OWN AI accounts have consumed of their OWN plans, metered from each provider\'s own login — and appends them to the warehouse series. Answers 202.  Send either a `samples` array or one sample\'s fields at the top level. Every sample needs a provider, a machine and a known window class; an unknown window or kind is refused rather than silently rewritten, because a dash filled with a class nobody reported is worse than an error. There is no timestamp field: the server owns the observation clock, and a sample says which window it measured with windowStart or resetsAt.  It is FAIL-SOFT on storage: a warehouse outage costs a poll of history (stored:false), never a failed request. It records usage ONLY — the link registry is refreshed separately via POST /v1/link, so there is one and only one way to update an account row.
      * Ingests a batch of account-usage samples — what a developer\'s OWN AI accounts have consumed of their OWN plans, metered from each provider\'s own login — and appends them to the warehouse series.
      */
     async postUsage(requestParameters: UsageApiPostUsageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ReportResp> {
         const response = await this.postUsageRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Backfill seeds the derived usage rollup from ledger history — the rows written before the incremental view existed, which that view can never capture. SuperAdmin only. Because the rollup accumulates, a second unguarded run would double every day it re-reads, so it refuses with 409 when the rollup already holds rows unless force=true is passed; forcing WILL double-count.
-     * Backfill seeds the derived usage rollup from ledger history — the rows written before the incremental view existed, which that view can never capture.
-     */
-    async postUsageRollupBackfillRaw(requestParameters: UsageApiPostUsageRollupBackfillRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BackfillResult>> {
-        if (requestParameters['backfillQuery'] == null) {
-            throw new runtime.RequiredError(
-                'backfillQuery',
-                'Required parameter "backfillQuery" was null or undefined when calling postUsageRollupBackfill().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/usage/rollup/backfill`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: BackfillQueryToJSON(requestParameters['backfillQuery']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => BackfillResultFromJSON(jsonValue));
-    }
-
-    /**
-     * Backfill seeds the derived usage rollup from ledger history — the rows written before the incremental view existed, which that view can never capture. SuperAdmin only. Because the rollup accumulates, a second unguarded run would double every day it re-reads, so it refuses with 409 when the rollup already holds rows unless force=true is passed; forcing WILL double-count.
-     * Backfill seeds the derived usage rollup from ledger history — the rows written before the incremental view existed, which that view can never capture.
-     */
-    async postUsageRollupBackfill(requestParameters: UsageApiPostUsageRollupBackfillRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BackfillResult> {
-        const response = await this.postUsageRollupBackfillRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Sets the CALLER\'s own public-listing preference on the leaderboard. Self only: the row written is keyed by the caller\'s validated ledger identity, so this can never edit another member\'s visibility whatever the request says. A caller opting in with no handle is given their username, so a listed row never renders as \"Anonymous\" to its own owner.
-     * Sets the CALLER\'s own public-listing preference on the leaderboard.
-     */
-    async putUsageLeaderboardOptinRaw(requestParameters: UsageApiPutUsageLeaderboardOptinRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserOptinView>> {
-        if (requestParameters['userOptinReq'] == null) {
-            throw new runtime.RequiredError(
-                'userOptinReq',
-                'Required parameter "userOptinReq" was null or undefined when calling putUsageLeaderboardOptin().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/usage/leaderboard/optin`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'PUT',
-            headers: headerParameters,
-            query: queryParameters,
-            body: UserOptinReqToJSON(requestParameters['userOptinReq']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => UserOptinViewFromJSON(jsonValue));
-    }
-
-    /**
-     * Sets the CALLER\'s own public-listing preference on the leaderboard. Self only: the row written is keyed by the caller\'s validated ledger identity, so this can never edit another member\'s visibility whatever the request says. A caller opting in with no handle is given their username, so a listed row never renders as \"Anonymous\" to its own owner.
-     * Sets the CALLER\'s own public-listing preference on the leaderboard.
-     */
-    async putUsageLeaderboardOptin(requestParameters: UsageApiPutUsageLeaderboardOptinRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserOptinView> {
-        const response = await this.putUsageLeaderboardOptinRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Sets the ORG\'s listing on the cross-org global board. Only an admin of the caller\'s own org — an org admin or a platform SuperAdmin — may change it, and the org written is the caller\'s validated tenant, never a value from the request. Listing consents to publishing the org\'s usage VOLUME; cross-org spend stays restricted to platform admins regardless.
-     * Sets the ORG\'s listing on the cross-org global board.
-     */
-    async putUsageLeaderboardOptinOrgRaw(requestParameters: UsageApiPutUsageLeaderboardOptinOrgRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OrgOptinView>> {
-        if (requestParameters['orgOptinReq'] == null) {
-            throw new runtime.RequiredError(
-                'orgOptinReq',
-                'Required parameter "orgOptinReq" was null or undefined when calling putUsageLeaderboardOptinOrg().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/usage/leaderboard/optin/org`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'PUT',
-            headers: headerParameters,
-            query: queryParameters,
-            body: OrgOptinReqToJSON(requestParameters['orgOptinReq']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => OrgOptinViewFromJSON(jsonValue));
-    }
-
-    /**
-     * Sets the ORG\'s listing on the cross-org global board. Only an admin of the caller\'s own org — an org admin or a platform SuperAdmin — may change it, and the org written is the caller\'s validated tenant, never a value from the request. Listing consents to publishing the org\'s usage VOLUME; cross-org spend stays restricted to platform admins regardless.
-     * Sets the ORG\'s listing on the cross-org global board.
-     */
-    async putUsageLeaderboardOptinOrg(requestParameters: UsageApiPutUsageLeaderboardOptinOrgRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OrgOptinView> {
-        const response = await this.putUsageLeaderboardOptinOrgRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

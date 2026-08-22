@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,55 +20,65 @@ import { mapValues } from '../runtime.js';
  */
 export interface TrialBalanceRow {
     /**
-     * 
+     * Account is the chart-of-accounts NUMBER this line reports on ("1000", "4000")
+     * — the stable posting key, not a display label.
      * @type {string}
      * @memberof TrialBalanceRow
      */
     account?: string;
     /**
-     * 
+     * ClosingCredit is that closing balance in cents when it is a credit balance.
      * @type {number}
      * @memberof TrialBalanceRow
      */
     closingCredit?: number;
     /**
-     * 
+     * ClosingDebit is the balance at the end of the window, in cents, when it is a
+     * debit balance. This is the column the report's totals are summed from.
      * @type {number}
      * @memberof TrialBalanceRow
      */
     closingDebit?: number;
     /**
-     * period movement
+     * Credit is the same window movement in cents when it was net credit.
      * @type {number}
      * @memberof TrialBalanceRow
      */
     credit?: number;
     /**
-     * period movement
+     * Debit is the account's MOVEMENT within the window — closing minus opening, not
+     * the closing balance — in cents, when that movement was net debit. Zero when the
+     * account moved net credit.
      * @type {number}
      * @memberof TrialBalanceRow
      */
     debit?: number;
     /**
-     * 
+     * Name is that account's human name from the fixed chart.
      * @type {string}
      * @memberof TrialBalanceRow
      */
     name?: string;
     /**
-     * 
+     * OpeningCredit is the same opening balance in cents when it fell on the credit
+     * side. Zero when the balance was a debit one.
      * @type {number}
      * @memberof TrialBalanceRow
      */
     openingCredit?: number;
     /**
-     * 
+     * OpeningDebit is the account's balance before the window began, in whole cents,
+     * when that balance was on the debit side. Zero when the balance was a credit
+     * one — the pair is exclusive, never two halves of one number.
      * @type {number}
      * @memberof TrialBalanceRow
      */
     openingDebit?: number;
     /**
-     * 
+     * Type is the account's fundamental class — asset, liability, income, expense or
+     * equity — which is also its normal balance side. It is carried for presentation
+     * and does NOT decide which column an amount lands in: placement follows the
+     * sign of the real net, so a contra balance shows up as one.
      * @type {string}
      * @memberof TrialBalanceRow
      */

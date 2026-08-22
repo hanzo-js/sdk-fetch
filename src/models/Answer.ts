@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -57,61 +57,69 @@ export interface Answer {
      */
     cold?: boolean;
     /**
-     * 
+     * Completions is complete's answer: the candidates at the position, typed and
+     * resolved through the repository's dependencies rather than guessed from text.
      * @type {Array<Completion>}
      * @memberof Answer
      */
     completions?: Array<Completion>;
     /**
-     * 
+     * Diagnostics is diagnostics' answer: every problem the server finds in the
+     * whole file, position ignored. Empty means it found none.
      * @type {Array<Diagnostic>}
      * @memberof Answer
      */
     diagnostics?: Array<Diagnostic>;
     /**
-     * 
+     * Hover is hover's answer: the type and documentation as the language server
+     * itself renders them, so it is prose meant to be shown, not parsed.
      * @type {string}
      * @memberof Answer
      */
     hover?: string;
     /**
-     * 
+     * Lang is the language the server that answered speaks ("go"), as the daemon
+     * reports it. Empty when the daemon named none.
      * @type {string}
      * @memberof Answer
      */
     lang?: string;
     /**
-     * 
+     * Locations is locate's answer: where the symbol is defined, referenced, typed
+     * or implemented, per the relation asked for. Empty means the server resolved
+     * nothing there, which is an answer.
      * @type {Array<Location>}
      * @memberof Answer
      */
     locations?: Array<Location>;
     /**
-     * 
+     * Op is the question that was asked: hover, locate, symbols, diagnostics or
+     * complete. It names which result field below is the populated one.
      * @type {string}
      * @memberof Answer
      */
     op?: string;
     /**
-     * 
+     * Path is the repo-relative file the question was about, echoed back.
      * @type {string}
      * @memberof Answer
      */
     path?: string;
     /**
-     * 
+     * Repo is the repository the question was about, echoed back.
      * @type {string}
      * @memberof Answer
      */
     repo?: string;
     /**
-     * 
+     * Rev is the RESOLVED commit sha, never the branch or tag that was asked for.
+     * It is what makes an answer re-askable: a branch moves, this does not.
      * @type {string}
      * @memberof Answer
      */
     rev?: string;
     /**
-     * 
+     * Symbols is symbols' answer: the file's whole outline, position ignored.
      * @type {Array<Symbol>}
      * @memberof Answer
      */

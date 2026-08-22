@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -59,6 +59,82 @@ export class MetricsApi extends runtime.BaseAPI {
     }
 
     /**
+     * Reports the native log store\'s live state for the calling tenant: the subsystem version and `records`, the count actually held right now rather than a constant. Not a dependency probe — the store is in-process, so this answers 200 whenever the process is up.  The tenant is the gateway-minted `X-Org-Id` header, falling back to the deployment brand and then `default`.
+     * How many log records this deployment holds for your org
+     */
+    async getMetricsLogsHealthRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/metrics/logs/health`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Reports the native log store\'s live state for the calling tenant: the subsystem version and `records`, the count actually held right now rather than a constant. Not a dependency probe — the store is in-process, so this answers 200 whenever the process is up.  The tenant is the gateway-minted `X-Org-Id` header, falling back to the deployment brand and then `default`.
+     * How many log records this deployment holds for your org
+     */
+    async getMetricsLogsHealth(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getMetricsLogsHealthRaw(initOverrides);
+    }
+
+    /**
+     * Answers `{count, records}`, newest first. `match` is the same `k=v,k2=v2` superset label matcher the metrics query uses; `contains` is a case-insensitive substring test against the record body; `start` and `end` are nanosecond bounds.  A bound that is absent, empty or unparseable becomes 0, which means UNBOUNDED — a malformed `start` widens the search rather than failing it. `limit` caps the page and defaults to 100 when absent or non-positive, so an unfiltered read is never the whole ring.  The tenant is the gateway-minted `X-Org-Id` header, falling back to the deployment brand and then `default`, so a search can only reach the org the edge asserted.
+     * Search your org\'s logs by label, time and substring
+     */
+    async getMetricsLogsQueryRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/metrics/logs/query`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Answers `{count, records}`, newest first. `match` is the same `k=v,k2=v2` superset label matcher the metrics query uses; `contains` is a case-insensitive substring test against the record body; `start` and `end` are nanosecond bounds.  A bound that is absent, empty or unparseable becomes 0, which means UNBOUNDED — a malformed `start` widens the search rather than failing it. `limit` caps the page and defaults to 100 when absent or non-positive, so an unfiltered read is never the whole ring.  The tenant is the gateway-minted `X-Org-Id` header, falling back to the deployment brand and then `default`, so a search can only reach the org the edge asserted.
+     * Search your org\'s logs by label, time and substring
+     */
+    async getMetricsLogsQuery(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getMetricsLogsQueryRaw(initOverrides);
+    }
+
+    /**
      * Answers `{count, series}`, where `count` is the number of matching SERIES and each series carries the samples that fall inside the window. `name` selects one series name, and an absent or empty `name` returns every series the org holds. `match` is a `k=v,k2=v2` label matcher applied as a SUPERSET test: a series matches when it carries all the named labels with those values, extra labels and all.  `start` and `end` are nanoseconds since the Unix epoch, and here is the rule worth knowing: a bound that is absent, empty or unparseable becomes 0, which this store reads as UNBOUNDED. A malformed `start` therefore silently widens the query instead of failing it. There is no limit parameter — the window and the matcher are the whole of what bounds the answer.  The tenant is the gateway-minted `X-Org-Id` header, falling back to the deployment brand and then `default`, so a query can only ever read the org the edge asserted.
      * Read your org\'s series back over a time range
      */
@@ -97,6 +173,120 @@ export class MetricsApi extends runtime.BaseAPI {
     }
 
     /**
+     * Reports the native trace store\'s live state for the calling tenant: the subsystem version and `spans`, the count actually held right now. Not a dependency probe — the store is in-process, so this answers 200 whenever the process is up.  The tenant is the gateway-minted `X-Org-Id` header, falling back to the deployment brand and then `default`.
+     * How many spans this deployment holds for your org
+     */
+    async getMetricsTracesHealthRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/metrics/traces/health`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Reports the native trace store\'s live state for the calling tenant: the subsystem version and `spans`, the count actually held right now. Not a dependency probe — the store is in-process, so this answers 200 whenever the process is up.  The tenant is the gateway-minted `X-Org-Id` header, falling back to the deployment brand and then `default`.
+     * How many spans this deployment holds for your org
+     */
+    async getMetricsTracesHealth(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getMetricsTracesHealthRaw(initOverrides);
+    }
+
+    /**
+     * Answers `{count, spans}`, newest first, filtered on each span\'s START time. `start` and `end` are nanosecond bounds where 0 — which is what an absent, empty or unparseable value becomes — means UNBOUNDED, so a malformed bound widens the listing instead of failing it. `limit` defaults to 100 when absent or non-positive.  It lists SPANS, not traces: several spans of one trace each count separately and each take a slot against `limit`. Assembling one trace is /v1/metrics/traces/trace. The tenant is the gateway-minted `X-Org-Id` header, falling back to the deployment brand and then `default`.
+     * Recent spans for your org over a time range
+     */
+    async getMetricsTracesQueryRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/metrics/traces/query`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Answers `{count, spans}`, newest first, filtered on each span\'s START time. `start` and `end` are nanosecond bounds where 0 — which is what an absent, empty or unparseable value becomes — means UNBOUNDED, so a malformed bound widens the listing instead of failing it. `limit` defaults to 100 when absent or non-positive.  It lists SPANS, not traces: several spans of one trace each count separately and each take a slot against `limit`. Assembling one trace is /v1/metrics/traces/trace. The tenant is the gateway-minted `X-Org-Id` header, falling back to the deployment brand and then `default`.
+     * Recent spans for your org over a time range
+     */
+    async getMetricsTracesQuery(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getMetricsTracesQueryRaw(initOverrides);
+    }
+
+    /**
+     * Answers `{spans}`: every span the org holds for the trace id in `id`, in the order they were appended, which is what a waterfall view renders. Unlike the other reads there is no count, no time range and no limit — a trace is addressed by id or not at all.  An id with no spans answers an EMPTY list, never a 404: the store cannot tell a trace that never existed from one whose spans retention has already dropped, so it does not pretend to. The tenant is the gateway-minted `X-Org-Id` header, falling back to the deployment brand and then `default`, and a trace id belonging to another org is simply not in this org\'s store.
+     * Every span of one trace — the waterfall
+     */
+    async getMetricsTracesTraceRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/metrics/traces/trace`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Answers `{spans}`: every span the org holds for the trace id in `id`, in the order they were appended, which is what a waterfall view renders. Unlike the other reads there is no count, no time range and no limit — a trace is addressed by id or not at all.  An id with no spans answers an EMPTY list, never a 404: the store cannot tell a trace that never existed from one whose spans retention has already dropped, so it does not pretend to. The tenant is the gateway-minted `X-Org-Id` header, falling back to the deployment brand and then `default`, and a trace id belonging to another org is simply not in this org\'s store.
+     * Every span of one trace — the waterfall
+     */
+    async getMetricsTracesTrace(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getMetricsTracesTraceRaw(initOverrides);
+    }
+
+    /**
      * Writes every sample in a luxfi/metric `MetricBatch` into the calling org\'s store and answers `{written}`: the number of SAMPLES stored, not families and not metrics. This is the exact wire shape the ZAP `MsgMetricBatch` transport carries, so the HTTP door and the optional ZAP push receiver share one code path and one meaning — the transport is an optimisation, never a different contract.  A counter or gauge lands as one sample. A histogram or summary contributes DERIVED `<name>_sum` and `<name>_count` series, so one metric can write more than one sample and `written` can exceed the number of metrics you sent. The batch\'s own `TimestampNs` stamps every sample it carries.  The tenant is the gateway-minted `X-Org-Id` header, falling back to the deployment brand and then `default`; each org gets its own store, WAL-durable under the deployment\'s data dir. A body that does not decode is 400.
      * Ingest a MetricBatch — the same payload the ZAP transport carries
      */
@@ -132,6 +322,82 @@ export class MetricsApi extends runtime.BaseAPI {
      */
     async postMetricsBatch(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.postMetricsBatchRaw(initOverrides);
+    }
+
+    /**
+     * Takes `{records:[{t, level, body, labels}]}`, appends each one, and answers `{written}`. Bodies are stored verbatim; `labels` are the indexed dimensions a query filters on, so what you do not label you can only find by substring.  `t` is NANOSECONDS since the Unix epoch. A record sent without one is stored at 0 and then falls outside any query carrying a lower bound — the usual reason a successful write does not read back. Retention is a bounded ring, 1048576 records per org, oldest evicted first. No record is validated or rejected, so `written` is the number of records SENT; only a body that does not decode at all is 400.  The tenant is the gateway-minted `X-Org-Id` header, falling back to the deployment brand and then `default`; each org\'s records live in its own WAL-durable store.
+     * Append structured log records for your org
+     */
+    async postMetricsLogsWriteRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/metrics/logs/write`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Takes `{records:[{t, level, body, labels}]}`, appends each one, and answers `{written}`. Bodies are stored verbatim; `labels` are the indexed dimensions a query filters on, so what you do not label you can only find by substring.  `t` is NANOSECONDS since the Unix epoch. A record sent without one is stored at 0 and then falls outside any query carrying a lower bound — the usual reason a successful write does not read back. Retention is a bounded ring, 1048576 records per org, oldest evicted first. No record is validated or rejected, so `written` is the number of records SENT; only a body that does not decode at all is 400.  The tenant is the gateway-minted `X-Org-Id` header, falling back to the deployment brand and then `default`; each org\'s records live in its own WAL-durable store.
+     * Append structured log records for your org
+     */
+    async postMetricsLogsWrite(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postMetricsLogsWriteRaw(initOverrides);
+    }
+
+    /**
+     * Takes `{spans:[{traceId, spanId, parentId, name, startNs, endNs, attrs}]}`, appends each, and answers `{written}` — the number of spans sent. Every span is indexed by its trace id as it lands, which is what makes the waterfall read possible without a second store.  Times are NANOSECONDS since the Unix epoch. Retention is a bounded ring of 1048576 spans per org: past that the OLDEST are evicted to keep the newest 1048576, and the trace index is rebuilt — so a long-lived trace can lose its early spans while its later ones survive, and a waterfall read is best-effort against retention, not a guarantee.  The tenant is the gateway-minted `X-Org-Id` header, falling back to the deployment brand and then `default`. A body that does not decode is 400.
+     * Append spans for your org
+     */
+    async postMetricsTracesWriteRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/metrics/traces/write`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Takes `{spans:[{traceId, spanId, parentId, name, startNs, endNs, attrs}]}`, appends each, and answers `{written}` — the number of spans sent. Every span is indexed by its trace id as it lands, which is what makes the waterfall read possible without a second store.  Times are NANOSECONDS since the Unix epoch. Retention is a bounded ring of 1048576 spans per org: past that the OLDEST are evicted to keep the newest 1048576, and the trace index is rebuilt — so a long-lived trace can lose its early spans while its later ones survive, and a waterfall read is best-effort against retention, not a guarantee.  The tenant is the gateway-minted `X-Org-Id` header, falling back to the deployment brand and then `default`. A body that does not decode is 400.
+     * Append spans for your org
+     */
+    async postMetricsTracesWrite(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postMetricsTracesWriteRaw(initOverrides);
     }
 
     /**

@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,7 +20,9 @@ import { mapValues } from '../runtime.js';
  */
 export interface SampleIngest {
     /**
-     * 
+     * GPUModel names the representative accelerator ("GB10"); GPUs carries how
+     * many. A heterogeneous host names its first card rather than inventing a
+     * summary.
      * @type {string}
      * @memberof SampleIngest
      */
@@ -33,8 +35,7 @@ export interface SampleIngest {
      */
     gpuUtil?: number;
     /**
-     * GPUs is how many accelerators the reading covers, GPUModel the representative
-     * model name.
+     * GPUs is how many accelerators this reading covers.
      * @type {number}
      * @memberof SampleIngest
      */
@@ -46,13 +47,13 @@ export interface SampleIngest {
      */
     host?: string;
     /**
-     * 
+     * MemFree is host memory still available, in BYTES.
      * @type {number}
      * @memberof SampleIngest
      */
     memFree?: number;
     /**
-     * MemUsed and MemFree are host memory in bytes.
+     * MemUsed is host memory in use, in BYTES.
      * @type {number}
      * @memberof SampleIngest
      */

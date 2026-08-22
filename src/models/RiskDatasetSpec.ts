@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -37,8 +37,8 @@ export interface RiskDatasetSpec {
      */
     dims?: Array<string>;
     /**
-     * From and To bound the event window, half-open, RFC 3339. The window may not
-     * be longer than the source's own retention: past that, its older half is
+     * From is where the event window opens, RFC 3339, INCLUSIVE. The window may
+     * not be longer than the source's own retention: past that, its older half is
      * already gone and the dataset would silently be shorter than it says.
      * @type {string}
      * @memberof RiskDatasetSpec
@@ -84,7 +84,9 @@ export interface RiskDatasetSpec {
      */
     seed?: string;
     /**
-     * 
+     * To is where the window ends, EXCLUSIVE, so two datasets meeting at one
+     * instant share no row. A materialisation reads less than this — the end is
+     * pulled back by Horizon, and the lineage reports the window it actually read.
      * @type {string}
      * @memberof RiskDatasetSpec
      */

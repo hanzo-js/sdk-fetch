@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -14,26 +14,6 @@
 
 
 import * as runtime from '../runtime.js';
-
-export interface TasksApiDeleteTasksByWildcard1Request {
-    wildcard1: string;
-}
-
-export interface TasksApiGetTasksByWildcard1Request {
-    wildcard1: string;
-}
-
-export interface TasksApiPatchTasksByWildcard1Request {
-    wildcard1: string;
-}
-
-export interface TasksApiPostTasksByWildcard1Request {
-    wildcard1: string;
-}
-
-export interface TasksApiPutTasksByWildcard1Request {
-    wildcard1: string;
-}
 
 /**
  * 
@@ -79,52 +59,6 @@ export class TasksApi extends runtime.BaseAPI {
     }
 
     /**
-     * Removes a resource the engine owns — a namespace and the like — inside the caller\'s own tenant shard.  It is the narrowest of the three working methods: most of the engine\'s surface is read on GET and acted on with POST, so a delete that finds no route for its path answers the same plain-text 404 any unrouted path does.  This single address fronts the whole durable-workflow engine — namespaces, workflows, schedules, batches, deployments, nexus, task queues, workers, activities and the rest — matched by path segment inside the engine\'s own router, which is why the document publishes one wildcard rather than sixty-four operations.  Most of it requires a validated principal and is refused 403 otherwise; the settings and cluster probes are open, because capability flags and cluster health carry no tenant data. A principal that is validated but carries NO org is refused too — that request would otherwise read the shared unscoped store instead of anyone\'s shard, so it fails closed. Admitted, the org, project and user are threaded into the engine, and every read and write lands in that tenant\'s own shard.  Two things about the answers differ from the rest of this API and will bite a generic client: errors here carry `code` as a NUMBER rather than the usual `status`, and the address serves several content types — JSON, plain-text refusals, and an event stream at the events path. Until the engine is wired the whole surface answers 503.
-     * Delete an engine resource
-     */
-    async deleteTasksByWildcard1Raw(requestParameters: TasksApiDeleteTasksByWildcard1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters['wildcard1'] == null) {
-            throw new runtime.RequiredError(
-                'wildcard1',
-                'Required parameter "wildcard1" was null or undefined when calling deleteTasksByWildcard1().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/tasks/{wildcard1}`;
-        urlPath = urlPath.replace(`{${"wildcard1"}}`, encodeURIComponent(String(requestParameters['wildcard1'])));
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'DELETE',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Removes a resource the engine owns — a namespace and the like — inside the caller\'s own tenant shard.  It is the narrowest of the three working methods: most of the engine\'s surface is read on GET and acted on with POST, so a delete that finds no route for its path answers the same plain-text 404 any unrouted path does.  This single address fronts the whole durable-workflow engine — namespaces, workflows, schedules, batches, deployments, nexus, task queues, workers, activities and the rest — matched by path segment inside the engine\'s own router, which is why the document publishes one wildcard rather than sixty-four operations.  Most of it requires a validated principal and is refused 403 otherwise; the settings and cluster probes are open, because capability flags and cluster health carry no tenant data. A principal that is validated but carries NO org is refused too — that request would otherwise read the shared unscoped store instead of anyone\'s shard, so it fails closed. Admitted, the org, project and user are threaded into the engine, and every read and write lands in that tenant\'s own shard.  Two things about the answers differ from the rest of this API and will bite a generic client: errors here carry `code` as a NUMBER rather than the usual `status`, and the address serves several content types — JSON, plain-text refusals, and an event stream at the events path. Until the engine is wired the whole surface answers 503.
-     * Delete an engine resource
-     */
-    async deleteTasksByWildcard1(requestParameters: TasksApiDeleteTasksByWildcard1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.deleteTasksByWildcard1Raw(requestParameters, initOverrides);
-    }
-
-    /**
      * Answers 307 with Location /v1/tasks/ — this address serves nothing itself. The redirect is a routing fact derived from the engine\'s subtree, decided before any handler runs, so it is the same on every method.  A 307 preserves both the method and the body, so a client that follows redirects re-sends the request unchanged to /v1/tasks/ and nothing is lost. A client that does NOT follow redirects sees only the 307 and performs no work — address /v1/tasks/ directly and the hop disappears.
      * Redirect to the tasks API root
      */
@@ -160,52 +94,6 @@ export class TasksApi extends runtime.BaseAPI {
      */
     async getTasks(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.getTasksRaw(initOverrides);
-    }
-
-    /**
-     * Reads from the durable engine: list namespaces, workflows, schedules, batches, deployments, task queues, workers and search attributes, fetch one workflow with its history, or subscribe to the realtime event stream. The cluster and settings probes are on this method too.  This single address fronts the whole durable-workflow engine — namespaces, workflows, schedules, batches, deployments, nexus, task queues, workers, activities and the rest — matched by path segment inside the engine\'s own router, which is why the document publishes one wildcard rather than sixty-four operations.  Most of it requires a validated principal and is refused 403 otherwise; the settings and cluster probes are open, because capability flags and cluster health carry no tenant data. A principal that is validated but carries NO org is refused too — that request would otherwise read the shared unscoped store instead of anyone\'s shard, so it fails closed. Admitted, the org, project and user are threaded into the engine, and every read and write lands in that tenant\'s own shard.  Two things about the answers differ from the rest of this API and will bite a generic client: errors here carry `code` as a NUMBER rather than the usual `status`, and the address serves several content types — JSON, plain-text refusals, and an event stream at the events path. Until the engine is wired the whole surface answers 503.
-     * Read workflow state from the durable engine
-     */
-    async getTasksByWildcard1Raw(requestParameters: TasksApiGetTasksByWildcard1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters['wildcard1'] == null) {
-            throw new runtime.RequiredError(
-                'wildcard1',
-                'Required parameter "wildcard1" was null or undefined when calling getTasksByWildcard1().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/tasks/{wildcard1}`;
-        urlPath = urlPath.replace(`{${"wildcard1"}}`, encodeURIComponent(String(requestParameters['wildcard1'])));
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Reads from the durable engine: list namespaces, workflows, schedules, batches, deployments, task queues, workers and search attributes, fetch one workflow with its history, or subscribe to the realtime event stream. The cluster and settings probes are on this method too.  This single address fronts the whole durable-workflow engine — namespaces, workflows, schedules, batches, deployments, nexus, task queues, workers, activities and the rest — matched by path segment inside the engine\'s own router, which is why the document publishes one wildcard rather than sixty-four operations.  Most of it requires a validated principal and is refused 403 otherwise; the settings and cluster probes are open, because capability flags and cluster health carry no tenant data. A principal that is validated but carries NO org is refused too — that request would otherwise read the shared unscoped store instead of anyone\'s shard, so it fails closed. Admitted, the org, project and user are threaded into the engine, and every read and write lands in that tenant\'s own shard.  Two things about the answers differ from the rest of this API and will bite a generic client: errors here carry `code` as a NUMBER rather than the usual `status`, and the address serves several content types — JSON, plain-text refusals, and an event stream at the events path. Until the engine is wired the whole surface answers 503.
-     * Read workflow state from the durable engine
-     */
-    async getTasksByWildcard1(requestParameters: TasksApiGetTasksByWildcard1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getTasksByWildcard1Raw(requestParameters, initOverrides);
     }
 
     /**
@@ -247,52 +135,6 @@ export class TasksApi extends runtime.BaseAPI {
     }
 
     /**
-     * Published because this address accepts every method, but the engine routes no PATCH: the answer is a plain-text 404, not a 405, and no state changes.  There is no partial update on this surface. State advances by appending events, so the operations that change a running workflow — signal, cancel, terminate, reset — are all POST.  This single address fronts the whole durable-workflow engine — namespaces, workflows, schedules, batches, deployments, nexus, task queues, workers, activities and the rest — matched by path segment inside the engine\'s own router, which is why the document publishes one wildcard rather than sixty-four operations.  Most of it requires a validated principal and is refused 403 otherwise; the settings and cluster probes are open, because capability flags and cluster health carry no tenant data. A principal that is validated but carries NO org is refused too — that request would otherwise read the shared unscoped store instead of anyone\'s shard, so it fails closed. Admitted, the org, project and user are threaded into the engine, and every read and write lands in that tenant\'s own shard.  Two things about the answers differ from the rest of this API and will bite a generic client: errors here carry `code` as a NUMBER rather than the usual `status`, and the address serves several content types — JSON, plain-text refusals, and an event stream at the events path. Until the engine is wired the whole surface answers 503.
-     * Not served by the engine
-     */
-    async patchTasksByWildcard1Raw(requestParameters: TasksApiPatchTasksByWildcard1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters['wildcard1'] == null) {
-            throw new runtime.RequiredError(
-                'wildcard1',
-                'Required parameter "wildcard1" was null or undefined when calling patchTasksByWildcard1().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/tasks/{wildcard1}`;
-        urlPath = urlPath.replace(`{${"wildcard1"}}`, encodeURIComponent(String(requestParameters['wildcard1'])));
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'PATCH',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Published because this address accepts every method, but the engine routes no PATCH: the answer is a plain-text 404, not a 405, and no state changes.  There is no partial update on this surface. State advances by appending events, so the operations that change a running workflow — signal, cancel, terminate, reset — are all POST.  This single address fronts the whole durable-workflow engine — namespaces, workflows, schedules, batches, deployments, nexus, task queues, workers, activities and the rest — matched by path segment inside the engine\'s own router, which is why the document publishes one wildcard rather than sixty-four operations.  Most of it requires a validated principal and is refused 403 otherwise; the settings and cluster probes are open, because capability flags and cluster health carry no tenant data. A principal that is validated but carries NO org is refused too — that request would otherwise read the shared unscoped store instead of anyone\'s shard, so it fails closed. Admitted, the org, project and user are threaded into the engine, and every read and write lands in that tenant\'s own shard.  Two things about the answers differ from the rest of this API and will bite a generic client: errors here carry `code` as a NUMBER rather than the usual `status`, and the address serves several content types — JSON, plain-text refusals, and an event stream at the events path. Until the engine is wired the whole surface answers 503.
-     * Not served by the engine
-     */
-    async patchTasksByWildcard1(requestParameters: TasksApiPatchTasksByWildcard1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.patchTasksByWildcard1Raw(requestParameters, initOverrides);
-    }
-
-    /**
      * Answers 307 with Location /v1/tasks/ — this address serves nothing itself. The redirect is a routing fact derived from the engine\'s subtree, decided before any handler runs, so it is the same on every method.  A 307 preserves both the method and the body, so a client that follows redirects re-sends the request unchanged to /v1/tasks/ and nothing is lost. A client that does NOT follow redirects sees only the 307 and performs no work — address /v1/tasks/ directly and the hop disappears.
      * Redirect to the tasks API root
      */
@@ -331,52 +173,6 @@ export class TasksApi extends runtime.BaseAPI {
     }
 
     /**
-     * Everything that changes the engine\'s state: register a namespace, start a workflow or signal-with-start one, and signal, query, cancel, terminate or reset a workflow that is already running. The MCP tool surface is on this method as well, and is the one part of it that refuses a non-POST with a plain-text 405.  The engine is event-sourced and exactly-once, so an action is durable once it is accepted and survives a process crash — a started workflow resumes rather than restarts.  This single address fronts the whole durable-workflow engine — namespaces, workflows, schedules, batches, deployments, nexus, task queues, workers, activities and the rest — matched by path segment inside the engine\'s own router, which is why the document publishes one wildcard rather than sixty-four operations.  Most of it requires a validated principal and is refused 403 otherwise; the settings and cluster probes are open, because capability flags and cluster health carry no tenant data. A principal that is validated but carries NO org is refused too — that request would otherwise read the shared unscoped store instead of anyone\'s shard, so it fails closed. Admitted, the org, project and user are threaded into the engine, and every read and write lands in that tenant\'s own shard.  Two things about the answers differ from the rest of this API and will bite a generic client: errors here carry `code` as a NUMBER rather than the usual `status`, and the address serves several content types — JSON, plain-text refusals, and an event stream at the events path. Until the engine is wired the whole surface answers 503.
-     * Start workflows and act on running ones
-     */
-    async postTasksByWildcard1Raw(requestParameters: TasksApiPostTasksByWildcard1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters['wildcard1'] == null) {
-            throw new runtime.RequiredError(
-                'wildcard1',
-                'Required parameter "wildcard1" was null or undefined when calling postTasksByWildcard1().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/tasks/{wildcard1}`;
-        urlPath = urlPath.replace(`{${"wildcard1"}}`, encodeURIComponent(String(requestParameters['wildcard1'])));
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Everything that changes the engine\'s state: register a namespace, start a workflow or signal-with-start one, and signal, query, cancel, terminate or reset a workflow that is already running. The MCP tool surface is on this method as well, and is the one part of it that refuses a non-POST with a plain-text 405.  The engine is event-sourced and exactly-once, so an action is durable once it is accepted and survives a process crash — a started workflow resumes rather than restarts.  This single address fronts the whole durable-workflow engine — namespaces, workflows, schedules, batches, deployments, nexus, task queues, workers, activities and the rest — matched by path segment inside the engine\'s own router, which is why the document publishes one wildcard rather than sixty-four operations.  Most of it requires a validated principal and is refused 403 otherwise; the settings and cluster probes are open, because capability flags and cluster health carry no tenant data. A principal that is validated but carries NO org is refused too — that request would otherwise read the shared unscoped store instead of anyone\'s shard, so it fails closed. Admitted, the org, project and user are threaded into the engine, and every read and write lands in that tenant\'s own shard.  Two things about the answers differ from the rest of this API and will bite a generic client: errors here carry `code` as a NUMBER rather than the usual `status`, and the address serves several content types — JSON, plain-text refusals, and an event stream at the events path. Until the engine is wired the whole surface answers 503.
-     * Start workflows and act on running ones
-     */
-    async postTasksByWildcard1(requestParameters: TasksApiPostTasksByWildcard1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postTasksByWildcard1Raw(requestParameters, initOverrides);
-    }
-
-    /**
      * Answers 307 with Location /v1/tasks/ — this address serves nothing itself. The redirect is a routing fact derived from the engine\'s subtree, decided before any handler runs, so it is the same on every method.  A 307 preserves both the method and the body, so a client that follows redirects re-sends the request unchanged to /v1/tasks/ and nothing is lost. A client that does NOT follow redirects sees only the 307 and performs no work — address /v1/tasks/ directly and the hop disappears.
      * Redirect to the tasks API root
      */
@@ -412,52 +208,6 @@ export class TasksApi extends runtime.BaseAPI {
      */
     async putTasks(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.putTasksRaw(initOverrides);
-    }
-
-    /**
-     * Published because this address accepts every method, but the engine routes no PUT: the answer is a plain-text 404, not a 405, and no state changes.  Nothing here is updated by replacement. The engine is event-sourced — a workflow is changed by signalling, cancelling, terminating or resetting it, all of which are POST — so a client reaching for PUT wants POST.  This single address fronts the whole durable-workflow engine — namespaces, workflows, schedules, batches, deployments, nexus, task queues, workers, activities and the rest — matched by path segment inside the engine\'s own router, which is why the document publishes one wildcard rather than sixty-four operations.  Most of it requires a validated principal and is refused 403 otherwise; the settings and cluster probes are open, because capability flags and cluster health carry no tenant data. A principal that is validated but carries NO org is refused too — that request would otherwise read the shared unscoped store instead of anyone\'s shard, so it fails closed. Admitted, the org, project and user are threaded into the engine, and every read and write lands in that tenant\'s own shard.  Two things about the answers differ from the rest of this API and will bite a generic client: errors here carry `code` as a NUMBER rather than the usual `status`, and the address serves several content types — JSON, plain-text refusals, and an event stream at the events path. Until the engine is wired the whole surface answers 503.
-     * Not served by the engine
-     */
-    async putTasksByWildcard1Raw(requestParameters: TasksApiPutTasksByWildcard1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters['wildcard1'] == null) {
-            throw new runtime.RequiredError(
-                'wildcard1',
-                'Required parameter "wildcard1" was null or undefined when calling putTasksByWildcard1().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/tasks/{wildcard1}`;
-        urlPath = urlPath.replace(`{${"wildcard1"}}`, encodeURIComponent(String(requestParameters['wildcard1'])));
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'PUT',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Published because this address accepts every method, but the engine routes no PUT: the answer is a plain-text 404, not a 405, and no state changes.  Nothing here is updated by replacement. The engine is event-sourced — a workflow is changed by signalling, cancelling, terminating or resetting it, all of which are POST — so a client reaching for PUT wants POST.  This single address fronts the whole durable-workflow engine — namespaces, workflows, schedules, batches, deployments, nexus, task queues, workers, activities and the rest — matched by path segment inside the engine\'s own router, which is why the document publishes one wildcard rather than sixty-four operations.  Most of it requires a validated principal and is refused 403 otherwise; the settings and cluster probes are open, because capability flags and cluster health carry no tenant data. A principal that is validated but carries NO org is refused too — that request would otherwise read the shared unscoped store instead of anyone\'s shard, so it fails closed. Admitted, the org, project and user are threaded into the engine, and every read and write lands in that tenant\'s own shard.  Two things about the answers differ from the rest of this API and will bite a generic client: errors here carry `code` as a NUMBER rather than the usual `status`, and the address serves several content types — JSON, plain-text refusals, and an event stream at the events path. Until the engine is wired the whole surface answers 503.
-     * Not served by the engine
-     */
-    async putTasksByWildcard1(requestParameters: TasksApiPutTasksByWildcard1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.putTasksByWildcard1Raw(requestParameters, initOverrides);
     }
 
 }

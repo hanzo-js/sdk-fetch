@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,25 +20,32 @@ import { mapValues } from '../runtime.js';
  */
 export interface BalanceLine {
     /**
-     * 
+     * Account is the chart-of-accounts number this line reports on. ABSENT marks a
+     * DERIVED line that no account holds — retained earnings is the one such line,
+     * computed from cumulative income minus expense.
      * @type {string}
      * @memberof BalanceLine
      */
     account?: string;
     /**
-     * cents, display sign
+     * Amount is the balance as of the statement date, in whole cents, in its NATURAL
+     * sign: positive when the account behaved normally, on all three sides. Assets
+     * are debit-normal and shown as stored; liabilities and equity are credit-normal
+     * and flipped once here for display. A negative asset is a real overdraft, not a
+     * sign convention.
      * @type {number}
      * @memberof BalanceLine
      */
     amount?: number;
     /**
-     * 
+     * Name is the account's human name, or the derived line's own name.
      * @type {string}
      * @memberof BalanceLine
      */
     name?: string;
     /**
-     * 
+     * Type is the account's fundamental class. Absent on a derived line, which
+     * belongs to no account and therefore has none.
      * @type {string}
      * @memberof BalanceLine
      */

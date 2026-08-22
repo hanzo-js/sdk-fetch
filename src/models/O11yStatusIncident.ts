@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -28,7 +28,10 @@ import {
  */
 export interface O11yStatusIncident {
     /**
-     * 
+     * AffectedComponents is what this incident covers. It is COUNTED rather than
+     * classified: some services down is a partial outage and every probed service
+     * down is a full one, because deciding that one service is critical and another
+     * is not would need a judgement nobody has measured.
      * @type {Array<O11yStatusComponent>}
      * @memberof O11yStatusIncident
      */
@@ -41,7 +44,8 @@ export interface O11yStatusIncident {
      */
     currentWorstImpact?: string;
     /**
-     * 
+     * ID is derived from the service, so the same outage keeps one id across reads
+     * rather than being reported as a new incident every 15 seconds.
      * @type {string}
      * @memberof O11yStatusIncident
      */
@@ -54,25 +58,30 @@ export interface O11yStatusIncident {
      */
     lastUpdateAt?: string;
     /**
-     * 
+     * LastUpdateMessage says what was observed, not what is being done about it —
+     * there is no operator writing updates here, only the probe that failed.
      * @type {string}
      * @memberof O11yStatusIncident
      */
     lastUpdateMessage?: string;
     /**
-     * 
+     * Name is the one-line headline, built from the service that stopped answering.
      * @type {string}
      * @memberof O11yStatusIncident
      */
     name?: string;
     /**
-     * 
+     * Status is always "investigating" — the member of the client's closed set that
+     * means detected, cause not yet established, which is exactly what an automated
+     * prober knows. Nothing here ever claims "identified": that would assert a
+     * diagnosis no measurement made.
      * @type {string}
      * @memberof O11yStatusIncident
      */
     status?: string;
     /**
-     * 
+     * URL points at the HUMAN status page, not back at this JSON. Every link in this
+     * document goes to the same place.
      * @type {string}
      * @memberof O11yStatusIncident
      */

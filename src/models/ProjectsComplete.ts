@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,19 +20,19 @@ import { mapValues } from '../runtime.js';
  */
 export interface ProjectsComplete {
     /**
-     * 
+     * Bytes is their total size in bytes.
      * @type {number}
      * @memberof ProjectsComplete
      */
     bytes?: number;
     /**
-     * 
+     * Commit is the revision that was built, recorded on the deployment.
      * @type {string}
      * @memberof ProjectsComplete
      */
     commit?: string;
     /**
-     * 
+     * Files is how many objects CI published.
      * @type {number}
      * @memberof ProjectsComplete
      */
@@ -54,13 +54,15 @@ export interface ProjectsComplete {
      */
     keys?: Array<string>;
     /**
-     * 
+     * LiveURL is a HINT at the address the site should serve at. The public host is
+     * claimed by cloud first, so this can refine the URL a deployment reports but
+     * can never assert a subdomain another tenant holds.
      * @type {string}
      * @memberof ProjectsComplete
      */
     liveUrl?: string;
     /**
-     * 
+     * Message is what happened, in words — on an error completion, why it failed.
      * @type {string}
      * @memberof ProjectsComplete
      */
@@ -72,7 +74,8 @@ export interface ProjectsComplete {
      */
     slug?: string;
     /**
-     * live | error
+     * Status is how the build ended: `live` if it succeeded, `error` if it did not.
+     * Nothing else is accepted.
      * @type {string}
      * @memberof ProjectsComplete
      */

@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,43 +20,55 @@ import { mapValues } from '../runtime.js';
  */
 export interface TodoProject {
     /**
-     * 
+     * CreatedAt is when the board was created, in unix seconds. 0 on a forge board
+     * for the same reason Description is absent.
      * @type {number}
      * @memberof TodoProject
      */
     createdAt?: number;
     /**
-     * 
+     * Description is whatever an index board was created with. Absent on a forge
+     * board: this projection takes the repository's name and nothing else about the
+     * repository.
      * @type {string}
      * @memberof TodoProject
      */
     description?: string;
     /**
-     * 
+     * ID is the board's opaque handle, and it is NOT how you address it — Key is.
+     * Its shape says which source answered: a forge board's is the repository's
+     * full name ("hanzoai/cloud"), an index board's a minted "prj_" id.
      * @type {string}
      * @memberof TodoProject
      */
     id?: string;
     /**
-     * 
+     * Key addresses the board everywhere else — /v1/todo/projects/<key>/issues —
+     * and prefixes every issue identifier on it. An index board's key is 2-8
+     * uppercase alphanumerics starting with a letter ("ENG", "OPS2") and is matched
+     * case-insensitively; a forge board's is the repository name as the forge
+     * spells it.
      * @type {string}
      * @memberof TodoProject
      */
     key?: string;
     /**
-     * 
+     * Name is the board's display name. For a forge board it is the repository
+     * name, so it equals Key; an index board carries its own.
      * @type {string}
      * @memberof TodoProject
      */
     name?: string;
     /**
-     * 
+     * Org is the IAM org the board belongs to, taken from the validated principal
+     * and never from the request. Every board a caller can see is in it.
      * @type {string}
      * @memberof TodoProject
      */
     org?: string;
     /**
-     * 
+     * UpdatedAt is when the board record last changed, in unix seconds — the BOARD,
+     * not the work on it, so filing an issue does not move it. 0 on a forge board.
      * @type {number}
      * @memberof TodoProject
      */

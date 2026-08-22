@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -79,7 +79,7 @@ export interface CodingStartIn {
      * ReplyChannel / ReplyThread are WHERE THE RUN NARRATES ITSELF, when the door
      * that started it has somewhere for it to talk. Empty means nobody is
      * listening and the run simply does not narrate — which is the app door's
-     * case, because /v1/coding hands back a session id and the session stream is
+     * case, because /v1/agents/coding hands back a session id and the session stream is
      * a better progress feed than any message could be.
      * 
      * It is an ADDRESS and not a token: the engine says "put this text there",
@@ -91,7 +91,12 @@ export interface CodingStartIn {
      */
     replyChannel?: string;
     /**
+     * ReplyThread narrows that address to one THREAD inside the channel: on Slack
+     * it is the parent message's ts, the same value a reply carries as thread_ts.
+     * Empty puts the run's status line at the top level of the channel instead.
      * 
+     * The channel is what decides whether a run narrates at all, so this on its own
+     * addresses nothing — a thread with no ReplyChannel is a run nobody hears.
      * @type {string}
      * @memberof CodingStartIn
      */

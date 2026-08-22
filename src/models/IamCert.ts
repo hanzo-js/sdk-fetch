@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -120,12 +120,6 @@ export interface IamCert {
      * @type {string}
      * @memberof IamCert
      */
-    privateKey?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof IamCert
-     */
     provider?: string;
     /**
      * 
@@ -180,7 +174,6 @@ export function IamCertFromJSONTyped(json: any, ignoreDiscriminator: boolean): I
         'id': json['id'] == null ? undefined : json['id'],
         'name': json['name'] == null ? undefined : json['name'],
         'owner': json['owner'] == null ? undefined : json['owner'],
-        'privateKey': json['privateKey'] == null ? undefined : json['privateKey'],
         'provider': json['provider'] == null ? undefined : json['provider'],
         'scope': json['scope'] == null ? undefined : json['scope'],
         'type': json['type'] == null ? undefined : json['type'],
@@ -215,7 +208,6 @@ export function IamCertToJSONTyped(value?: IamCert | null, ignoreDiscriminator: 
         'id': value['id'],
         'name': value['name'],
         'owner': value['owner'],
-        'privateKey': value['privateKey'],
         'provider': value['provider'],
         'scope': value['scope'],
         'type': value['type'],

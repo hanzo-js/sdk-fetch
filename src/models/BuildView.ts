@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -28,67 +28,78 @@ import {
  */
 export interface BuildView {
     /**
-     * 
+     * Agent is the label the surface that did the work calls itself by.
      * @type {string}
      * @memberof BuildView
      */
     agent?: string;
     /**
-     * 
+     * EndedAt is when it finished, same format. Empty means it has not — the build
+     * is still going.
      * @type {string}
      * @memberof BuildView
      */
     endedAt?: string;
     /**
-     * 
+     * Model is the model that did the work, taken from the FIRST turn whose body
+     * names one — a transcript states it, this route does not resolve it. Empty when
+     * no turn said.
      * @type {string}
      * @memberof BuildView
      */
     model?: string;
     /**
-     * 
+     * Org is the org that published this build, echoed from the URL. It is part of
+     * the build's public ADDRESS and not a tenant key — this route is anonymous, and
+     * the only rows it can reach are ones an author explicitly published.
      * @type {string}
      * @memberof BuildView
      */
     org?: string;
     /**
-     * 
+     * Project is the product's slug, the other half of that address.
      * @type {string}
      * @memberof BuildView
      */
     project?: string;
     /**
-     * 
+     * Repo is the repository the work was done in, as the session reported it.
      * @type {string}
      * @memberof BuildView
      */
     repo?: string;
     /**
-     * 
+     * Session is the id of the agent session this story IS — the same value a
+     * produced commit carries in its `Hanzo-Session:` trailer, which is what ties
+     * the repository's history to this page.
      * @type {string}
      * @memberof BuildView
      */
     session?: string;
     /**
-     * 
+     * StartedAt is when the session opened, RFC 3339 in UTC.
      * @type {string}
      * @memberof BuildView
      */
     startedAt?: string;
     /**
-     * 
+     * Status is the session's own: running, paused, done or error. A build can be
+     * read while it is still being written, so this is not always terminal — and an
+     * `error` build is still a readable story, not a missing page.
      * @type {string}
      * @memberof BuildView
      */
     status?: string;
     /**
-     * 
+     * Title is the human line the session was opened or renamed with. Empty when
+     * nobody gave it one.
      * @type {string}
      * @memberof BuildView
      */
     title?: string;
     /**
-     * 
+     * Turns is the whole transcript, oldest first, capped at 1000: a published build
+     * is a story to read down, not an archive to page.
      * @type {Array<BuildTurn>}
      * @memberof BuildView
      */

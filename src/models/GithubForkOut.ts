@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,13 +20,14 @@ import { mapValues } from '../runtime.js';
  */
 export interface GithubForkOut {
     /**
-     * 
+     * CloneURL is the fork's https git remote. GitHub populates a new fork in the
+     * background, so a clone issued the moment this answers can still find it empty.
      * @type {string}
      * @memberof GithubForkOut
      */
     cloneUrl?: string;
     /**
-     * 
+     * DefaultBranch is the branch the fork checks out, inherited from upstream.
      * @type {string}
      * @memberof GithubForkOut
      */
@@ -39,13 +40,14 @@ export interface GithubForkOut {
      */
     existing?: boolean;
     /**
-     * 
+     * FullName is the fork's "owner/repo". The owner is the account it landed in
+     * — the request's org, or the installation's own account when none was named.
      * @type {string}
      * @memberof GithubForkOut
      */
     fullName?: string;
     /**
-     * 
+     * HTMLURL is the fork's page on github.com.
      * @type {string}
      * @memberof GithubForkOut
      */

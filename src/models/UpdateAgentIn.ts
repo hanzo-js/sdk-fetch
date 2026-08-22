@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,31 +20,38 @@ import { mapValues } from '../runtime.js';
  */
 export interface UpdateAgentIn {
     /**
-     * 
+     * ComputeRef re-binds (or, with "", unbinds) the visor machine. Opaque here.
      * @type {string}
      * @memberof UpdateAgentIn
      */
     computeRef?: string;
     /**
-     * 
+     * Description replaces the line other agents read in the tool catalogue.
      * @type {string}
      * @memberof UpdateAgentIn
      */
     description?: string;
     /**
-     * 
+     * ExecutionMode switches between one-shot and long-running. The RESULTING
+     * mode+schedule are validated together, so switching to long-running without a
+     * stored or supplied cron is refused rather than accepted into an agent the
+     * scheduler would skip forever. A switch INTO long-running counts against the
+     * per-org cap and can be a 409.
      * @type {string}
      * @memberof UpdateAgentIn
      */
     executionMode?: string;
     /**
-     * 
+     * Instructions replaces the system prompt whole, up to 32 KiB. There is no
+     * append: a prompt is one text, and sending "" clears it.
      * @type {string}
      * @memberof UpdateAgentIn
      */
     instructions?: string;
     /**
-     * 
+     * Model re-points the agent at another model, checked against the gateway's
+     * served catalogue exactly as create checks it. Empty STRING is refused — say
+     * nothing to keep the current one. Past runs keep the model that served them.
      * @type {string}
      * @memberof UpdateAgentIn
      */
@@ -56,19 +63,22 @@ export interface UpdateAgentIn {
      */
     ref?: string;
     /**
-     * 
+     * Schedule replaces the cron. It is validated against the mode this update
+     * leaves behind, and dropped if that mode is one-shot.
      * @type {string}
      * @memberof UpdateAgentIn
      */
     schedule?: string;
     /**
-     * 
+     * ServiceAccountID re-points (or, with "", clears) the IAM service account a
+     * scheduled run is billed as. Clearing it puts that spend back on the org.
      * @type {string}
      * @memberof UpdateAgentIn
      */
     serviceAccountId?: string;
     /**
-     * 
+     * Tools replaces the whole allow-list, it does not add to it. Sending [] takes
+     * every tool away, which is the only way to say that.
      * @type {Array<string>}
      * @memberof UpdateAgentIn
      */

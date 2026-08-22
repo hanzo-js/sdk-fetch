@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,31 +20,32 @@ import { mapValues } from '../runtime.js';
  */
 export interface Citation {
     /**
-     * 
+     * EndLine is its last line, inclusive.
      * @type {number}
      * @memberof Citation
      */
     endLine?: number;
     /**
-     * 
+     * File is the path inside the repo, relative to its root.
      * @type {string}
      * @memberof Citation
      */
     file?: string;
     /**
-     * 
+     * Line is the first line of the cited region, 1-based.
      * @type {number}
      * @memberof Citation
      */
     line?: number;
     /**
-     * 
+     * Repo is the repository the cited code lives in ("owner/name"), absent when the
+     * ask was already scoped to one.
      * @type {string}
      * @memberof Citation
      */
     repo?: string;
     /**
-     * 
+     * Symbol is the declaration the region belongs to, when it belongs to one.
      * @type {string}
      * @memberof Citation
      */

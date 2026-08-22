@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -25,6 +25,10 @@ import {
     CodeRunToJSON,
 } from '../models/index.js';
 
+export interface ExecApiGetExecFilesBySidRequest {
+    sid: string;
+}
+
 export interface ExecApiPostExecRequest {
     codeRun: CodeRun;
 }
@@ -35,7 +39,53 @@ export interface ExecApiPostExecRequest {
 export class ExecApi extends runtime.BaseAPI {
 
     /**
-     * Executes a program in a throwaway sandbox and answers with what it printed and what it left behind.  `lang` names one of the thirteen the sandbox image carries — py, js, ts, bash, r, php, go, rs, c, cpp, java, d, f90 — and `code` is the whole program, not a fragment: a compiled language is compiled and then run, an interpreted one is interpreted, and `args` becomes the program\'s own argv either way. Nothing is installed for you; the image is the environment.  A PROGRAM THAT FAILS IS A SUCCESSFUL CALL. A non-zero exit answers 200 with the diagnostics on `stderr`, because \"the code threw\" and \"the interpreter is down\" are different facts a caller renders differently. Only the second is an error status.  Runs are stateful through `session_id`. Omit it and the run gets a fresh sandbox whose id comes back on the answer; pass that id again and the next run sees the same filesystem, so a program can write a file one call and read it the next. `files` names bytes already uploaded to a session (POST /v1/upload), copied in before the program starts. `files` on the ANSWER is what the program created or changed, by comparison against a marker taken at start — so it is the run\'s real output, not a listing of the directory — and each is fetched from GET /v1/download/{session}/{name}.  The tenant is the caller\'s, never the body\'s, at every door. A typed op is also an MCP tool and an op-plane op; MCP\'s tools/call invokes it directly, with no route and therefore no middleware, so nothing there could have checked a credential. tenantOf refuses a context carrying neither a validated principal nor exec\'s own admission marker, so those doors fail closed without a second gate to keep in step.
+     * Lists what a session\'s sandbox holds — the uploads a run can read and the artifacts it produced — each then fetched from /v1/exec/download.  It answers a BARE JSON ARRAY of {name, lastModified}, where `name` is the same {session_id}/{fileId} identifier download takes, because that is what the client matches on. An object wrapper would be a wire change, which is why this is not a typed operation.
+     * List the files in an execution session
+     */
+    async getExecFilesBySidRaw(requestParameters: ExecApiGetExecFilesBySidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['sid'] == null) {
+            throw new runtime.RequiredError(
+                'sid',
+                'Required parameter "sid" was null or undefined when calling getExecFilesBySid().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/exec/files/{sid}`;
+        urlPath = urlPath.replace(`{${"sid"}}`, encodeURIComponent(String(requestParameters['sid'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Lists what a session\'s sandbox holds — the uploads a run can read and the artifacts it produced — each then fetched from /v1/exec/download.  It answers a BARE JSON ARRAY of {name, lastModified}, where `name` is the same {session_id}/{fileId} identifier download takes, because that is what the client matches on. An object wrapper would be a wire change, which is why this is not a typed operation.
+     * List the files in an execution session
+     */
+    async getExecFilesBySid(requestParameters: ExecApiGetExecFilesBySidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getExecFilesBySidRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Executes a program in a throwaway sandbox and answers with what it printed and what it left behind.  `lang` names one of the thirteen the sandbox image carries — py, js, ts, bash, r, php, go, rs, c, cpp, java, d, f90 — and `code` is the whole program, not a fragment: a compiled language is compiled and then run, an interpreted one is interpreted, and `args` becomes the program\'s own argv either way. Nothing is installed for you; the image is the environment.  A PROGRAM THAT FAILS IS A SUCCESSFUL CALL. A non-zero exit answers 200 with the diagnostics on `stderr`, because \"the code threw\" and \"the interpreter is down\" are different facts a caller renders differently. Only the second is an error status.  Runs are stateful through `session_id`. Omit it and the run gets a fresh sandbox whose id comes back on the answer; pass that id again and the next run sees the same filesystem, so a program can write a file one call and read it the next. `files` names bytes already uploaded to a session (POST /v1/exec/upload), copied in before the program starts. `files` on the ANSWER is what the program created or changed, by comparison against a marker taken at start — so it is the run\'s real output, not a listing of the directory — and each is fetched from GET /v1/exec/download/{session}/{name}.  The tenant is the caller\'s, never the body\'s, at every door. A typed op is also an MCP tool and an op-plane op; MCP\'s tools/call invokes it directly, with no route and therefore no middleware, so nothing there could have checked a credential. tenantOf refuses a context carrying neither a validated principal nor exec\'s own admission marker, so those doors fail closed without a second gate to keep in step.
      * Run a code snippet in a sandboxed interpreter
      */
     async postExecRaw(requestParameters: ExecApiPostExecRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CodeResult>> {
@@ -75,7 +125,7 @@ export class ExecApi extends runtime.BaseAPI {
     }
 
     /**
-     * Executes a program in a throwaway sandbox and answers with what it printed and what it left behind.  `lang` names one of the thirteen the sandbox image carries — py, js, ts, bash, r, php, go, rs, c, cpp, java, d, f90 — and `code` is the whole program, not a fragment: a compiled language is compiled and then run, an interpreted one is interpreted, and `args` becomes the program\'s own argv either way. Nothing is installed for you; the image is the environment.  A PROGRAM THAT FAILS IS A SUCCESSFUL CALL. A non-zero exit answers 200 with the diagnostics on `stderr`, because \"the code threw\" and \"the interpreter is down\" are different facts a caller renders differently. Only the second is an error status.  Runs are stateful through `session_id`. Omit it and the run gets a fresh sandbox whose id comes back on the answer; pass that id again and the next run sees the same filesystem, so a program can write a file one call and read it the next. `files` names bytes already uploaded to a session (POST /v1/upload), copied in before the program starts. `files` on the ANSWER is what the program created or changed, by comparison against a marker taken at start — so it is the run\'s real output, not a listing of the directory — and each is fetched from GET /v1/download/{session}/{name}.  The tenant is the caller\'s, never the body\'s, at every door. A typed op is also an MCP tool and an op-plane op; MCP\'s tools/call invokes it directly, with no route and therefore no middleware, so nothing there could have checked a credential. tenantOf refuses a context carrying neither a validated principal nor exec\'s own admission marker, so those doors fail closed without a second gate to keep in step.
+     * Executes a program in a throwaway sandbox and answers with what it printed and what it left behind.  `lang` names one of the thirteen the sandbox image carries — py, js, ts, bash, r, php, go, rs, c, cpp, java, d, f90 — and `code` is the whole program, not a fragment: a compiled language is compiled and then run, an interpreted one is interpreted, and `args` becomes the program\'s own argv either way. Nothing is installed for you; the image is the environment.  A PROGRAM THAT FAILS IS A SUCCESSFUL CALL. A non-zero exit answers 200 with the diagnostics on `stderr`, because \"the code threw\" and \"the interpreter is down\" are different facts a caller renders differently. Only the second is an error status.  Runs are stateful through `session_id`. Omit it and the run gets a fresh sandbox whose id comes back on the answer; pass that id again and the next run sees the same filesystem, so a program can write a file one call and read it the next. `files` names bytes already uploaded to a session (POST /v1/exec/upload), copied in before the program starts. `files` on the ANSWER is what the program created or changed, by comparison against a marker taken at start — so it is the run\'s real output, not a listing of the directory — and each is fetched from GET /v1/exec/download/{session}/{name}.  The tenant is the caller\'s, never the body\'s, at every door. A typed op is also an MCP tool and an op-plane op; MCP\'s tools/call invokes it directly, with no route and therefore no middleware, so nothing there could have checked a credential. tenantOf refuses a context carrying neither a validated principal nor exec\'s own admission marker, so those doors fail closed without a second gate to keep in step.
      * Run a code snippet in a sandboxed interpreter
      */
     async postExec(requestParameters: ExecApiPostExecRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CodeResult> {
@@ -119,6 +169,44 @@ export class ExecApi extends runtime.BaseAPI {
      */
     async postExecProgrammatic(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.postExecProgrammaticRaw(initOverrides);
+    }
+
+    /**
+     * Takes a multipart upload and writes the file into the session\'s sandbox, so a later run can read it. Answers the session id and the identifier the file is addressed by; `session_id` in the form joins an existing session instead of opening one.  The body is multipart/form-data, which is why this is not a typed operation: every non-empty typed body is decoded as JSON.
+     * Upload a file into an execution session
+     */
+    async postExecUploadRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/exec/upload`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Takes a multipart upload and writes the file into the session\'s sandbox, so a later run can read it. Answers the session id and the identifier the file is addressed by; `session_id` in the form joins an existing session instead of opening one.  The body is multipart/form-data, which is why this is not a typed operation: every non-empty typed body is decoded as JSON.
+     * Upload a file into an execution session
+     */
+    async postExecUpload(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postExecUploadRaw(initOverrides);
     }
 
 }

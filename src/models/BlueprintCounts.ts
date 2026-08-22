@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,31 +20,34 @@ import { mapValues } from '../runtime.js';
  */
 export interface BlueprintCounts {
     /**
-     * 
+     * Principles is how many spine archetypes the playbook carries (64 in the
+     * shipped corpus).
      * @type {number}
      * @memberof BlueprintCounts
      */
     principles?: number;
     /**
-     * 
+     * Sections is how many phases the journey has.
      * @type {number}
      * @memberof BlueprintCounts
      */
     sections?: number;
     /**
-     * 
+     * Steps is how many checklist items the playbook holds, DISABLED ONES INCLUDED
+     * — this counts the authored document, not the journey an org runs, so it is
+     * normally larger than the `total` on a progress view.
      * @type {number}
      * @memberof BlueprintCounts
      */
     steps?: number;
     /**
-     * 
+     * Strategies is how many tactics the corpus holds, again counting disabled ones.
      * @type {number}
      * @memberof BlueprintCounts
      */
     strategies?: number;
     /**
-     * 
+     * Templates is how many reusable prompts the playbook carries.
      * @type {number}
      * @memberof BlueprintCounts
      */

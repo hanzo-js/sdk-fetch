@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -28,13 +28,18 @@ import {
  */
 export interface IssueHits {
     /**
-     * 
+     * Count is how many rows Issues carries — the size of THIS answer after the
+     * cap, not how many issues matched. A count equal to the limit means there are
+     * probably more; there is no total and no cursor.
      * @type {number}
      * @memberof IssueHits
      */
     count?: number;
     /**
-     * 
+     * Issues are the matching rows grouped by status and oldest-first within a
+     * group, capped by the search's limit (50 by default, 200 at most). The cap is
+     * applied to that order, so a broad search returns the head of it rather than a
+     * sample.
      * @type {Array<IssueHit>}
      * @memberof IssueHits
      */

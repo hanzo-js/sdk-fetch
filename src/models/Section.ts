@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,31 +20,34 @@ import { mapValues } from '../runtime.js';
  */
 export interface Section {
     /**
-     * 
+     * Detail is what this phase of the journey is for, in prose.
      * @type {string}
      * @memberof Section
      */
     detail?: string;
     /**
-     * 
+     * Enabled is the admin lever. Absent reads as ON, so only an explicit false
+     * turns a phase off — and it takes every step filed under it out of the
+     * journey, not just the heading.
      * @type {boolean}
      * @memberof Section
      */
     enabled?: boolean;
     /**
-     * 
+     * ID is the slug a step's `section` names to file itself under this phase.
      * @type {string}
      * @memberof Section
      */
     id?: string;
     /**
-     * 
+     * Order places the phase in the journey, ascending. Ties fall back to
+     * authoring order, and an omitted order sorts as 0 — ahead of everything.
      * @type {number}
      * @memberof Section
      */
     order?: number;
     /**
-     * 
+     * Title is the phase heading a person reads above its steps.
      * @type {string}
      * @memberof Section
      */

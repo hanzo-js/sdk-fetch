@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,31 +20,34 @@ import { mapValues } from '../runtime.js';
  */
 export interface BankQuestion {
     /**
-     * 
+     * Connector names the feed the unplaceable line arrived on. With externalId it
+     * identifies both the question and the bank line it is about, so re-syncing the
+     * same deposit never asks twice.
      * @type {string}
      * @memberof BankQuestion
      */
     connector?: string;
     /**
-     * 
+     * CreatedAt is when the question was raised.
      * @type {string}
      * @memberof BankQuestion
      */
     createdAt?: string;
     /**
-     * 
+     * ExternalID is the bank's own id for the line in question.
      * @type {string}
      * @memberof BankQuestion
      */
     externalId?: string;
     /**
-     * 
+     * Prompt is the question put to the founder in plain language — what this money
+     * was, since the books cannot place it on their own.
      * @type {string}
      * @memberof BankQuestion
      */
     prompt?: string;
     /**
-     * 
+     * Status is whether the question is still open or has been answered.
      * @type {string}
      * @memberof BankQuestion
      */

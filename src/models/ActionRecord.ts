@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,49 +20,56 @@ import { mapValues } from '../runtime.js';
  */
 export interface ActionRecord {
     /**
-     * 
+     * Args is the JSON the tool was called with, recorded as TEXT exactly as sent —
+     * including whatever the AI drafted into it — so a run can be read back and
+     * reproduced. It is a string, not an object.
      * @type {string}
      * @memberof ActionRecord
      */
     args?: string;
     /**
-     * 
+     * CreatedAt is when the run was recorded, as Unix seconds. The ledger is read
+     * newest-first on this column.
      * @type {number}
      * @memberof ActionRecord
      */
     createdAt?: number;
     /**
-     * 
+     * Err is why the run failed, when it did. Empty on a successful run.
      * @type {string}
      * @memberof ActionRecord
      */
     err?: string;
     /**
-     * 
+     * ID identifies this one execution. The ledger is append-only, so an id is
+     * never reused and never updated.
      * @type {string}
      * @memberof ActionRecord
      */
     id?: string;
     /**
-     * 
+     * OK is whether the tool ran to completion. It is the ledger's own verdict, not
+     * the tool's opinion of the outcome — a tool that succeeded at reporting bad
+     * news is ok.
      * @type {boolean}
      * @memberof ActionRecord
      */
     ok?: boolean;
     /**
-     * 
+     * Result is the tool's own answer, likewise recorded as JSON text. Present on a
+     * failed run too, where the tool answered but the answer was a refusal.
      * @type {string}
      * @memberof ActionRecord
      */
     result?: string;
     /**
-     * 
+     * StepID is the checklist step the Business AI was acting on.
      * @type {string}
      * @memberof ActionRecord
      */
     stepId?: string;
     /**
-     * 
+     * Tool is the MCP tool that was dispatched, by name.
      * @type {string}
      * @memberof ActionRecord
      */

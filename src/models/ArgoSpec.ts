@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -35,19 +35,22 @@ import {
  */
 export interface ArgoSpec {
     /**
-     * 
+     * Destination is which cluster and namespace it lands in. Zero-valued on a CD
+     * row: this projection reports CD's source, not its destination.
      * @type {ArgoDestination}
      * @memberof ArgoSpec
      */
     destination?: ArgoDestination;
     /**
-     * 
+     * Project is the AppProject this application is grouped and filtered under. For
+     * an App CR it is the app.kubernetes.io/part-of label — the IAM project name —
+     * falling back to "default" when the CR carries no such label.
      * @type {string}
      * @memberof ArgoSpec
      */
     project?: string;
     /**
-     * 
+     * Source is where the desired state is declared.
      * @type {ArgoSource}
      * @memberof ArgoSpec
      */

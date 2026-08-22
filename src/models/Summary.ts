@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,19 +20,20 @@ import { mapValues } from '../runtime.js';
  */
 export interface Summary {
     /**
-     * 
+     * Calls is how many calls this org has placed or received, over its whole
+     * history — a running total, not a window.
      * @type {number}
      * @memberof Summary
      */
     calls?: number;
     /**
-     * 
+     * Messages is the same running total for messages.
      * @type {number}
      * @memberof Summary
      */
     messages?: number;
     /**
-     * 
+     * Numbers is how many numbers this org holds right now.
      * @type {number}
      * @memberof Summary
      */

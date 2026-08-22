@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -35,37 +35,47 @@ import {
  */
 export interface TransitionResult {
     /**
-     * 
+     * Distribution is the channel fan-out this move triggered. Present ONLY on the
+     * move to published, the single edge that distributes — so its absence means
+     * no fan-out was attempted, never that one failed quietly. A fan-out that DID
+     * fail is present carrying its own honest status, because distribution never
+     * rolls the status change back.
      * @type {PublishResult}
      * @memberof TransitionResult
      */
     distribution?: PublishResult;
     /**
-     * 
+     * DocType is the content type that moved — Campaign, SocialPost or Asset —
+     * echoed from the path.
      * @type {string}
      * @memberof TransitionResult
      */
     doctype?: string;
     /**
-     * 
+     * From is the state the item held when it was read. A document carrying no
+     * status yet reads as "draft".
      * @type {string}
      * @memberof TransitionResult
      */
     from?: string;
     /**
-     * 
+     * Name is the document that moved, echoed from the path.
      * @type {string}
      * @memberof TransitionResult
      */
     name?: string;
     /**
-     * 
+     * Storefront is the catalog side effect, present only when a published Asset
+     * was product imagery — it carries a design and a kind of ecom, product or
+     * lifestyle. Absent for everything else, so absence reads as "not catalog
+     * imagery" rather than "the catalog failed".
      * @type {StorefrontResult}
      * @memberof TransitionResult
      */
     storefront?: StorefrontResult;
     /**
-     * 
+     * To is the state it holds now. From == To on an idempotent re-transition,
+     * which is legal and is where a caller that lost a publish race lands.
      * @type {string}
      * @memberof TransitionResult
      */

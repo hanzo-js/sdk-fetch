@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -28,43 +28,48 @@ import {
  */
 export interface PnL {
     /**
-     * 
+     * Expense is the cost lines that moved in the period, one per account.
      * @type {Array<PnLLine>}
      * @memberof PnL
      */
     expense?: Array<PnLLine>;
     /**
-     * 
+     * From opens the period and is EXCLUSIVE — movement strictly after it, matching
+     * the trial balance's opening boundary so the two reports agree on what belongs
+     * to a period. Absent means from the beginning of the ledger.
      * @type {string}
      * @memberof PnL
      */
     from?: string;
     /**
-     * 
+     * Income is the revenue lines that moved in the period, one per account.
+     * Accounts that did not move are omitted rather than listed at zero.
      * @type {Array<PnLLine>}
      * @memberof PnL
      */
     income?: Array<PnLLine>;
     /**
-     * TotalIncome − TotalExpense
+     * NetIncome is totalIncome minus totalExpense, in cents. Negative is a loss.
      * @type {number}
      * @memberof PnL
      */
     netIncome?: number;
     /**
-     * 
+     * To closes the period and is inclusive. Absent means up to now.
      * @type {string}
      * @memberof PnL
      */
     to?: string;
     /**
-     * 
+     * TotalExpense is cost MATCHED to that revenue, in cents, including accrued
+     * infrastructure that has not been billed yet.
      * @type {number}
      * @memberof PnL
      */
     totalExpense?: number;
     /**
-     * 
+     * TotalIncome is revenue RECOGNIZED in the period, in cents — accrual, not cash,
+     * so a prepaid top-up is not in it until the credit is consumed.
      * @type {number}
      * @memberof PnL
      */

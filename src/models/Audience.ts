@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,7 +20,7 @@ import { mapValues } from '../runtime.js';
  */
 export interface Audience {
     /**
-     * CreatedAt and UpdatedAt are unix seconds, both server-assigned.
+     * CreatedAt is unix seconds when the filter was saved, server-assigned.
      * @type {number}
      * @memberof Audience
      */
@@ -46,7 +46,10 @@ export interface Audience {
      */
     name?: string;
     /**
-     * 
+     * UpdatedAt is unix seconds of the last write, server-assigned, and the key
+     * the audience list is ordered by (newest first). A saved audience has no
+     * update route, so in practice it stays equal to CreatedAt: to change a
+     * filter you save another one.
      * @type {number}
      * @memberof Audience
      */

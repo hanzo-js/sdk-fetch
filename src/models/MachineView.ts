@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,85 +20,112 @@ import { mapValues } from '../runtime.js';
  */
 export interface MachineView {
     /**
-     * 
+     * CreatedTime is when the machine came into being: the provider's own creation
+     * timestamp for a Visor machine, passed through in whatever form it states it,
+     * and for a BYO machine the RFC 3339 moment it first dialed in.
      * @type {string}
      * @memberof MachineView
      */
     createdTime?: string;
     /**
-     * 
+     * GPU names the accelerators this machine holds ("H100", or "2× NVIDIA GB10"
+     * for a BYO machine reporting a matched pair). Empty means the machine is not
+     * a GPU machine — the size slug does not parse as one, or nvidia-smi found
+     * nothing.
      * @type {string}
      * @memberof MachineView
      */
     gpu?: string;
     /**
-     * 
+     * ID addresses this machine on the /v1/visor/machines/:id routes: the
+     * org-scoped NAME Visor keys a machine by, falling back to the provider id for
+     * a machine that has no name. A BYO machine's is the id it dialed in under.
      * @type {string}
      * @memberof MachineView
      */
     id?: string;
     /**
-     * 
+     * Image is the OS image the machine booted from, as the provider names it.
      * @type {string}
      * @memberof MachineView
      */
     image?: string;
     /**
-     * 
+     * Mem is system RAM rendered for a human ("8 GB"), not a number to compute
+     * with. Empty when the provider's figure is ambiguous, or when the only figure
+     * available is a GPU slug's gb — that is VRAM, and reporting it as system RAM
+     * would be a fabrication. A BYO machine's RAM is on /v1/visor/fleet/workers.
      * @type {string}
      * @memberof MachineView
      */
     mem?: string;
     /**
-     * 
+     * Name is the label to show a human — Visor's displayName, or the machine name
+     * when it carries none. A BYO machine's is its hostname. It is not an address:
+     * ID is what the routes take.
      * @type {string}
      * @memberof MachineView
      */
     name?: string;
     /**
-     * 
+     * Os is the operating system on the machine — Visor's record for a provisioned
+     * one, the host's own report (linux, darwin, windows) for a BYO one.
      * @type {string}
      * @memberof MachineView
      */
     os?: string;
     /**
-     * 
+     * PrivateIp is the address on the provider's own network, reachable from the
+     * org's other machines in the same region. Empty on the same terms as PublicIp.
      * @type {string}
      * @memberof MachineView
      */
     privateIp?: string;
     /**
-     * 
+     * Provider is the cloud that runs the machine ("digitalocean"), or "byo" for
+     * one the operator dialed in with `hanzo link`.
      * @type {string}
      * @memberof MachineView
      */
     provider?: string;
     /**
-     * 
+     * PublicIp is the internet-facing address the provider assigned. Empty while a
+     * machine is still provisioning, and empty for a BYO machine — it dials out
+     * from behind NAT, so no address is ever learned for it.
      * @type {string}
      * @memberof MachineView
      */
     publicIp?: string;
     /**
-     * 
+     * Region is the provider region slug ("sfo3"), or the zone when the provider
+     * reports only that. "on-prem" for a BYO machine, which has no cloud region.
      * @type {string}
      * @memberof MachineView
      */
     region?: string;
     /**
-     * 
+     * Status is the lifecycle state in the PROVIDER's own words ("active",
+     * "running", "off"), passed through rather than mapped onto a vocabulary of
+     * ours. A BYO machine's is "online" or "offline", decided by whether its last
+     * heartbeat is within 90s.
      * @type {string}
      * @memberof MachineView
      */
     status?: string;
     /**
-     * 
+     * Type is the provider SIZE SLUG the machine runs at ("s-2vcpu-4gb",
+     * "gpu-h100x8-640gb") — the value a launch asks for, and what Vcpu/Mem/GPU are
+     * read out of when the provider states them no other way. "byo-gpu" for a
+     * dialed-in machine, which was never bought from a size catalog.
      * @type {string}
      * @memberof MachineView
      */
     type?: string;
     /**
-     * 
+     * Vcpu is logical cores — the provider's own cpuSize when that is a clean
+     * integer, else the count read out of the size slug (4 from "s-4vcpu-8gb").
+     * ABSENT, never 0, when neither says. A BYO machine leaves it absent here; its
+     * real core count is on GET /v1/visor/fleet/workers.
      * @type {number}
      * @memberof MachineView
      */

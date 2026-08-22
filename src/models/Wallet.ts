@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -26,7 +26,12 @@ export interface Wallet {
      */
     accountId?: string;
     /**
-     * 
+     * Address is the on-chain address. For kms/mpc/treasury it is the EOA a
+     * signature from this wallet recovers to; for safe it is the CREATE2 address
+     * of the Safe CONTRACT, which holds no key — its approvals recover to the MPC
+     * owner instead. Rotating a kms wallet mints a new key and therefore a NEW
+     * address, and funds and approvals at the old one do not follow; mpc,
+     * treasury and safe addresses are invariant under rotation.
      * @type {string}
      * @memberof Wallet
      */
@@ -38,37 +43,52 @@ export interface Wallet {
      */
     agent?: string;
     /**
-     * 
+     * Chain is the EVM chain the wallet is bound to, CAIP-2 "eip155:<n>" or a
+     * bare decimal chain id. Empty is chain-agnostic: the ring signs an unbound
+     * digest, and a Safe falls back to the Hanzo L1 (36963) because a Safe and
+     * its EIP-712 domain must be chain-bound.
      * @type {string}
      * @memberof Wallet
      */
     chain?: string;
     /**
-     * 
+     * CreatedAt is when the wallet was provisioned, Unix seconds. Listings order
+     * by it, newest first.
      * @type {number}
      * @memberof Wallet
      */
     createdAt?: number;
     /**
-     * 
+     * Custody is the backend holding the signing material, fixed at creation:
+     * "kms" (a secp256k1 key sealed under KMS and opened in-process), "mpc" or
+     * "treasury" (an m-of-n threshold key on the deployed ring, which differ by
+     * governance and not by signing mechanics), or "safe" (a Safe contract owned
+     * by an MPC key). A kind the deployment has not wired refuses with 503 rather
+     * than fabricating a signature.
      * @type {string}
      * @memberof Wallet
      */
     custody?: string;
     /**
-     * 
+     * FinanceAccount is the finance ledger account bound to this wallet — the
+     * lookup that turns a ledger account back into an on-chain signer. Absent is
+     * the normal state and means unbound; the column is NULL until something
+     * binds it.
      * @type {string}
      * @memberof Wallet
      */
     financeAccount?: string;
     /**
-     * 
+     * ID is the wallet id, minted by the server as "wal_" + 24 hex. It is the
+     * last segment of the key ref, and it is the LEDGER SUBJECT an x402 payment
+     * into this wallet credits — so it names money as well as key material.
      * @type {string}
      * @memberof Wallet
      */
     id?: string;
     /**
-     * 
+     * Name is the display label given at creation. It addresses nothing: the key
+     * ref is derived from the scope and the id, so renaming moves no material.
      * @type {string}
      * @memberof Wallet
      */
@@ -86,7 +106,9 @@ export interface Wallet {
      */
     project?: string;
     /**
-     * 
+     * Tier is the wallet tier the ring keys its TierPolicy on: hot, warm, cold,
+     * gas, bridge, contract_admin, validator, quarantine or disaster_recovery.
+     * It defaults to hot and is refused at the boundary if it is none of the nine.
      * @type {string}
      * @memberof Wallet
      */

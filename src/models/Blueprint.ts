@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -56,55 +56,63 @@ import {
  */
 export interface Blueprint {
     /**
-     * 
+     * Brand is the white-label key this playbook serves. Empty is the shared
+     * default every unbranded deployment falls back to.
      * @type {string}
      * @memberof Blueprint
      */
     brand?: string;
     /**
-     * 
+     * Enabled is the whole-playbook lever. Absent reads as ON; an explicit false
+     * makes resolution skip this playbook entirely and fall through to the next
+     * tier, rather than serving an empty journey.
      * @type {boolean}
      * @memberof Blueprint
      */
     enabled?: boolean;
     /**
-     * the 64-principle spine (Zen of Hanzo archetypes)
+     * Principles are the fixed 64-archetype spine a tactic files under. It is
+     * authored data an operator organises the corpus by; nothing in the checklist
+     * engine reads it.
      * @type {Array<Principle>}
      * @memberof Blueprint
      */
     principles?: Array<Principle>;
     /**
-     * 
+     * Sections are the journey's ordered phases.
      * @type {Array<Section>}
      * @memberof Blueprint
      */
     sections?: Array<Section>;
     /**
-     * 
+     * Steps are every checklist item, disabled ones included — this is the authored
+     * document, not the projection an org runs.
      * @type {Array<JourneyStep>}
      * @memberof Blueprint
      */
     steps?: Array<JourneyStep>;
     /**
-     * 
+     * Strategies are the tactics corpus the recommendation reads narrow.
      * @type {Array<Strategy>}
      * @memberof Blueprint
      */
     strategies?: Array<Strategy>;
     /**
-     * 
+     * Templates are the reusable prompts and snippets steps reference by id.
      * @type {Array<Page>}
      * @memberof Blueprint
      */
     templates?: Array<Page>;
     /**
-     * 
+     * Title is the playbook's name as a person reads it.
      * @type {string}
      * @memberof Blueprint
      */
     title?: string;
     /**
-     * 
+     * Version is the playbook's own name for this edition of its content, chosen by
+     * whoever authored it. It travels onto every journey projected from it. The
+     * store's numeric revision is a separate value and lives beside it.
      * @type {string}
      * @memberof Blueprint
      */

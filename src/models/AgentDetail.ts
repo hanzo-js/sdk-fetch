@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -58,7 +58,9 @@ export interface AgentDetail {
      */
     id?: string;
     /**
-     * 
+     * Instructions is the agent's system prompt, verbatim, up to 32 KiB. It is the
+     * one field the list read withholds, because it is the agent's whole behaviour
+     * and a page of them would be a page of prompts.
      * @type {string}
      * @memberof AgentDetail
      */
@@ -76,7 +78,8 @@ export interface AgentDetail {
      */
     name?: string;
     /**
-     * 
+     * RecentRuns is the agent's 20 most recent executions, newest first. It is a
+     * window on the history, not the history: the count beside it is `runs`.
      * @type {Array<AgentRunView>}
      * @memberof AgentDetail
      */

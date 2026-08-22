@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -17,6 +17,8 @@ import * as runtime from '../runtime.js';
 import type {
   BotRoster,
   BotSync,
+  CollabRequest,
+  CollabResult,
   CookieAck,
   PlanInfo,
   ProviderInfo,
@@ -27,6 +29,10 @@ import {
     BotRosterToJSON,
     BotSyncFromJSON,
     BotSyncToJSON,
+    CollabRequestFromJSON,
+    CollabRequestToJSON,
+    CollabResultFromJSON,
+    CollabResultToJSON,
     CookieAckFromJSON,
     CookieAckToJSON,
     PlanInfoFromJSON,
@@ -51,10 +57,6 @@ export interface TeamApiGetTeamAccountAuthByProviderCallbackRequest {
     provider: string;
 }
 
-export interface TeamApiGetTeamBillingUiByWildcard1Request {
-    wildcard1: string;
-}
-
 export interface TeamApiGetTeamFilesByWorkspaceByFilenameRequest {
     workspace: string;
     filename: string;
@@ -70,6 +72,11 @@ export interface TeamApiGetTeamTransactorByTokenRequest {
 
 export interface TeamApiGetTeamTransactorStatisticsRequest {
     token?: string;
+}
+
+export interface TeamApiPostTeamCollaboratorRpcByDocumentidRequest {
+    documentId: string;
+    collabRequest: CollabRequest;
 }
 
 export interface TeamApiPostTeamFilesByWorkspaceRequest {
@@ -387,52 +394,6 @@ export class TeamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Serves one file of the embedded wallet bundle — a content-hashed script or stylesheet under assets/, an icon, or the page shell itself.  A path that names NO REAL FILE falls back to the shell instead of 404ing, which is what makes a deep link into the page\'s own routes survive a hard refresh. So a 200 here is not proof the asset exists — a typo answers HTML.  assets/ is immutable for a year (the names carry the content hash); the shell is no-cache, so a deploy is picked up on the next load. Gated exactly like the page: 401 without a verified session, 503 when the bundle was never built.
-     * Load an asset of the wallet page
-     */
-    async getTeamBillingUiByWildcard1Raw(requestParameters: TeamApiGetTeamBillingUiByWildcard1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters['wildcard1'] == null) {
-            throw new runtime.RequiredError(
-                'wildcard1',
-                'Required parameter "wildcard1" was null or undefined when calling getTeamBillingUiByWildcard1().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/team/billing/ui/{wildcard1}`;
-        urlPath = urlPath.replace(`{${"wildcard1"}}`, encodeURIComponent(String(requestParameters['wildcard1'])));
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Serves one file of the embedded wallet bundle — a content-hashed script or stylesheet under assets/, an icon, or the page shell itself.  A path that names NO REAL FILE falls back to the shell instead of 404ing, which is what makes a deep link into the page\'s own routes survive a hard refresh. So a 200 here is not proof the asset exists — a typo answers HTML.  assets/ is immutable for a year (the names carry the content hash); the shell is no-cache, so a deploy is picked up on the next load. Gated exactly like the page: 401 without a verified session, 503 when the bundle was never built.
-     * Load an asset of the wallet page
-     */
-    async getTeamBillingUiByWildcard1(requestParameters: TeamApiGetTeamBillingUiByWildcard1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getTeamBillingUiByWildcard1Raw(requestParameters, initOverrides);
-    }
-
-    /**
      * Returns the caller org\'s bot members — the org\'s agents projected as the workspace Employees they become, each with the member account uuid and Person reference the roster addresses it by. An agents subsystem that is not mounted answers an empty list, never an error.
      * Returns the caller org\'s bot members — the org\'s agents projected as the workspace Employees they become, each with the member account uuid and Person reference the roster addresses it by.
      */
@@ -469,6 +430,44 @@ export class TeamApi extends runtime.BaseAPI {
     async getTeamBots(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BotRoster> {
         const response = await this.getTeamBotsRaw(initOverrides);
         return await response.value();
+    }
+
+    /**
+     * Upgrades to the hocuspocus WebSocket the Team editor syncs its Y.js documents over: binary frames of document name, message type and payload, with ONE socket multiplexing every document a tab has open. The server is a relay and an ordered update log, not a CRDT engine — it replays the log to each joining peer and broadcasts every update to the rest, which converges because Y.js updates are commutative and idempotent. There is no body; the response is a protocol upgrade.  BOTH LANES SHARE ONE ROOT. The client derives them from one configured URL — this socket at its root, the markup-snapshot RPC one segment in — so pointing the editor at this service is one value, and the two lanes cannot drift apart.  AUTH IS IN-BAND, PER DOCUMENT, NOT ON THE UPGRADE. The handshake gates only on browser Origin (403 outside the team surfaces; no Origin at all is admitted, which is what a non-browser sends), and then the first frame for a document must be an Auth message carrying the same session or workspace token every other team route verifies — a browser WebSocket cannot set an Authorization header, which is why the token rides inside the protocol. Anything else on an unauthenticated document is answered with one permission denial and nothing further.  Every document is authorized on its own: the document\'s workspace must be the token\'s workspace when the token pins one, and the caller must be a member of it. A mismatch, an unknown workspace and a non-member deny alike with \"document not found\". Rooms are keyed by org and workspace and the persisted log\'s key embeds both, so a foreign document id can neither join a room nor read a blob.  The server pings every twenty seconds and drops a socket silent for sixty, so a backgrounded tab — whose JS timers are throttled but whose network stack still auto-pongs — stays connected instead of dying into a reconnect loop.
+     * Open the live collaborative-editing socket
+     */
+    async getTeamCollaboratorRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/team/collaborator`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Upgrades to the hocuspocus WebSocket the Team editor syncs its Y.js documents over: binary frames of document name, message type and payload, with ONE socket multiplexing every document a tab has open. The server is a relay and an ordered update log, not a CRDT engine — it replays the log to each joining peer and broadcasts every update to the rest, which converges because Y.js updates are commutative and idempotent. There is no body; the response is a protocol upgrade.  BOTH LANES SHARE ONE ROOT. The client derives them from one configured URL — this socket at its root, the markup-snapshot RPC one segment in — so pointing the editor at this service is one value, and the two lanes cannot drift apart.  AUTH IS IN-BAND, PER DOCUMENT, NOT ON THE UPGRADE. The handshake gates only on browser Origin (403 outside the team surfaces; no Origin at all is admitted, which is what a non-browser sends), and then the first frame for a document must be an Auth message carrying the same session or workspace token every other team route verifies — a browser WebSocket cannot set an Authorization header, which is why the token rides inside the protocol. Anything else on an unauthenticated document is answered with one permission denial and nothing further.  Every document is authorized on its own: the document\'s workspace must be the token\'s workspace when the token pins one, and the caller must be a member of it. A mismatch, an unknown workspace and a non-member deny alike with \"document not found\". Rooms are keyed by org and workspace and the persisted log\'s key embeds both, so a foreign document id can neither join a room nor read a blob.  The server pings every twenty seconds and drops a socket silent for sixty, so a backgrounded tab — whose JS timers are throttled but whose network stack still auto-pongs — stays connected instead of dying into a reconnect loop.
+     * Open the live collaborative-editing socket
+     */
+    async getTeamCollaborator(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getTeamCollaboratorRaw(initOverrides);
     }
 
     /**
@@ -731,6 +730,63 @@ export class TeamApi extends runtime.BaseAPI {
      */
     async postTeamBotsSync(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BotSync> {
         const response = await this.postTeamBotsSyncRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * CollabRPC is the collaborative-markup snapshot plane the Team front\'s editor speaks: createContent stores a document field\'s markup at a fresh, immutable blob ref and returns it, updateContent stores a new snapshot and answers nothing, and getContent reads back the exact snapshot a ref names.  createContent ALSO seeds the live-editing update log from the front-supplied Y.js update, so a dialog-authored description is visible in the collaborative editor — which replays that log — and not only in snapshot reads. updateContent never touches that log: peers may be live-editing the document, and their edits are not this call\'s to overwrite.  Every call is scoped to the caller\'s VERIFIED session or workspace token: the documentId\'s workspace must be the token\'s workspace when the token names one, and the caller must be a member of it. An unknown workspace, another tenant\'s workspace and a workspace the caller is not in all answer the same 404, so a probe learns nothing about what exists.
+     * CollabRPC is the collaborative-markup snapshot plane the Team front\'s editor speaks: createContent stores a document field\'s markup at a fresh, immutable blob ref and returns it, updateContent stores a new snapshot and answers nothing, and getContent reads back the exact snapshot a ref names.
+     */
+    async postTeamCollaboratorRpcByDocumentidRaw(requestParameters: TeamApiPostTeamCollaboratorRpcByDocumentidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CollabResult>> {
+        if (requestParameters['documentId'] == null) {
+            throw new runtime.RequiredError(
+                'documentId',
+                'Required parameter "documentId" was null or undefined when calling postTeamCollaboratorRpcByDocumentid().'
+            );
+        }
+
+        if (requestParameters['collabRequest'] == null) {
+            throw new runtime.RequiredError(
+                'collabRequest',
+                'Required parameter "collabRequest" was null or undefined when calling postTeamCollaboratorRpcByDocumentid().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/team/collaborator/rpc/{documentId}`;
+        urlPath = urlPath.replace(`{${"documentId"}}`, encodeURIComponent(String(requestParameters['documentId'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: CollabRequestToJSON(requestParameters['collabRequest']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => CollabResultFromJSON(jsonValue));
+    }
+
+    /**
+     * CollabRPC is the collaborative-markup snapshot plane the Team front\'s editor speaks: createContent stores a document field\'s markup at a fresh, immutable blob ref and returns it, updateContent stores a new snapshot and answers nothing, and getContent reads back the exact snapshot a ref names.  createContent ALSO seeds the live-editing update log from the front-supplied Y.js update, so a dialog-authored description is visible in the collaborative editor — which replays that log — and not only in snapshot reads. updateContent never touches that log: peers may be live-editing the document, and their edits are not this call\'s to overwrite.  Every call is scoped to the caller\'s VERIFIED session or workspace token: the documentId\'s workspace must be the token\'s workspace when the token names one, and the caller must be a member of it. An unknown workspace, another tenant\'s workspace and a workspace the caller is not in all answer the same 404, so a probe learns nothing about what exists.
+     * CollabRPC is the collaborative-markup snapshot plane the Team front\'s editor speaks: createContent stores a document field\'s markup at a fresh, immutable blob ref and returns it, updateContent stores a new snapshot and answers nothing, and getContent reads back the exact snapshot a ref names.
+     */
+    async postTeamCollaboratorRpcByDocumentid(requestParameters: TeamApiPostTeamCollaboratorRpcByDocumentidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CollabResult> {
+        const response = await this.postTeamCollaboratorRpcByDocumentidRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

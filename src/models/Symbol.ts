@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -28,25 +28,28 @@ import {
  */
 export interface Symbol {
     /**
-     * 
+     * Detail is the server's short elaboration, typically the signature. Absent when
+     * it offered none.
      * @type {string}
      * @memberof Symbol
      */
     detail?: string;
     /**
-     * 
+     * Kind is the LSP SymbolKind number (5 class, 6 method, 12 function, 23 struct,
+     * …), passed through rather than translated to a word — these callers already
+     * speak LSP, and inventing a second vocabulary is how the two drift.
      * @type {number}
      * @memberof Symbol
      */
     kind?: number;
     /**
-     * 
+     * Name is the declared identifier.
      * @type {string}
      * @memberof Symbol
      */
     name?: string;
     /**
-     * 
+     * Range is the declaration's span in the file.
      * @type {Range}
      * @memberof Symbol
      */

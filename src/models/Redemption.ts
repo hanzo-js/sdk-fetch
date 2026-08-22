@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -35,9 +35,9 @@ export interface Redemption {
      */
     discountCents?: number;
     /**
-     * Plan and Seats are what was redeemed against. Both are DERIVED server-side
-     * — Plan from the org's live paid subscription, Seats from claimSeats — and
-     * neither is ever read from the request.
+     * Plan is the tier redeemed against: pro, max or team. It is DERIVED from the
+     * org's live ACTIVE/TRIALING subscription, never read from the request, so it
+     * is what the org actually holds rather than what it claimed.
      * @type {string}
      * @memberof Redemption
      */
@@ -49,7 +49,11 @@ export interface Redemption {
      */
     redeemedAt?: number;
     /**
-     * 
+     * Seats is the seat count the claim was priced at, and it is ALWAYS 1. No
+     * server-side authority on this surface answers "how many seats", and the
+     * caller's own number is exactly the input that once inflated these claims,
+     * so a redemption records the single-seat floor and an admin resolves the
+     * real count against subscription data at grant time.
      * @type {number}
      * @memberof Redemption
      */

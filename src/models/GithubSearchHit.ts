@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,49 +20,55 @@ import { mapValues } from '../runtime.js';
  */
 export interface GithubSearchHit {
     /**
-     * 
+     * CloneURL is the repository's https git remote.
      * @type {string}
      * @memberof GithubSearchHit
      */
     cloneUrl?: string;
     /**
-     * 
+     * DefaultBranch is the branch a clone checks out.
      * @type {string}
      * @memberof GithubSearchHit
      */
     defaultBranch?: string;
     /**
-     * 
+     * Description is the blurb the repository's owner wrote. Empty when it has none.
      * @type {string}
      * @memberof GithubSearchHit
      */
     description?: string;
     /**
-     * 
+     * FullName is the repository's "owner/repo" on GitHub. Finding it here does
+     * NOT make it forkable: githubFork takes a repo the org's installation was
+     * granted, and a hit from the public index usually is not one.
      * @type {string}
      * @memberof GithubSearchHit
      */
     fullName?: string;
     /**
-     * 
+     * HTMLURL is the repository's page on github.com.
      * @type {string}
      * @memberof GithubSearchHit
      */
     htmlUrl?: string;
     /**
-     * 
+     * Language is the primary language GitHub detected from the file mix ("Go",
+     * "TypeScript"). Empty when GitHub attributes none.
      * @type {string}
      * @memberof GithubSearchHit
      */
     language?: string;
     /**
-     * 
+     * Private is GitHub's visibility flag, passed through. This op reads the
+     * public index — the org's token only charges the rate limit to the
+     * installation — so it is false for everything a search can reach.
      * @type {boolean}
      * @memberof GithubSearchHit
      */
     _private?: boolean;
     /**
-     * 
+     * Stars is GitHub's stargazers_count as the SEARCH INDEX held it when the
+     * query ran — a snapshot, not a live count off the repository.
      * @type {number}
      * @memberof GithubSearchHit
      */

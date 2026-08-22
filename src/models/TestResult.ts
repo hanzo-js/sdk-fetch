@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,25 +20,26 @@ import { mapValues } from '../runtime.js';
  */
 export interface TestResult {
     /**
-     * 
+     * Delivered is whether the subscriber accepted the test POST. It is the whole
+     * answer: the send is synchronous and is not retried.
      * @type {boolean}
      * @memberof TestResult
      */
     delivered?: boolean;
     /**
-     * 
+     * DurationMs is how long the single attempt took, in MILLISECONDS.
      * @type {number}
      * @memberof TestResult
      */
     durationMs?: number;
     /**
-     * 
+     * Error says what stopped it. Empty when delivered.
      * @type {string}
      * @memberof TestResult
      */
     error?: string;
     /**
-     * 
+     * HTTPStatus is what the subscriber answered, or 0 if it never answered.
      * @type {number}
      * @memberof TestResult
      */

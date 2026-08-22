@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,17 +20,57 @@ import { mapValues } from '../runtime.js';
  */
 export interface LeaderRow {
     /**
+     * CIHigh is the upper bound of that interval. Wilson rather than the normal
+     * approximation because the normal one produces bounds past 100 exactly where
+     * benchmark scores live — at 194/198 that is the top of the board, not a
+     * corner case.
+     * @type {number}
+     * @memberof LeaderRow
+     */
+    ciHigh?: number;
+    /**
+     * CILow and CIHigh are the 95% Wilson interval on Measured, in percent. They
+     * are what makes the score comparable: at n=198 a 98% carries roughly ±2
+     * points, so most differences at the top of a board are not distinguishable
+     * and a bare number implies a precision it does not have. Absent when there
+     * is no measurement.
+     * @type {number}
+     * @memberof LeaderRow
+     */
+    ciLow?: number;
+    /**
+     * Claims is how many independent claims exist for this model on this
+     * benchmark. More than one means several sources reported it.
+     * @type {number}
+     * @memberof LeaderRow
+     */
+    claims?: number;
+    /**
      * published − measured (the arena signal)
      * @type {number}
      * @memberof LeaderRow
      */
     gap?: number;
     /**
+     * Mean is the unweighted average of every claim, which answers a different
+     * question from Published: what the field says on average, rather than what
+     * the vendor says about itself. With one claim the two are equal.
+     * @type {number}
+     * @memberof LeaderRow
+     */
+    mean?: number;
+    /**
      * hanzo-measured accuracy % (nil if unrun)
      * @type {number}
      * @memberof LeaderRow
      */
     measured?: number;
+    /**
+     * MeasuredAt is when the run behind Measured was recorded.
+     * @type {Date}
+     * @memberof LeaderRow
+     */
+    measuredAt?: Date;
     /**
      * the model this row scores
      * @type {string}
@@ -55,6 +95,24 @@ export interface LeaderRow {
      * @memberof LeaderRow
      */
     published?: number;
+    /**
+     * Run names the measurement Measured came from, and MeasuredAt is when it
+     * ran. A score with no date is not a fact about a model, it is a fact about
+     * a model on a day — and models change, so the date is what makes the number
+     * checkable rather than merely quoted.
+     * @type {string}
+     * @memberof LeaderRow
+     */
+    run?: string;
+    /**
+     * Spread is the distance between the highest and lowest of them, nil when
+     * there is only one. It is the disagreement AMONG sources, which a single
+     * Published number cannot show — signal in the same way the
+     * published-minus-measured gap is.
+     * @type {number}
+     * @memberof LeaderRow
+     */
+    spread?: number;
 }
 
 /**
@@ -74,12 +132,19 @@ export function LeaderRowFromJSONTyped(json: any, ignoreDiscriminator: boolean):
     }
     return {
         
+        'ciHigh': json['ciHigh'] == null ? undefined : json['ciHigh'],
+        'ciLow': json['ciLow'] == null ? undefined : json['ciLow'],
+        'claims': json['claims'] == null ? undefined : json['claims'],
         'gap': json['gap'] == null ? undefined : json['gap'],
+        'mean': json['mean'] == null ? undefined : json['mean'],
         'measured': json['measured'] == null ? undefined : json['measured'],
+        'measuredAt': json['measuredAt'] == null ? undefined : (new Date(json['measuredAt'])),
         'model': json['model'] == null ? undefined : json['model'],
         'n': json['n'] == null ? undefined : json['n'],
         'protocol': json['protocol'] == null ? undefined : json['protocol'],
         'published': json['published'] == null ? undefined : json['published'],
+        'run': json['run'] == null ? undefined : json['run'],
+        'spread': json['spread'] == null ? undefined : json['spread'],
     };
 }
 
@@ -94,12 +159,19 @@ export function LeaderRowToJSONTyped(value?: LeaderRow | null, ignoreDiscriminat
 
     return {
         
+        'ciHigh': value['ciHigh'],
+        'ciLow': value['ciLow'],
+        'claims': value['claims'],
         'gap': value['gap'],
+        'mean': value['mean'],
         'measured': value['measured'],
+        'measuredAt': value['measuredAt'] == null ? undefined : ((value['measuredAt']).toISOString()),
         'model': value['model'],
         'n': value['n'],
         'protocol': value['protocol'],
         'published': value['published'],
+        'run': value['run'],
+        'spread': value['spread'],
     };
 }
 

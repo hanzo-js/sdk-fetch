@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,43 +20,52 @@ import { mapValues } from '../runtime.js';
  */
 export interface NodePoolView {
     /**
-     * 
+     * AutoScale reports whether the provider's cluster autoscaler owns this pool's
+     * size, moving Count between MinNodes and MaxNodes as workloads demand. False
+     * means Count changes only when someone scales the pool.
      * @type {boolean}
      * @memberof NodePoolView
      */
     autoScale?: boolean;
     /**
-     * 
+     * Count is how many nodes the pool has right now. Always present, so 0 means a
+     * pool that is genuinely empty rather than a figure the provider withheld.
      * @type {number}
      * @memberof NodePoolView
      */
     count?: number;
     /**
-     * 
+     * MaxNodes is the ceiling the autoscaler will not grow the pool past, and so
+     * the bound on what this pool can cost. Read it only with AutoScale set.
      * @type {number}
      * @memberof NodePoolView
      */
     maxNodes?: number;
     /**
-     * 
+     * MinNodes is the floor the autoscaler will not shrink the pool below. Read it
+     * only with AutoScale set — the provider ignores it otherwise.
      * @type {number}
      * @memberof NodePoolView
      */
     minNodes?: number;
     /**
-     * 
+     * Name is the pool's name as the provider knows it.
      * @type {string}
      * @memberof NodePoolView
      */
     name?: string;
     /**
-     * 
+     * PoolID is the provider's id for the pool — the value the scale and delete
+     * routes address it by. It falls back to the pool's name when the provider
+     * answered without one, so it is always something the routes accept.
      * @type {string}
      * @memberof NodePoolView
      */
     poolId?: string;
     /**
-     * 
+     * Size is the provider size slug every node in the pool runs at
+     * ("s-4vcpu-8gb", "gpu-h100x8-640gb"). One pool is one size — a mixed cluster
+     * is several pools.
      * @type {string}
      * @memberof NodePoolView
      */

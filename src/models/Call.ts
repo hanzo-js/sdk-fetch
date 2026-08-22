@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,37 +20,40 @@ import { mapValues } from '../runtime.js';
  */
 export interface Call {
     /**
-     * 
+     * Agent names the Hanzo assistant handling the call. Set means the call was
+     * answered by that assistant rather than connected to a person.
      * @type {string}
      * @memberof Call
      */
     agent?: string;
     /**
-     * 
+     * From is the calling number in E.164. It must be one this org holds: a carrier
+     * refuses an origination from a number nobody proved they own.
      * @type {string}
      * @memberof Call
      */
     from?: string;
     /**
-     * 
+     * ID is the carrier's handle for the call — what a hangup or a lookup names.
      * @type {string}
      * @memberof Call
      */
     id?: string;
     /**
-     * 
+     * Org is the tenant the call was placed for or received by.
      * @type {string}
      * @memberof Call
      */
     org?: string;
     /**
-     * queued | ringing | answered | completed | failed
+     * Status is where the call is: "queued", "ringing", "answered", "completed" or
+     * "failed". Only the last two are terminal.
      * @type {string}
      * @memberof Call
      */
     status?: string;
     /**
-     * 
+     * To is the called number in E.164.
      * @type {string}
      * @memberof Call
      */

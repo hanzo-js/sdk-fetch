@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -19,6 +19,8 @@ import type {
   BeginIn,
   DecisionIn,
   DeckOut,
+  EIN,
+  EinIn,
   EsignCompleteIn,
   EsignOut,
   FormationView,
@@ -37,6 +39,8 @@ import type {
   SafeIn,
   SafeOut,
   StructureIn,
+  Tariff,
+  TariffIn,
 } from '../models/index.js';
 import {
     AdvanceInFromJSON,
@@ -47,6 +51,10 @@ import {
     DecisionInToJSON,
     DeckOutFromJSON,
     DeckOutToJSON,
+    EINFromJSON,
+    EINToJSON,
+    EinInFromJSON,
+    EinInToJSON,
     EsignCompleteInFromJSON,
     EsignCompleteInToJSON,
     EsignOutFromJSON,
@@ -83,6 +91,10 @@ import {
     SafeOutToJSON,
     StructureInFromJSON,
     StructureInToJSON,
+    TariffFromJSON,
+    TariffToJSON,
+    TariffInFromJSON,
+    TariffInToJSON,
 } from '../models/index.js';
 
 export interface CompanyApiGetCompanyRegisterRequest {
@@ -102,6 +114,10 @@ export interface CompanyApiPostCompanyRequest {
 
 export interface CompanyApiPostCompanyAdvanceRequest {
     advanceIn: AdvanceIn;
+}
+
+export interface CompanyApiPostCompanyEinRequest {
+    einIn: EinIn;
 }
 
 export interface CompanyApiPostCompanyEsignCompleteRequest {
@@ -134,6 +150,10 @@ export interface CompanyApiPostCompanyImportDocumentsRequest {
 
 export interface CompanyApiPostCompanyKycDecisionRequest {
     decisionIn: DecisionIn;
+}
+
+export interface CompanyApiPostCompanyTariffRequest {
+    tariffIn: TariffIn;
 }
 
 export interface CompanyApiPutCompanyStructureRequest {
@@ -455,6 +475,55 @@ export class CompanyApi extends runtime.BaseAPI {
      */
     async postCompanyDocuments(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<FormationView> {
         const response = await this.postCompanyDocumentsRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Opens the EIN application and answers what it owes.  The answer states whether it can be filed ONLINE, because that is the fact deciding whether the customer waits a sitting or several weeks — and it names each form with what that form is for, so nobody has to already know what an SS-4 is to understand why they are signing one.
+     * Opens the EIN application and answers what it owes.
+     */
+    async postCompanyEinRaw(requestParameters: CompanyApiPostCompanyEinRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<EIN>> {
+        if (requestParameters['einIn'] == null) {
+            throw new runtime.RequiredError(
+                'einIn',
+                'Required parameter "einIn" was null or undefined when calling postCompanyEin().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/company/ein`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: EinInToJSON(requestParameters['einIn']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EINFromJSON(jsonValue));
+    }
+
+    /**
+     * Opens the EIN application and answers what it owes.  The answer states whether it can be filed ONLINE, because that is the fact deciding whether the customer waits a sitting or several weeks — and it names each form with what that form is for, so nobody has to already know what an SS-4 is to understand why they are signing one.
+     * Opens the EIN application and answers what it owes.
+     */
+    async postCompanyEin(requestParameters: CompanyApiPostCompanyEinRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<EIN> {
+        const response = await this.postCompanyEinRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1000,8 +1069,8 @@ export class CompanyApi extends runtime.BaseAPI {
     }
 
     /**
-     * Bills the caller\'s own org the one-time Hanzo Company formation fee — $999 unless the deployment sets another — and answers with the formation record carrying its paid flag and the charge reference. Takes no body: the org is the validated tenant and the amount is the platform\'s, never the caller\'s to assert.  IDEMPOTENT on the formation rather than on the request: an already-paid formation answers 200 with the same record and is not charged again, so a retry or a double-clicked button costs nothing. Available only at the `payment` stage (409 anywhere else) and only for an org that has begun a formation (404 otherwise).  A refused charge answers the fleet-wide billing contract, not a formation error — 402 when the org cannot pay, 503 when metering is unavailable — which is exactly why this route is not a typed op.
-     * Charge the one-time formation fee and mark the formation paid
+     * Charges the caller\'s own org the one-time Hanzo Company formation fee.  It is $999 unless the deployment sets another, and the answer is the formation record carrying its paid flag and the charge reference. It takes no body: the org is the validated tenant and the amount is the platform\'s, never the caller\'s to assert.  IDEMPOTENT on the formation rather than on the request: an already-paid formation answers 200 with the same record and is not charged again, so a retry or a double-clicked button costs nothing. Available only at the `payment` stage (409 anywhere else) and only for an org that has begun a formation (404 otherwise).  A denial answers the fleet-wide billing contract — 402 insufficient_balance, 402 spend_cap_exceeded, 503 balance_unavailable — carried by cloud.Denied, which is the money wire\'s own {\"error\":{\"code\",\"message\"}} body rather than a second vocabulary invented for this surface.  The gate is the LAST thing it does, after the stage check and the paid short-circuit, so a caller the machine is about to refuse is never charged. That ordering is why the gate cannot lift into middleware, where it would run first. Both facts are pinned: TestPaymentDenialWire, TestPaymentChargesLast.
+     * Charges the caller\'s own org the one-time Hanzo Company formation fee.
      */
     async postCompanyPaymentRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<FormationView>> {
         const queryParameters: any = {};
@@ -1030,8 +1099,8 @@ export class CompanyApi extends runtime.BaseAPI {
     }
 
     /**
-     * Bills the caller\'s own org the one-time Hanzo Company formation fee — $999 unless the deployment sets another — and answers with the formation record carrying its paid flag and the charge reference. Takes no body: the org is the validated tenant and the amount is the platform\'s, never the caller\'s to assert.  IDEMPOTENT on the formation rather than on the request: an already-paid formation answers 200 with the same record and is not charged again, so a retry or a double-clicked button costs nothing. Available only at the `payment` stage (409 anywhere else) and only for an org that has begun a formation (404 otherwise).  A refused charge answers the fleet-wide billing contract, not a formation error — 402 when the org cannot pay, 503 when metering is unavailable — which is exactly why this route is not a typed op.
-     * Charge the one-time formation fee and mark the formation paid
+     * Charges the caller\'s own org the one-time Hanzo Company formation fee.  It is $999 unless the deployment sets another, and the answer is the formation record carrying its paid flag and the charge reference. It takes no body: the org is the validated tenant and the amount is the platform\'s, never the caller\'s to assert.  IDEMPOTENT on the formation rather than on the request: an already-paid formation answers 200 with the same record and is not charged again, so a retry or a double-clicked button costs nothing. Available only at the `payment` stage (409 anywhere else) and only for an org that has begun a formation (404 otherwise).  A denial answers the fleet-wide billing contract — 402 insufficient_balance, 402 spend_cap_exceeded, 503 balance_unavailable — carried by cloud.Denied, which is the money wire\'s own {\"error\":{\"code\",\"message\"}} body rather than a second vocabulary invented for this surface.  The gate is the LAST thing it does, after the stage check and the paid short-circuit, so a caller the machine is about to refuse is never charged. That ordering is why the gate cannot lift into middleware, where it would run first. Both facts are pinned: TestPaymentDenialWire, TestPaymentChargesLast.
+     * Charges the caller\'s own org the one-time Hanzo Company formation fee.
      */
     async postCompanyPayment(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<FormationView> {
         const response = await this.postCompanyPaymentRaw(initOverrides);
@@ -1074,6 +1143,55 @@ export class CompanyApi extends runtime.BaseAPI {
      */
     async postCompanySkip(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<FormationView> {
         const response = await this.postCompanySkipRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Itemises what a formation costs before anyone commits to it.  It answers what is due now and what recurs, as separate figures, and marks the state\'s filing fee as money we collect and remit rather than keep. A caller can therefore show a payer the whole bill — which is the point of quoting at all, and was impossible while the fee was one number in an error string.  A jurisdiction whose filing fee this deployment has not been told REFUSES, naming the setting that fixes it. Quoting our half as though it were the total is the one answer that would be worse than no answer.
+     * Itemises what a formation costs before anyone commits to it.
+     */
+    async postCompanyTariffRaw(requestParameters: CompanyApiPostCompanyTariffRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Tariff>> {
+        if (requestParameters['tariffIn'] == null) {
+            throw new runtime.RequiredError(
+                'tariffIn',
+                'Required parameter "tariffIn" was null or undefined when calling postCompanyTariff().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/company/tariff`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: TariffInToJSON(requestParameters['tariffIn']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TariffFromJSON(jsonValue));
+    }
+
+    /**
+     * Itemises what a formation costs before anyone commits to it.  It answers what is due now and what recurs, as separate figures, and marks the state\'s filing fee as money we collect and remit rather than keep. A caller can therefore show a payer the whole bill — which is the point of quoting at all, and was impossible while the fee was one number in an error string.  A jurisdiction whose filing fee this deployment has not been told REFUSES, naming the setting that fixes it. Quoting our half as though it were the total is the one answer that would be worse than no answer.
+     * Itemises what a formation costs before anyone commits to it.
+     */
+    async postCompanyTariff(requestParameters: CompanyApiPostCompanyTariffRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Tariff> {
+        const response = await this.postCompanyTariffRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

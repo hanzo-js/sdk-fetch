@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -16,20 +16,97 @@
 import * as runtime from '../runtime.js';
 import type {
   Accounts,
-  CollectOut,
-  InvoiceOut,
-  RaiseInvoiceIn,
+  Alert,
+  AlertPatch,
+  AlertSpec,
+  BillingAccount,
+  CapVerdict,
+  Collected,
+  CreditBalance,
+  CreditGrants,
+  CryptoAsset,
+  CryptoDeposit,
+  CryptoOptions,
+  FinanceLedgerEntry,
+  Holder,
+  Invoice,
+  Invoices,
+  Mode,
+  ModeIn,
+  PaymentConfig,
+  Payout,
+  RaiseIn,
+  Rollup,
+  Subscription,
+  SubscriptionRef,
+  Subscriptions,
+  Tier,
+  Transactions,
+  WireInstructions,
 } from '../models/index.js';
 import {
     AccountsFromJSON,
     AccountsToJSON,
-    CollectOutFromJSON,
-    CollectOutToJSON,
-    InvoiceOutFromJSON,
-    InvoiceOutToJSON,
-    RaiseInvoiceInFromJSON,
-    RaiseInvoiceInToJSON,
+    AlertFromJSON,
+    AlertToJSON,
+    AlertPatchFromJSON,
+    AlertPatchToJSON,
+    AlertSpecFromJSON,
+    AlertSpecToJSON,
+    BillingAccountFromJSON,
+    BillingAccountToJSON,
+    CapVerdictFromJSON,
+    CapVerdictToJSON,
+    CollectedFromJSON,
+    CollectedToJSON,
+    CreditBalanceFromJSON,
+    CreditBalanceToJSON,
+    CreditGrantsFromJSON,
+    CreditGrantsToJSON,
+    CryptoAssetFromJSON,
+    CryptoAssetToJSON,
+    CryptoDepositFromJSON,
+    CryptoDepositToJSON,
+    CryptoOptionsFromJSON,
+    CryptoOptionsToJSON,
+    FinanceLedgerEntryFromJSON,
+    FinanceLedgerEntryToJSON,
+    HolderFromJSON,
+    HolderToJSON,
+    InvoiceFromJSON,
+    InvoiceToJSON,
+    InvoicesFromJSON,
+    InvoicesToJSON,
+    ModeFromJSON,
+    ModeToJSON,
+    ModeInFromJSON,
+    ModeInToJSON,
+    PaymentConfigFromJSON,
+    PaymentConfigToJSON,
+    PayoutFromJSON,
+    PayoutToJSON,
+    RaiseInFromJSON,
+    RaiseInToJSON,
+    RollupFromJSON,
+    RollupToJSON,
+    SubscriptionFromJSON,
+    SubscriptionToJSON,
+    SubscriptionRefFromJSON,
+    SubscriptionRefToJSON,
+    SubscriptionsFromJSON,
+    SubscriptionsToJSON,
+    TierFromJSON,
+    TierToJSON,
+    TransactionsFromJSON,
+    TransactionsToJSON,
+    WireInstructionsFromJSON,
+    WireInstructionsToJSON,
 } from '../models/index.js';
+
+export interface BillingApiCancelSubscriptionRequest {
+    id: string;
+    subscriptionRef: SubscriptionRef;
+}
 
 export interface BillingApiCollectInvoiceRequest {
     id: string;
@@ -51,12 +128,29 @@ export interface BillingApiGetBillingAccountsByIdMembersRequest {
     id: string;
 }
 
+export interface BillingApiGetBillingAlertsAuthorizeRequest {
+    project?: string;
+    service?: string;
+    amount?: string;
+    pv?: string;
+}
+
 export interface BillingApiGetBillingCryptoDepositByIdRequest {
     id: string;
 }
 
 export interface BillingApiGetBillingInvoicesByIdPdfRequest {
     id: string;
+}
+
+export interface BillingApiGetBillingLedgerRequest {
+    range?: string;
+}
+
+export interface BillingApiGetBillingTransactionsRequest {
+    currency?: string;
+    limit?: string;
+    offset?: string;
 }
 
 export interface BillingApiGetInvoiceRequest {
@@ -69,22 +163,28 @@ export interface BillingApiIssueInvoiceRequest {
 
 export interface BillingApiPatchBillingAlertsByIdRequest {
     id: string;
+    alertPatch: AlertPatch;
 }
 
-export interface BillingApiPostBillingSubscriptionsByIdCancelRequest {
-    id: string;
+export interface BillingApiPostBillingAlertsRequest {
+    alertSpec: AlertSpec;
 }
 
-export interface BillingApiPostBillingSubscriptionsByIdReactivateRequest {
-    id: string;
+export interface BillingApiPostBillingCryptoDepositRequest {
+    cryptoAsset: CryptoAsset;
 }
 
-export interface BillingApiPostBillingWebhooksByProviderRequest {
-    provider: string;
+export interface BillingApiPostBillingModeRequest {
+    modeIn: ModeIn;
 }
 
 export interface BillingApiRaiseInvoiceRequest {
-    raiseInvoiceIn: RaiseInvoiceIn;
+    raiseIn: RaiseIn;
+}
+
+export interface BillingApiReactivateSubscriptionRequest {
+    id: string;
+    subscriptionRef: SubscriptionRef;
 }
 
 export interface BillingApiVoidInvoiceRequest {
@@ -97,10 +197,67 @@ export interface BillingApiVoidInvoiceRequest {
 export class BillingApi extends runtime.BaseAPI {
 
     /**
+     * Ends a subscription.  It cancels at the END OF THE PAID PERIOD by default, because a customer who cancels has already paid for the period they are in and taking it away is taking money for nothing. `atPeriodEnd: false` ends it at once, which is the caller asking for that.  A subscription from another org is not found rather than refused, so an id cannot be probed for existence.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * End a subscription
+     */
+    async cancelSubscriptionRaw(requestParameters: BillingApiCancelSubscriptionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Subscription>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling cancelSubscription().'
+            );
+        }
+
+        if (requestParameters['subscriptionRef'] == null) {
+            throw new runtime.RequiredError(
+                'subscriptionRef',
+                'Required parameter "subscriptionRef" was null or undefined when calling cancelSubscription().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/billing/subscriptions/{id}/cancel`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: SubscriptionRefToJSON(requestParameters['subscriptionRef']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => SubscriptionFromJSON(jsonValue));
+    }
+
+    /**
+     * Ends a subscription.  It cancels at the END OF THE PAID PERIOD by default, because a customer who cancels has already paid for the period they are in and taking it away is taking money for nothing. `atPeriodEnd: false` ends it at once, which is the caller asking for that.  A subscription from another org is not found rather than refused, so an id cannot be probed for existence.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * End a subscription
+     */
+    async cancelSubscription(requestParameters: BillingApiCancelSubscriptionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Subscription> {
+        const response = await this.cancelSubscriptionRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Collects an issued invoice: credit grants first, then prepaid balance, then the card on file — the same waterfall the dunning workflow runs.  A DECLINE IS NOT AN ERROR. It answers with paid=false, a reason, and the invoice still open, because a declined collection is a normal business outcome that must remain retryable — and because sealing it as a failure would wedge dunning behind a replayed decline. Only a successful collection is sealed, so a retry of a paid invoice replays the receipt instead of charging again.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
      * Collect an issued invoice from credits, balance, then card
      */
-    async collectInvoiceRaw(requestParameters: BillingApiCollectInvoiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CollectOut>> {
+    async collectInvoiceRaw(requestParameters: BillingApiCollectInvoiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Collected>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -131,21 +288,21 @@ export class BillingApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CollectOutFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CollectedFromJSON(jsonValue));
     }
 
     /**
      * Collects an issued invoice: credit grants first, then prepaid balance, then the card on file — the same waterfall the dunning workflow runs.  A DECLINE IS NOT AN ERROR. It answers with paid=false, a reason, and the invoice still open, because a declined collection is a normal business outcome that must remain retryable — and because sealing it as a failure would wedge dunning behind a replayed decline. Only a successful collection is sealed, so a retry of a paid invoice replays the receipt instead of charging again.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
      * Collect an issued invoice from credits, balance, then card
      */
-    async collectInvoice(requestParameters: BillingApiCollectInvoiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CollectOut> {
+    async collectInvoice(requestParameters: BillingApiCollectInvoiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Collected> {
         const response = await this.collectInvoiceRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Deletes the addressed cap and answers 204. Requires an ORG ADMIN, a platform admin, or the internal service token — deleting a cap uncaps the org\'s spend, so a plain member is refused 403. Ownership is checked per row and a cap the caller does not own is refused as 404 rather than 403, so the response cannot confirm that another org\'s id exists.
-     * Remove one of your org\'s spend caps
+     * Deletes a budget the caller\'s org owns and answers 204.  Removing a cap REMOVES A CEILING, so it takes the same bar as setting one: a validated org admin, the platform SuperAdmin, or the trusted in-process service token. A member who could delete the org\'s cap would have unbounded spend.  A cap this org does not own is NOT FOUND rather than refused — the same answer whether the id is unknown or belongs to another customer — so an id cannot be probed for existence by trying to delete it.
+     * Remove one spend cap
      */
     async deleteBillingAlertsByIdRaw(requestParameters: BillingApiDeleteBillingAlertsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['id'] == null) {
@@ -182,16 +339,16 @@ export class BillingApi extends runtime.BaseAPI {
     }
 
     /**
-     * Deletes the addressed cap and answers 204. Requires an ORG ADMIN, a platform admin, or the internal service token — deleting a cap uncaps the org\'s spend, so a plain member is refused 403. Ownership is checked per row and a cap the caller does not own is refused as 404 rather than 403, so the response cannot confirm that another org\'s id exists.
-     * Remove one of your org\'s spend caps
+     * Deletes a budget the caller\'s org owns and answers 204.  Removing a cap REMOVES A CEILING, so it takes the same bar as setting one: a validated org admin, the platform SuperAdmin, or the trusted in-process service token. A member who could delete the org\'s cap would have unbounded spend.  A cap this org does not own is NOT FOUND rather than refused — the same answer whether the id is unknown or belongs to another customer — so an id cannot be probed for existence by trying to delete it.
+     * Remove one spend cap
      */
     async deleteBillingAlertsById(requestParameters: BillingApiDeleteBillingAlertsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.deleteBillingAlertsByIdRaw(requestParameters, initOverrides);
     }
 
     /**
-     * Detaches the addressed card: the stored reference is removed here AND withdrawn from the processor\'s vault, so nothing is left that a later charge could bill.  The customer twin of DELETE /v1/billing/portal/methods/{id}. The id is resolved INSIDE your own org namespace, so a card that is not yours is simply not found there and answers 404 — never 403, which would confirm the id exists.  Removing the card an auto-recharge or a running lease bills leaves that arrangement with nothing to charge; that is yours to decide.
-     * Remove one of your saved cards
+     * Detaches the method at the processor and drops the row.  A method the caller does not own is NOT FOUND rather than refused — the same answer whether the id names nothing or names somebody else\'s card — so an id cannot be probed for existence.  A platform operator or the trusted in-process service token may act on any subject inside the org; everyone else may only remove their own.
+     * Remove one saved card or account
      */
     async deleteBillingMethodsByIdRaw(requestParameters: BillingApiDeleteBillingMethodsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['id'] == null) {
@@ -228,16 +385,16 @@ export class BillingApi extends runtime.BaseAPI {
     }
 
     /**
-     * Detaches the addressed card: the stored reference is removed here AND withdrawn from the processor\'s vault, so nothing is left that a later charge could bill.  The customer twin of DELETE /v1/billing/portal/methods/{id}. The id is resolved INSIDE your own org namespace, so a card that is not yours is simply not found there and answers 404 — never 403, which would confirm the id exists.  Removing the card an auto-recharge or a running lease bills leaves that arrangement with nothing to charge; that is yours to decide.
-     * Remove one of your saved cards
+     * Detaches the method at the processor and drops the row.  A method the caller does not own is NOT FOUND rather than refused — the same answer whether the id names nothing or names somebody else\'s card — so an id cannot be probed for existence.  A platform operator or the trusted in-process service token may act on any subject inside the org; everyone else may only remove their own.
+     * Remove one saved card or account
      */
     async deleteBillingMethodsById(requestParameters: BillingApiDeleteBillingMethodsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.deleteBillingMethodsByIdRaw(requestParameters, initOverrides);
     }
 
     /**
-     * Detaches the addressed card: the stored reference is removed here AND withdrawn from the processor\'s vault, so nothing is left that a later charge could bill.  The service-token twin of the customer\'s DELETE /v1/billing/methods/{id}, at its own address for the same reason the portal list is — a different principal, on the same rows, in this same process.  The id is resolved INSIDE the caller\'s org namespace, so another tenant\'s card is not found there and answers 404 — never 403, which would confirm the id exists. That bound holds for the service token too: it may act for any subject within the org the gateway pinned, and for no subject outside it.  Removing the card an auto-recharge or a running lease bills leaves that arrangement with nothing to charge; that is the customer\'s call to make.
-     * Remove a saved card — the portal detach
+     * Detaches the method at the processor and drops the row.  A method the caller does not own is NOT FOUND rather than refused — the same answer whether the id names nothing or names somebody else\'s card — so an id cannot be probed for existence.  A platform operator or the trusted in-process service token may act on any subject inside the org; everyone else may only remove their own.
+     * Remove one saved card or account
      */
     async deleteBillingPortalMethodsByIdRaw(requestParameters: BillingApiDeleteBillingPortalMethodsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['id'] == null) {
@@ -274,18 +431,18 @@ export class BillingApi extends runtime.BaseAPI {
     }
 
     /**
-     * Detaches the addressed card: the stored reference is removed here AND withdrawn from the processor\'s vault, so nothing is left that a later charge could bill.  The service-token twin of the customer\'s DELETE /v1/billing/methods/{id}, at its own address for the same reason the portal list is — a different principal, on the same rows, in this same process.  The id is resolved INSIDE the caller\'s org namespace, so another tenant\'s card is not found there and answers 404 — never 403, which would confirm the id exists. That bound holds for the service token too: it may act for any subject within the org the gateway pinned, and for no subject outside it.  Removing the card an auto-recharge or a running lease bills leaves that arrangement with nothing to charge; that is the customer\'s call to make.
-     * Remove a saved card — the portal detach
+     * Detaches the method at the processor and drops the row.  A method the caller does not own is NOT FOUND rather than refused — the same answer whether the id names nothing or names somebody else\'s card — so an id cannot be probed for existence.  A platform operator or the trusted in-process service token may act on any subject inside the org; everyone else may only remove their own.
+     * Remove one saved card or account
      */
     async deleteBillingPortalMethodsById(requestParameters: BillingApiDeleteBillingPortalMethodsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.deleteBillingPortalMethodsByIdRaw(requestParameters, initOverrides);
     }
 
     /**
-     * Returns the billing accounts visible to the caller. One organisation is exactly one billing account here, so an authenticated caller sees precisely one: their own. The list shape is the honest one — it is what a caller with access to several would receive — rather than a promise that more will ever appear for a token scoped to a single org.  The account is derived from the validated org claim and from nothing the caller sends, so there is no account parameter and a cross-tenant read is not expressible. An unauthenticated call is 401.
-     * The billing account you are signed in to
+     * Answers the caller\'s billing accounts: the org itself, its currency, when it was opened, and the caller\'s own standing in it.  The standing is the caller\'s, resolved from the validated principal here and sent to the store rather than looked up there — the membership roster is IAM\'s and commerce keeps none, so a callee that answered \"what role is this\" would be inventing it. An anonymous read gets the account with no role rather than an implied membership.  Scoped to the caller\'s own org, which is the whole tenancy story: there is no org field on the wire and none on the input.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Answers the caller\'s billing accounts: the org itself, its currency, when it was opened, and the caller\'s own standing in it.
      */
-    async getBillingAccountsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getBillingAccountsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<BillingAccount>>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -308,22 +465,23 @@ export class BillingApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(BillingAccountFromJSON));
     }
 
     /**
-     * Returns the billing accounts visible to the caller. One organisation is exactly one billing account here, so an authenticated caller sees precisely one: their own. The list shape is the honest one — it is what a caller with access to several would receive — rather than a promise that more will ever appear for a token scoped to a single org.  The account is derived from the validated org claim and from nothing the caller sends, so there is no account parameter and a cross-tenant read is not expressible. An unauthenticated call is 401.
-     * The billing account you are signed in to
+     * Answers the caller\'s billing accounts: the org itself, its currency, when it was opened, and the caller\'s own standing in it.  The standing is the caller\'s, resolved from the validated principal here and sent to the store rather than looked up there — the membership roster is IAM\'s and commerce keeps none, so a callee that answered \"what role is this\" would be inventing it. An anonymous read gets the account with no role rather than an implied membership.  Scoped to the caller\'s own org, which is the whole tenancy story: there is no org field on the wire and none on the input.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Answers the caller\'s billing accounts: the org itself, its currency, when it was opened, and the caller\'s own standing in it.
      */
-    async getBillingAccounts(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getBillingAccountsRaw(initOverrides);
+    async getBillingAccounts(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<BillingAccount>> {
+        const response = await this.getBillingAccountsRaw(initOverrides);
+        return await response.value();
     }
 
     /**
-     * Returns the members of one billing account. The id must be the caller\'s OWN account — the handler compares it against the org resolved from the token and answers 403 when they differ, which is what guards this route: unlike its siblings it carries no subject key for the pin to overwrite, so it checks the path segment itself.  The roster it can answer is currently the requesting user alone. Membership lives in IAM, not in the ledger, and this operation reports what commerce actually holds rather than inventing a roster from a source it does not read. An unauthenticated call is 401.
-     * Who is on a billing account
+     * Answers one billing account\'s roster.  commerce stores no roster — that is IAM\'s — so the only member it can name is the caller, and that is what comes back. What it does enforce is that the account named in the path is the caller\'s own: a foreign id is 403, not an empty list, because \"no members\" and \"not your account\" are different answers.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Answers one billing account\'s roster.
      */
-    async getBillingAccountsByIdMembersRaw(requestParameters: BillingApiGetBillingAccountsByIdMembersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getBillingAccountsByIdMembersRaw(requestParameters: BillingApiGetBillingAccountsByIdMembersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Holder>>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -354,22 +512,23 @@ export class BillingApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(HolderFromJSON));
     }
 
     /**
-     * Returns the members of one billing account. The id must be the caller\'s OWN account — the handler compares it against the org resolved from the token and answers 403 when they differ, which is what guards this route: unlike its siblings it carries no subject key for the pin to overwrite, so it checks the path segment itself.  The roster it can answer is currently the requesting user alone. Membership lives in IAM, not in the ledger, and this operation reports what commerce actually holds rather than inventing a roster from a source it does not read. An unauthenticated call is 401.
-     * Who is on a billing account
+     * Answers one billing account\'s roster.  commerce stores no roster — that is IAM\'s — so the only member it can name is the caller, and that is what comes back. What it does enforce is that the account named in the path is the caller\'s own: a foreign id is 403, not an empty list, because \"no members\" and \"not your account\" are different answers.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Answers one billing account\'s roster.
      */
-    async getBillingAccountsByIdMembers(requestParameters: BillingApiGetBillingAccountsByIdMembersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getBillingAccountsByIdMembersRaw(requestParameters, initOverrides);
+    async getBillingAccountsByIdMembers(requestParameters: BillingApiGetBillingAccountsByIdMembersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Holder>> {
+        const response = await this.getBillingAccountsByIdMembersRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Returns the caps and alerts keyed to the caller\'s own billing subject, each with its threshold, enforcement flag, soft-warning percentage and current period spend. Any authenticated member of the org may read them — only the writes require an admin. The rows are keyed on the org subject the enforcement gate itself reads, which is why a cap created here is the one that actually binds. A caller with no resolvable org or subject gets an empty list, never another tenant\'s caps.
-     * List your org\'s spend caps and rate limits
+     * Lists this org\'s spend caps: the ceiling, its scope, whether it enforces, and how much of it has been spent this period.  `periodSpentCents`, `over` and `warn` are ABSENT rather than zero when the spend could not be read, because \"nothing spent\" and \"spend unknown\" are different answers and a customer acting on the first when the second is true would be reading a ceiling that is not there. The policy row is reported either way.  The period is the UTC calendar month and `resetsAt` is when the count starts again, so a surface can say \"resets on\" without a second call.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Lists this org\'s spend caps: the ceiling, its scope, whether it enforces, and how much of it has been spent this period.
      */
-    async getBillingAlertsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getBillingAlertsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Alert>>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -392,23 +551,40 @@ export class BillingApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(AlertFromJSON));
     }
 
     /**
-     * Returns the caps and alerts keyed to the caller\'s own billing subject, each with its threshold, enforcement flag, soft-warning percentage and current period spend. Any authenticated member of the org may read them — only the writes require an admin. The rows are keyed on the org subject the enforcement gate itself reads, which is why a cap created here is the one that actually binds. A caller with no resolvable org or subject gets an empty list, never another tenant\'s caps.
-     * List your org\'s spend caps and rate limits
+     * Lists this org\'s spend caps: the ceiling, its scope, whether it enforces, and how much of it has been spent this period.  `periodSpentCents`, `over` and `warn` are ABSENT rather than zero when the spend could not be read, because \"nothing spent\" and \"spend unknown\" are different answers and a customer acting on the first when the second is true would be reading a ceiling that is not there. The policy row is reported either way.  The period is the UTC calendar month and `resetsAt` is when the count starts again, so a surface can say \"resets on\" without a second call.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Lists this org\'s spend caps: the ceiling, its scope, whether it enforces, and how much of it has been spent this period.
      */
-    async getBillingAlerts(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getBillingAlertsRaw(initOverrides);
+    async getBillingAlerts(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Alert>> {
+        const response = await this.getBillingAlertsRaw(initOverrides);
+        return await response.value();
     }
 
     /**
-     * Answers allow, reason, capCents, spentCents and warnPct for a proposed amount against a (project, service) scope — the verdict the request-edge metering gate reads before admitting a call. It evaluates EVERY covering cap and the most restrictive enforcing one wins; soft caps and an enforcing project cap whose project axis is not validated never block, they only raise the warning utilization. It is a service-to-service read authenticated by the internal service token with the org pinned by the gateway, not a browser call. Two rules matter: the spend it scores comes from the finance ledger\'s current-month total, and it FAILS OPEN on unknown spend — a transient read failure allows rather than denies, so a backend blip never bills-blocks an under-cap customer, while a known overage still denies.
-     * The per-request spend-cap verdict the metering gate consumes
+     * Answers whether one proposed spend fits inside this org\'s caps.  It is the per-request verdict the metering edge consumes before every priced call, and its caller is a SERVICE rather than a person: a service token plus the gateway-pinned org, with no user behind it. So this admits that principal where the CRUD beside it does not.  Every covering row is evaluated, most-restrictive-wins, and the tightest one is what `capCents`, `spentCents` and `reason` describe. Soft rows never deny; nor does a project-scoped enforcing row whose project axis the caller could not establish — `pv=1` is how a caller states that it did, and an unproven claim must not be able to refuse traffic.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Answers whether one proposed spend fits inside this org\'s caps.
      */
-    async getBillingAlertsAuthorizeRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getBillingAlertsAuthorizeRaw(requestParameters: BillingApiGetBillingAlertsAuthorizeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CapVerdict>> {
         const queryParameters: any = {};
+
+        if (requestParameters['project'] != null) {
+            queryParameters['project'] = requestParameters['project'];
+        }
+
+        if (requestParameters['service'] != null) {
+            queryParameters['service'] = requestParameters['service'];
+        }
+
+        if (requestParameters['amount'] != null) {
+            queryParameters['amount'] = requestParameters['amount'];
+        }
+
+        if (requestParameters['pv'] != null) {
+            queryParameters['pv'] = requestParameters['pv'];
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -430,15 +606,16 @@ export class BillingApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => CapVerdictFromJSON(jsonValue));
     }
 
     /**
-     * Answers allow, reason, capCents, spentCents and warnPct for a proposed amount against a (project, service) scope — the verdict the request-edge metering gate reads before admitting a call. It evaluates EVERY covering cap and the most restrictive enforcing one wins; soft caps and an enforcing project cap whose project axis is not validated never block, they only raise the warning utilization. It is a service-to-service read authenticated by the internal service token with the org pinned by the gateway, not a browser call. Two rules matter: the spend it scores comes from the finance ledger\'s current-month total, and it FAILS OPEN on unknown spend — a transient read failure allows rather than denies, so a backend blip never bills-blocks an under-cap customer, while a known overage still denies.
-     * The per-request spend-cap verdict the metering gate consumes
+     * Answers whether one proposed spend fits inside this org\'s caps.  It is the per-request verdict the metering edge consumes before every priced call, and its caller is a SERVICE rather than a person: a service token plus the gateway-pinned org, with no user behind it. So this admits that principal where the CRUD beside it does not.  Every covering row is evaluated, most-restrictive-wins, and the tightest one is what `capCents`, `spentCents` and `reason` describe. Soft rows never deny; nor does a project-scoped enforcing row whose project axis the caller could not establish — `pv=1` is how a caller states that it did, and an unproven claim must not be able to refuse traffic.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Answers whether one proposed spend fits inside this org\'s caps.
      */
-    async getBillingAlertsAuthorize(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getBillingAlertsAuthorizeRaw(initOverrides);
+    async getBillingAlertsAuthorize(requestParameters: BillingApiGetBillingAlertsAuthorizeRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CapVerdict> {
+        const response = await this.getBillingAlertsAuthorizeRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
@@ -480,10 +657,10 @@ export class BillingApi extends runtime.BaseAPI {
     }
 
     /**
-     * Returns the total credit still available to the caller\'s own subject — the sum of what the grants have left, which is the figure the console shows above the usage meter. It is the balance a metered act draws down, so it answers the one question a customer asks before spending: how much is there.  Like every read in this family the subject is pinned to the caller before the handler runs, so the userId parameter the handler reads can never name another tenant. For the grants BEHIND this number — each with its original amount and its expiry — read /v1/billing/credits. A subject with no credit is zero, which is an answer and not an error.
-     * What is left of your credit, as one number
+     * Answers what the caller can spend right now, one entry per currency.  Only ACTIVE grants count: a voided, exhausted or lapsed grant contributes nothing, which is why this number can be smaller than the grant list suggests and why the two reads exist separately. It is credit, not prepaid balance — /v1/billing/balance is the wallet, and the two are added by the gate, never by a reader.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Answers what the caller can spend right now, one entry per currency.
      */
-    async getBillingCreditBalanceRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getBillingCreditBalanceRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreditBalance>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -506,22 +683,66 @@ export class BillingApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => CreditBalanceFromJSON(jsonValue));
     }
 
     /**
-     * Returns the total credit still available to the caller\'s own subject — the sum of what the grants have left, which is the figure the console shows above the usage meter. It is the balance a metered act draws down, so it answers the one question a customer asks before spending: how much is there.  Like every read in this family the subject is pinned to the caller before the handler runs, so the userId parameter the handler reads can never name another tenant. For the grants BEHIND this number — each with its original amount and its expiry — read /v1/billing/credits. A subject with no credit is zero, which is an answer and not an error.
-     * What is left of your credit, as one number
+     * Answers what the caller can spend right now, one entry per currency.  Only ACTIVE grants count: a voided, exhausted or lapsed grant contributes nothing, which is why this number can be smaller than the grant list suggests and why the two reads exist separately. It is credit, not prepaid balance — /v1/billing/balance is the wallet, and the two are added by the gate, never by a reader.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Answers what the caller can spend right now, one entry per currency.
      */
-    async getBillingCreditBalance(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getBillingCreditBalanceRaw(initOverrides);
+    async getBillingCreditBalance(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreditBalance> {
+        const response = await this.getBillingCreditBalanceRaw(initOverrides);
+        return await response.value();
     }
 
     /**
-     * Returns the caller org\'s credit grants — each with its original amount, what remains and when it expires — so a customer can see what was given and what is left before metered spend draws it down. It is a READ of the caller\'s own subject, pinned before the handler runs, so a grant belonging to another tenant is simply absent. Granting credit is not this route and never has been: minting lands on the mint-gated POST /v1/billing/credit, which no browser can reach. Reading an empty balance is an empty array, not an error.
-     * List the credit grants on your org\'s balance
+     * Answers that same spendable credit split by grant tag, with the earliest expiry under each and the total across all of them.  The split is the point: it is how trial credit is told apart from bought credit, which is what a surface asks before it decides whether to spend any. An unregistered address answers 404 and a caller reads that as \"no credit\", so this being served is the difference between a customer with a trial grant being offered their trial and being told they have none.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Answers that same spendable credit split by grant tag, with the earliest expiry under each and the total across all of them.
      */
-    async getBillingCreditsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getBillingCreditBalanceBreakdownRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/billing/credit-balance/breakdown`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return new runtime.JSONApiResponse<any>(response);
+        } else {
+            return new runtime.TextApiResponse(response) as any;
+        }
+    }
+
+    /**
+     * Answers that same spendable credit split by grant tag, with the earliest expiry under each and the total across all of them.  The split is the point: it is how trial credit is told apart from bought credit, which is what a surface asks before it decides whether to spend any. An unregistered address answers 404 and a caller reads that as \"no credit\", so this being served is the difference between a customer with a trial grant being offered their trial and being told they have none.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Answers that same spendable credit split by grant tag, with the earliest expiry under each and the total across all of them.
+     */
+    async getBillingCreditBalanceBreakdown(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
+        const response = await this.getBillingCreditBalanceBreakdownRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Lists the caller\'s credit grants — every one of them, spent and lapsed and voided included.  That is deliberate and it is what makes the list useful: a grant list is a LEDGER, and one that hid its spent rows could not be reconciled against a burn-down. What is spendable right now is the sibling read, /v1/billing/ credit-balance, and the two are different questions.  Scoped to the caller\'s own wallet, resolved server-side.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Lists the caller\'s credit grants — every one of them, spent and lapsed and voided included.
+     */
+    async getBillingCreditsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreditGrants>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -544,22 +765,23 @@ export class BillingApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => CreditGrantsFromJSON(jsonValue));
     }
 
     /**
-     * Returns the caller org\'s credit grants — each with its original amount, what remains and when it expires — so a customer can see what was given and what is left before metered spend draws it down. It is a READ of the caller\'s own subject, pinned before the handler runs, so a grant belonging to another tenant is simply absent. Granting credit is not this route and never has been: minting lands on the mint-gated POST /v1/billing/credit, which no browser can reach. Reading an empty balance is an empty array, not an error.
-     * List the credit grants on your org\'s balance
+     * Lists the caller\'s credit grants — every one of them, spent and lapsed and voided included.  That is deliberate and it is what makes the list useful: a grant list is a LEDGER, and one that hid its spent rows could not be reconciled against a burn-down. What is spendable right now is the sibling read, /v1/billing/ credit-balance, and the two are different questions.  Scoped to the caller\'s own wallet, resolved server-side.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Lists the caller\'s credit grants — every one of them, spent and lapsed and voided included.
      */
-    async getBillingCredits(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getBillingCreditsRaw(initOverrides);
+    async getBillingCredits(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreditGrants> {
+        const response = await this.getBillingCreditsRaw(initOverrides);
+        return await response.value();
     }
 
     /**
-     * Answers the addressed deposit intent\'s current state — pending until a transfer is seen, confirming while the chain buries it, succeeded once it is credited — so a payment page can poll one deposit rather than the whole balance.  Scoped to the caller: an intent belonging to another payer is not found and answers 404, never another account\'s state. The credit itself is the chain watcher\'s to make; this read reports it and never performs it.
-     * Follow one crypto deposit to settlement
+     * Reads one of the caller\'s own deposit intents back — pending, confirming, or succeeded.  An intent belonging to another payer answers 404, exactly as an id that names nothing, so a guessed id cannot confirm that somebody else\'s deposit exists.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Reads one of the caller\'s own deposit intents back — pending, confirming, or succeeded.
      */
-    async getBillingCryptoDepositByIdRaw(requestParameters: BillingApiGetBillingCryptoDepositByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getBillingCryptoDepositByIdRaw(requestParameters: BillingApiGetBillingCryptoDepositByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CryptoDeposit>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -590,22 +812,23 @@ export class BillingApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => CryptoDepositFromJSON(jsonValue));
     }
 
     /**
-     * Answers the addressed deposit intent\'s current state — pending until a transfer is seen, confirming while the chain buries it, succeeded once it is credited — so a payment page can poll one deposit rather than the whole balance.  Scoped to the caller: an intent belonging to another payer is not found and answers 404, never another account\'s state. The credit itself is the chain watcher\'s to make; this read reports it and never performs it.
-     * Follow one crypto deposit to settlement
+     * Reads one of the caller\'s own deposit intents back — pending, confirming, or succeeded.  An intent belonging to another payer answers 404, exactly as an id that names nothing, so a guessed id cannot confirm that somebody else\'s deposit exists.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Reads one of the caller\'s own deposit intents back — pending, confirming, or succeeded.
      */
-    async getBillingCryptoDepositById(requestParameters: BillingApiGetBillingCryptoDepositByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getBillingCryptoDepositByIdRaw(requestParameters, initOverrides);
+    async getBillingCryptoDepositById(requestParameters: BillingApiGetBillingCryptoDepositByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CryptoDeposit> {
+        const response = await this.getBillingCryptoDepositByIdRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Answers the custody processor\'s LIVE capability list — the chains and the tokens on each that this deployment can actually take a deposit on. A payment page renders its asset picker straight from it rather than from a list of its own, so a chain the processor stops supporting disappears from the picker instead of minting an address nothing watches.  It is a capability read, not an account read: it says what may be paid with, never anything about this caller\'s balance or deposits.
-     * Which chains and tokens a crypto top-up can use
+     * Answers which chains and tokens the crypto rail accepts — what an asset picker renders.  It is the intersection of two live facts rather than a configured list: an asset appears only if something is WATCHING it and the custody processor supports it. An address nobody watches credits nobody, so offering one would take a customer\'s money and lose it. A rail with nothing armed answers 503, not an empty menu — \"no rail\" and \"no assets\" are different, and only one of them means try again later.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Answers which chains and tokens the crypto rail accepts — what an asset picker renders.
      */
-    async getBillingCryptoOptionsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getBillingCryptoOptionsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CryptoOptions>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -628,22 +851,23 @@ export class BillingApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => CryptoOptionsFromJSON(jsonValue));
     }
 
     /**
-     * Answers the custody processor\'s LIVE capability list — the chains and the tokens on each that this deployment can actually take a deposit on. A payment page renders its asset picker straight from it rather than from a list of its own, so a chain the processor stops supporting disappears from the picker instead of minting an address nothing watches.  It is a capability read, not an account read: it says what may be paid with, never anything about this caller\'s balance or deposits.
-     * Which chains and tokens a crypto top-up can use
+     * Answers which chains and tokens the crypto rail accepts — what an asset picker renders.  It is the intersection of two live facts rather than a configured list: an asset appears only if something is WATCHING it and the custody processor supports it. An address nobody watches credits nobody, so offering one would take a customer\'s money and lose it. A rail with nothing armed answers 503, not an empty menu — \"no rail\" and \"no assets\" are different, and only one of them means try again later.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Answers which chains and tokens the crypto rail accepts — what an asset picker renders.
      */
-    async getBillingCryptoOptions(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getBillingCryptoOptionsRaw(initOverrides);
+    async getBillingCryptoOptions(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CryptoOptions> {
+        const response = await this.getBillingCryptoOptionsRaw(initOverrides);
+        return await response.value();
     }
 
     /**
-     * Returns the caller org\'s invoices with a count, read from that org\'s own namespaced store, narrowable by userId, status or subscriptionId. The org is the one the gateway validated and the caller\'s billing subject is pinned into the query before the handler runs, so a read can never widen past the caller. A request that carries no resolvable org gets an honest empty list rather than an error or another tenant\'s rows.
-     * List your org\'s billing invoices
+     * Lists the caller\'s invoices, newest first, with the count beside them.  It is scoped to the caller\'s own billing subject — the wallet this request bills from, resolved server-side — so a query cannot widen it to another customer of the same org. An org with no invoices is an empty list, not a refusal.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Lists the caller\'s invoices, newest first, with the count beside them.
      */
-    async getBillingInvoicesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getBillingInvoicesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Invoices>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -666,20 +890,21 @@ export class BillingApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => InvoicesFromJSON(jsonValue));
     }
 
     /**
-     * Returns the caller org\'s invoices with a count, read from that org\'s own namespaced store, narrowable by userId, status or subscriptionId. The org is the one the gateway validated and the caller\'s billing subject is pinned into the query before the handler runs, so a read can never widen past the caller. A request that carries no resolvable org gets an honest empty list rather than an error or another tenant\'s rows.
-     * List your org\'s billing invoices
+     * Lists the caller\'s invoices, newest first, with the count beside them.  It is scoped to the caller\'s own billing subject — the wallet this request bills from, resolved server-side — so a query cannot widen it to another customer of the same org. An org with no invoices is an empty list, not a refusal.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Lists the caller\'s invoices, newest first, with the count beside them.
      */
-    async getBillingInvoices(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getBillingInvoicesRaw(initOverrides);
+    async getBillingInvoices(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Invoices> {
+        const response = await this.getBillingInvoicesRaw(initOverrides);
+        return await response.value();
     }
 
     /**
-     * Renders the addressed invoice as a single-page PDF and answers it as an attachment named after the invoice number. The render is a pure function of the invoice — no timestamps, no random ids — so the same invoice always produces identical bytes and a re-download is stable. The invoice is resolved inside the caller org\'s own namespace, so an id belonging to another tenant is simply absent and reads as 404; a caller with no validated org gets 401 rather than a document.
-     * Download one invoice as a PDF attachment
+     * Answers the invoice as an attachment — `application/pdf` under a Content-Disposition naming the invoice number — rather than as a JSON value, which is why this one route is untyped where its five siblings are typed: a PDF is bytes with a filename, and the two headers are the whole contract.  The render is a PURE function of the invoice: one page, no timestamps and no random ids, so the same invoice renders the same bytes however often it is asked for and a retry after a dropped connection costs a re-render and nothing else.  The invoice is read from the caller\'s own org, taken from the VALIDATED IAM owner claim and never from a client header, and the lookup is scoped at the storage layer — so an id belonging to another customer resolves to nothing and answers 404 rather than being found and then refused.
+     * Download one invoice as a PDF
      */
     async getBillingInvoicesByIdPdfRaw(requestParameters: BillingApiGetBillingInvoicesByIdPdfRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['id'] == null) {
@@ -716,16 +941,59 @@ export class BillingApi extends runtime.BaseAPI {
     }
 
     /**
-     * Renders the addressed invoice as a single-page PDF and answers it as an attachment named after the invoice number. The render is a pure function of the invoice — no timestamps, no random ids — so the same invoice always produces identical bytes and a re-download is stable. The invoice is resolved inside the caller org\'s own namespace, so an id belonging to another tenant is simply absent and reads as 404; a caller with no validated org gets 401 rather than a document.
-     * Download one invoice as a PDF attachment
+     * Answers the invoice as an attachment — `application/pdf` under a Content-Disposition naming the invoice number — rather than as a JSON value, which is why this one route is untyped where its five siblings are typed: a PDF is bytes with a filename, and the two headers are the whole contract.  The render is a PURE function of the invoice: one page, no timestamps and no random ids, so the same invoice renders the same bytes however often it is asked for and a retry after a dropped connection costs a re-render and nothing else.  The invoice is read from the caller\'s own org, taken from the VALIDATED IAM owner claim and never from a client header, and the lookup is scoped at the storage layer — so an id belonging to another customer resolves to nothing and answers 404 rather than being found and then refused.
+     * Download one invoice as a PDF
      */
     async getBillingInvoicesByIdPdf(requestParameters: BillingApiGetBillingInvoicesByIdPdfRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.getBillingInvoicesByIdPdfRaw(requestParameters, initOverrides);
     }
 
     /**
-     * Answers the cards saved against your own account as masked descriptors: brand, last four, expiry and the processor\'s reusable reference. No card number and no security code exist here to return; both live at the processor and never enter this system. It is what a checkout prefills its payment step from.  The customer face of the list a service token reads at /v1/billing/portal/methods — same rows, different principal, no hop between them.  The subject filter is pinned to the VALIDATED caller before the handler runs, so the answer is your own account\'s cards whatever customerId the request carries, and another org\'s rows are outside the namespace entirely. A caller who is not signed in is refused before the read.
-     * Your saved cards, masked — the customer read
+     * Answers the org\'s own postings inside `range=`, each as a signed entry: a DEPOSIT CREDITS the wallet (positive, account `credits:<org>`) and every other posting DEBITS it (negative, account `usage:<org>`), described by its notes or its tags. The sign is the posting\'s own meaning, read through ONE vocabulary shared with the ledger that wrote it — a reader with its own spelling for `deposit` rendered a customer\'s grant as a charge.  This is the closest projection of the truth. The org\'s double-entry postings are the source of record — balanced, only ever appended, one file per org — and this lane is that list, wider than either half of it: the deposits are the grants /v1/billing/credits lists and the debits are the spend /v1/billing/usage rolls up. It answers 503 where this deployment runs no ledger, rather than reporting an empty wallet.  A row whose timestamp will not parse is KEPT rather than dropped — a malformed date must show up in a money list, not vanish from it. `balanceCents` is omitted: these are MOVEMENTS, and the standing balance is /v1/billing/balance.  Cents are ROUNDED from the ledger\'s exact 18-decimal USD. Scoped to the caller\'s own org, where the org\'s ledger file is the tenant boundary; 401 without a validated principal.
+     * Answers the org\'s own postings inside `range=`, each as a signed entry: a DEPOSIT CREDITS the wallet (positive, account `credits:<org>`) and every other posting DEBITS it (negative, account `usage:<org>`), described by its notes or its tags.
+     */
+    async getBillingLedgerRaw(requestParameters: BillingApiGetBillingLedgerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<FinanceLedgerEntry>>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['range'] != null) {
+            queryParameters['range'] = requestParameters['range'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/billing/ledger`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(FinanceLedgerEntryFromJSON));
+    }
+
+    /**
+     * Answers the org\'s own postings inside `range=`, each as a signed entry: a DEPOSIT CREDITS the wallet (positive, account `credits:<org>`) and every other posting DEBITS it (negative, account `usage:<org>`), described by its notes or its tags. The sign is the posting\'s own meaning, read through ONE vocabulary shared with the ledger that wrote it — a reader with its own spelling for `deposit` rendered a customer\'s grant as a charge.  This is the closest projection of the truth. The org\'s double-entry postings are the source of record — balanced, only ever appended, one file per org — and this lane is that list, wider than either half of it: the deposits are the grants /v1/billing/credits lists and the debits are the spend /v1/billing/usage rolls up. It answers 503 where this deployment runs no ledger, rather than reporting an empty wallet.  A row whose timestamp will not parse is KEPT rather than dropped — a malformed date must show up in a money list, not vanish from it. `balanceCents` is omitted: these are MOVEMENTS, and the standing balance is /v1/billing/balance.  Cents are ROUNDED from the ledger\'s exact 18-decimal USD. Scoped to the caller\'s own org, where the org\'s ledger file is the tenant boundary; 401 without a validated principal.
+     * Answers the org\'s own postings inside `range=`, each as a signed entry: a DEPOSIT CREDITS the wallet (positive, account `credits:<org>`) and every other posting DEBITS it (negative, account `usage:<org>`), described by its notes or its tags.
+     */
+    async getBillingLedger(requestParameters: BillingApiGetBillingLedgerRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<FinanceLedgerEntry>> {
+        const response = await this.getBillingLedgerRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Answers every payment method the caller has saved, newest first.  A saved method is a card or account VAULTED at the processor: what is stored here is the processor\'s token for it plus the last four digits and the expiry a customer recognises it by, never a card number.  The list is the caller\'s OWN — the wallet this request bills from, resolved server-side — so a query cannot widen it to another customer of the same org.  `/v1/billing/portal/methods` answers the same list under the name a hosted checkout addresses it by. One set of rows, two spellings; a card added at either is present at both.  A store that cannot be read answers an EMPTY LIST rather than a failure: the saved-cards panel renders empty instead of breaking the page around it.
+     * Cards and accounts on file for the caller
      */
     async getBillingMethodsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
@@ -754,18 +1022,18 @@ export class BillingApi extends runtime.BaseAPI {
     }
 
     /**
-     * Answers the cards saved against your own account as masked descriptors: brand, last four, expiry and the processor\'s reusable reference. No card number and no security code exist here to return; both live at the processor and never enter this system. It is what a checkout prefills its payment step from.  The customer face of the list a service token reads at /v1/billing/portal/methods — same rows, different principal, no hop between them.  The subject filter is pinned to the VALIDATED caller before the handler runs, so the answer is your own account\'s cards whatever customerId the request carries, and another org\'s rows are outside the namespace entirely. A caller who is not signed in is refused before the read.
-     * Your saved cards, masked — the customer read
+     * Answers every payment method the caller has saved, newest first.  A saved method is a card or account VAULTED at the processor: what is stored here is the processor\'s token for it plus the last four digits and the expiry a customer recognises it by, never a card number.  The list is the caller\'s OWN — the wallet this request bills from, resolved server-side — so a query cannot widen it to another customer of the same org.  `/v1/billing/portal/methods` answers the same list under the name a hosted checkout addresses it by. One set of rows, two spellings; a card added at either is present at both.  A store that cannot be read answers an EMPTY LIST rather than a failure: the saved-cards panel renders empty instead of breaking the page around it.
+     * Cards and accounts on file for the caller
      */
     async getBillingMethods(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.getBillingMethodsRaw(initOverrides);
     }
 
     /**
-     * Returns the caller org\'s payout records ordered by creation time descending, read from that org\'s own namespaced store. The org is the gateway-validated one and the caller\'s billing subject is pinned before the handler runs, so the list is the caller\'s own and cannot be widened. A request with no resolvable org gets an empty array rather than an error.
-     * List your org\'s payouts, newest first
+     * Answers the org\'s outbound payouts, newest first — amount, destination, status, and the failure reason where one applies.  A payout is ORG-scoped rather than subject-scoped, so there is nothing to pin beyond the tenant the caller already is, and no query can widen it.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Answers the org\'s outbound payouts, newest first — amount, destination, status, and the failure reason where one applies.
      */
-    async getBillingPayoutsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getBillingPayoutsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Payout>>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -788,20 +1056,21 @@ export class BillingApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(PayoutFromJSON));
     }
 
     /**
-     * Returns the caller org\'s payout records ordered by creation time descending, read from that org\'s own namespaced store. The org is the gateway-validated one and the caller\'s billing subject is pinned before the handler runs, so the list is the caller\'s own and cannot be widened. A request with no resolvable org gets an empty array rather than an error.
-     * List your org\'s payouts, newest first
+     * Answers the org\'s outbound payouts, newest first — amount, destination, status, and the failure reason where one applies.  A payout is ORG-scoped rather than subject-scoped, so there is nothing to pin beyond the tenant the caller already is, and no query can widen it.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Answers the org\'s outbound payouts, newest first — amount, destination, status, and the failure reason where one applies.
      */
-    async getBillingPayouts(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getBillingPayoutsRaw(initOverrides);
+    async getBillingPayouts(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Payout>> {
+        const response = await this.getBillingPayoutsRaw(initOverrides);
+        return await response.value();
     }
 
     /**
-     * Returns every subscription tier a buyer can choose, each carrying the platform promo currently in effect, optionally narrowed with the category query. Prices come from the admin-editable plan authority in the database; the embedded catalog is only a loud-failing fallback, so a failed seed or a query error serves the known plans rather than a silently blank list. It is a catalog read, not an entitlement read — it says what may be bought, never what this caller has.
-     * The public plan catalog, annotated with the active platform promotion
+     * Answers every plan on sale — its price, what it includes, and the limits it carries — optionally narrowed to one `?category=`.  The prices are what the CHECKOUT will charge: any active promotion is applied before they leave the store, so a reader never applies a discount a second time and a quote can never disagree with the sale.  It is the public catalog and needs no tenant: this is what anyone may buy.
+     * The plan catalog, priced with whatever offer is in force
      */
     async getBillingPlansRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
@@ -830,16 +1099,16 @@ export class BillingApi extends runtime.BaseAPI {
     }
 
     /**
-     * Returns every subscription tier a buyer can choose, each carrying the platform promo currently in effect, optionally narrowed with the category query. Prices come from the admin-editable plan authority in the database; the embedded catalog is only a loud-failing fallback, so a failed seed or a query error serves the known plans rather than a silently blank list. It is a catalog read, not an entitlement read — it says what may be bought, never what this caller has.
-     * The public plan catalog, annotated with the active platform promotion
+     * Answers every plan on sale — its price, what it includes, and the limits it carries — optionally narrowed to one `?category=`.  The prices are what the CHECKOUT will charge: any active promotion is applied before they leave the store, so a reader never applies a discount a second time and a quote can never disagree with the sale.  It is the public catalog and needs no tenant: this is what anyone may buy.
+     * The plan catalog, priced with whatever offer is in force
      */
     async getBillingPlans(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.getBillingPlansRaw(initOverrides);
     }
 
     /**
-     * Answers the org\'s saved payment methods as masked descriptors: brand, last four, expiry and the processor\'s reusable reference. No card number and no security code exist here to return; both live at the processor and never enter this system.  This is the SERVICE-TOKEN face of the same list a customer reads at /v1/billing/methods. Both are served here, in this process, and answer the same rows; they are two addresses because they admit two different principals, not because either forwards to the other.  The customer filter is pinned to the VALIDATED caller before the handler runs, so a browser sees only its own subject\'s cards whatever customerId it sends; only a caller holding the internal service token may name the subject, and the org it may name it within is fixed by the gateway. Cross-tenant is closed by the org namespace for both, so an id or a subject from another org resolves to nothing. A caller who is neither is refused before the read.
-     * Cards saved against the caller\'s org, masked — the portal read
+     * Answers every payment method the caller has saved, newest first.  A saved method is a card or account VAULTED at the processor: what is stored here is the processor\'s token for it plus the last four digits and the expiry a customer recognises it by, never a card number.  The list is the caller\'s OWN — the wallet this request bills from, resolved server-side — so a query cannot widen it to another customer of the same org.  `/v1/billing/portal/methods` answers the same list under the name a hosted checkout addresses it by. One set of rows, two spellings; a card added at either is present at both.  A store that cannot be read answers an EMPTY LIST rather than a failure: the saved-cards panel renders empty instead of breaking the page around it.
+     * Cards and accounts on file for the caller
      */
     async getBillingPortalMethodsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
@@ -868,18 +1137,18 @@ export class BillingApi extends runtime.BaseAPI {
     }
 
     /**
-     * Answers the org\'s saved payment methods as masked descriptors: brand, last four, expiry and the processor\'s reusable reference. No card number and no security code exist here to return; both live at the processor and never enter this system.  This is the SERVICE-TOKEN face of the same list a customer reads at /v1/billing/methods. Both are served here, in this process, and answer the same rows; they are two addresses because they admit two different principals, not because either forwards to the other.  The customer filter is pinned to the VALIDATED caller before the handler runs, so a browser sees only its own subject\'s cards whatever customerId it sends; only a caller holding the internal service token may name the subject, and the org it may name it within is fixed by the gateway. Cross-tenant is closed by the org namespace for both, so an id or a subject from another org resolves to nothing. A caller who is neither is refused before the read.
-     * Cards saved against the caller\'s org, masked — the portal read
+     * Answers every payment method the caller has saved, newest first.  A saved method is a card or account VAULTED at the processor: what is stored here is the processor\'s token for it plus the last four digits and the expiry a customer recognises it by, never a card number.  The list is the caller\'s OWN — the wallet this request bills from, resolved server-side — so a query cannot widen it to another customer of the same org.  `/v1/billing/portal/methods` answers the same list under the name a hosted checkout addresses it by. One set of rows, two spellings; a card added at either is present at both.  A store that cannot be read answers an EMPTY LIST rather than a failure: the saved-cards panel renders empty instead of breaking the page around it.
+     * Cards and accounts on file for the caller
      */
     async getBillingPortalMethods(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.getBillingPortalMethodsRaw(initOverrides);
     }
 
     /**
-     * Answers the Square application id, location id, environment and live flag the browser\'s card iframe boots against — public values only, never a secret. Resolution lives in one place shared with the public tenant projection, so the card form can never initialize against a different Square application than the one commerce will actually charge. It deliberately does NOT hydrate credentials from KMS: the dialog blocks on this call, so it answers from the org and the deployment environment without a round trip, and an org with no per-org credentials gets the deployment\'s own public app id.
-     * The public payment-provider config your card form needs to initialize
+     * Answers the PUBLIC half of this org\'s processor configuration — the ids a browser needs to tokenize a card, and the environment it must tokenize against.  It carries no secret: an application id is published to every checkout page by design. What matters is that it names the SAME processor account the charge will be made on, because a card vaulted against one account and charged against another is a card that saves and then cannot be used.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Answers the PUBLIC half of this org\'s processor configuration — the ids a browser needs to tokenize a card, and the environment it must tokenize against.
      */
-    async getBillingSettingsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getBillingSettingsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PaymentConfig>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -902,22 +1171,23 @@ export class BillingApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => PaymentConfigFromJSON(jsonValue));
     }
 
     /**
-     * Answers the Square application id, location id, environment and live flag the browser\'s card iframe boots against — public values only, never a secret. Resolution lives in one place shared with the public tenant projection, so the card form can never initialize against a different Square application than the one commerce will actually charge. It deliberately does NOT hydrate credentials from KMS: the dialog blocks on this call, so it answers from the org and the deployment environment without a round trip, and an org with no per-org credentials gets the deployment\'s own public app id.
-     * The public payment-provider config your card form needs to initialize
+     * Answers the PUBLIC half of this org\'s processor configuration — the ids a browser needs to tokenize a card, and the environment it must tokenize against.  It carries no secret: an application id is published to every checkout page by design. What matters is that it names the SAME processor account the charge will be made on, because a card vaulted against one account and charged against another is a card that saves and then cannot be used.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Answers the PUBLIC half of this org\'s processor configuration — the ids a browser needs to tokenize a card, and the environment it must tokenize against.
      */
-    async getBillingSettings(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getBillingSettingsRaw(initOverrides);
+    async getBillingSettings(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PaymentConfig> {
+        const response = await this.getBillingSettingsRaw(initOverrides);
+        return await response.value();
     }
 
     /**
-     * Returns the caller org\'s subscriptions with a count, narrowable by userId or status, read from that org\'s own namespaced store. The org is the gateway-validated one and the caller\'s billing subject is pinned before the handler runs. A request with no resolvable org gets an empty list and a zero count rather than an error.
-     * List your org\'s subscriptions
+     * Lists the plans the caller holds, with the count beside them.  It is scoped to the caller\'s own org, so a query cannot widen it to another customer\'s. An org on nothing is an empty list, not a refusal — being on no plan is an answer.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Lists the plans the caller holds, with the count beside them.
      */
-    async getBillingSubscriptionsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getBillingSubscriptionsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Subscriptions>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -940,22 +1210,23 @@ export class BillingApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => SubscriptionsFromJSON(jsonValue));
     }
 
     /**
-     * Returns the caller org\'s subscriptions with a count, narrowable by userId or status, read from that org\'s own namespaced store. The org is the gateway-validated one and the caller\'s billing subject is pinned before the handler runs. A request with no resolvable org gets an empty list and a zero count rather than an error.
-     * List your org\'s subscriptions
+     * Lists the plans the caller holds, with the count beside them.  It is scoped to the caller\'s own org, so a query cannot widen it to another customer\'s. An org on nothing is an empty list, not a refusal — being on no plan is an answer.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Lists the plans the caller holds, with the count beside them.
      */
-    async getBillingSubscriptions(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getBillingSubscriptionsRaw(initOverrides);
+    async getBillingSubscriptions(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Subscriptions> {
+        const response = await this.getBillingSubscriptionsRaw(initOverrides);
+        return await response.value();
     }
 
     /**
-     * Answers one subject\'s resolved tier — name, display name, agent ceiling and allowed models — with the balance that admits their next metered call: prepaidAvailable, creditsRemaining, dailyRemaining and the effectiveAvailable those fold into. The ai router reads it per request to pick that caller\'s rate-limit tier. It sits on the org-resolving chain because a tier is org state, and the subject keys are pinned to the validated caller before the handler runs, so a browser read is always the caller\'s own; user is required, which only a service-to-service caller can omit and be refused 400 for. The tier is an upstream tier claim, or an explicit tier override, when either is present — that is the service-to-service contract — and is otherwise DERIVED from the org\'s active and trialing subscriptions, the highest one winning, its paid-ness read from the plan catalog by slug rather than from the subscription\'s own stored copy. The rule to get right is effectiveAvailable and not prepaidAvailable: granted credits spend too, credits first, so an account funded only by a grant reads zero prepaid while holding real spendable credit — and with the daily term zero on every tier there is no free allowance behind it, so a zero-balance account is gated. A subscription-store error answers 500 rather than downgrading to free, so a transient failure never reports a paid subscriber as unsubscribed.
-     * The subject\'s plan tier and the balance a metered call is admitted on
+     * Answers which tier the caller is on, what it allows, and what is left to spend.  `effectiveAvailable` is the ONLY figure to compare against zero. The others are its parts — prepaid money, granted credits and the daily term are three sources of one spend, not three balances to add up a second time.  A tier that cannot be READ is an error, never Free. The router in front of the models maps any non-2xx to Free, so answering Free from a question nobody could answer would pin every paying customer to the most restrictive row with nothing anywhere to find.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Answers which tier the caller is on, what it allows, and what is left to spend.
      */
-    async getBillingTierRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getBillingTierRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Tier>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -978,23 +1249,36 @@ export class BillingApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => TierFromJSON(jsonValue));
     }
 
     /**
-     * Answers one subject\'s resolved tier — name, display name, agent ceiling and allowed models — with the balance that admits their next metered call: prepaidAvailable, creditsRemaining, dailyRemaining and the effectiveAvailable those fold into. The ai router reads it per request to pick that caller\'s rate-limit tier. It sits on the org-resolving chain because a tier is org state, and the subject keys are pinned to the validated caller before the handler runs, so a browser read is always the caller\'s own; user is required, which only a service-to-service caller can omit and be refused 400 for. The tier is an upstream tier claim, or an explicit tier override, when either is present — that is the service-to-service contract — and is otherwise DERIVED from the org\'s active and trialing subscriptions, the highest one winning, its paid-ness read from the plan catalog by slug rather than from the subscription\'s own stored copy. The rule to get right is effectiveAvailable and not prepaidAvailable: granted credits spend too, credits first, so an account funded only by a grant reads zero prepaid while holding real spendable credit — and with the daily term zero on every tier there is no free allowance behind it, so a zero-balance account is gated. A subscription-store error answers 500 rather than downgrading to free, so a transient failure never reports a paid subscriber as unsubscribed.
-     * The subject\'s plan tier and the balance a metered call is admitted on
+     * Answers which tier the caller is on, what it allows, and what is left to spend.  `effectiveAvailable` is the ONLY figure to compare against zero. The others are its parts — prepaid money, granted credits and the daily term are three sources of one spend, not three balances to add up a second time.  A tier that cannot be READ is an error, never Free. The router in front of the models maps any non-2xx to Free, so answering Free from a question nobody could answer would pin every paying customer to the most restrictive row with nothing anywhere to find.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Answers which tier the caller is on, what it allows, and what is left to spend.
      */
-    async getBillingTier(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getBillingTierRaw(initOverrides);
+    async getBillingTier(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Tier> {
+        const response = await this.getBillingTierRaw(initOverrides);
+        return await response.value();
     }
 
     /**
-     * Returns the caller\'s own ledger movements — every credit and debit against the subject the usage gate charges — newest first, with a count and the subject they belong to, so a customer can reconcile a bill against the acts that produced it. Paging is limit and offset, and the currency can be narrowed.  The subject is NOT the caller\'s to choose. The handler filters on a user parameter, and that parameter is overwritten with the caller\'s own billing subject before the handler runs — so naming another subject returns your own rows rather than theirs, and the read can never disagree with the wallet it describes. An unauthenticated call is 401 rather than 403, because a browser re-authenticates on the first and only reports the second. No movements is an empty list, not an error.
-     * List the movements on your own balance, newest first
+     * Answers one page of the caller\'s own ledger, newest first: what moved, how much, when, and what it was tagged with.  `count` is the size of the WHOLE history rather than of the page, which is how a reader knows there is more to ask for, and `user` echoes the wallet the page was read for — the same subject the spend gate debits, so a customer can see which account answered rather than guessing from their own token.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Answers one page of the caller\'s own ledger, newest first: what moved, how much, when, and what it was tagged with.
      */
-    async getBillingTransactionsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getBillingTransactionsRaw(requestParameters: BillingApiGetBillingTransactionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Transactions>> {
         const queryParameters: any = {};
+
+        if (requestParameters['currency'] != null) {
+            queryParameters['currency'] = requestParameters['currency'];
+        }
+
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
+        }
+
+        if (requestParameters['offset'] != null) {
+            queryParameters['offset'] = requestParameters['offset'];
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -1016,15 +1300,16 @@ export class BillingApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => TransactionsFromJSON(jsonValue));
     }
 
     /**
-     * Returns the caller\'s own ledger movements — every credit and debit against the subject the usage gate charges — newest first, with a count and the subject they belong to, so a customer can reconcile a bill against the acts that produced it. Paging is limit and offset, and the currency can be narrowed.  The subject is NOT the caller\'s to choose. The handler filters on a user parameter, and that parameter is overwritten with the caller\'s own billing subject before the handler runs — so naming another subject returns your own rows rather than theirs, and the read can never disagree with the wallet it describes. An unauthenticated call is 401 rather than 403, because a browser re-authenticates on the first and only reports the second. No movements is an empty list, not an error.
-     * List the movements on your own balance, newest first
+     * Answers one page of the caller\'s own ledger, newest first: what moved, how much, when, and what it was tagged with.  `count` is the size of the WHOLE history rather than of the page, which is how a reader knows there is more to ask for, and `user` echoes the wallet the page was read for — the same subject the spend gate debits, so a customer can see which account answered rather than guessing from their own token.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Answers one page of the caller\'s own ledger, newest first: what moved, how much, when, and what it was tagged with.
      */
-    async getBillingTransactions(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getBillingTransactionsRaw(initOverrides);
+    async getBillingTransactions(requestParameters: BillingApiGetBillingTransactionsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Transactions> {
+        const response = await this.getBillingTransactionsRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
@@ -1105,10 +1390,49 @@ export class BillingApi extends runtime.BaseAPI {
     }
 
     /**
-     * Answers the receiving bank details for the brand this deployment serves — the account the funds actually land in, hydrated per brand rather than hard-coded — together with the payment reference to put on the transfer.  THE REFERENCE IS THE POINT. It carries your own billing key, and it is how an arriving wire is attributed to your account; a transfer sent without it arrives as an unidentified receipt. That is why this read is gated at all: an unpinned caller would be handed an unattributable reference.  Reading it credits nothing and reserves nothing. A wire is settled by an operator when the bank shows the funds, so the balance moves on receipt, not on this call.
-     * Where to wire funds, and the reference that credits them to you
+     * Answers the caller\'s month: what their plan includes, what has been consumed against it, and the wallet beside it.  The two blocks are SEPARATE monies and are never added. One is usage a plan granted; the other is prepaid credit bought with a card. Their sum is not a number anyone holds, and a reader that formed it would be inventing a balance.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Answers the caller\'s month: what their plan includes, what has been consumed against it, and the wallet beside it.
      */
-    async getBillingWireRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getBillingUsageRollupRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Rollup>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/billing/usage/rollup`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => RollupFromJSON(jsonValue));
+    }
+
+    /**
+     * Answers the caller\'s month: what their plan includes, what has been consumed against it, and the wallet beside it.  The two blocks are SEPARATE monies and are never added. One is usage a plan granted; the other is prepaid credit bought with a card. Their sum is not a number anyone holds, and a reader that formed it would be inventing a balance.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Answers the caller\'s month: what their plan includes, what has been consumed against it, and the wallet beside it.
+     */
+    async getBillingUsageRollup(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Rollup> {
+        const response = await this.getBillingUsageRollupRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Answers where to send a wire top-up: the receiving bank details, with the caller\'s own payment reference.  The account is the SERVING BRAND\'S — resolved from the host the customer is paying on, so paying on one brand never shows another\'s bank — and the reference carries the caller\'s billing key, which is how an arriving wire names who it credits. Nothing mints here; a receipt is settled by an operator once the bank confirms it.  It is all-or-nothing: no configured account is 503 rather than a partial form, because nobody can wire to three fields out of five.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Answers where to send a wire top-up: the receiving bank details, with the caller\'s own payment reference.
+     */
+    async getBillingWireRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<WireInstructions>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -1131,22 +1455,23 @@ export class BillingApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => WireInstructionsFromJSON(jsonValue));
     }
 
     /**
-     * Answers the receiving bank details for the brand this deployment serves — the account the funds actually land in, hydrated per brand rather than hard-coded — together with the payment reference to put on the transfer.  THE REFERENCE IS THE POINT. It carries your own billing key, and it is how an arriving wire is attributed to your account; a transfer sent without it arrives as an unidentified receipt. That is why this read is gated at all: an unpinned caller would be handed an unattributable reference.  Reading it credits nothing and reserves nothing. A wire is settled by an operator when the bank shows the funds, so the balance moves on receipt, not on this call.
-     * Where to wire funds, and the reference that credits them to you
+     * Answers where to send a wire top-up: the receiving bank details, with the caller\'s own payment reference.  The account is the SERVING BRAND\'S — resolved from the host the customer is paying on, so paying on one brand never shows another\'s bank — and the reference carries the caller\'s billing key, which is how an arriving wire names who it credits. Nothing mints here; a receipt is settled by an operator once the bank confirms it.  It is all-or-nothing: no configured account is 503 rather than a partial form, because nobody can wire to three fields out of five.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Answers where to send a wire top-up: the receiving bank details, with the caller\'s own payment reference.
      */
-    async getBillingWire(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getBillingWireRaw(initOverrides);
+    async getBillingWire(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<WireInstructions> {
+        const response = await this.getBillingWireRaw(initOverrides);
+        return await response.value();
     }
 
     /**
      * Reads one invoice out of the caller\'s org.  The org scopes the read by construction — the store is namespaced to it — so an id belonging to another tenant is not found rather than found and then filtered.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
      * Read one invoice
      */
-    async getInvoiceRaw(requestParameters: BillingApiGetInvoiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<InvoiceOut>> {
+    async getInvoiceRaw(requestParameters: BillingApiGetInvoiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Invoice>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -1177,14 +1502,14 @@ export class BillingApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => InvoiceOutFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => InvoiceFromJSON(jsonValue));
     }
 
     /**
      * Reads one invoice out of the caller\'s org.  The org scopes the read by construction — the store is namespaced to it — so an id belonging to another tenant is not found rather than found and then filtered.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
      * Read one invoice
      */
-    async getInvoice(requestParameters: BillingApiGetInvoiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<InvoiceOut> {
+    async getInvoice(requestParameters: BillingApiGetInvoiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Invoice> {
         const response = await this.getInvoiceRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -1193,7 +1518,7 @@ export class BillingApi extends runtime.BaseAPI {
      * Issues a draft invoice: moves it to OPEN, assigns its number, and makes it collectible.  Only a draft can be issued. An invoice already open, paid or void is refused with the state machine\'s own reason rather than being silently re-issued, which would mint a second number for one debt.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
      * Issue a draft invoice, making it collectible
      */
-    async issueInvoiceRaw(requestParameters: BillingApiIssueInvoiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<InvoiceOut>> {
+    async issueInvoiceRaw(requestParameters: BillingApiIssueInvoiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Invoice>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -1224,23 +1549,23 @@ export class BillingApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => InvoiceOutFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => InvoiceFromJSON(jsonValue));
     }
 
     /**
      * Issues a draft invoice: moves it to OPEN, assigns its number, and makes it collectible.  Only a draft can be issued. An invoice already open, paid or void is refused with the state machine\'s own reason rather than being silently re-issued, which would mint a second number for one debt.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
      * Issue a draft invoice, making it collectible
      */
-    async issueInvoice(requestParameters: BillingApiIssueInvoiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<InvoiceOut> {
+    async issueInvoice(requestParameters: BillingApiIssueInvoiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Invoice> {
         const response = await this.issueInvoiceRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Applies only the fields the body actually carries — title, threshold, project, service, enforce, softPct, rateLimitRpm — and leaves the rest as stored, answering the merged row with its current period spend. Requires an ORG ADMIN, a platform admin, or the internal service token, for the same reason creation does: a member who could edit the cap could raise it to nothing or drop it to a punitive floor. Ownership is checked per row and a cap the caller does not own is refused as 404, never 403, so the id space cannot be probed.
-     * Change one of your org\'s spend caps
+     * Changes one spend cap: raise or lower the ceiling, flip enforcement, retune the rate limit.  Only the fields the body carries move. Every mutable field is optional, and an absent one is PRESERVED rather than reset — so a change that flips enforcement cannot silently wipe the threshold it enforces.  A cap belonging to another org is a 404, not a 403: a guessed id must not become an oracle for what anyone else holds.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Changes one spend cap: raise or lower the ceiling, flip enforcement, retune the rate limit.
      */
-    async patchBillingAlertsByIdRaw(requestParameters: BillingApiPatchBillingAlertsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async patchBillingAlertsByIdRaw(requestParameters: BillingApiPatchBillingAlertsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Alert>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -1248,9 +1573,18 @@ export class BillingApi extends runtime.BaseAPI {
             );
         }
 
+        if (requestParameters['alertPatch'] == null) {
+            throw new runtime.RequiredError(
+                'alertPatch',
+                'Required parameter "alertPatch" was null or undefined when calling patchBillingAlertsById().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -1269,27 +1603,38 @@ export class BillingApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
+            body: AlertPatchToJSON(requestParameters['alertPatch']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => AlertFromJSON(jsonValue));
     }
 
     /**
-     * Applies only the fields the body actually carries — title, threshold, project, service, enforce, softPct, rateLimitRpm — and leaves the rest as stored, answering the merged row with its current period spend. Requires an ORG ADMIN, a platform admin, or the internal service token, for the same reason creation does: a member who could edit the cap could raise it to nothing or drop it to a punitive floor. Ownership is checked per row and a cap the caller does not own is refused as 404, never 403, so the id space cannot be probed.
-     * Change one of your org\'s spend caps
+     * Changes one spend cap: raise or lower the ceiling, flip enforcement, retune the rate limit.  Only the fields the body carries move. Every mutable field is optional, and an absent one is PRESERVED rather than reset — so a change that flips enforcement cannot silently wipe the threshold it enforces.  A cap belonging to another org is a 404, not a 403: a guessed id must not become an oracle for what anyone else holds.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Changes one spend cap: raise or lower the ceiling, flip enforcement, retune the rate limit.
      */
-    async patchBillingAlertsById(requestParameters: BillingApiPatchBillingAlertsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.patchBillingAlertsByIdRaw(requestParameters, initOverrides);
+    async patchBillingAlertsById(requestParameters: BillingApiPatchBillingAlertsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Alert> {
+        const response = await this.patchBillingAlertsByIdRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Creates a cap for the caller\'s own org and answers the stored row with its current period spend. A spend cap is a FINANCIAL SAFETY control, so writing one requires an ORG ADMIN, a platform admin, or the internal service token — a plain authenticated member is refused 403, because a member who could delete the cap could uncap the org\'s spend and a member who could set a one-cent enforcing cap could deny the whole org. The cap is always keyed to the caller\'s own billing subject: a userId in the body is overwritten, never honored, so a cap cannot be planted on another subject. At least one of a positive threshold or a positive rateLimitRpm is required, softPct must be within 0 to 100, and an org that has reached its row limit is refused 400.
-     * Set a spend cap or rate limit on your org
+     * Opens a spend cap on the caller\'s own org.  At least one limit must mean something: a threshold above zero (a spend cap) or a requests-per-minute above zero (a rate limit). A row that bounds neither is refused rather than stored, because a ceiling nothing measures against is a ceiling a customer believes in and does not have.  The cap is keyed on the caller\'s own billing subject, resolved server-side — the SAME key the verdict looks it up under, which is what makes enforcement bind rather than merely record.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Opens a spend cap on the caller\'s own org.
      */
-    async postBillingAlertsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postBillingAlertsRaw(requestParameters: BillingApiPostBillingAlertsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Alert>> {
+        if (requestParameters['alertSpec'] == null) {
+            throw new runtime.RequiredError(
+                'alertSpec',
+                'Required parameter "alertSpec" was null or undefined when calling postBillingAlerts().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -1307,27 +1652,38 @@ export class BillingApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: AlertSpecToJSON(requestParameters['alertSpec']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => AlertFromJSON(jsonValue));
     }
 
     /**
-     * Creates a cap for the caller\'s own org and answers the stored row with its current period spend. A spend cap is a FINANCIAL SAFETY control, so writing one requires an ORG ADMIN, a platform admin, or the internal service token — a plain authenticated member is refused 403, because a member who could delete the cap could uncap the org\'s spend and a member who could set a one-cent enforcing cap could deny the whole org. The cap is always keyed to the caller\'s own billing subject: a userId in the body is overwritten, never honored, so a cap cannot be planted on another subject. At least one of a positive threshold or a positive rateLimitRpm is required, softPct must be within 0 to 100, and an org that has reached its row limit is refused 400.
-     * Set a spend cap or rate limit on your org
+     * Opens a spend cap on the caller\'s own org.  At least one limit must mean something: a threshold above zero (a spend cap) or a requests-per-minute above zero (a rate limit). A row that bounds neither is refused rather than stored, because a ceiling nothing measures against is a ceiling a customer believes in and does not have.  The cap is keyed on the caller\'s own billing subject, resolved server-side — the SAME key the verdict looks it up under, which is what makes enforcement bind rather than merely record.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Opens a spend cap on the caller\'s own org.
      */
-    async postBillingAlerts(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postBillingAlertsRaw(initOverrides);
+    async postBillingAlerts(requestParameters: BillingApiPostBillingAlertsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Alert> {
+        const response = await this.postBillingAlertsRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Mints a deposit address held by the MPC signer fleet — no single party holds the key — on the chain and token you name, and returns it with the intent that tracks it.  The account credited is the PINNED caller\'s, never a value in the body, so a deposit cannot be aimed at someone else\'s balance. A caller who already has an open intent gets that same address back rather than a new one, so reloading the page cannot spray keygens across the signer fleet.  NO BALANCE MOVES HERE. This hands out an address; the chain watcher credits the account when a real transfer confirms, which is also why an address handed out and never funded costs nothing and expires nothing.
-     * Get a deposit address for a crypto top-up
+     * Issues a deposit address the caller can send crypto to, on the asset they ask for.  The address credits the CALLER\'S own wallet and nobody else\'s: the payer is the validated principal, never a body value. Asking again reuses the caller\'s open intent rather than minting a second address, so a refresh cannot spray key generations — and a payer who sent to the address they saw earlier is still credited.  No balance moves here. The chain watcher credits on real confirmations, so what comes back is an address and a status, not a receipt.  An asset this rail cannot mint on is 400 — ask for another. A rail that is shut for that asset is 503 — nothing sent now can be credited.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Issues a deposit address the caller can send crypto to, on the asset they ask for.
      */
-    async postBillingCryptoDepositRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postBillingCryptoDepositRaw(requestParameters: BillingApiPostBillingCryptoDepositRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CryptoDeposit>> {
+        if (requestParameters['cryptoAsset'] == null) {
+            throw new runtime.RequiredError(
+                'cryptoAsset',
+                'Required parameter "cryptoAsset" was null or undefined when calling postBillingCryptoDeposit().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -1345,22 +1701,24 @@ export class BillingApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: CryptoAssetToJSON(requestParameters['cryptoAsset']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => CryptoDepositFromJSON(jsonValue));
     }
 
     /**
-     * Mints a deposit address held by the MPC signer fleet — no single party holds the key — on the chain and token you name, and returns it with the intent that tracks it.  The account credited is the PINNED caller\'s, never a value in the body, so a deposit cannot be aimed at someone else\'s balance. A caller who already has an open intent gets that same address back rather than a new one, so reloading the page cannot spray keygens across the signer fleet.  NO BALANCE MOVES HERE. This hands out an address; the chain watcher credits the account when a real transfer confirms, which is also why an address handed out and never funded costs nothing and expires nothing.
-     * Get a deposit address for a crypto top-up
+     * Issues a deposit address the caller can send crypto to, on the asset they ask for.  The address credits the CALLER\'S own wallet and nobody else\'s: the payer is the validated principal, never a body value. Asking again reuses the caller\'s open intent rather than minting a second address, so a refresh cannot spray key generations — and a payer who sent to the address they saw earlier is still credited.  No balance moves here. The chain watcher credits on real confirmations, so what comes back is an address and a status, not a receipt.  An asset this rail cannot mint on is 400 — ask for another. A rail that is shut for that asset is 503 — nothing sent now can be credited.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Issues a deposit address the caller can send crypto to, on the asset they ask for.
      */
-    async postBillingCryptoDeposit(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postBillingCryptoDepositRaw(initOverrides);
+    async postBillingCryptoDeposit(requestParameters: BillingApiPostBillingCryptoDepositRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CryptoDeposit> {
+        const response = await this.postBillingCryptoDepositRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Vaults the card the processor already holds — you send its one-time reference, never a card number — as a reusable card on file, and stores the billing address with it. That vaulted card is what a subscription renewal or an auto-recharge charges later, which is why saving one is the step that makes a monthly plan billable at all.  It charges nothing. Saving a card moves no money; the first charge is whatever arrangement you then attach it to.  The subject is pinned from the validated caller and OVERWRITES the customerId in the body while leaving the card fields untouched, so a card can only ever be attached to the caller\'s OWN account whatever the body claims. That pin is the whole control on this write, not decoration: this is the one handler in the family that reads its subject from the body.
-     * Save a card for later charges
+     * Vaults the instrument at the processor and stores the row.  A saved method is a card or account VAULTED at the processor: what is stored here is the processor\'s token for it plus the last four digits and the expiry a customer recognises it by, never a card number.  The list is the caller\'s OWN — the wallet this request bills from, resolved server-side — so a query cannot widen it to another customer of the same org.  `/v1/billing/portal/methods` answers the same list under the name a hosted checkout addresses it by. One set of rows, two spellings; a card added at either is present at both.  Saving a card ALREADY on file answers with the row that already holds it rather than stacking a duplicate — 200 for that, 201 for a genuinely new row, so a client can tell which happened. A card the processor declines is 402 and nothing is stored.
+     * Save a card or account for the caller
      */
     async postBillingMethodsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
@@ -1389,21 +1747,30 @@ export class BillingApi extends runtime.BaseAPI {
     }
 
     /**
-     * Vaults the card the processor already holds — you send its one-time reference, never a card number — as a reusable card on file, and stores the billing address with it. That vaulted card is what a subscription renewal or an auto-recharge charges later, which is why saving one is the step that makes a monthly plan billable at all.  It charges nothing. Saving a card moves no money; the first charge is whatever arrangement you then attach it to.  The subject is pinned from the validated caller and OVERWRITES the customerId in the body while leaving the card fields untouched, so a card can only ever be attached to the caller\'s OWN account whatever the body claims. That pin is the whole control on this write, not decoration: this is the one handler in the family that reads its subject from the body.
-     * Save a card for later charges
+     * Vaults the instrument at the processor and stores the row.  A saved method is a card or account VAULTED at the processor: what is stored here is the processor\'s token for it plus the last four digits and the expiry a customer recognises it by, never a card number.  The list is the caller\'s OWN — the wallet this request bills from, resolved server-side — so a query cannot widen it to another customer of the same org.  `/v1/billing/portal/methods` answers the same list under the name a hosted checkout addresses it by. One set of rows, two spellings; a card added at either is present at both.  Saving a card ALREADY on file answers with the row that already holds it rather than stacking a duplicate — 200 for that, 201 for a genuinely new row, so a client can tell which happened. A card the processor declines is 402 and nothing is stored.
+     * Save a card or account for the caller
      */
     async postBillingMethods(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.postBillingMethodsRaw(initOverrides);
     }
 
     /**
-     * Flips the org\'s live flag, which is the single authority for both the payment environment and the ledger bucket its transactions land in. This is a money-MINT control, not a customer action: it is gated on the internal service token AND platform scope, so an ORG ADMIN CANNOT move their own org — otherwise a tenant could drop itself into sandbox and stop paying. The rule most callers get wrong is the default: an org that has never been flipped transacts in SANDBOX, which is why a production-credentialled deployment can still hand a buyer a sandbox card form. When the deployment pins the payment environment explicitly, that pin governs and this flag only marks the transactions.
-     * Move an org between sandbox and live billing
+     * Moves this org between sandbox money and real money.  It decides whether a charge hits a real card, so it is the one posture change that is not self-service: the platform bar, never an org owner, because an org that could put itself in test mode could take priced work for free.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Moves this org between sandbox money and real money.
      */
-    async postBillingModeRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postBillingModeRaw(requestParameters: BillingApiPostBillingModeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Mode>> {
+        if (requestParameters['modeIn'] == null) {
+            throw new runtime.RequiredError(
+                'modeIn',
+                'Required parameter "modeIn" was null or undefined when calling postBillingMode().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -1421,22 +1788,24 @@ export class BillingApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: ModeInToJSON(requestParameters['modeIn']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => ModeFromJSON(jsonValue));
     }
 
     /**
-     * Flips the org\'s live flag, which is the single authority for both the payment environment and the ledger bucket its transactions land in. This is a money-MINT control, not a customer action: it is gated on the internal service token AND platform scope, so an ORG ADMIN CANNOT move their own org — otherwise a tenant could drop itself into sandbox and stop paying. The rule most callers get wrong is the default: an org that has never been flipped transacts in SANDBOX, which is why a production-credentialled deployment can still hand a buyer a sandbox card form. When the deployment pins the payment environment explicitly, that pin governs and this flag only marks the transactions.
-     * Move an org between sandbox and live billing
+     * Moves this org between sandbox money and real money.  It decides whether a charge hits a real card, so it is the one posture change that is not self-service: the platform bar, never an org owner, because an org that could put itself in test mode could take priced work for free.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Moves this org between sandbox money and real money.
      */
-    async postBillingMode(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postBillingModeRaw(initOverrides);
+    async postBillingMode(requestParameters: BillingApiPostBillingModeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Mode> {
+        const response = await this.postBillingModeRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * The service-token twin of POST /v1/billing/methods: it vaults the processor\'s one-time reference as a reusable card on file for the named subject, with its billing address, and moves no money doing it.  It exists so an internal caller can complete the family it can already read and detach. The subject it may name is pinned to the org the gateway fixed, so the service token acts WITHIN one tenant and never across tenants; a caller holding no service token is refused before the write.
-     * Save a card on a subject\'s behalf — the portal attach
+     * Vaults the instrument at the processor and stores the row.  A saved method is a card or account VAULTED at the processor: what is stored here is the processor\'s token for it plus the last four digits and the expiry a customer recognises it by, never a card number.  The list is the caller\'s OWN — the wallet this request bills from, resolved server-side — so a query cannot widen it to another customer of the same org.  `/v1/billing/portal/methods` answers the same list under the name a hosted checkout addresses it by. One set of rows, two spellings; a card added at either is present at both.  Saving a card ALREADY on file answers with the row that already holds it rather than stacking a duplicate — 200 for that, 201 for a genuinely new row, so a client can tell which happened. A card the processor declines is 402 and nothing is stored.
+     * Save a card or account for the caller
      */
     async postBillingPortalMethodsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
@@ -1465,16 +1834,16 @@ export class BillingApi extends runtime.BaseAPI {
     }
 
     /**
-     * The service-token twin of POST /v1/billing/methods: it vaults the processor\'s one-time reference as a reusable card on file for the named subject, with its billing address, and moves no money doing it.  It exists so an internal caller can complete the family it can already read and detach. The subject it may name is pinned to the org the gateway fixed, so the service token acts WITHIN one tenant and never across tenants; a caller holding no service token is refused before the write.
-     * Save a card on a subject\'s behalf — the portal attach
+     * Vaults the instrument at the processor and stores the row.  A saved method is a card or account VAULTED at the processor: what is stored here is the processor\'s token for it plus the last four digits and the expiry a customer recognises it by, never a card number.  The list is the caller\'s OWN — the wallet this request bills from, resolved server-side — so a query cannot widen it to another customer of the same org.  `/v1/billing/portal/methods` answers the same list under the name a hosted checkout addresses it by. One set of rows, two spellings; a card added at either is present at both.  Saving a card ALREADY on file answers with the row that already holds it rather than stacking a duplicate — 200 for that, 201 for a genuinely new row, so a client can tell which happened. A card the processor declines is 402 and nothing is stored.
+     * Save a card or account for the caller
      */
     async postBillingPortalMethods(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.postBillingPortalMethodsRaw(initOverrides);
     }
 
     /**
-     * Walks every organization and, for those that enabled auto-recharge and whose available balance (balance minus holds) has fallen under their configured threshold, charges their default payment method off-session and credits the balance, answering a per-org result row for each one it touched. This is the platform cron\'s door, not a customer\'s: it is gated on the internal service token AND platform scope, so an org admin cannot run the fleet-wide sweep. An org above its threshold is skipped silently; an org with no default payment method is reported as an uncharged row with the reason rather than failing the whole run.
-     * Platform sweep: top up every org whose balance has fallen below its own threshold
+     * Sweeps every organization and, for those with auto-recharge on whose available balance has dropped below their own threshold, charges the default card and credits the balance.  It charges cards across EVERY tenant, so it is platform authority only — never an org owner, who could otherwise sweep-charge saved cards estate-wide. Its caller is a schedule, not a person.  `orgs` is the population considered, not the row count: that difference is how a reader tells \'nobody was below threshold\' from \'the sweep never ran\'. One org\'s failure is reported in its own row and does not stop the rest.
+     * Recharge every org that has fallen below its threshold
      */
     async postBillingRechargeRunAllRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
@@ -1503,16 +1872,16 @@ export class BillingApi extends runtime.BaseAPI {
     }
 
     /**
-     * Walks every organization and, for those that enabled auto-recharge and whose available balance (balance minus holds) has fallen under their configured threshold, charges their default payment method off-session and credits the balance, answering a per-org result row for each one it touched. This is the platform cron\'s door, not a customer\'s: it is gated on the internal service token AND platform scope, so an org admin cannot run the fleet-wide sweep. An org above its threshold is skipped silently; an org with no default payment method is reported as an uncharged row with the reason rather than failing the whole run.
-     * Platform sweep: top up every org whose balance has fallen below its own threshold
+     * Sweeps every organization and, for those with auto-recharge on whose available balance has dropped below their own threshold, charges the default card and credits the balance.  It charges cards across EVERY tenant, so it is platform authority only — never an org owner, who could otherwise sweep-charge saved cards estate-wide. Its caller is a schedule, not a person.  `orgs` is the population considered, not the row count: that difference is how a reader tells \'nobody was below threshold\' from \'the sweep never ran\'. One org\'s failure is reported in its own row and does not stop the rest.
+     * Recharge every org that has fallen below its threshold
      */
     async postBillingRechargeRunAll(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.postBillingRechargeRunAllRaw(initOverrides);
     }
 
     /**
-     * Vaults the tokenized card as a reusable card-on-file, charges the first period, and creates the subscription — answering the subscription and invoice ids with the amount charged. The price is SERVER-AUTHORITATIVE: it is the plan\'s catalog price times billable seats and a client-supplied amount is never consulted, so a scripted request cannot underpay; a per-seat plan below its minimum seats is refused, and a free plan is refused outright because this address is the paid path. The card PAN never reaches this service — the browser tokenizes it and only the single-use nonce arrives here. The subject is the caller\'s own org, with an in-org user honored only inside that bound, and an idempotency key (or, absent one, the nonce itself) makes a retry replay the first result instead of charging twice.
-     * Subscribe to a paid plan with a card, charged for the first period immediately
+     * Vaults the card (or reuses one already on file), charges the plan\'s FIRST period at the catalog price, and opens the subscription — one act, all of it server-side.  There is NO AMOUNT in the request. `level` picks which of the plan\'s published prices to buy at — an index, never a number — so what the card is charged is decided by the catalog and underpaying cannot be expressed.  A fresh sale answers 201 with the receipt. An identical retry answers 200 with the FIRST sale\'s body, byte for byte, so a client cannot read a replay as a second subscription having been opened. A caller already on a paid plan is 409 rather than charged again.
+     * Buy a plan with a card
      */
     async postBillingSubscribeCardRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
@@ -1541,108 +1910,16 @@ export class BillingApi extends runtime.BaseAPI {
     }
 
     /**
-     * Vaults the tokenized card as a reusable card-on-file, charges the first period, and creates the subscription — answering the subscription and invoice ids with the amount charged. The price is SERVER-AUTHORITATIVE: it is the plan\'s catalog price times billable seats and a client-supplied amount is never consulted, so a scripted request cannot underpay; a per-seat plan below its minimum seats is refused, and a free plan is refused outright because this address is the paid path. The card PAN never reaches this service — the browser tokenizes it and only the single-use nonce arrives here. The subject is the caller\'s own org, with an in-org user honored only inside that bound, and an idempotency key (or, absent one, the nonce itself) makes a retry replay the first result instead of charging twice.
-     * Subscribe to a paid plan with a card, charged for the first period immediately
+     * Vaults the card (or reuses one already on file), charges the plan\'s FIRST period at the catalog price, and opens the subscription — one act, all of it server-side.  There is NO AMOUNT in the request. `level` picks which of the plan\'s published prices to buy at — an index, never a number — so what the card is charged is decided by the catalog and underpaying cannot be expressed.  A fresh sale answers 201 with the receipt. An identical retry answers 200 with the FIRST sale\'s body, byte for byte, so a client cannot read a replay as a second subscription having been opened. A caller already on a paid plan is 409 rather than charged again.
+     * Buy a plan with a card
      */
     async postBillingSubscribeCard(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.postBillingSubscribeCardRaw(initOverrides);
     }
 
     /**
-     * Cancels the addressed subscription and answers its updated state, emitting the cancellation event the rest of the platform keys on. The default is to cancel AT PERIOD END — a body that fails to parse falls back to it — so the customer keeps what they paid for unless atPeriodEnd is explicitly false. The subscription is resolved inside the caller\'s own org namespace, so another tenant\'s id is a 404, and the write carries the browser anti-CSRF gate because it is reachable with an ambient cookie.
-     * Cancel a subscription, at period end by default
-     */
-    async postBillingSubscriptionsByIdCancelRaw(requestParameters: BillingApiPostBillingSubscriptionsByIdCancelRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling postBillingSubscriptionsByIdCancel().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/billing/subscriptions/{id}/cancel`;
-        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Cancels the addressed subscription and answers its updated state, emitting the cancellation event the rest of the platform keys on. The default is to cancel AT PERIOD END — a body that fails to parse falls back to it — so the customer keeps what they paid for unless atPeriodEnd is explicitly false. The subscription is resolved inside the caller\'s own org namespace, so another tenant\'s id is a 404, and the write carries the browser anti-CSRF gate because it is reachable with an ambient cookie.
-     * Cancel a subscription, at period end by default
-     */
-    async postBillingSubscriptionsByIdCancel(requestParameters: BillingApiPostBillingSubscriptionsByIdCancelRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postBillingSubscriptionsByIdCancelRaw(requestParameters, initOverrides);
-    }
-
-    /**
-     * Clears the scheduled cancellation on the addressed subscription and answers its updated state. It is the inverse of cancel and applies to a subscription that is still within its period; one the engine will not reactivate is refused 400 with the reason. The subscription is resolved inside the caller\'s own org namespace, so another tenant\'s id reads as 404, and the write carries the browser anti-CSRF gate.
-     * Undo a pending cancellation and keep the subscription running
-     */
-    async postBillingSubscriptionsByIdReactivateRaw(requestParameters: BillingApiPostBillingSubscriptionsByIdReactivateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling postBillingSubscriptionsByIdReactivate().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/billing/subscriptions/{id}/reactivate`;
-        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Clears the scheduled cancellation on the addressed subscription and answers its updated state. It is the inverse of cancel and applies to a subscription that is still within its period; one the engine will not reactivate is refused 400 with the reason. The subscription is resolved inside the caller\'s own org namespace, so another tenant\'s id reads as 404, and the write carries the browser anti-CSRF gate.
-     * Undo a pending cancellation and keep the subscription running
-     */
-    async postBillingSubscriptionsByIdReactivate(requestParameters: BillingApiPostBillingSubscriptionsByIdReactivateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postBillingSubscriptionsByIdReactivateRaw(requestParameters, initOverrides);
-    }
-
-    /**
-     * Charges a card the caller already has on file, named by paymentMethodId, and credits the caller\'s own balance — the SAVED-card twin of topup/token, sharing the one charge-and-credit core the auto-recharge cron runs on. The credit lands on the caller\'s OWN billing subject: the request body\'s subject field is pinned to the caller before the handler sees it, so a top-up can never be redirected to another subject or outside the caller\'s org. It is screened for risk before any money moves, exactly as the token path is, because both credit the SPENDABLE wallet. The rule most callers get wrong is that paymentMethodId is NOT covered by that subject pin — it is a card id, not a subject key — so it is checked separately, and a card belonging to any other subject answers 404 rather than 403: a permission error would confirm the id exists, which is an ownership oracle over other people\'s cards.
-     * Add credit to your balance by charging one of your saved cards
+     * Charges a saved card and credits the caller\'s prepaid wallet.  The method must belong to the caller: one that does not is NOT FOUND rather than refused, so an id cannot be probed for existence. A saved row whose card is no longer chargeable is 422 — add the card again — which is a different thing to do than a decline (402) or a bad amount (400).  Retries behave exactly as they do for a token top-up: same key, same replay, same exactly-once at the processor.
+     * Add funds with a card already on file
      */
     async postBillingTopupRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
@@ -1671,16 +1948,16 @@ export class BillingApi extends runtime.BaseAPI {
     }
 
     /**
-     * Charges a card the caller already has on file, named by paymentMethodId, and credits the caller\'s own balance — the SAVED-card twin of topup/token, sharing the one charge-and-credit core the auto-recharge cron runs on. The credit lands on the caller\'s OWN billing subject: the request body\'s subject field is pinned to the caller before the handler sees it, so a top-up can never be redirected to another subject or outside the caller\'s org. It is screened for risk before any money moves, exactly as the token path is, because both credit the SPENDABLE wallet. The rule most callers get wrong is that paymentMethodId is NOT covered by that subject pin — it is a card id, not a subject key — so it is checked separately, and a card belonging to any other subject answers 404 rather than 403: a permission error would confirm the id exists, which is an ownership oracle over other people\'s cards.
-     * Add credit to your balance by charging one of your saved cards
+     * Charges a saved card and credits the caller\'s prepaid wallet.  The method must belong to the caller: one that does not is NOT FOUND rather than refused, so an id cannot be probed for existence. A saved row whose card is no longer chargeable is 422 — add the card again — which is a different thing to do than a decline (402) or a bad amount (400).  Retries behave exactly as they do for a token top-up: same key, same replay, same exactly-once at the processor.
+     * Add funds with a card already on file
      */
     async postBillingTopup(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.postBillingTopupRaw(initOverrides);
     }
 
     /**
-     * Charges the single-use card token for the given amount and credits the caller\'s own balance, answering the transaction id and the new balance — the one-time top-up path, with no payment method saved. The amount is bounded SERVER-SIDE (roughly a one dollar floor and a five thousand dollar ceiling by deployment policy) and the check runs before any money moves, because the browser cap is not a control against a scripted request. The credit lands on the caller\'s OWN billing subject — the same key the usage gate debits — and can never be redirected outside the caller\'s org. Retries are safe: an idempotency key, or absent one the amount within a short window, replays the first result, and if that guard store is unreachable the call is refused with 503 rather than risking a second real charge.
-     * Add credit to your balance by charging a tokenized card once
+     * Charges a card token from the browser\'s payment SDK and credits the caller\'s prepaid wallet — the cold-customer path, where nothing has to be saved first.  The wallet credited is the CALLER\'S OWN, resolved from their signed identity. It is never a value in the request: a client-set selector is how a customer once topped up one account while their usage drew from another.  `X-Idempotency-Key` makes a retry safe. With one, a repeat replays the first result; without one, the same amount from the same subject inside a short window does too. The key reaches the processor as well as our own guard, so the charge is exactly-once at the gateway even if our guard store is down.  The amount is bounded server-side. A decline is 402 and nothing is credited.
+     * Add funds with a single-use card token
      */
     async postBillingTopupTokenRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
@@ -1709,68 +1986,22 @@ export class BillingApi extends runtime.BaseAPI {
     }
 
     /**
-     * Charges the single-use card token for the given amount and credits the caller\'s own balance, answering the transaction id and the new balance — the one-time top-up path, with no payment method saved. The amount is bounded SERVER-SIDE (roughly a one dollar floor and a five thousand dollar ceiling by deployment policy) and the check runs before any money moves, because the browser cap is not a control against a scripted request. The credit lands on the caller\'s OWN billing subject — the same key the usage gate debits — and can never be redirected outside the caller\'s org. Retries are safe: an idempotency key, or absent one the amount within a short window, replays the first result, and if that guard store is unreachable the call is refused with 503 rather than risking a second real charge.
-     * Add credit to your balance by charging a tokenized card once
+     * Charges a card token from the browser\'s payment SDK and credits the caller\'s prepaid wallet — the cold-customer path, where nothing has to be saved first.  The wallet credited is the CALLER\'S OWN, resolved from their signed identity. It is never a value in the request: a client-set selector is how a customer once topped up one account while their usage drew from another.  `X-Idempotency-Key` makes a retry safe. With one, a repeat replays the first result; without one, the same amount from the same subject inside a short window does too. The key reaches the processor as well as our own guard, so the charge is exactly-once at the gateway even if our guard store is down.  The amount is bounded server-side. A decline is 402 and nothing is credited.
+     * Add funds with a single-use card token
      */
     async postBillingTopupToken(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.postBillingTopupTokenRaw(initOverrides);
     }
 
     /**
-     * Accepts a payment provider\'s event, verifies it, records it for audit, and applies subscription lifecycle changes to the matching local row. There is no bearer here and there cannot be: the provider\'s SIGNATURE over the body IS the authentication, so a request with no recognized signature header is 400 and one whose signature does not verify is 401. The provider path segment is only a hint for dashboard configuration — verification picks the processor regardless of what the URL says. Redelivery is safe: an event id already recorded is acknowledged as a duplicate without re-applying any side effect, which matters because providers retry for days until they see a 2xx.
-     * Payment-provider webhook intake for settlement and subscription lifecycle events
-     */
-    async postBillingWebhooksByProviderRaw(requestParameters: BillingApiPostBillingWebhooksByProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters['provider'] == null) {
-            throw new runtime.RequiredError(
-                'provider',
-                'Required parameter "provider" was null or undefined when calling postBillingWebhooksByProvider().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/billing/webhooks/{provider}`;
-        urlPath = urlPath.replace(`{${"provider"}}`, encodeURIComponent(String(requestParameters['provider'])));
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Accepts a payment provider\'s event, verifies it, records it for audit, and applies subscription lifecycle changes to the matching local row. There is no bearer here and there cannot be: the provider\'s SIGNATURE over the body IS the authentication, so a request with no recognized signature header is 400 and one whose signature does not verify is 401. The provider path segment is only a hint for dashboard configuration — verification picks the processor regardless of what the URL says. Redelivery is safe: an event id already recorded is acknowledged as a duplicate without re-applying any side effect, which matters because providers retry for days until they see a 2xx.
-     * Payment-provider webhook intake for settlement and subscription lifecycle events
-     */
-    async postBillingWebhooksByProvider(requestParameters: BillingApiPostBillingWebhooksByProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postBillingWebhooksByProviderRaw(requestParameters, initOverrides);
-    }
-
-    /**
      * Raises a DRAFT invoice against a customer in the caller\'s own org.  The invoice is not collectible yet: a draft exists so it can be read and corrected, and issueInvoice is the separate act that turns it into a demand for payment. The subtotal and amount due are computed from the lines, so there is no total to send and none to get wrong.  The billing org is the caller\'s, taken from the validated principal, so an invoice can only ever be raised on the caller\'s own books.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
      * Raise a draft invoice against a customer
      */
-    async raiseInvoiceRaw(requestParameters: BillingApiRaiseInvoiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<InvoiceOut>> {
-        if (requestParameters['raiseInvoiceIn'] == null) {
+    async raiseInvoiceRaw(requestParameters: BillingApiRaiseInvoiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Invoice>> {
+        if (requestParameters['raiseIn'] == null) {
             throw new runtime.RequiredError(
-                'raiseInvoiceIn',
-                'Required parameter "raiseInvoiceIn" was null or undefined when calling raiseInvoice().'
+                'raiseIn',
+                'Required parameter "raiseIn" was null or undefined when calling raiseInvoice().'
             );
         }
 
@@ -1796,18 +2027,75 @@ export class BillingApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: RaiseInvoiceInToJSON(requestParameters['raiseInvoiceIn']),
+            body: RaiseInToJSON(requestParameters['raiseIn']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => InvoiceOutFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => InvoiceFromJSON(jsonValue));
     }
 
     /**
      * Raises a DRAFT invoice against a customer in the caller\'s own org.  The invoice is not collectible yet: a draft exists so it can be read and corrected, and issueInvoice is the separate act that turns it into a demand for payment. The subtotal and amount due are computed from the lines, so there is no total to send and none to get wrong.  The billing org is the caller\'s, taken from the validated principal, so an invoice can only ever be raised on the caller\'s own books.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
      * Raise a draft invoice against a customer
      */
-    async raiseInvoice(requestParameters: BillingApiRaiseInvoiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<InvoiceOut> {
+    async raiseInvoice(requestParameters: BillingApiRaiseInvoiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Invoice> {
         const response = await this.raiseInvoiceRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Puts a canceled subscription back on its plan.  What asks for this is usually a recovered payment method or a support tool rather than a browser, which is most of the argument for it having an address at all. The engine decides whether the move is legal; a row it will not reactivate comes back with its own reason.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Put a canceled subscription back on its plan
+     */
+    async reactivateSubscriptionRaw(requestParameters: BillingApiReactivateSubscriptionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Subscription>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling reactivateSubscription().'
+            );
+        }
+
+        if (requestParameters['subscriptionRef'] == null) {
+            throw new runtime.RequiredError(
+                'subscriptionRef',
+                'Required parameter "subscriptionRef" was null or undefined when calling reactivateSubscription().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/billing/subscriptions/{id}/reactivate`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: SubscriptionRefToJSON(requestParameters['subscriptionRef']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => SubscriptionFromJSON(jsonValue));
+    }
+
+    /**
+     * Puts a canceled subscription back on its plan.  What asks for this is usually a recovered payment method or a support tool rather than a browser, which is most of the argument for it having an address at all. The engine decides whether the move is legal; a row it will not reactivate comes back with its own reason.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Put a canceled subscription back on its plan
+     */
+    async reactivateSubscription(requestParameters: BillingApiReactivateSubscriptionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Subscription> {
+        const response = await this.reactivateSubscriptionRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1815,7 +2103,7 @@ export class BillingApi extends runtime.BaseAPI {
      * Voids a draft or issued invoice — the cancel.  A paid invoice cannot be voided: money has moved, and the correction for that is a refund, not an erasure. The state machine refuses it and that refusal is the answer.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
      * Void a draft or issued invoice
      */
-    async voidInvoiceRaw(requestParameters: BillingApiVoidInvoiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<InvoiceOut>> {
+    async voidInvoiceRaw(requestParameters: BillingApiVoidInvoiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Invoice>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -1846,14 +2134,14 @@ export class BillingApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => InvoiceOutFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => InvoiceFromJSON(jsonValue));
     }
 
     /**
      * Voids a draft or issued invoice — the cancel.  A paid invoice cannot be voided: money has moved, and the correction for that is a refund, not an erasure. The state machine refuses it and that refusal is the answer.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
      * Void a draft or issued invoice
      */
-    async voidInvoice(requestParameters: BillingApiVoidInvoiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<InvoiceOut> {
+    async voidInvoice(requestParameters: BillingApiVoidInvoiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Invoice> {
         const response = await this.voidInvoiceRaw(requestParameters, initOverrides);
         return await response.value();
     }

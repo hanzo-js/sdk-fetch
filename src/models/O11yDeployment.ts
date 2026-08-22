@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,13 +20,17 @@ import { mapValues } from '../runtime.js';
  */
 export interface O11yDeployment {
     /**
-     * 
+     * Instance is the replica as the telemetry store labels it — the address the
+     * series was recorded against, which is what distinguishes two replicas of one
+     * service.
      * @type {string}
      * @memberof O11yDeployment
      */
     instance?: string;
     /**
-     * 
+     * Up is that replica's last reported state. Every target emits on every cycle,
+     * so a replica missing from the list is one the prober is not reporting at all,
+     * which is a different fact from down.
      * @type {boolean}
      * @memberof O11yDeployment
      */

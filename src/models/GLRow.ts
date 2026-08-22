@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,55 +20,62 @@ import { mapValues } from '../runtime.js';
  */
 export interface GLRow {
     /**
-     * 
+     * Account is the chart-of-accounts number this leg posts to.
      * @type {string}
      * @memberof GLRow
      */
     account?: string;
     /**
-     * 
+     * Against names the OTHER accounts in the same voucher — the contra side of this
+     * leg — so a single row reads as an entry rather than as half of one.
      * @type {string}
      * @memberof GLRow
      */
     against?: string;
     /**
-     * 
+     * Credit is the amount credited to that account, in whole cents.
      * @type {number}
      * @memberof GLRow
      */
     credit?: number;
     /**
-     * 
+     * Debit is the amount debited to that account, in whole cents. Exactly one of
+     * debit and credit is non-zero on a leg; a negative amount is never used to mean
+     * the other side.
      * @type {number}
      * @memberof GLRow
      */
     debit?: number;
     /**
-     * 
+     * ID is the entry's position in the ledger. The ledger is append-only, so ids
+     * ascend with posting order and a higher id is a later entry.
      * @type {number}
      * @memberof GLRow
      */
     id?: number;
     /**
-     * 
+     * PostingAt is the accounting date this entry belongs to — what the reports
+     * window on, which need not be when the row was written.
      * @type {string}
      * @memberof GLRow
      */
     postingAt?: string;
     /**
-     * 
+     * Remarks is the memo carried onto the entry, for a human reading the ledger.
      * @type {string}
      * @memberof GLRow
      */
     remarks?: string;
     /**
-     * 
+     * SourceID identifies that originating record within its kind.
      * @type {string}
      * @memberof GLRow
      */
     sourceId?: string;
     /**
-     * 
+     * SourceKind is what caused the posting: a bank line, a scanned document, a
+     * commerce sale. With sourceId it traces the entry back to the thing that
+     * produced it.
      * @type {string}
      * @memberof GLRow
      */

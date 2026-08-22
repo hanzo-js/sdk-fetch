@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -34,7 +34,8 @@ export interface MarketItem {
      */
     activated?: boolean;
     /**
-     * 
+     * Category is that same listing's grouping. Free text chosen by the publisher,
+     * absent when there is no public listing or the publisher left it blank.
      * @type {string}
      * @memberof MarketItem
      */
@@ -58,7 +59,10 @@ export interface MarketItem {
      */
     inputSchema?: any | null;
     /**
-     * 
+     * Installed is whether the tool is activated for THIS caller's (org, project):
+     * the same bit as Activated, under the shop's name for it, which install and
+     * uninstall are the writes for. It is per caller, so one listing reads
+     * installed for one org and not for another.
      * @type {boolean}
      * @memberof MarketItem
      */
@@ -82,7 +86,10 @@ export interface MarketItem {
      */
     source?: string;
     /**
-     * 
+     * Title is the shop-window name, painted over the registry Name from the
+     * CHEAPEST public listing for this tool — several orgs may list the same one,
+     * and the row shown is the one a buyer would pay. Absent when no org has listed
+     * the tool publicly: that row is a plain capability, not an offer.
      * @type {string}
      * @memberof MarketItem
      */

@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -35,13 +35,14 @@ import {
  */
 export interface RiskDataset {
     /**
-     * At is when this version last changed state, and By who.
+     * At is when this version last changed state, RFC 3339 UTC.
      * @type {string}
      * @memberof RiskDataset
      */
     at?: string;
     /**
-     * 
+     * By is who moved it there: the validated user, or the org itself when the
+     * caller is a machine with no user behind it.
      * @type {string}
      * @memberof RiskDataset
      */
@@ -60,7 +61,7 @@ export interface RiskDataset {
      */
     digest?: string;
     /**
-     * Name and Version identify the version.
+     * Name identifies the dataset across all of its versions.
      * @type {string}
      * @memberof RiskDataset
      */
@@ -123,7 +124,10 @@ export interface RiskDataset {
      */
     truncated?: boolean;
     /**
-     * 
+     * Version is which version this is, from 1 and monotone within the dataset.
+     * A number is never reused — not even after a disposal, where the next declare
+     * continues the count — so "signups v3" means one thing forever, which is what
+     * makes a model's citation of it checkable.
      * @type {number}
      * @memberof RiskDataset
      */

@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,31 +20,36 @@ import { mapValues } from '../runtime.js';
  */
 export interface Span {
     /**
-     * 
+     * EndLine is the last line of the span, inclusive. It equals Line for a
+     * one-line span rather than being zero or absent.
      * @type {number}
      * @memberof Span
      */
     endLine?: number;
     /**
-     * 
+     * File is the path inside the repo, relative to its root and never absolute.
      * @type {string}
      * @memberof Span
      */
     file?: string;
     /**
-     * 
+     * Kind is what the indexer decided this chunk IS — "func", "method", "type",
+     * "struct", "interface", "var", "const", or "block" for a run of code that
+     * declares nothing. Absent when the chunker could not classify it.
      * @type {string}
      * @memberof Span
      */
     kind?: string;
     /**
-     * 
+     * Line is where the span starts, 1-based, as an editor counts.
      * @type {number}
      * @memberof Span
      */
     line?: number;
     /**
-     * 
+     * Repo is the indexed repository the span was found in, as it was indexed
+     * ("owner/name"). A search may be scoped to one repo or run across all of them,
+     * so this is how a caller tells the results apart.
      * @type {string}
      * @memberof Span
      */
@@ -56,25 +61,33 @@ export interface Span {
      */
     role?: string;
     /**
-     * 
+     * Score ranks this span against the OTHERS IN THE SAME RESPONSE and means
+     * nothing across responses or between tiers: the hybrid tier's number is a
+     * reciprocal-rank fusion sum (Σ 1/(60+rank), so tenths at best), the symbol
+     * tier's is a descending position count, and the text and semantic tiers pass
+     * through bm25 and cosine. Compare within a list; never threshold on it.
      * @type {number}
      * @memberof Span
      */
     score?: number;
     /**
-     * 
+     * Snippet is the code itself: a bounded excerpt on /search, the whole chunk on
+     * /context — which is why the same type serves both and why a /context span is
+     * the one an agent pastes into its window.
      * @type {string}
      * @memberof Span
      */
     snippet?: string;
     /**
-     * 
+     * Symbol is the declared name, when the span declares one. Absent on a block.
      * @type {string}
      * @memberof Span
      */
     symbol?: string;
     /**
-     * 
+     * Tier is which retrieval produced the span: "hybrid" (the default — all three
+     * fused), "text" (trigram/FTS), "regex", "semantic" (vector), or "symbol". It is
+     * what explains a Score, so the two travel together.
      * @type {string}
      * @memberof Span
      */

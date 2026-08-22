@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -44,19 +44,24 @@ export interface O11yStatusSummary {
      */
     checkedAt?: string;
     /**
-     * 
+     * InProgressMaintenances is always empty: this platform has no maintenance
+     * scheduling plane, so "nothing is running" is a true statement rather than a
+     * placeholder.
      * @type {Array<O11yStatusMaintenance>}
      * @memberof O11yStatusSummary
      */
     inProgressMaintenances?: Array<O11yStatusMaintenance>;
     /**
-     * 
+     * OngoingIncidents is one entry per service that failed its health probe, sorted
+     * by name. Empty means every probed service answered — which is a measurement,
+     * not an absence of reports.
      * @type {Array<O11yStatusIncident>}
      * @memberof O11yStatusSummary
      */
     ongoingIncidents?: Array<O11yStatusIncident>;
     /**
-     * 
+     * PageTitle is the brand's own status-page title, resolved per request from the
+     * Host — a lux caller must never be shown Hanzo's.
      * @type {string}
      * @memberof O11yStatusSummary
      */
@@ -69,7 +74,7 @@ export interface O11yStatusSummary {
      */
     pageUrl?: string;
     /**
-     * 
+     * ScheduledMaintenances is always empty, for the same reason.
      * @type {Array<O11yStatusMaintenance>}
      * @memberof O11yStatusSummary
      */

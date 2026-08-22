@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -31,6 +31,16 @@ export interface IamWebauthnCredential {
      * @memberof IamWebauthnCredential
      */
     attachment?: string;
+    /**
+     * AttestationFormat is the statement format the authenticator attested in
+     * ("packed", "apple", "none", …), which is a DIFFERENT value from the
+     * attestation type above. The library reads it back when resolving the FIDO
+     * AppID extension, so a row that dropped it would round-trip a credential the
+     * verifier no longer recognises as the one it stored.
+     * @type {string}
+     * @memberof IamWebauthnCredential
+     */
+    attestationFormat?: string;
     /**
      * 
      * @type {string}
@@ -160,6 +170,7 @@ export function IamWebauthnCredentialFromJSONTyped(json: any, ignoreDiscriminato
         
         'aaguid': json['aaguid'] == null ? undefined : json['aaguid'],
         'attachment': json['attachment'] == null ? undefined : json['attachment'],
+        'attestationFormat': json['attestationFormat'] == null ? undefined : json['attestationFormat'],
         'attestationType': json['attestationType'] == null ? undefined : json['attestationType'],
         'backupEligible': json['backupEligible'] == null ? undefined : json['backupEligible'],
         'backupState': json['backupState'] == null ? undefined : json['backupState'],
@@ -194,6 +205,7 @@ export function IamWebauthnCredentialToJSONTyped(value?: IamWebauthnCredential |
         
         'aaguid': value['aaguid'],
         'attachment': value['attachment'],
+        'attestationFormat': value['attestationFormat'],
         'attestationType': value['attestationType'],
         'backupEligible': value['backupEligible'],
         'backupState': value['backupState'],

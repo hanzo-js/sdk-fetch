@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,7 +20,8 @@ import { mapValues } from '../runtime.js';
  */
 export interface JourneyStep {
     /**
-     * 
+     * Args are the tool's default arguments, merged under whatever the caller
+     * passes at run time, so a step ships with the arguments that make it work.
      * @type {{ [key: string]: object; }}
      * @memberof JourneyStep
      */
@@ -34,19 +35,21 @@ export interface JourneyStep {
      */
     deps?: Array<string>;
     /**
-     * the prose/juncture — what the Guide asks/explains here
+     * Detail is the juncture — what the Guide explains, or asks for, at this step.
      * @type {string}
      * @memberof JourneyStep
      */
     detail?: string;
     /**
-     * 
+     * Draft, when set, is the prompt the embedded AI answers first; its output is
+     * folded into one of Args before the tool runs, so the model writes the
+     * content and the tool only delivers it.
      * @type {string}
      * @memberof JourneyStep
      */
     draft?: string;
     /**
-     * 
+     * DraftInto names the argument the drafted text lands in. Empty means "brief".
      * @type {string}
      * @memberof JourneyStep
      */
@@ -61,13 +64,16 @@ export interface JourneyStep {
      */
     enabled?: boolean;
     /**
-     * 
+     * ID is the stable slug the whole plane addresses this step by — the value in
+     * `deps`, in `next`, in the progress rows, and in the URL of every step route.
+     * Renaming it orphans an org's recorded progress for this step.
      * @type {string}
      * @memberof JourneyStep
      */
     id?: string;
     /**
-     * the phase (section id) this step groups under
+     * Section is the id of the phase this step groups under. A disabled section
+     * takes its steps out of the journey with it.
      * @type {string}
      * @memberof JourneyStep
      */
@@ -80,15 +86,15 @@ export interface JourneyStep {
      */
     signal?: string;
     /**
-     * 
+     * Title is the one-line quest as a person reads it in the checklist.
      * @type {string}
      * @memberof JourneyStep
      */
     title?: string;
     /**
-     * Tool, when set, is the MCP tool the Business AI runs for "do it for me". Args
-     * are its default arguments; Draft is an optional AI prompt whose output fills the
-     * DraftInto arg (default "brief").
+     * Tool, when set, names the MCP tool the Business AI runs for "do it for me".
+     * A step with no tool can only be completed by a person; it is the field the
+     * `automatable` flag on every projection of this step is derived from.
      * @type {string}
      * @memberof JourneyStep
      */

@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,101 +20,29 @@ import { mapValues } from '../runtime.js';
  */
 export interface ProductRow {
     /**
-     * hanzo-k8s
+     * Orders is how many order_completed events carried it.
+     * @type {number}
+     * @memberof ProductRow
+     */
+    orders?: number;
+    /**
+     * ProductID is the product the order events named.
      * @type {string}
      * @memberof ProductRow
      */
-    cluster?: string;
+    productId?: string;
     /**
-     * spec.image.tag on the App CR (declared truth)
-     * @type {string}
+     * Revenue is the total they carried, in the events' own currency unit.
+     * @type {number}
      * @memberof ProductRow
      */
-    declaredTag?: string;
+    revenue?: number;
     /**
-     * any drift flag present
-     * @type {boolean}
+     * Units is the summed quantity sold.
+     * @type {number}
      * @memberof ProductRow
      */
-    drift?: boolean;
-    /**
-     * ok|yellow|red (rolled-up)
-     * @type {string}
-     * @memberof ProductRow
-     */
-    driftSeverity?: string;
-    /**
-     * main|test|dev (lifecycle namespace)
-     * @type {string}
-     * @memberof ProductRow
-     */
-    env?: string;
-    /**
-     * green|yellow|red|unknown
-     * @type {string}
-     * @memberof ProductRow
-     */
-    health?: string;
-    /**
-     * operator App CR spec.role (sql|kv|generic|ingress) or ""
-     * @type {string}
-     * @memberof ProductRow
-     */
-    kind?: string;
-    /**
-     * newest released tag (GH release reader — empty until wired)
-     * @type {string}
-     * @memberof ProductRow
-     */
-    latestTag?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ProductRow
-     */
-    name?: string;
-    /**
-     * k8s namespace
-     * @type {string}
-     * @memberof ProductRow
-     */
-    namespace?: string;
-    /**
-     * image namespace (hanzoai|luxfi|docker.io/…)
-     * @type {string}
-     * @memberof ProductRow
-     */
-    org?: string;
-    /**
-     * operator status.phase (Running/Creating/…)
-     * @type {string}
-     * @memberof ProductRow
-     */
-    phase?: string;
-    /**
-     * owner/repo image coordinate
-     * @type {string}
-     * @memberof ProductRow
-     */
-    repo?: string;
-    /**
-     * observed from the live Deployment
-     * @type {string}
-     * @memberof ProductRow
-     */
-    runningTag?: string;
-    /**
-     * derived: cloud|data|edge|daemon|paas|app (grouping)
-     * @type {string}
-     * @memberof ProductRow
-     */
-    tier?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ProductRow
-     */
-    updated?: string;
+    units?: number;
 }
 
 /**
@@ -134,22 +62,10 @@ export function ProductRowFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     }
     return {
         
-        'cluster': json['cluster'] == null ? undefined : json['cluster'],
-        'declaredTag': json['declaredTag'] == null ? undefined : json['declaredTag'],
-        'drift': json['drift'] == null ? undefined : json['drift'],
-        'driftSeverity': json['driftSeverity'] == null ? undefined : json['driftSeverity'],
-        'env': json['env'] == null ? undefined : json['env'],
-        'health': json['health'] == null ? undefined : json['health'],
-        'kind': json['kind'] == null ? undefined : json['kind'],
-        'latestTag': json['latestTag'] == null ? undefined : json['latestTag'],
-        'name': json['name'] == null ? undefined : json['name'],
-        'namespace': json['namespace'] == null ? undefined : json['namespace'],
-        'org': json['org'] == null ? undefined : json['org'],
-        'phase': json['phase'] == null ? undefined : json['phase'],
-        'repo': json['repo'] == null ? undefined : json['repo'],
-        'runningTag': json['runningTag'] == null ? undefined : json['runningTag'],
-        'tier': json['tier'] == null ? undefined : json['tier'],
-        'updated': json['updated'] == null ? undefined : json['updated'],
+        'orders': json['orders'] == null ? undefined : json['orders'],
+        'productId': json['productId'] == null ? undefined : json['productId'],
+        'revenue': json['revenue'] == null ? undefined : json['revenue'],
+        'units': json['units'] == null ? undefined : json['units'],
     };
 }
 
@@ -164,22 +80,10 @@ export function ProductRowToJSONTyped(value?: ProductRow | null, ignoreDiscrimin
 
     return {
         
-        'cluster': value['cluster'],
-        'declaredTag': value['declaredTag'],
-        'drift': value['drift'],
-        'driftSeverity': value['driftSeverity'],
-        'env': value['env'],
-        'health': value['health'],
-        'kind': value['kind'],
-        'latestTag': value['latestTag'],
-        'name': value['name'],
-        'namespace': value['namespace'],
-        'org': value['org'],
-        'phase': value['phase'],
-        'repo': value['repo'],
-        'runningTag': value['runningTag'],
-        'tier': value['tier'],
-        'updated': value['updated'],
+        'orders': value['orders'],
+        'productId': value['productId'],
+        'revenue': value['revenue'],
+        'units': value['units'],
     };
 }
 

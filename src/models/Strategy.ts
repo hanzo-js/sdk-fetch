@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -28,61 +28,68 @@ import {
  */
 export interface Strategy {
     /**
-     * 
+     * Action is the tactic itself: the thing to go and do, stated imperatively.
      * @type {string}
      * @memberof Strategy
      */
     action?: string;
     /**
-     * long-form explainer (nil for un-blogged tactics)
+     * Blog is the tactic's long-form explainer; absent for tactics that have none.
      * @type {Blog}
      * @memberof Strategy
      */
     blog?: Blog;
     /**
-     * 
+     * Category is the growth discipline the tactic belongs to — the axis
+     * `?category=` narrows the corpus on, and one of the facets a caller browses by.
      * @type {string}
      * @memberof Strategy
      */
     category?: string;
     /**
-     * 
+     * Enabled is the admin lever. Absent reads as ON; an explicit false drops the
+     * tactic from every org-facing corpus read while leaving it in the document.
      * @type {boolean}
      * @memberof Strategy
      */
     enabled?: boolean;
     /**
-     * modern | heritage
+     * Era separates an AI-era tactic (`modern`) from a classical one (`heritage`).
      * @type {string}
      * @memberof Strategy
      */
     era?: string;
     /**
-     * 
+     * ID is the tactic's stable slug, unique across the corpus.
      * @type {string}
      * @memberof Strategy
      */
     id?: string;
     /**
-     * the spine slug this tactic files under
+     * Principle is the spine slug this tactic files under (a Principle.Slug).
      * @type {string}
      * @memberof Strategy
      */
     principle?: string;
     /**
-     * provenance / attribution
+     * Source is where the tactic came from — the attribution a reader is owed.
      * @type {string}
      * @memberof Strategy
      */
     source?: string;
     /**
-     * 
+     * Tags are PRECONDITIONS, not labels — every one must be satisfied by the org's
+     * observed profile before the tactic surfaces, so an untagged tactic is
+     * universally applicable. Two vocabularies: `stage:<research|formed|launched|
+     * activated|scaling>` reads the org's growth stage, `has:<capability>` reads an
+     * observed signal.
      * @type {Array<string>}
      * @memberof Strategy
      */
     tags?: Array<string>;
     /**
-     * 
+     * Workload is how much effort running the tactic costs, so a corpus can be
+     * narrowed to what an org has the hands for right now.
      * @type {string}
      * @memberof Strategy
      */

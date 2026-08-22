@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -29,10 +29,10 @@ import {
 export interface IamListOrganizationsOutput {
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof IamListOrganizationsOutput
      */
-    count?: number;
+    cursor?: string;
     /**
      * 
      * @type {Array<IamOrganization>}
@@ -58,7 +58,7 @@ export function IamListOrganizationsOutputFromJSONTyped(json: any, ignoreDiscrim
     }
     return {
         
-        'count': json['count'] == null ? undefined : json['count'],
+        'cursor': json['cursor'] == null ? undefined : json['cursor'],
         'organizations': json['organizations'] == null ? undefined : ((json['organizations'] as Array<any>).map(IamOrganizationFromJSON)),
     };
 }
@@ -74,7 +74,7 @@ export function IamListOrganizationsOutputToJSONTyped(value?: IamListOrganizatio
 
     return {
         
-        'count': value['count'],
+        'cursor': value['cursor'],
         'organizations': value['organizations'] == null ? undefined : ((value['organizations'] as Array<any>).map(IamOrganizationToJSON)),
     };
 }

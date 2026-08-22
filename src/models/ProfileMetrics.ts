@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -35,25 +35,35 @@ import {
  */
 export interface ProfileMetrics {
     /**
-     * 
+     * Funnel is what the org's analytics observed over the trailing window. Read
+     * its `available` first: an org with no analytics reports zeros here, and zero
+     * traffic and no measurement are different facts.
      * @type {Funnel}
      * @memberof ProfileMetrics
      */
     funnel?: Funnel;
     /**
-     * 
+     * LaunchProgress is the org's own position in the launch checklist, folded in
+     * so a profile carries both what the org has BUILT and what it has DONE.
      * @type {ProgressView}
      * @memberof ProfileMetrics
      */
     launchProgress?: ProgressView;
     /**
-     * 
+     * Records is how many business records the org holds — the volume that tells a
+     * real book of customers from an empty account. It feeds the `customers`
+     * signal, which crosses at a threshold rather than at one row.
      * @type {number}
      * @memberof ProfileMetrics
      */
     records?: number;
     /**
-     * 
+     * RevenueCents is the org's money OF RECORD — what its books say, in whole
+     * cents, never a float and never a display string. This is the number the
+     * scaling stage is decided on; funnel.revenue is the beacon's separate,
+     * unreconciled view of the same business. Zero when the org has none, and also
+     * zero when the books could not be read, which is why the `revenue` signal
+     * beside it is the thing to trust.
      * @type {number}
      * @memberof ProfileMetrics
      */

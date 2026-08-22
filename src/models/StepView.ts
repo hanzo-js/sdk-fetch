@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,7 +20,8 @@ import { mapValues } from '../runtime.js';
  */
 export interface StepView {
     /**
-     * 
+     * Args are the tool's default arguments, merged under whatever the caller
+     * passes at run time.
      * @type {{ [key: string]: object; }}
      * @memberof StepView
      */
@@ -57,13 +58,14 @@ export interface StepView {
      */
     detail?: string;
     /**
-     * 
+     * Draft, when set, is the prompt the embedded AI answers first; its output is
+     * folded into one of Args before the tool runs.
      * @type {string}
      * @memberof StepView
      */
     draft?: string;
     /**
-     * 
+     * DraftInto names the argument the drafted text lands in. Empty means "brief".
      * @type {string}
      * @memberof StepView
      */
@@ -105,15 +107,14 @@ export interface StepView {
      */
     state?: string;
     /**
-     * 
+     * Title is the one-line quest as a person reads it in the checklist.
      * @type {string}
      * @memberof StepView
      */
     title?: string;
     /**
-     * Tool is the MCP tool the Business AI runs for "do it for me"; Args are its
-     * default arguments, Draft an optional AI prompt whose output fills the
-     * DraftInto arg (default "brief").
+     * Tool is the MCP tool the Business AI runs for "do it for me". A step naming
+     * none can only be completed by a person.
      * @type {string}
      * @memberof StepView
      */

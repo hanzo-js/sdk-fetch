@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -28,6 +28,17 @@ import type {
   DataroomRoomOne,
   DataroomRooms,
   DataroomStats,
+  TrustAsk,
+  TrustAsked,
+  TrustDecision,
+  TrustDesk,
+  TrustEdit,
+  TrustGranted,
+  TrustItemView,
+  TrustPage,
+  TrustPublish,
+  TrustRefused,
+  TrustSettings,
 } from '../models/index.js';
 import {
     DataroomAddDocumentFromJSON,
@@ -56,6 +67,28 @@ import {
     DataroomRoomsToJSON,
     DataroomStatsFromJSON,
     DataroomStatsToJSON,
+    TrustAskFromJSON,
+    TrustAskToJSON,
+    TrustAskedFromJSON,
+    TrustAskedToJSON,
+    TrustDecisionFromJSON,
+    TrustDecisionToJSON,
+    TrustDeskFromJSON,
+    TrustDeskToJSON,
+    TrustEditFromJSON,
+    TrustEditToJSON,
+    TrustGrantedFromJSON,
+    TrustGrantedToJSON,
+    TrustItemViewFromJSON,
+    TrustItemViewToJSON,
+    TrustPageFromJSON,
+    TrustPageToJSON,
+    TrustPublishFromJSON,
+    TrustPublishToJSON,
+    TrustRefusedFromJSON,
+    TrustRefusedToJSON,
+    TrustSettingsFromJSON,
+    TrustSettingsToJSON,
 } from '../models/index.js';
 
 export interface DataroomApiGetDataroomAnalyticsDataroomByDataroomidRequest {
@@ -78,6 +111,15 @@ export interface DataroomApiGetDataroomDocumentsByIdFileRequest {
     id: string;
 }
 
+export interface DataroomApiGetDataroomTrustCenterBySlugRequest {
+    slug: string;
+}
+
+export interface DataroomApiGetDataroomTrustCenterBySlugFileByItemRequest {
+    slug: string;
+    item: string;
+}
+
 export interface DataroomApiGetDataroomViewByLinkidRequest {
     linkId: string;
 }
@@ -85,6 +127,11 @@ export interface DataroomApiGetDataroomViewByLinkidRequest {
 export interface DataroomApiGetDataroomViewByLinkidDocumentByDocumentidFileRequest {
     linkId: string;
     documentId: string;
+}
+
+export interface DataroomApiPatchDataroomTrustArtifactsByIdRequest {
+    id: string;
+    trustEdit: TrustEdit;
 }
 
 export interface DataroomApiPostDataroomDataroomsRequest {
@@ -100,12 +147,35 @@ export interface DataroomApiPostDataroomLinksRequest {
     dataroomLinkCreate: DataroomLinkCreate;
 }
 
+export interface DataroomApiPostDataroomTrustArtifactsRequest {
+    trustPublish: TrustPublish;
+}
+
+export interface DataroomApiPostDataroomTrustCenterBySlugRequestsRequest {
+    slug: string;
+    trustAsk: TrustAsk;
+}
+
+export interface DataroomApiPostDataroomTrustRequestsByIdGrantRequest {
+    id: string;
+    trustDecision: TrustDecision;
+}
+
+export interface DataroomApiPostDataroomTrustRequestsByIdRefuseRequest {
+    id: string;
+    trustDecision: TrustDecision;
+}
+
 export interface DataroomApiPostDataroomViewByLinkidAuthenticateRequest {
     linkId: string;
 }
 
 export interface DataroomApiPostDataroomViewByLinkidPageviewRequest {
     linkId: string;
+}
+
+export interface DataroomApiPutDataroomTrustRequest {
+    trustSettings: TrustSettings;
 }
 
 /**
@@ -503,6 +573,146 @@ export class DataroomApi extends runtime.BaseAPI {
     }
 
     /**
+     * Answers the caller org\'s OWN trust centre: its settings, every item it holds in both tiers, the requests waiting on it, and the grants it has made.  The org is the caller\'s, taken from the validated bearer and from nothing else, so this op cannot be pointed at another tenant — there is no field for one. An org that has never opened a centre reads back an empty one rather than an error, because having no trust centre is an ordinary state and this is the read that tells you so.
+     * Answers the caller org\'s OWN trust centre: its settings, every item it holds in both tiers, the requests waiting on it, and the grants it has made.
+     */
+    async getDataroomTrustRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TrustDesk>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/dataroom/trust`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TrustDeskFromJSON(jsonValue));
+    }
+
+    /**
+     * Answers the caller org\'s OWN trust centre: its settings, every item it holds in both tiers, the requests waiting on it, and the grants it has made.  The org is the caller\'s, taken from the validated bearer and from nothing else, so this op cannot be pointed at another tenant — there is no field for one. An org that has never opened a centre reads back an empty one rather than an error, because having no trust centre is an ordinary state and this is the read that tells you so.
+     * Answers the caller org\'s OWN trust centre: its settings, every item it holds in both tiers, the requests waiting on it, and the grants it has made.
+     */
+    async getDataroomTrust(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TrustDesk> {
+        const response = await this.getDataroomTrustRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Answers an org\'s public trust centre: its name, the text a party must accept to ask for a document, and every item it publishes.  An item is either available NOW — the things the org states itself, its policies, its filled questionnaires, its subprocessor list, its knowledge base — or available ON REQUEST, which is everything an independent auditor put their name to. Both are listed by name and kind, so a reader can see WHAT exists before asking for it; only the second withholds the content.  No principal is involved and none is accepted: the org is resolved from the address, which answers only for a centre its owner has published. An address nobody publishes at is not found, the same answer an unpublished one gets.
+     * Answers an org\'s public trust centre: its name, the text a party must accept to ask for a document, and every item it publishes.
+     */
+    async getDataroomTrustCenterBySlugRaw(requestParameters: DataroomApiGetDataroomTrustCenterBySlugRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TrustPage>> {
+        if (requestParameters['slug'] == null) {
+            throw new runtime.RequiredError(
+                'slug',
+                'Required parameter "slug" was null or undefined when calling getDataroomTrustCenterBySlug().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/dataroom/trust/center/{slug}`;
+        urlPath = urlPath.replace(`{${"slug"}}`, encodeURIComponent(String(requestParameters['slug'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TrustPageFromJSON(jsonValue));
+    }
+
+    /**
+     * Answers an org\'s public trust centre: its name, the text a party must accept to ask for a document, and every item it publishes.  An item is either available NOW — the things the org states itself, its policies, its filled questionnaires, its subprocessor list, its knowledge base — or available ON REQUEST, which is everything an independent auditor put their name to. Both are listed by name and kind, so a reader can see WHAT exists before asking for it; only the second withholds the content.  No principal is involved and none is accepted: the org is resolved from the address, which answers only for a centre its owner has published. An address nobody publishes at is not found, the same answer an unpublished one gets.
+     * Answers an org\'s public trust centre: its name, the text a party must accept to ask for a document, and every item it publishes.
+     */
+    async getDataroomTrustCenterBySlug(requestParameters: DataroomApiGetDataroomTrustCenterBySlugRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TrustPage> {
+        const response = await this.getDataroomTrustCenterBySlugRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Streams the file behind an item a trust centre publishes openly — a policy, a filled questionnaire, a knowledge-base attachment — under its recorded content type.  No principal and no link: these are the things an org states about itself, so they are served to anyone who asks. The narrowing is in the lookup rather than in a check: the item must be public, must not be retired, and must belong to a centre its owner has published, so an item released only on request is NOT FOUND here rather than refused — the same answer an id that never existed gets, which is what stops this reporting what the released-on-request tier holds.  Bytes that cannot be fetched from object storage are 502, never a truncated file.
+     * Read a public trust-centre item\'s bytes
+     */
+    async getDataroomTrustCenterBySlugFileByItemRaw(requestParameters: DataroomApiGetDataroomTrustCenterBySlugFileByItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['slug'] == null) {
+            throw new runtime.RequiredError(
+                'slug',
+                'Required parameter "slug" was null or undefined when calling getDataroomTrustCenterBySlugFileByItem().'
+            );
+        }
+
+        if (requestParameters['item'] == null) {
+            throw new runtime.RequiredError(
+                'item',
+                'Required parameter "item" was null or undefined when calling getDataroomTrustCenterBySlugFileByItem().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/dataroom/trust/center/{slug}/file/{item}`;
+        urlPath = urlPath.replace(`{${"slug"}}`, encodeURIComponent(String(requestParameters['slug'])));
+        urlPath = urlPath.replace(`{${"item"}}`, encodeURIComponent(String(requestParameters['item'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Streams the file behind an item a trust centre publishes openly — a policy, a filled questionnaire, a knowledge-base attachment — under its recorded content type.  No principal and no link: these are the things an org states about itself, so they are served to anyone who asks. The narrowing is in the lookup rather than in a check: the item must be public, must not be retired, and must belong to a centre its owner has published, so an item released only on request is NOT FOUND here rather than refused — the same answer an id that never existed gets, which is what stops this reporting what the released-on-request tier holds.  Bytes that cannot be fetched from object storage are 502, never a truncated file.
+     * Read a public trust-centre item\'s bytes
+     */
+    async getDataroomTrustCenterBySlugFileByItem(requestParameters: DataroomApiGetDataroomTrustCenterBySlugFileByItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getDataroomTrustCenterBySlugFileByItemRaw(requestParameters, initOverrides);
+    }
+
+    /**
      * Answers the pre-auth face of a link to anyone holding its id: name and type, which gates apply (whether an address is required, whether a password is set), whether download is permitted, whether it has expired, and the name and description of the room behind it — or, for a single-document link, that document\'s name and page count.  No principal is involved: the owning org is resolved from the link id through dataroom\'s one cross-tenant routing table, and an unknown or archived link is a 404.  It is metadata only — a room\'s document list and every file stay behind the authenticate step. An expired link is REPORTED as expired here rather than refused, so a visitor learns why the next step will fail; nothing about the password beyond its existence is disclosed.
      * What a share link\'s visitor sees before authenticating
      */
@@ -600,6 +810,63 @@ export class DataroomApi extends runtime.BaseAPI {
      */
     async getDataroomViewByLinkidDocumentByDocumentidFile(requestParameters: DataroomApiGetDataroomViewByLinkidDocumentByDocumentidFileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.getDataroomViewByLinkidDocumentByDocumentidFileRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Amend changes an item on the caller org\'s trust centre — replace its file with a newer edition, move it between public and gated, rewrite what it says, or retire it — and answers with the item as it now stands.  Retiring is the withdrawal: the item leaves the public centre immediately and can no longer be granted, while grants already made over it stand, because a release that happened is part of the record and un-happening it in the record would be a lie. Restoring is the same call with retired false.  Moving an item an independent auditor signed to the public tier is refused, and refused by the database rather than only here. Only an admin of the org may call it, and the item is resolved in that org\'s own store, so another org\'s id is not found.
+     * Amend changes an item on the caller org\'s trust centre — replace its file with a newer edition, move it between public and gated, rewrite what it says, or retire it — and answers with the item as it now stands.
+     */
+    async patchDataroomTrustArtifactsByIdRaw(requestParameters: DataroomApiPatchDataroomTrustArtifactsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TrustItemView>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling patchDataroomTrustArtifactsById().'
+            );
+        }
+
+        if (requestParameters['trustEdit'] == null) {
+            throw new runtime.RequiredError(
+                'trustEdit',
+                'Required parameter "trustEdit" was null or undefined when calling patchDataroomTrustArtifactsById().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/dataroom/trust/artifacts/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+            body: TrustEditToJSON(requestParameters['trustEdit']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TrustItemViewFromJSON(jsonValue));
+    }
+
+    /**
+     * Amend changes an item on the caller org\'s trust centre — replace its file with a newer edition, move it between public and gated, rewrite what it says, or retire it — and answers with the item as it now stands.  Retiring is the withdrawal: the item leaves the public centre immediately and can no longer be granted, while grants already made over it stand, because a release that happened is part of the record and un-happening it in the record would be a lie. Restoring is the same call with retired false.  Moving an item an independent auditor signed to the public tier is refused, and refused by the database rather than only here. Only an admin of the org may call it, and the item is resolved in that org\'s own store, so another org\'s id is not found.
+     * Amend changes an item on the caller org\'s trust centre — replace its file with a newer edition, move it between public and gated, rewrite what it says, or retire it — and answers with the item as it now stands.
+     */
+    async patchDataroomTrustArtifactsById(requestParameters: DataroomApiPatchDataroomTrustArtifactsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TrustItemView> {
+        const response = await this.patchDataroomTrustArtifactsByIdRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
@@ -796,6 +1063,226 @@ export class DataroomApi extends runtime.BaseAPI {
     }
 
     /**
+     * Publish puts an item on the caller org\'s trust centre and answers with it.  The item is GATED unless it says otherwise, so a kind nobody has thought of yet arrives private and someone has to release it deliberately — that default is what keeps an auditor\'s report from becoming readable because a field went unset. An item whose attester is \"auditor\" cannot be public at all: the database refuses the pair, so no path through this API can publish one.  A file is optional and is uploaded FIRST, through POST /v1/dataroom/documents, then named here — the data room is the one place bytes enter, so a trust centre document is an ordinary data-room document and inherits its storage, its grants and its page-by-page access record. A gated item that has a file is added to the org\'s release room, which is what lets a party be granted the whole gated tier in one link.  Only an admin of the org may call it.
+     * Publish puts an item on the caller org\'s trust centre and answers with it.
+     */
+    async postDataroomTrustArtifactsRaw(requestParameters: DataroomApiPostDataroomTrustArtifactsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TrustItemView>> {
+        if (requestParameters['trustPublish'] == null) {
+            throw new runtime.RequiredError(
+                'trustPublish',
+                'Required parameter "trustPublish" was null or undefined when calling postDataroomTrustArtifacts().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/dataroom/trust/artifacts`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: TrustPublishToJSON(requestParameters['trustPublish']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TrustItemViewFromJSON(jsonValue));
+    }
+
+    /**
+     * Publish puts an item on the caller org\'s trust centre and answers with it.  The item is GATED unless it says otherwise, so a kind nobody has thought of yet arrives private and someone has to release it deliberately — that default is what keeps an auditor\'s report from becoming readable because a field went unset. An item whose attester is \"auditor\" cannot be public at all: the database refuses the pair, so no path through this API can publish one.  A file is optional and is uploaded FIRST, through POST /v1/dataroom/documents, then named here — the data room is the one place bytes enter, so a trust centre document is an ordinary data-room document and inherits its storage, its grants and its page-by-page access record. A gated item that has a file is added to the org\'s release room, which is what lets a party be granted the whole gated tier in one link.  Only an admin of the org may call it.
+     * Publish puts an item on the caller org\'s trust centre and answers with it.
+     */
+    async postDataroomTrustArtifacts(requestParameters: DataroomApiPostDataroomTrustArtifactsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TrustItemView> {
+        const response = await this.postDataroomTrustArtifactsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Records a request to read what an independent auditor signed, and answers with its id.  The org that owns the centre decides. Nothing is released here and no link is minted: this writes the ask down, which is the whole promise the form makes. The write is the answer — a request that could not be stored is an error, never a receipt, so a form can never appear to have been sent and be gone.  `email` is required and is the ONLY address the eventual grant will admit, so an address the asker cannot read is an ask that cannot be answered. Where the centre states an NDA, `accept` must be true and the text in force is recorded verbatim against the request.  Asking twice for the same thing from the same address is the SAME ask: the second answers with the first\'s id rather than opening a second row, which is also what keeps an anonymous door from filling a tenant\'s store.
+     * Records a request to read what an independent auditor signed, and answers with its id.
+     */
+    async postDataroomTrustCenterBySlugRequestsRaw(requestParameters: DataroomApiPostDataroomTrustCenterBySlugRequestsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TrustAsked>> {
+        if (requestParameters['slug'] == null) {
+            throw new runtime.RequiredError(
+                'slug',
+                'Required parameter "slug" was null or undefined when calling postDataroomTrustCenterBySlugRequests().'
+            );
+        }
+
+        if (requestParameters['trustAsk'] == null) {
+            throw new runtime.RequiredError(
+                'trustAsk',
+                'Required parameter "trustAsk" was null or undefined when calling postDataroomTrustCenterBySlugRequests().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/dataroom/trust/center/{slug}/requests`;
+        urlPath = urlPath.replace(`{${"slug"}}`, encodeURIComponent(String(requestParameters['slug'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: TrustAskToJSON(requestParameters['trustAsk']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TrustAskedFromJSON(jsonValue));
+    }
+
+    /**
+     * Records a request to read what an independent auditor signed, and answers with its id.  The org that owns the centre decides. Nothing is released here and no link is minted: this writes the ask down, which is the whole promise the form makes. The write is the answer — a request that could not be stored is an error, never a receipt, so a form can never appear to have been sent and be gone.  `email` is required and is the ONLY address the eventual grant will admit, so an address the asker cannot read is an ask that cannot be answered. Where the centre states an NDA, `accept` must be true and the text in force is recorded verbatim against the request.  Asking twice for the same thing from the same address is the SAME ask: the second answers with the first\'s id rather than opening a second row, which is also what keeps an anonymous door from filling a tenant\'s store.
+     * Records a request to read what an independent auditor signed, and answers with its id.
+     */
+    async postDataroomTrustCenterBySlugRequests(requestParameters: DataroomApiPostDataroomTrustCenterBySlugRequestsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TrustAsked> {
+        const response = await this.postDataroomTrustCenterBySlugRequestsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Grant answers a request by opening access: it mints a share link over what was asked for, addressed to the address that asked and closing at expiry, records the decision, and mails the asker.  The link is NEVER a public URL. It carries the asker\'s address on its allow list, so forwarding it to somebody else does not open it, and it expires. What the party then does with it — which document, which page, for how long — is recorded by the data room\'s own view tracking, which is where the access record for this release lives; there is no second log.  A request that was already answered is refused rather than answered twice, so a second click cannot mint a second link. Only an admin of the org may call it, and the request is resolved in that org\'s own store, so another org\'s request id is not found — which is also what stops one org deciding another\'s queue.  Mail is best effort and the grant does not depend on it: a deployment that sends no mail still records the grant and says so in `delivery`, so the approver knows to pass the address on themselves.
+     * Grant answers a request by opening access: it mints a share link over what was asked for, addressed to the address that asked and closing at expiry, records the decision, and mails the asker.
+     */
+    async postDataroomTrustRequestsByIdGrantRaw(requestParameters: DataroomApiPostDataroomTrustRequestsByIdGrantRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TrustGranted>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling postDataroomTrustRequestsByIdGrant().'
+            );
+        }
+
+        if (requestParameters['trustDecision'] == null) {
+            throw new runtime.RequiredError(
+                'trustDecision',
+                'Required parameter "trustDecision" was null or undefined when calling postDataroomTrustRequestsByIdGrant().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/dataroom/trust/requests/{id}/grant`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: TrustDecisionToJSON(requestParameters['trustDecision']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TrustGrantedFromJSON(jsonValue));
+    }
+
+    /**
+     * Grant answers a request by opening access: it mints a share link over what was asked for, addressed to the address that asked and closing at expiry, records the decision, and mails the asker.  The link is NEVER a public URL. It carries the asker\'s address on its allow list, so forwarding it to somebody else does not open it, and it expires. What the party then does with it — which document, which page, for how long — is recorded by the data room\'s own view tracking, which is where the access record for this release lives; there is no second log.  A request that was already answered is refused rather than answered twice, so a second click cannot mint a second link. Only an admin of the org may call it, and the request is resolved in that org\'s own store, so another org\'s request id is not found — which is also what stops one org deciding another\'s queue.  Mail is best effort and the grant does not depend on it: a deployment that sends no mail still records the grant and says so in `delivery`, so the approver knows to pass the address on themselves.
+     * Grant answers a request by opening access: it mints a share link over what was asked for, addressed to the address that asked and closing at expiry, records the decision, and mails the asker.
+     */
+    async postDataroomTrustRequestsByIdGrant(requestParameters: DataroomApiPostDataroomTrustRequestsByIdGrantRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TrustGranted> {
+        const response = await this.postDataroomTrustRequestsByIdGrantRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Refuse answers a request by declining it, recording who declined and why.  Nothing is released and no link is minted. The refusal STAYS on the record beside the ask — a request that was turned down is part of the access record exactly as one that was granted is, and deleting it would leave a queue that only ever shows the decisions somebody liked.  A request that was already answered is refused rather than answered twice. Only an admin of the org may call it, and the request is resolved in that org\'s own store, so another org\'s request id is not found.
+     * Refuse answers a request by declining it, recording who declined and why.
+     */
+    async postDataroomTrustRequestsByIdRefuseRaw(requestParameters: DataroomApiPostDataroomTrustRequestsByIdRefuseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TrustRefused>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling postDataroomTrustRequestsByIdRefuse().'
+            );
+        }
+
+        if (requestParameters['trustDecision'] == null) {
+            throw new runtime.RequiredError(
+                'trustDecision',
+                'Required parameter "trustDecision" was null or undefined when calling postDataroomTrustRequestsByIdRefuse().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/dataroom/trust/requests/{id}/refuse`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: TrustDecisionToJSON(requestParameters['trustDecision']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TrustRefusedFromJSON(jsonValue));
+    }
+
+    /**
+     * Refuse answers a request by declining it, recording who declined and why.  Nothing is released and no link is minted. The refusal STAYS on the record beside the ask — a request that was turned down is part of the access record exactly as one that was granted is, and deleting it would leave a queue that only ever shows the decisions somebody liked.  A request that was already answered is refused rather than answered twice. Only an admin of the org may call it, and the request is resolved in that org\'s own store, so another org\'s request id is not found.
+     * Refuse answers a request by declining it, recording who declined and why.
+     */
+    async postDataroomTrustRequestsByIdRefuse(requestParameters: DataroomApiPostDataroomTrustRequestsByIdRefuseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TrustRefused> {
+        const response = await this.postDataroomTrustRequestsByIdRefuseRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Clears the link\'s access controls and answers with the viewing session — a `viewId`, whether download is permitted, and the documents behind the link — which every later viewer call is authorised by.  No principal: the visitor is whoever holds the link id, and the org is resolved from it. The gates run in a fixed order and each is a flat refusal, never a hint. An archived or unknown link is 404 and an expired one 403. A missing address on an email-protected link is 401. An address on the deny list is 403, checked BEFORE the allow list so deny always wins. An address the allow list does not admit is 403 — an EMPTY allow list admits everyone, so a link with no list enforces the email gate alone. A wrong or absent password is 401, decided against the stored bcrypt hash.  The address is taken as stated and recorded UNVERIFIED: it names a viewer for analytics and repeat visits from it reuse one viewer record, but it proves nothing about who is on the other end. A link gated only by email is openable by anyone the link reaches.
      * Pass a share link\'s gates and open a viewing session
      */
@@ -885,6 +1372,55 @@ export class DataroomApi extends runtime.BaseAPI {
      */
     async postDataroomViewByLinkidPageview(requestParameters: DataroomApiPostDataroomViewByLinkidPageviewRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.postDataroomViewByLinkidPageviewRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * SetCenter opens, publishes or withdraws the caller org\'s trust centre and answers with the centre as it now stands.  Publishing requires a name and an address, and the address must be free: another org already answering there is a conflict, never a takeover. Withdrawing closes the public door only — items, grants and the access record are untouched, so an org can go quiet and come back without losing anything.  Only an admin of the org may call it. The org is the caller\'s own, so there is no field naming one and no way to point this at another tenant.
+     * SetCenter opens, publishes or withdraws the caller org\'s trust centre and answers with the centre as it now stands.
+     */
+    async putDataroomTrustRaw(requestParameters: DataroomApiPutDataroomTrustRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TrustDesk>> {
+        if (requestParameters['trustSettings'] == null) {
+            throw new runtime.RequiredError(
+                'trustSettings',
+                'Required parameter "trustSettings" was null or undefined when calling putDataroomTrust().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/dataroom/trust`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: TrustSettingsToJSON(requestParameters['trustSettings']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TrustDeskFromJSON(jsonValue));
+    }
+
+    /**
+     * SetCenter opens, publishes or withdraws the caller org\'s trust centre and answers with the centre as it now stands.  Publishing requires a name and an address, and the address must be free: another org already answering there is a conflict, never a takeover. Withdrawing closes the public door only — items, grants and the access record are untouched, so an org can go quiet and come back without losing anything.  Only an admin of the org may call it. The org is the caller\'s own, so there is no field naming one and no way to point this at another tenant.
+     * SetCenter opens, publishes or withdraws the caller org\'s trust centre and answers with the centre as it now stands.
+     */
+    async putDataroomTrust(requestParameters: DataroomApiPutDataroomTrustRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TrustDesk> {
+        const response = await this.putDataroomTrustRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
 }

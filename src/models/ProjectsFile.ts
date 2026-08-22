@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,13 +20,17 @@ import { mapValues } from '../runtime.js';
  */
 export interface ProjectsFile {
     /**
-     * 
+     * Content is the file's whole text, inline. There is no upload step and no
+     * reference to fetch: a site is sent as its bytes, and each file and the site as
+     * a whole are size-bounded.
      * @type {string}
      * @memberof ProjectsFile
      */
     content?: string;
     /**
-     * 
+     * Path is where the file lands in the site, RELATIVE to its root — so
+     * "index.html" is the page served at /. Leading slashes and any attempt to
+     * escape the root are refused.
      * @type {string}
      * @memberof ProjectsFile
      */

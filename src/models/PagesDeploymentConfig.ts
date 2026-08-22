@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -49,37 +49,42 @@ import {
  */
 export interface PagesDeploymentConfig {
     /**
-     * 
+     * CompatibilityDate pins which Workers runtime behaviour the functions run under,
+     * as a date ("2024-01-01"). It is a pin, not a version: the runtime keeps that
+     * date's semantics for code deployed against it.
      * @type {string}
      * @memberof PagesDeploymentConfig
      */
     compatibilityDate?: string;
     /**
-     * 
+     * CompatibilityFlags turn individual runtime behaviours on or off ahead of, or
+     * behind, the date above ("nodejs_compat").
      * @type {Array<string>}
      * @memberof PagesDeploymentConfig
      */
     compatibilityFlags?: Array<string>;
     /**
-     * 
+     * D1Databases binds D1 databases in, keyed by binding name.
      * @type {{ [key: string]: PagesD1Binding; }}
      * @memberof PagesDeploymentConfig
      */
     d1Databases?: { [key: string]: PagesD1Binding; };
     /**
-     * 
+     * EnvVars are the environment variables the functions see, KEYED BY VARIABLE NAME.
+     * The key is the name; the value carries the value and whether it is a secret.
      * @type {{ [key: string]: PagesEnvVar; }}
      * @memberof PagesDeploymentConfig
      */
     envVars?: { [key: string]: PagesEnvVar; };
     /**
-     * 
+     * KVNamespaces binds KV namespaces into the functions, KEYED BY THE BINDING NAME
+     * the code reads (`env.SESSIONS`). Same shape for the two below.
      * @type {{ [key: string]: PagesKVBinding; }}
      * @memberof PagesDeploymentConfig
      */
     kvNamespaces?: { [key: string]: PagesKVBinding; };
     /**
-     * 
+     * R2Buckets binds R2 buckets in, keyed by binding name.
      * @type {{ [key: string]: PagesR2Binding; }}
      * @memberof PagesDeploymentConfig
      */

@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -21,7 +21,6 @@ import type {
   DeletedOut,
   EvaluateIn,
   HealthOut,
-  WaitlistModeView,
 } from '../models/index.js';
 import {
     ActivityOutFromJSON,
@@ -36,8 +35,6 @@ import {
     EvaluateInToJSON,
     HealthOutFromJSON,
     HealthOutToJSON,
-    WaitlistModeViewFromJSON,
-    WaitlistModeViewToJSON,
 } from '../models/index.js';
 
 export interface FlagsApiDeleteFlagsDefsByKeyRequest {
@@ -50,10 +47,6 @@ export interface FlagsApiGetFlagsActivityRequest {
 
 export interface FlagsApiGetFlagsDefsByKeyRequest {
     key: string;
-}
-
-export interface FlagsApiGetFlagsWaitlistRequest {
-    host?: string;
 }
 
 export interface FlagsApiPostFlagsRequest {
@@ -286,49 +279,6 @@ export class FlagsApi extends runtime.BaseAPI {
      */
     async getFlagsHealth(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<HealthOut> {
         const response = await this.getFlagsHealthRaw(initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Reports whether ONE host is currently gated by the launch waitlist. It resolves the host to the service that governs it and reads that service\'s waitlist switch, so a guard sitting in front of a hosted surface can decide in one call whether to show the waitlist or the product. It answers for the ONE host asked about and never enumerates the registry, which is why it needs no credential. It FAILS OPEN: an unregistered host, an unmounted registry and a store fault all answer known=false with mode=false, so a request is never gated pre-boot or on a registry fault.
-     * Reports whether ONE host is currently gated by the launch waitlist.
-     */
-    async getFlagsWaitlistRaw(requestParameters: FlagsApiGetFlagsWaitlistRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<WaitlistModeView>> {
-        const queryParameters: any = {};
-
-        if (requestParameters['host'] != null) {
-            queryParameters['host'] = requestParameters['host'];
-        }
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/flags/waitlist`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => WaitlistModeViewFromJSON(jsonValue));
-    }
-
-    /**
-     * Reports whether ONE host is currently gated by the launch waitlist. It resolves the host to the service that governs it and reads that service\'s waitlist switch, so a guard sitting in front of a hosted surface can decide in one call whether to show the waitlist or the product. It answers for the ONE host asked about and never enumerates the registry, which is why it needs no credential. It FAILS OPEN: an unregistered host, an unmounted registry and a store fault all answer known=false with mode=false, so a request is never gated pre-boot or on a registry fault.
-     * Reports whether ONE host is currently gated by the launch waitlist.
-     */
-    async getFlagsWaitlist(requestParameters: FlagsApiGetFlagsWaitlistRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<WaitlistModeView> {
-        const response = await this.getFlagsWaitlistRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

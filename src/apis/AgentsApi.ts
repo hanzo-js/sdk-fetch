@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -22,6 +22,8 @@ import type {
   BuildList,
   BuildView,
   ClaimKeyOut,
+  CodingStartIn,
+  CodingStarted,
   ControlDrain,
   CreateAgentIn,
   MetricsView,
@@ -57,6 +59,10 @@ import {
     BuildViewToJSON,
     ClaimKeyOutFromJSON,
     ClaimKeyOutToJSON,
+    CodingStartInFromJSON,
+    CodingStartInToJSON,
+    CodingStartedFromJSON,
+    CodingStartedToJSON,
     ControlDrainFromJSON,
     ControlDrainToJSON,
     CreateAgentInFromJSON,
@@ -123,6 +129,10 @@ export interface AgentsApiGetAgentsByRefRunsRequest {
     limit?: number;
 }
 
+export interface AgentsApiGetAgentsChatConversationsByIdRequest {
+    id: string;
+}
+
 export interface AgentsApiGetAgentsMetricsRequest {
     range?: string;
 }
@@ -178,6 +188,10 @@ export interface AgentsApiPostAgentsRequest {
 
 export interface AgentsApiPostAgentsByRefRunRequest {
     ref: string;
+}
+
+export interface AgentsApiPostAgentsCodingRequest {
+    codingStartIn: CodingStartIn;
 }
 
 export interface AgentsApiPostAgentsSessionsRequest {
@@ -592,6 +606,128 @@ export class AgentsApi extends runtime.BaseAPI {
     async getAgentsByRefRuns(requestParameters: AgentsApiGetAgentsByRefRunsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RunList> {
         const response = await this.getAgentsByRefRunsRaw(requestParameters, initOverrides);
         return await response.value();
+    }
+
+    /**
+     * Returns a summary of every agent conversation in the caller\'s org — id, derived title, and when it was last appended to — for populating a thread list.  Scoped to the caller\'s org and nothing else, and that isolation is structural rather than a filter: conversations are persisted in a store opened PER ORG, so there is no query in which another tenant\'s threads could appear. A validated principal with a non-empty org is required; 403 without one.
+     * List the agent threads in your org
+     */
+    async getAgentsChatConversationsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/agents/chat/conversations`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Returns a summary of every agent conversation in the caller\'s org — id, derived title, and when it was last appended to — for populating a thread list.  Scoped to the caller\'s org and nothing else, and that isolation is structural rather than a filter: conversations are persisted in a store opened PER ORG, so there is no query in which another tenant\'s threads could appear. A validated principal with a non-empty org is required; 403 without one.
+     * List the agent threads in your org
+     */
+    async getAgentsChatConversations(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAgentsChatConversationsRaw(initOverrides);
+    }
+
+    /**
+     * Returns every message of one conversation in order — role, content, the assistant\'s tool calls where it made any, and each message\'s creation time — which is the transcript a client replays to resume a thread.  The lookup happens inside the caller\'s OWN per-org store, so an id belonging to another tenant is not refused, it is simply absent: the answer is 200 with an empty message list. Read it as \"no such conversation for you\" rather than as an empty thread. A validated principal with a non-empty org is required; 403 without one.
+     * Read one agent thread in full
+     */
+    async getAgentsChatConversationsByIdRaw(requestParameters: AgentsApiGetAgentsChatConversationsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getAgentsChatConversationsById().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/agents/chat/conversations/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Returns every message of one conversation in order — role, content, the assistant\'s tool calls where it made any, and each message\'s creation time — which is the transcript a client replays to resume a thread.  The lookup happens inside the caller\'s OWN per-org store, so an id belonging to another tenant is not refused, it is simply absent: the answer is 200 with an empty message list. Read it as \"no such conversation for you\" rather than as an empty thread. A validated principal with a non-empty org is required; 403 without one.
+     * Read one agent thread in full
+     */
+    async getAgentsChatConversationsById(requestParameters: AgentsApiGetAgentsChatConversationsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAgentsChatConversationsByIdRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Returns the preset catalog: each entry\'s id, its description and whether it is server-executing — the flag that decides if a preset\'s tool calls run here or come back for the client to apply. The ids are what the round accepts in `preset`.  The catalog is compiled into the build, identical for every caller, and this is the one read in the group that needs no principal.
+     * List the agent presets available to a caller
+     */
+    async getAgentsChatPresetsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/agents/chat/presets`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Returns the preset catalog: each entry\'s id, its description and whether it is server-executing — the flag that decides if a preset\'s tool calls run here or come back for the client to apply. The ids are what the round accepts in `preset`.  The catalog is compiled into the build, identical for every caller, and this is the one read in the group that needs no principal.
+     * List the agent presets available to a caller
+     */
+    async getAgentsChatPresets(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAgentsChatPresetsRaw(initOverrides);
     }
 
     /**
@@ -1276,6 +1412,93 @@ export class AgentsApi extends runtime.BaseAPI {
      */
     async postAgentsByRefRun(requestParameters: AgentsApiPostAgentsByRefRunRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.postAgentsByRefRunRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Answers one turn of a conversation with four things: the model\'s `reply`, the `actions` the server executed on the caller\'s behalf, the `ops` the client must apply itself, and the `conversationId` the turn was recorded under.  The split between actions and ops is the rule most easily got wrong. A tool call is executed HERE only when the chosen preset is server-executing AND the tool resolves in the caller\'s own scope; every other call is handed back as an op for the client to apply to its own graph or UI. A tool that fails still comes back as an action, carrying its error rather than failing the round.  `preset` selects the system prompt and the tool set (`capability` is a legacy alias for it); an unknown one is refused. `conversationId` continues an existing thread, and its absence starts one. A validated principal with a non-empty org is required — the org is the sole authority for both persistence and tool scope, and is NEVER read from the body.  A completion refused for the caller\'s own reason — 402 insufficient balance, 429, 403 — is relayed with its own status and body verbatim, so the real billing message reaches the client instead of an opaque gateway error. Only a genuine upstream fault becomes a 502.
+     * Run one tool-calling round against your org\'s own tools
+     */
+    async postAgentsChatRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/agents/chat`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Answers one turn of a conversation with four things: the model\'s `reply`, the `actions` the server executed on the caller\'s behalf, the `ops` the client must apply itself, and the `conversationId` the turn was recorded under.  The split between actions and ops is the rule most easily got wrong. A tool call is executed HERE only when the chosen preset is server-executing AND the tool resolves in the caller\'s own scope; every other call is handed back as an op for the client to apply to its own graph or UI. A tool that fails still comes back as an action, carrying its error rather than failing the round.  `preset` selects the system prompt and the tool set (`capability` is a legacy alias for it); an unknown one is refused. `conversationId` continues an existing thread, and its absence starts one. A validated principal with a non-empty org is required — the org is the sole authority for both persistence and tool scope, and is NEVER read from the body.  A completion refused for the caller\'s own reason — 402 insufficient balance, 429, 403 — is relayed with its own status and body verbatim, so the real billing message reaches the client instead of an opaque gateway error. Only a genuine upstream fault becomes a 502.
+     * Run one tool-calling round against your org\'s own tools
+     */
+    async postAgentsChat(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAgentsChatRaw(initOverrides);
+    }
+
+    /**
+     * Runs a coding task on a repository: clones it into a sandbox, lets a model read and edit the code, run the tests, and push the work to a branch. Say the thing you want done — \"fix the failing auth test in hanzoai/cloud\" — and the run infers the repo, the branch and the plan. No prefix, no ceremony.  It answers 202 with the run\'s handle the moment the run is ADMITTED — not when it finishes. A coding run takes minutes; holding a request open for one would tie a connection to a model loop and give the caller nothing it cannot get better from the session stream.  The handle is a session id, and that is deliberate: the session is already the run\'s durable record and its live stream (/v1/agents/sessions/{id}/stream), so this door does not grow a progress endpoint, a status endpoint or a cancel endpoint of its own. One way to watch a run, whoever started it.  It is also how work CONTINUES. Pass an earlier run\'s session as `after` and this one starts from where that one stopped, so \"now add tests for it\" builds on the branch already pushed instead of a fresh clone. The follow-up still gets its own branch and its own session — one run, one branch, always reviewable on its own.
+     * Start one autonomous coding run against a repo in the caller\'s org
+     */
+    async postAgentsCodingRaw(requestParameters: AgentsApiPostAgentsCodingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CodingStarted>> {
+        if (requestParameters['codingStartIn'] == null) {
+            throw new runtime.RequiredError(
+                'codingStartIn',
+                'Required parameter "codingStartIn" was null or undefined when calling postAgentsCoding().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/agents/coding`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: CodingStartInToJSON(requestParameters['codingStartIn']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => CodingStartedFromJSON(jsonValue));
+    }
+
+    /**
+     * Runs a coding task on a repository: clones it into a sandbox, lets a model read and edit the code, run the tests, and push the work to a branch. Say the thing you want done — \"fix the failing auth test in hanzoai/cloud\" — and the run infers the repo, the branch and the plan. No prefix, no ceremony.  It answers 202 with the run\'s handle the moment the run is ADMITTED — not when it finishes. A coding run takes minutes; holding a request open for one would tie a connection to a model loop and give the caller nothing it cannot get better from the session stream.  The handle is a session id, and that is deliberate: the session is already the run\'s durable record and its live stream (/v1/agents/sessions/{id}/stream), so this door does not grow a progress endpoint, a status endpoint or a cancel endpoint of its own. One way to watch a run, whoever started it.  It is also how work CONTINUES. Pass an earlier run\'s session as `after` and this one starts from where that one stopped, so \"now add tests for it\" builds on the branch already pushed instead of a fresh clone. The follow-up still gets its own branch and its own session — one run, one branch, always reviewable on its own.
+     * Start one autonomous coding run against a repo in the caller\'s org
+     */
+    async postAgentsCoding(requestParameters: AgentsApiPostAgentsCodingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CodingStarted> {
+        const response = await this.postAgentsCodingRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**

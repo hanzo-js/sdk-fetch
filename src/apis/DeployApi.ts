@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -52,10 +52,6 @@ import {
     VersionMessageToJSON,
 } from '../models/index.js';
 
-export interface DeployApiGetDeployAccountCanIByWildcard1Request {
-    wildcard1: string;
-}
-
 export interface DeployApiGetDeployApplicationsByNameRequest {
     name: string;
 }
@@ -89,52 +85,6 @@ export interface DeployApiPostDeployApplicationsByNameSyncRequest {
  * 
  */
 export class DeployApi extends runtime.BaseAPI {
-
-    /**
-     * Always answers `yes`, whatever resource, action or subresource the path names. It exists for the ArgoCD-compatible console, which asks this before enabling a control, and it is NOT the authorization decision: nothing downstream consults it, and every route that returns fleet data or mutates a CR carries its own gate. Reaching it at all already requires SuperAdmin, so a caller who can read the `yes` is one for whom it is true.
-     * Compatibility answer the console UI asks before enabling its buttons
-     */
-    async getDeployAccountCanIByWildcard1Raw(requestParameters: DeployApiGetDeployAccountCanIByWildcard1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters['wildcard1'] == null) {
-            throw new runtime.RequiredError(
-                'wildcard1',
-                'Required parameter "wildcard1" was null or undefined when calling getDeployAccountCanIByWildcard1().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/deploy/account/can-i/{wildcard1}`;
-        urlPath = urlPath.replace(`{${"wildcard1"}}`, encodeURIComponent(String(requestParameters['wildcard1'])));
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Always answers `yes`, whatever resource, action or subresource the path names. It exists for the ArgoCD-compatible console, which asks this before enabling a control, and it is NOT the authorization decision: nothing downstream consults it, and every route that returns fleet data or mutates a CR carries its own gate. Reaching it at all already requires SuperAdmin, so a caller who can read the `yes` is one for whom it is true.
-     * Compatibility answer the console UI asks before enabling its buttons
-     */
-    async getDeployAccountCanIByWildcard1(requestParameters: DeployApiGetDeployAccountCanIByWildcard1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getDeployAccountCanIByWildcard1Raw(requestParameters, initOverrides);
-    }
 
     /**
      * Returns the fleet as an argocd ApplicationList: one projected Application per operator App CR, carrying the image tag the CR DECLARES, the tag actually RUNNING in the cluster\'s Deployment, the reconciled health, and the sync verdict those two produce (declared == running ⇒ Synced, both known and different ⇒ OutOfSync, either unknown ⇒ Unknown).  It is TENANT-SCOPED: a platform SuperAdmin reads every platform namespace, a validated org member reads only its own org\'s tenant namespace and only the App CRs labelled with its org, and anyone else is refused. A cross-tenant CR is never projected into an answer.

@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,7 +20,8 @@ import { mapValues } from '../runtime.js';
  */
 export interface BuyInput {
     /**
-     * 
+     * E164 is the number to buy, in E.164 (a leading + and digits), exactly as the
+     * search returned it. This is the number itself, not the id from a search result.
      * @type {string}
      * @memberof BuyInput
      */

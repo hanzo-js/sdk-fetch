@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,19 +20,28 @@ import { mapValues } from '../runtime.js';
  */
 export interface CatalogEntry {
     /**
-     * 
+     * Configured is whether THIS DEPLOYMENT holds the OAuth client credentials for
+     * the provider. False means Connect would dead-end, so the console can offer it
+     * disabled instead of broken. It is deployment-wide and says nothing about
+     * whether the caller's org has connected the source — that is the connector
+     * list's `status`.
      * @type {boolean}
      * @memberof CatalogEntry
      */
     configured?: boolean;
     /**
-     * 
+     * Description is one line of shop copy: what connecting this source pulls in.
+     * Native connectors carry written prose; a piece-backed one reads
+     * "activepieces connector (<piece>)".
      * @type {string}
      * @memberof CatalogEntry
      */
     description?: string;
     /**
-     * 
+     * DisplayName is the label to show a person. First-party connectors carry a
+     * written name ("GitHub", "Google Drive"); a piece-backed one falls back to the
+     * provider capitalized, because the rich activepieces metadata lives behind a
+     * cross-service call this read will not make.
      * @type {string}
      * @memberof CatalogEntry
      */
@@ -44,7 +53,8 @@ export interface CatalogEntry {
      */
     kind?: string;
     /**
-     * 
+     * Provider is the source's id and the address every connector op takes it by
+     * (/v1/knowledge/connectors/:provider). One of github, slack, google, notion.
      * @type {string}
      * @memberof CatalogEntry
      */

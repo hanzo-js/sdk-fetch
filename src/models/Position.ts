@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,13 +20,16 @@ import { mapValues } from '../runtime.js';
  */
 export interface Position {
     /**
-     * 
+     * Character is a 0-based UTF-16 code-unit offset within Line, per the LSP
+     * specification: not a byte offset and not a rune index. An emoji before the
+     * cursor counts as one here and as two in Go's arithmetic.
      * @type {number}
      * @memberof Position
      */
     character?: number;
     /**
-     * 
+     * Line is 0-BASED, per the LSP specification — one less than the line an editor
+     * shows a human.
      * @type {number}
      * @memberof Position
      */

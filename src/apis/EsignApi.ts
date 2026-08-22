@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -14,6 +14,61 @@
 
 
 import * as runtime from '../runtime.js';
+import type {
+  EsignCompletion,
+  EsignDocument,
+  EsignDocuments,
+  EsignFieldIn,
+  EsignHealth,
+  EsignInsertion,
+  EsignInvite,
+  EsignLinks,
+  EsignPDF,
+  EsignPlacement,
+  EsignRecipientIn,
+  EsignRejectIn,
+  EsignRejection,
+  EsignSession,
+  EsignTrail,
+  EsignUploadIn,
+  EsignValueIn,
+} from '../models/index.js';
+import {
+    EsignCompletionFromJSON,
+    EsignCompletionToJSON,
+    EsignDocumentFromJSON,
+    EsignDocumentToJSON,
+    EsignDocumentsFromJSON,
+    EsignDocumentsToJSON,
+    EsignFieldInFromJSON,
+    EsignFieldInToJSON,
+    EsignHealthFromJSON,
+    EsignHealthToJSON,
+    EsignInsertionFromJSON,
+    EsignInsertionToJSON,
+    EsignInviteFromJSON,
+    EsignInviteToJSON,
+    EsignLinksFromJSON,
+    EsignLinksToJSON,
+    EsignPDFFromJSON,
+    EsignPDFToJSON,
+    EsignPlacementFromJSON,
+    EsignPlacementToJSON,
+    EsignRecipientInFromJSON,
+    EsignRecipientInToJSON,
+    EsignRejectInFromJSON,
+    EsignRejectInToJSON,
+    EsignRejectionFromJSON,
+    EsignRejectionToJSON,
+    EsignSessionFromJSON,
+    EsignSessionToJSON,
+    EsignTrailFromJSON,
+    EsignTrailToJSON,
+    EsignUploadInFromJSON,
+    EsignUploadInToJSON,
+    EsignValueInFromJSON,
+    EsignValueInToJSON,
+} from '../models/index.js';
 
 export interface EsignApiGetEsignDocumentsByIdRequest {
     id: string;
@@ -32,12 +87,18 @@ export interface EsignApiGetEsignOByOrgSignByTokenRequest {
     token: string;
 }
 
+export interface EsignApiPostEsignDocumentsRequest {
+    esignUploadIn: EsignUploadIn;
+}
+
 export interface EsignApiPostEsignDocumentsByIdFieldsRequest {
     id: string;
+    esignFieldIn: EsignFieldIn;
 }
 
 export interface EsignApiPostEsignDocumentsByIdRecipientsRequest {
     id: string;
+    esignRecipientIn: EsignRecipientIn;
 }
 
 export interface EsignApiPostEsignDocumentsByIdSendRequest {
@@ -53,11 +114,13 @@ export interface EsignApiPostEsignOByOrgSignByTokenFieldsByFieldidRequest {
     org: string;
     token: string;
     fieldId: string;
+    esignValueIn: EsignValueIn;
 }
 
 export interface EsignApiPostEsignOByOrgSignByTokenRejectRequest {
     org: string;
     token: string;
+    esignRejectIn: EsignRejectIn;
 }
 
 /**
@@ -66,10 +129,10 @@ export interface EsignApiPostEsignOByOrgSignByTokenRejectRequest {
 export class EsignApi extends runtime.BaseAPI {
 
     /**
-     * Lists the caller org\'s documents with their status, recipients and timestamps, newest first, capped at 200 — there is no paging, so treat it as the recent window rather than a complete export. Requires a validated principal (403 without one) and reads the caller\'s own tenant store, so no other org\'s documents can appear in it.
-     * Your org\'s documents, newest first
+     * Returns your org\'s documents, newest first.  Each carries its status, recipients and field layout. The listing is capped at 200 and there is no paging, so treat it as the recent window rather than a complete export. It reads the caller\'s own tenant store, so no other org\'s documents can appear in it.
+     * Returns your org\'s documents, newest first.
      */
-    async getEsignDocumentsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getEsignDocumentsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<EsignDocuments>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -92,22 +155,23 @@ export class EsignApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => EsignDocumentsFromJSON(jsonValue));
     }
 
     /**
-     * Lists the caller org\'s documents with their status, recipients and timestamps, newest first, capped at 200 — there is no paging, so treat it as the recent window rather than a complete export. Requires a validated principal (403 without one) and reads the caller\'s own tenant store, so no other org\'s documents can appear in it.
-     * Your org\'s documents, newest first
+     * Returns your org\'s documents, newest first.  Each carries its status, recipients and field layout. The listing is capped at 200 and there is no paging, so treat it as the recent window rather than a complete export. It reads the caller\'s own tenant store, so no other org\'s documents can appear in it.
+     * Returns your org\'s documents, newest first.
      */
-    async getEsignDocuments(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getEsignDocumentsRaw(initOverrides);
+    async getEsignDocuments(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<EsignDocuments> {
+        const response = await this.getEsignDocumentsRaw(initOverrides);
+        return await response.value();
     }
 
     /**
-     * Answers the document, its recipients with each one\'s read and signing status, and every field with its type, page and position — the view a sender\'s UI renders, and where the field ids come from. Requires a validated principal (403 without one) and resolves the id in the caller\'s OWN tenant store, so another org\'s document id is a 404 rather than a refusal that would confirm it exists.
-     * One document with its recipients and field layout
+     * Returns one document with its recipients and field layout.  It answers the document, its recipients with each one\'s read and signing status, and every field with its type, page and position — the view a sender\'s UI renders, and where the field ids come from. The id is resolved in the caller\'s OWN tenant store, so another org\'s document id is a 404 rather than a refusal that would confirm it exists.
+     * Returns one document with its recipients and field layout.
      */
-    async getEsignDocumentsByIdRaw(requestParameters: EsignApiGetEsignDocumentsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getEsignDocumentsByIdRaw(requestParameters: EsignApiGetEsignDocumentsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<EsignDocument>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -138,22 +202,23 @@ export class EsignApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => EsignDocumentFromJSON(jsonValue));
     }
 
     /**
-     * Answers the document, its recipients with each one\'s read and signing status, and every field with its type, page and position — the view a sender\'s UI renders, and where the field ids come from. Requires a validated principal (403 without one) and resolves the id in the caller\'s OWN tenant store, so another org\'s document id is a 404 rather than a refusal that would confirm it exists.
-     * One document with its recipients and field layout
+     * Returns one document with its recipients and field layout.  It answers the document, its recipients with each one\'s read and signing status, and every field with its type, page and position — the view a sender\'s UI renders, and where the field ids come from. The id is resolved in the caller\'s OWN tenant store, so another org\'s document id is a 404 rather than a refusal that would confirm it exists.
+     * Returns one document with its recipients and field layout.
      */
-    async getEsignDocumentsById(requestParameters: EsignApiGetEsignDocumentsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getEsignDocumentsByIdRaw(requestParameters, initOverrides);
+    async getEsignDocumentsById(requestParameters: EsignApiGetEsignDocumentsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<EsignDocument> {
+        const response = await this.getEsignDocumentsByIdRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Answers every recorded event for the document in order — created, recipient added, field created, sent, opened, each field inserted, each recipient completed or rejected, and completion — with the actor and timestamp on each. This is the evidence record behind a signature, so it is append-only and nothing in the surface edits it.  Requires a validated principal (403 without one) and resolves the id in the caller\'s OWN tenant store, so another org\'s document id is a 404.
-     * The document\'s full audit trail, oldest first
+     * Returns the document\'s full audit trail, oldest first.  It answers every recorded event for the document in order — created, recipient added, field created, sent, opened, each field inserted, each recipient completed or rejected, and completion — with the actor and timestamp on each. This is the evidence record behind a signature, so it is append-only and nothing in the surface edits it.  The id is resolved in the caller\'s OWN tenant store, so another org\'s document id is a 404.
+     * Returns the document\'s full audit trail, oldest first.
      */
-    async getEsignDocumentsByIdAuditRaw(requestParameters: EsignApiGetEsignDocumentsByIdAuditRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getEsignDocumentsByIdAuditRaw(requestParameters: EsignApiGetEsignDocumentsByIdAuditRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<EsignTrail>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -184,22 +249,23 @@ export class EsignApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => EsignTrailFromJSON(jsonValue));
     }
 
     /**
-     * Answers every recorded event for the document in order — created, recipient added, field created, sent, opened, each field inserted, each recipient completed or rejected, and completion — with the actor and timestamp on each. This is the evidence record behind a signature, so it is append-only and nothing in the surface edits it.  Requires a validated principal (403 without one) and resolves the id in the caller\'s OWN tenant store, so another org\'s document id is a 404.
-     * The document\'s full audit trail, oldest first
+     * Returns the document\'s full audit trail, oldest first.  It answers every recorded event for the document in order — created, recipient added, field created, sent, opened, each field inserted, each recipient completed or rejected, and completion — with the actor and timestamp on each. This is the evidence record behind a signature, so it is append-only and nothing in the surface edits it.  The id is resolved in the caller\'s OWN tenant store, so another org\'s document id is a 404.
+     * Returns the document\'s full audit trail, oldest first.
      */
-    async getEsignDocumentsByIdAudit(requestParameters: EsignApiGetEsignDocumentsByIdAuditRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getEsignDocumentsByIdAuditRaw(requestParameters, initOverrides);
+    async getEsignDocumentsByIdAudit(requestParameters: EsignApiGetEsignDocumentsByIdAuditRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<EsignTrail> {
+        const response = await this.getEsignDocumentsByIdAuditRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Answers the document\'s current PDF as base64 with a `sealed` flag and a filename. Before completion that is the original upload; once every signer has finished it is the SEALED artifact — the field values rendered onto the page and a real x509 PKCS#7 digital signature applied — and `sealed` is true. There is one `pdfBase64` field either way, so `sealed` is what tells you which you are holding.  Requires a validated principal (403 without one) and resolves the id in the caller\'s OWN tenant store, so another org\'s document id is a 404.
-     * Download the document — the sealed PDF once it is complete
+     * Returns the document — the sealed PDF once it is complete.  It answers the document\'s current PDF as base64 with a sealed flag and a filename. Before completion that is the original upload; once every signer has finished it is the SEALED artifact, with the field values rendered onto the page and a real x509 PKCS#7 digital signature applied. There is one pdfBase64 field either way, so sealed is what tells you which you are holding.  The id is resolved in the caller\'s OWN tenant store, so another org\'s document id is a 404.
+     * Returns the document — the sealed PDF once it is complete.
      */
-    async getEsignDocumentsByIdDownloadRaw(requestParameters: EsignApiGetEsignDocumentsByIdDownloadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getEsignDocumentsByIdDownloadRaw(requestParameters: EsignApiGetEsignDocumentsByIdDownloadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<EsignPDF>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -230,22 +296,23 @@ export class EsignApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => EsignPDFFromJSON(jsonValue));
     }
 
     /**
-     * Answers the document\'s current PDF as base64 with a `sealed` flag and a filename. Before completion that is the original upload; once every signer has finished it is the SEALED artifact — the field values rendered onto the page and a real x509 PKCS#7 digital signature applied — and `sealed` is true. There is one `pdfBase64` field either way, so `sealed` is what tells you which you are holding.  Requires a validated principal (403 without one) and resolves the id in the caller\'s OWN tenant store, so another org\'s document id is a 404.
-     * Download the document — the sealed PDF once it is complete
+     * Returns the document — the sealed PDF once it is complete.  It answers the document\'s current PDF as base64 with a sealed flag and a filename. Before completion that is the original upload; once every signer has finished it is the SEALED artifact, with the field values rendered onto the page and a real x509 PKCS#7 digital signature applied. There is one pdfBase64 field either way, so sealed is what tells you which you are holding.  The id is resolved in the caller\'s OWN tenant store, so another org\'s document id is a 404.
+     * Returns the document — the sealed PDF once it is complete.
      */
-    async getEsignDocumentsByIdDownload(requestParameters: EsignApiGetEsignDocumentsByIdDownloadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getEsignDocumentsByIdDownloadRaw(requestParameters, initOverrides);
+    async getEsignDocumentsByIdDownload(requestParameters: EsignApiGetEsignDocumentsByIdDownloadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<EsignPDF> {
+        const response = await this.getEsignDocumentsByIdDownloadRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Answers ok whenever the subsystem is mounted. It is unauthenticated and takes no tenant, and it is deliberately shallow: it is registered before the document host is built, so it still answers on a deployment that came up WITHOUT object storage and therefore serves nothing else. Read it as reachability, never as a promise that documents can be stored.
-     * Whether the e-signature surface is mounted
+     * Reports whether the e-signature surface is mounted.  It answers ok whenever the subsystem is mounted, takes no tenant and needs no principal. It is deliberately shallow: it is registered before the document host is built, so it still answers on a deployment that came up WITHOUT object storage and therefore serves nothing else. Read it as reachability, never as a promise that documents can be stored.
+     * Reports whether the e-signature surface is mounted.
      */
-    async getEsignHealthRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getEsignHealthRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<EsignHealth>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -268,22 +335,23 @@ export class EsignApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => EsignHealthFromJSON(jsonValue));
     }
 
     /**
-     * Answers ok whenever the subsystem is mounted. It is unauthenticated and takes no tenant, and it is deliberately shallow: it is registered before the document host is built, so it still answers on a deployment that came up WITHOUT object storage and therefore serves nothing else. Read it as reachability, never as a promise that documents can be stored.
-     * Whether the e-signature surface is mounted
+     * Reports whether the e-signature surface is mounted.  It answers ok whenever the subsystem is mounted, takes no tenant and needs no principal. It is deliberately shallow: it is registered before the document host is built, so it still answers on a deployment that came up WITHOUT object storage and therefore serves nothing else. Read it as reachability, never as a promise that documents can be stored.
+     * Reports whether the e-signature surface is mounted.
      */
-    async getEsignHealth(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getEsignHealthRaw(initOverrides);
+    async getEsignHealth(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<EsignHealth> {
+        const response = await this.getEsignHealthRaw(initOverrides);
+        return await response.value();
     }
 
     /**
-     * Answers the document, the recipient it identifies, the fields THAT recipient must fill, and the PDF to display. The first open also marks the recipient as having opened it and records that on the audit trail, so this read has a side effect by design.  This is the signer\'s door and it takes NO account: the signing token is the entire credential, and it names the recipient, so a signer sees only their own fields and never the other recipients\' tokens. The `:org` segment selects which tenant\'s store is opened, and the token is then looked up inside it — so a token presented under the wrong org simply does not resolve. An unknown or wrong-org token is a 401, never a hint that some other document exists.
-     * Open a document you were asked to sign, using your signing link
+     * Opens a document you were asked to sign, using your signing link.  It answers the document, the recipient the link identifies, the fields THAT recipient must fill, and the PDF to display. The first open also marks the recipient as having opened it and records that on the audit trail, so this read has a side effect by design.  This door takes NO account: the signing token is the entire credential, and it names the recipient, so a signer sees only their own fields and never the other recipients\' tokens. The token resolves to its owning tenant FIRST, before any per-tenant store is opened, and the org segment is only checked against that answer. An unknown or wrong-org token is one and the same 404, never a hint that some other document exists.
+     * Opens a document you were asked to sign, using your signing link.
      */
-    async getEsignOByOrgSignByTokenRaw(requestParameters: EsignApiGetEsignOByOrgSignByTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getEsignOByOrgSignByTokenRaw(requestParameters: EsignApiGetEsignOByOrgSignByTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<EsignSession>> {
         if (requestParameters['org'] == null) {
             throw new runtime.RequiredError(
                 'org',
@@ -322,25 +390,35 @@ export class EsignApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => EsignSessionFromJSON(jsonValue));
     }
 
     /**
-     * Answers the document, the recipient it identifies, the fields THAT recipient must fill, and the PDF to display. The first open also marks the recipient as having opened it and records that on the audit trail, so this read has a side effect by design.  This is the signer\'s door and it takes NO account: the signing token is the entire credential, and it names the recipient, so a signer sees only their own fields and never the other recipients\' tokens. The `:org` segment selects which tenant\'s store is opened, and the token is then looked up inside it — so a token presented under the wrong org simply does not resolve. An unknown or wrong-org token is a 401, never a hint that some other document exists.
-     * Open a document you were asked to sign, using your signing link
+     * Opens a document you were asked to sign, using your signing link.  It answers the document, the recipient the link identifies, the fields THAT recipient must fill, and the PDF to display. The first open also marks the recipient as having opened it and records that on the audit trail, so this read has a side effect by design.  This door takes NO account: the signing token is the entire credential, and it names the recipient, so a signer sees only their own fields and never the other recipients\' tokens. The token resolves to its owning tenant FIRST, before any per-tenant store is opened, and the org segment is only checked against that answer. An unknown or wrong-org token is one and the same 404, never a hint that some other document exists.
+     * Opens a document you were asked to sign, using your signing link.
      */
-    async getEsignOByOrgSignByToken(requestParameters: EsignApiGetEsignOByOrgSignByTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getEsignOByOrgSignByTokenRaw(requestParameters, initOverrides);
+    async getEsignOByOrgSignByToken(requestParameters: EsignApiGetEsignOByOrgSignByTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<EsignSession> {
+        const response = await this.getEsignOByOrgSignByTokenRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Creates a document from a base64 PDF and answers 201 with it in `DRAFT` — the state where recipients and fields may still be added, and the only state they may. `title` and `pdfBase64` are required; `signingOrder` chooses `PARALLEL` (the default, everyone may sign at once) or `SEQUENTIAL`, and that choice is fixed for the document\'s life.  The bytes go to object storage, not into the tenant database, and the ORIGINAL is kept under its own key so it survives sealing untouched — a completed document can always be compared against what was uploaded. Creation is recorded on the audit trail.  This is the sender\'s door: a validated principal is required (403 without one) and the document lands in that principal\'s OWN org. Isolation is physical rather than a filter — each tenant has its own store — so another org\'s document id is simply not there. Bodies over 32 MiB are refused with 413.
-     * Upload a PDF and open a draft ready for recipients and fields
+     * Uploads a PDF and opens a draft ready for recipients and fields.  It answers 201 with the document in DRAFT — the state where recipients and fields may still be added, and the only state they may. The bytes go to object storage rather than into the tenant database, and the original is kept under its own key so it survives sealing untouched: a completed document can always be compared against what was uploaded. Creation is recorded on the audit trail.  This is the sender\'s door: a validated principal is required, and the document lands in that principal\'s OWN org. Isolation is physical rather than a filter — each tenant has its own store — so another org\'s document id is simply not there. A body over 32 MiB is refused with 413.
+     * Uploads a PDF and opens a draft ready for recipients and fields.
      */
-    async postEsignDocumentsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postEsignDocumentsRaw(requestParameters: EsignApiPostEsignDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<EsignDocument>> {
+        if (requestParameters['esignUploadIn'] == null) {
+            throw new runtime.RequiredError(
+                'esignUploadIn',
+                'Required parameter "esignUploadIn" was null or undefined when calling postEsignDocuments().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -358,24 +436,26 @@ export class EsignApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: EsignUploadInToJSON(requestParameters['esignUploadIn']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => EsignDocumentFromJSON(jsonValue));
     }
 
     /**
-     * Creates a document from a base64 PDF and answers 201 with it in `DRAFT` — the state where recipients and fields may still be added, and the only state they may. `title` and `pdfBase64` are required; `signingOrder` chooses `PARALLEL` (the default, everyone may sign at once) or `SEQUENTIAL`, and that choice is fixed for the document\'s life.  The bytes go to object storage, not into the tenant database, and the ORIGINAL is kept under its own key so it survives sealing untouched — a completed document can always be compared against what was uploaded. Creation is recorded on the audit trail.  This is the sender\'s door: a validated principal is required (403 without one) and the document lands in that principal\'s OWN org. Isolation is physical rather than a filter — each tenant has its own store — so another org\'s document id is simply not there. Bodies over 32 MiB are refused with 413.
-     * Upload a PDF and open a draft ready for recipients and fields
+     * Uploads a PDF and opens a draft ready for recipients and fields.  It answers 201 with the document in DRAFT — the state where recipients and fields may still be added, and the only state they may. The bytes go to object storage rather than into the tenant database, and the original is kept under its own key so it survives sealing untouched: a completed document can always be compared against what was uploaded. Creation is recorded on the audit trail.  This is the sender\'s door: a validated principal is required, and the document lands in that principal\'s OWN org. Isolation is physical rather than a filter — each tenant has its own store — so another org\'s document id is simply not there. A body over 32 MiB is refused with 413.
+     * Uploads a PDF and opens a draft ready for recipients and fields.
      */
-    async postEsignDocuments(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postEsignDocumentsRaw(initOverrides);
+    async postEsignDocuments(requestParameters: EsignApiPostEsignDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<EsignDocument> {
+        const response = await this.postEsignDocumentsRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Adds a field — a signature, date, name, email or text box — at a page and position for ONE named recipient, and answers 201 with its id. `recipientId` and a valid `type` are required, and the recipient must belong to this document (400 otherwise); page defaults to 1 and position defaults to the origin.  Fields are what make a recipient signable: a document cannot be sent while any signing recipient has none. Only while DRAFT — adding a field to a sent document is a 409. Requires a validated principal (403 without one), acts only on the caller\'s own tenant, and an unknown document is a 404. The addition is recorded on the audit trail.
-     * Place a field on the page for one recipient to fill
+     * Places a field on the page for one recipient to fill.  It adds a signature, date, name, email or text box at a page and position for ONE named recipient, and answers 201 with its id. The recipient must belong to this document; one from elsewhere is refused.  Fields are what make a recipient signable: a document cannot be sent while any signing recipient has none. Only while DRAFT — adding a field to a sent document is a 409 — and an unknown document is a 404. The addition is recorded on the audit trail.
+     * Places a field on the page for one recipient to fill.
      */
-    async postEsignDocumentsByIdFieldsRaw(requestParameters: EsignApiPostEsignDocumentsByIdFieldsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postEsignDocumentsByIdFieldsRaw(requestParameters: EsignApiPostEsignDocumentsByIdFieldsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<EsignPlacement>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -383,9 +463,18 @@ export class EsignApi extends runtime.BaseAPI {
             );
         }
 
+        if (requestParameters['esignFieldIn'] == null) {
+            throw new runtime.RequiredError(
+                'esignFieldIn',
+                'Required parameter "esignFieldIn" was null or undefined when calling postEsignDocumentsByIdFields().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -404,24 +493,26 @@ export class EsignApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: EsignFieldInToJSON(requestParameters['esignFieldIn']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => EsignPlacementFromJSON(jsonValue));
     }
 
     /**
-     * Adds a field — a signature, date, name, email or text box — at a page and position for ONE named recipient, and answers 201 with its id. `recipientId` and a valid `type` are required, and the recipient must belong to this document (400 otherwise); page defaults to 1 and position defaults to the origin.  Fields are what make a recipient signable: a document cannot be sent while any signing recipient has none. Only while DRAFT — adding a field to a sent document is a 409. Requires a validated principal (403 without one), acts only on the caller\'s own tenant, and an unknown document is a 404. The addition is recorded on the audit trail.
-     * Place a field on the page for one recipient to fill
+     * Places a field on the page for one recipient to fill.  It adds a signature, date, name, email or text box at a page and position for ONE named recipient, and answers 201 with its id. The recipient must belong to this document; one from elsewhere is refused.  Fields are what make a recipient signable: a document cannot be sent while any signing recipient has none. Only while DRAFT — adding a field to a sent document is a 409 — and an unknown document is a 404. The addition is recorded on the audit trail.
+     * Places a field on the page for one recipient to fill.
      */
-    async postEsignDocumentsByIdFields(requestParameters: EsignApiPostEsignDocumentsByIdFieldsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postEsignDocumentsByIdFieldsRaw(requestParameters, initOverrides);
+    async postEsignDocumentsByIdFields(requestParameters: EsignApiPostEsignDocumentsByIdFieldsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<EsignPlacement> {
+        const response = await this.postEsignDocumentsByIdFieldsRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Adds a recipient and answers 201 with their id and their signing TOKEN — the crypto-random capability that is the only credential the signer\'s door accepts, so this response is where the signing link is built from. `email` is required; `role` defaults to `SIGNER`, and a `CC` recipient is recorded as already complete because they are never asked to sign. `signingOrder` sets this recipient\'s position for a sequential document.  Only while DRAFT: adding a recipient to a document already sent is a 409, because the field layout and the turn order were fixed when it went out. Requires a validated principal (403 without one), acts only on the caller\'s own tenant, and an unknown document is a 404. The addition is recorded on the audit trail.
-     * Add someone to a draft and mint their signing token
+     * Adds someone to a draft and mints their signing token.  It answers 201 with the recipient\'s id and their signing TOKEN — the crypto-random capability that is the only credential the signer\'s door accepts — so this response is where the signing link is built from. A CC recipient is recorded as already complete, because they are never asked to sign.  Only while DRAFT: adding a recipient to a document already sent is a 409, because the field layout and the turn order were fixed when it went out. An unknown document is a 404. The addition is recorded on the audit trail.
+     * Adds someone to a draft and mints their signing token.
      */
-    async postEsignDocumentsByIdRecipientsRaw(requestParameters: EsignApiPostEsignDocumentsByIdRecipientsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postEsignDocumentsByIdRecipientsRaw(requestParameters: EsignApiPostEsignDocumentsByIdRecipientsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<EsignInvite>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -429,9 +520,18 @@ export class EsignApi extends runtime.BaseAPI {
             );
         }
 
+        if (requestParameters['esignRecipientIn'] == null) {
+            throw new runtime.RequiredError(
+                'esignRecipientIn',
+                'Required parameter "esignRecipientIn" was null or undefined when calling postEsignDocumentsByIdRecipients().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -450,24 +550,26 @@ export class EsignApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: EsignRecipientInToJSON(requestParameters['esignRecipientIn']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => EsignInviteFromJSON(jsonValue));
     }
 
     /**
-     * Adds a recipient and answers 201 with their id and their signing TOKEN — the crypto-random capability that is the only credential the signer\'s door accepts, so this response is where the signing link is built from. `email` is required; `role` defaults to `SIGNER`, and a `CC` recipient is recorded as already complete because they are never asked to sign. `signingOrder` sets this recipient\'s position for a sequential document.  Only while DRAFT: adding a recipient to a document already sent is a 409, because the field layout and the turn order were fixed when it went out. Requires a validated principal (403 without one), acts only on the caller\'s own tenant, and an unknown document is a 404. The addition is recorded on the audit trail.
-     * Add someone to a draft and mint their signing token
+     * Adds someone to a draft and mints their signing token.  It answers 201 with the recipient\'s id and their signing TOKEN — the crypto-random capability that is the only credential the signer\'s door accepts — so this response is where the signing link is built from. A CC recipient is recorded as already complete, because they are never asked to sign.  Only while DRAFT: adding a recipient to a document already sent is a 409, because the field layout and the turn order were fixed when it went out. An unknown document is a 404. The addition is recorded on the audit trail.
+     * Adds someone to a draft and mints their signing token.
      */
-    async postEsignDocumentsByIdRecipients(requestParameters: EsignApiPostEsignDocumentsByIdRecipientsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postEsignDocumentsByIdRecipientsRaw(requestParameters, initOverrides);
+    async postEsignDocumentsByIdRecipients(requestParameters: EsignApiPostEsignDocumentsByIdRecipientsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<EsignInvite> {
+        const response = await this.postEsignDocumentsByIdRecipientsRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Moves the document from `DRAFT` to `PENDING` and answers the signing tokens — one per signing recipient, with the path to hand them — which is how the links reach the people who must sign. Nothing is emailed by this call; delivering the links is the caller\'s.  It refuses to send an unsignable document: no recipients at all is a 400, and so is any signing recipient with no fields to fill, named in the error. Re-sending an already-pending document is allowed and re-issues the same links rather than restarting anything; a completed document is a 409. Requires a validated principal (403 without one) and acts only on the caller\'s own tenant; an unknown document is a 404. The send is recorded on the audit trail.
-     * Send the document out and get each signer\'s link
+     * Sends the document out and answers each signer\'s link.  It moves the document from DRAFT to PENDING and answers the signing tokens — one per signing recipient, with the path to hand them — which is how the links reach the people who must sign. Nothing is emailed by this call; delivering the links is the caller\'s.  It refuses to send an unsignable document: no recipients at all is a 400, and so is any signing recipient with no fields to fill, named in the error. Re-sending an already-pending document is allowed and re-issues the same links rather than restarting anything; a completed document is a 409, and an unknown one a 404. The send is recorded on the audit trail.
+     * Sends the document out and answers each signer\'s link.
      */
-    async postEsignDocumentsByIdSendRaw(requestParameters: EsignApiPostEsignDocumentsByIdSendRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postEsignDocumentsByIdSendRaw(requestParameters: EsignApiPostEsignDocumentsByIdSendRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<EsignLinks>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -498,22 +600,23 @@ export class EsignApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => EsignLinksFromJSON(jsonValue));
     }
 
     /**
-     * Moves the document from `DRAFT` to `PENDING` and answers the signing tokens — one per signing recipient, with the path to hand them — which is how the links reach the people who must sign. Nothing is emailed by this call; delivering the links is the caller\'s.  It refuses to send an unsignable document: no recipients at all is a 400, and so is any signing recipient with no fields to fill, named in the error. Re-sending an already-pending document is allowed and re-issues the same links rather than restarting anything; a completed document is a 409. Requires a validated principal (403 without one) and acts only on the caller\'s own tenant; an unknown document is a 404. The send is recorded on the audit trail.
-     * Send the document out and get each signer\'s link
+     * Sends the document out and answers each signer\'s link.  It moves the document from DRAFT to PENDING and answers the signing tokens — one per signing recipient, with the path to hand them — which is how the links reach the people who must sign. Nothing is emailed by this call; delivering the links is the caller\'s.  It refuses to send an unsignable document: no recipients at all is a 400, and so is any signing recipient with no fields to fill, named in the error. Re-sending an already-pending document is allowed and re-issues the same links rather than restarting anything; a completed document is a 409, and an unknown one a 404. The send is recorded on the audit trail.
+     * Sends the document out and answers each signer\'s link.
      */
-    async postEsignDocumentsByIdSend(requestParameters: EsignApiPostEsignDocumentsByIdSendRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postEsignDocumentsByIdSendRaw(requestParameters, initOverrides);
+    async postEsignDocumentsByIdSend(requestParameters: EsignApiPostEsignDocumentsByIdSendRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<EsignLinks> {
+        const response = await this.postEsignDocumentsByIdSendRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Marks this recipient as done and answers whether the DOCUMENT sealed with it. When every signing recipient has completed, sealing happens right here in the same call: the collected values are rendered onto the PDF, a real x509 PKCS#7 signature is applied, the sealed bytes are stored beside the untouched original, and the document moves to `COMPLETED`. Until then the answer is the recipient\'s own completion with the document still pending.  It refuses to complete a half-filled signature: a recipient with any unfilled field is a 400 naming how many remain. A document not out for signature is a 409, as is a recipient who has already completed, and under SEQUENTIAL order a signer out of turn is a 403. The token is the whole credential — no account, and a token that does not resolve under `:org` is a 401. Sealing and completion are one transaction, so a failure anywhere leaves the document exactly as it was.
-     * Finish signing — and seal the document if you were the last
+     * Finishes your signing — and seals the document if you were the last.  It marks this recipient as done and answers whether the DOCUMENT sealed with it. When every signing recipient has completed, sealing happens right here in the same call: the collected values are rendered onto the PDF, a real x509 PKCS#7 signature is applied, the sealed bytes are stored beside the untouched original, and the document moves to COMPLETED. Until then the answer is the recipient\'s own completion with the document still pending.  It refuses to complete a half-filled signature: a recipient with any unfilled field is a 400 naming how many remain. A document not out for signature is a 409, as is a recipient who has already completed, and under SEQUENTIAL order a signer out of turn is a 403. The token is the whole credential — no account, and a token that does not resolve under the org segment is a 404. Sealing and completion are one transaction, so a failure anywhere leaves the document exactly as it was.
+     * Finishes your signing — and seals the document if you were the last.
      */
-    async postEsignOByOrgSignByTokenCompleteRaw(requestParameters: EsignApiPostEsignOByOrgSignByTokenCompleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postEsignOByOrgSignByTokenCompleteRaw(requestParameters: EsignApiPostEsignOByOrgSignByTokenCompleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<EsignCompletion>> {
         if (requestParameters['org'] == null) {
             throw new runtime.RequiredError(
                 'org',
@@ -552,22 +655,23 @@ export class EsignApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => EsignCompletionFromJSON(jsonValue));
     }
 
     /**
-     * Marks this recipient as done and answers whether the DOCUMENT sealed with it. When every signing recipient has completed, sealing happens right here in the same call: the collected values are rendered onto the PDF, a real x509 PKCS#7 signature is applied, the sealed bytes are stored beside the untouched original, and the document moves to `COMPLETED`. Until then the answer is the recipient\'s own completion with the document still pending.  It refuses to complete a half-filled signature: a recipient with any unfilled field is a 400 naming how many remain. A document not out for signature is a 409, as is a recipient who has already completed, and under SEQUENTIAL order a signer out of turn is a 403. The token is the whole credential — no account, and a token that does not resolve under `:org` is a 401. Sealing and completion are one transaction, so a failure anywhere leaves the document exactly as it was.
-     * Finish signing — and seal the document if you were the last
+     * Finishes your signing — and seals the document if you were the last.  It marks this recipient as done and answers whether the DOCUMENT sealed with it. When every signing recipient has completed, sealing happens right here in the same call: the collected values are rendered onto the PDF, a real x509 PKCS#7 signature is applied, the sealed bytes are stored beside the untouched original, and the document moves to COMPLETED. Until then the answer is the recipient\'s own completion with the document still pending.  It refuses to complete a half-filled signature: a recipient with any unfilled field is a 400 naming how many remain. A document not out for signature is a 409, as is a recipient who has already completed, and under SEQUENTIAL order a signer out of turn is a 403. The token is the whole credential — no account, and a token that does not resolve under the org segment is a 404. Sealing and completion are one transaction, so a failure anywhere leaves the document exactly as it was.
+     * Finishes your signing — and seals the document if you were the last.
      */
-    async postEsignOByOrgSignByTokenComplete(requestParameters: EsignApiPostEsignOByOrgSignByTokenCompleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postEsignOByOrgSignByTokenCompleteRaw(requestParameters, initOverrides);
+    async postEsignOByOrgSignByTokenComplete(requestParameters: EsignApiPostEsignOByOrgSignByTokenCompleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<EsignCompletion> {
+        const response = await this.postEsignOByOrgSignByTokenCompleteRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Records a value for one field and marks it inserted. A signature field takes `value` with `isBase64` true for drawn image bytes, or false for a typed signature; a date, name or email field falls back to today, the recipient\'s name or their email when `value` is omitted; any other type requires one.  Nothing is sealed here — filling every field still leaves the document pending until the completion call. The token is the whole credential and it bounds what can be written: a field belonging to another recipient is refused with 401 even under a valid token, an unknown field is a 404, and a field already filled is a 409. A document not out for signature is a 409, as is a recipient who has already completed or rejected. Under SEQUENTIAL order a signer whose turn has not come is refused 403 until every earlier signer has signed. Each insertion is recorded on the audit trail.
-     * Fill in one of your fields
+     * Fills in one of your fields.  It records a value for one field and marks it inserted. A signature field takes a value with isBase64 true for drawn image bytes, or false for a typed signature; a date, name or email field falls back to today, the recipient\'s name or their email when the value is omitted; any other type requires one.  Nothing is sealed here — filling every field still leaves the document pending until the completion call. The token is the whole credential and it bounds what can be written: a field belonging to another recipient is refused with 401 even under a valid token, an unknown field is a 404, and a field already filled is a 409. A document not out for signature is a 409, as is a recipient who has already completed or rejected. Under SEQUENTIAL order a signer whose turn has not come is refused 403 until every earlier signer has signed. Each insertion is recorded on the audit trail.
+     * Fills in one of your fields.
      */
-    async postEsignOByOrgSignByTokenFieldsByFieldidRaw(requestParameters: EsignApiPostEsignOByOrgSignByTokenFieldsByFieldidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postEsignOByOrgSignByTokenFieldsByFieldidRaw(requestParameters: EsignApiPostEsignOByOrgSignByTokenFieldsByFieldidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<EsignInsertion>> {
         if (requestParameters['org'] == null) {
             throw new runtime.RequiredError(
                 'org',
@@ -589,9 +693,18 @@ export class EsignApi extends runtime.BaseAPI {
             );
         }
 
+        if (requestParameters['esignValueIn'] == null) {
+            throw new runtime.RequiredError(
+                'esignValueIn',
+                'Required parameter "esignValueIn" was null or undefined when calling postEsignOByOrgSignByTokenFieldsByFieldid().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -612,24 +725,26 @@ export class EsignApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: EsignValueInToJSON(requestParameters['esignValueIn']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => EsignInsertionFromJSON(jsonValue));
     }
 
     /**
-     * Records a value for one field and marks it inserted. A signature field takes `value` with `isBase64` true for drawn image bytes, or false for a typed signature; a date, name or email field falls back to today, the recipient\'s name or their email when `value` is omitted; any other type requires one.  Nothing is sealed here — filling every field still leaves the document pending until the completion call. The token is the whole credential and it bounds what can be written: a field belonging to another recipient is refused with 401 even under a valid token, an unknown field is a 404, and a field already filled is a 409. A document not out for signature is a 409, as is a recipient who has already completed or rejected. Under SEQUENTIAL order a signer whose turn has not come is refused 403 until every earlier signer has signed. Each insertion is recorded on the audit trail.
-     * Fill in one of your fields
+     * Fills in one of your fields.  It records a value for one field and marks it inserted. A signature field takes a value with isBase64 true for drawn image bytes, or false for a typed signature; a date, name or email field falls back to today, the recipient\'s name or their email when the value is omitted; any other type requires one.  Nothing is sealed here — filling every field still leaves the document pending until the completion call. The token is the whole credential and it bounds what can be written: a field belonging to another recipient is refused with 401 even under a valid token, an unknown field is a 404, and a field already filled is a 409. A document not out for signature is a 409, as is a recipient who has already completed or rejected. Under SEQUENTIAL order a signer whose turn has not come is refused 403 until every earlier signer has signed. Each insertion is recorded on the audit trail.
+     * Fills in one of your fields.
      */
-    async postEsignOByOrgSignByTokenFieldsByFieldid(requestParameters: EsignApiPostEsignOByOrgSignByTokenFieldsByFieldidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postEsignOByOrgSignByTokenFieldsByFieldidRaw(requestParameters, initOverrides);
+    async postEsignOByOrgSignByTokenFieldsByFieldid(requestParameters: EsignApiPostEsignOByOrgSignByTokenFieldsByFieldidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<EsignInsertion> {
+        const response = await this.postEsignOByOrgSignByTokenFieldsByFieldidRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Records this recipient\'s refusal and moves the WHOLE DOCUMENT to `REJECTED` — one declining signer ends it for everyone, and there is no route back: the document cannot then be signed or completed. An optional `reason` is stored and written onto the audit trail with the rejection, which is what the sender sees.  A document not out for signature is a 409, and so is a recipient who has already signed or already rejected — a refusal cannot be taken back or repeated. The token is the whole credential; one that does not resolve under `:org` is a 401.
-     * Decline to sign, with an optional reason
+     * Declines to sign, with an optional reason.  It records this recipient\'s refusal and moves the WHOLE DOCUMENT to REJECTED — one declining signer ends it for everyone, and there is no route back: the document cannot then be signed or completed. An optional reason is stored and written onto the audit trail with the rejection, which is what the sender sees.  A document not out for signature is a 409, and so is a recipient who has already signed or already rejected — a refusal cannot be taken back or repeated. The token is the whole credential; one that does not resolve under the org segment is a 404.
+     * Declines to sign, with an optional reason.
      */
-    async postEsignOByOrgSignByTokenRejectRaw(requestParameters: EsignApiPostEsignOByOrgSignByTokenRejectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postEsignOByOrgSignByTokenRejectRaw(requestParameters: EsignApiPostEsignOByOrgSignByTokenRejectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<EsignRejection>> {
         if (requestParameters['org'] == null) {
             throw new runtime.RequiredError(
                 'org',
@@ -644,9 +759,18 @@ export class EsignApi extends runtime.BaseAPI {
             );
         }
 
+        if (requestParameters['esignRejectIn'] == null) {
+            throw new runtime.RequiredError(
+                'esignRejectIn',
+                'Required parameter "esignRejectIn" was null or undefined when calling postEsignOByOrgSignByTokenReject().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -666,17 +790,19 @@ export class EsignApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: EsignRejectInToJSON(requestParameters['esignRejectIn']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => EsignRejectionFromJSON(jsonValue));
     }
 
     /**
-     * Records this recipient\'s refusal and moves the WHOLE DOCUMENT to `REJECTED` — one declining signer ends it for everyone, and there is no route back: the document cannot then be signed or completed. An optional `reason` is stored and written onto the audit trail with the rejection, which is what the sender sees.  A document not out for signature is a 409, and so is a recipient who has already signed or already rejected — a refusal cannot be taken back or repeated. The token is the whole credential; one that does not resolve under `:org` is a 401.
-     * Decline to sign, with an optional reason
+     * Declines to sign, with an optional reason.  It records this recipient\'s refusal and moves the WHOLE DOCUMENT to REJECTED — one declining signer ends it for everyone, and there is no route back: the document cannot then be signed or completed. An optional reason is stored and written onto the audit trail with the rejection, which is what the sender sees.  A document not out for signature is a 409, and so is a recipient who has already signed or already rejected — a refusal cannot be taken back or repeated. The token is the whole credential; one that does not resolve under the org segment is a 404.
+     * Declines to sign, with an optional reason.
      */
-    async postEsignOByOrgSignByTokenReject(requestParameters: EsignApiPostEsignOByOrgSignByTokenRejectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postEsignOByOrgSignByTokenRejectRaw(requestParameters, initOverrides);
+    async postEsignOByOrgSignByTokenReject(requestParameters: EsignApiPostEsignOByOrgSignByTokenRejectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<EsignRejection> {
+        const response = await this.postEsignOByOrgSignByTokenRejectRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
 }

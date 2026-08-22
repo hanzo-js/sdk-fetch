@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,31 +20,32 @@ import { mapValues } from '../runtime.js';
  */
 export interface Blog {
     /**
-     * 
+     * CaseStudy is one worked instance — somebody who ran it, and what happened.
      * @type {string}
      * @memberof Blog
      */
     caseStudy?: string;
     /**
-     * 
+     * How is the run book: the steps to execute the tactic.
      * @type {string}
      * @memberof Blog
      */
     how?: string;
     /**
-     * 
+     * Slug is the post's address — the last path segment it is published at.
      * @type {string}
      * @memberof Blog
      */
     slug?: string;
     /**
-     * 
+     * Title is the post's headline.
      * @type {string}
      * @memberof Blog
      */
     title?: string;
     /**
-     * 
+     * Why is the mechanism: the reason the tactic works, stated as a principle
+     * rather than as instructions.
      * @type {string}
      * @memberof Blog
      */

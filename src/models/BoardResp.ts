@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -47,7 +47,7 @@ export interface BoardResp {
      */
     current?: Array<ReadingView>;
     /**
-     * From and To are the resolved [from, to) window, RFC 3339 UTC.
+     * From is when the resolved window opens, RFC 3339 UTC.
      * @type {string}
      * @memberof BoardResp
      */
@@ -77,7 +77,9 @@ export interface BoardResp {
      */
     source?: string;
     /**
-     * 
+     * To is where it closes, EXCLUSIVE, RFC 3339 UTC — the instant the read was
+     * served, so the window walks forward with the clock and two reads a minute
+     * apart do not cover the same period.
      * @type {string}
      * @memberof BoardResp
      */

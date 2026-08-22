@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -18,6 +18,14 @@ import type {
   AuthorizeOut,
   ConnectIn,
   ConnectOut,
+  ConnectorProvidersOut,
+  ConnectorTokenOut,
+  ConnectorsOut,
+  CredentialIn,
+  CredentialOut,
+  DevicePollOut,
+  DeviceStartIn,
+  DeviceStartOut,
   DisconnectOut,
   GithubBackfillIn,
   GithubBackfillResult,
@@ -37,8 +45,10 @@ import type {
   GithubReposOut,
   GithubSearchOut,
   GithubSearchReq,
+  GitlabProjectsOut,
   ListOut,
   ProviderView,
+  RefreshOut,
   VerifyOut,
 } from '../models/index.js';
 import {
@@ -48,6 +58,22 @@ import {
     ConnectInToJSON,
     ConnectOutFromJSON,
     ConnectOutToJSON,
+    ConnectorProvidersOutFromJSON,
+    ConnectorProvidersOutToJSON,
+    ConnectorTokenOutFromJSON,
+    ConnectorTokenOutToJSON,
+    ConnectorsOutFromJSON,
+    ConnectorsOutToJSON,
+    CredentialInFromJSON,
+    CredentialInToJSON,
+    CredentialOutFromJSON,
+    CredentialOutToJSON,
+    DevicePollOutFromJSON,
+    DevicePollOutToJSON,
+    DeviceStartInFromJSON,
+    DeviceStartInToJSON,
+    DeviceStartOutFromJSON,
+    DeviceStartOutToJSON,
     DisconnectOutFromJSON,
     DisconnectOutToJSON,
     GithubBackfillInFromJSON,
@@ -86,13 +112,21 @@ import {
     GithubSearchOutToJSON,
     GithubSearchReqFromJSON,
     GithubSearchReqToJSON,
+    GitlabProjectsOutFromJSON,
+    GitlabProjectsOutToJSON,
     ListOutFromJSON,
     ListOutToJSON,
     ProviderViewFromJSON,
     ProviderViewToJSON,
+    RefreshOutFromJSON,
+    RefreshOutToJSON,
     VerifyOutFromJSON,
     VerifyOutToJSON,
 } from '../models/index.js';
+
+export interface IntegrationsApiDeleteIntegrationsConnectorsByIdRequest {
+    id: string;
+}
 
 export interface IntegrationsApiDeleteIntegrationsGithubReposByRepoPagesRequest {
     repo: string;
@@ -104,6 +138,10 @@ export interface IntegrationsApiGetIntegrationsByProviderRequest {
 
 export interface IntegrationsApiGetIntegrationsByProviderCallbackRequest {
     provider: string;
+}
+
+export interface IntegrationsApiGetIntegrationsConnectorsByIdTokenRequest {
+    id: string;
 }
 
 export interface IntegrationsApiGetIntegrationsGithubReposByRepoPagesRequest {
@@ -121,6 +159,25 @@ export interface IntegrationsApiPostIntegrationsByProviderDisconnectRequest {
 
 export interface IntegrationsApiPostIntegrationsByProviderVerifyRequest {
     provider: string;
+}
+
+export interface IntegrationsApiPostIntegrationsConnectorsByIdRefreshRequest {
+    id: string;
+}
+
+export interface IntegrationsApiPostIntegrationsConnectorsByProviderCredentialRequest {
+    provider: string;
+    credentialIn: CredentialIn;
+}
+
+export interface IntegrationsApiPostIntegrationsConnectorsByProviderDeviceRequest {
+    provider: string;
+    deviceStartIn: DeviceStartIn;
+}
+
+export interface IntegrationsApiPostIntegrationsConnectorsByProviderDeviceByFlowPollRequest {
+    provider: string;
+    flow: string;
 }
 
 export interface IntegrationsApiPostIntegrationsGithubClaimRequest {
@@ -165,6 +222,53 @@ export interface IntegrationsApiPutIntegrationsGithubReposByRepoPagesRequest {
  * 
  */
 export class IntegrationsApi extends runtime.BaseAPI {
+
+    /**
+     * Forgets a connector: every custodied secret, then the row. Idempotent — dropping a never-connected id still answers {disconnected:true} (disconnect() parity). No provider Revoke: none of the user-plane providers exposes a revoke endpoint.
+     * Forgets a connector: every custodied secret, then the row.
+     */
+    async deleteIntegrationsConnectorsByIdRaw(requestParameters: IntegrationsApiDeleteIntegrationsConnectorsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DisconnectOut>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteIntegrationsConnectorsById().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/integrations/connectors/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => DisconnectOutFromJSON(jsonValue));
+    }
+
+    /**
+     * Forgets a connector: every custodied secret, then the row. Idempotent — dropping a never-connected id still answers {disconnected:true} (disconnect() parity). No provider Revoke: none of the user-plane providers exposes a revoke endpoint.
+     * Forgets a connector: every custodied secret, then the row.
+     */
+    async deleteIntegrationsConnectorsById(requestParameters: IntegrationsApiDeleteIntegrationsConnectorsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DisconnectOut> {
+        const response = await this.deleteIntegrationsConnectorsByIdRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * Deletes the repo\'s Pages site. 404 when there is none, so a caller can tell \"turned it off\" from \"there was nothing on\".
@@ -214,7 +318,7 @@ export class IntegrationsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Returns every registered integration provider together with THIS org\'s connection status for it — the catalog the console\'s Integrations page renders. Org-authed: a caller with no validated principal is 403, because the status is per-org and there is no org-less answer. User-plane providers (the /v1/connectors surface) are omitted; the two planes are disjoint.
+     * Returns every registered integration provider together with THIS org\'s connection status for it — the catalog the console\'s Integrations page renders. Org-authed: a caller with no validated principal is 403, because the status is per-org and there is no org-less answer. User-plane providers (the /v1/integrations/connectors surface) are omitted; the two planes are disjoint.
      * Returns every registered integration provider together with THIS org\'s connection status for it — the catalog the console\'s Integrations page renders.
      */
     async getIntegrationsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListOut>> {
@@ -244,7 +348,7 @@ export class IntegrationsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Returns every registered integration provider together with THIS org\'s connection status for it — the catalog the console\'s Integrations page renders. Org-authed: a caller with no validated principal is 403, because the status is per-org and there is no org-less answer. User-plane providers (the /v1/connectors surface) are omitted; the two planes are disjoint.
+     * Returns every registered integration provider together with THIS org\'s connection status for it — the catalog the console\'s Integrations page renders. Org-authed: a caller with no validated principal is 403, because the status is per-org and there is no org-less answer. User-plane providers (the /v1/integrations/connectors surface) are omitted; the two planes are disjoint.
      * Returns every registered integration provider together with THIS org\'s connection status for it — the catalog the console\'s Integrations page renders.
      */
     async getIntegrations(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListOut> {
@@ -343,6 +447,131 @@ export class IntegrationsApi extends runtime.BaseAPI {
      */
     async getIntegrationsByProviderCallback(requestParameters: IntegrationsApiGetIntegrationsByProviderCallbackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.getIntegrationsByProviderCallbackRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Lists the caller\'s OWN connectors across every provider — the set `hanzo connector ls` prints. Rows are keyed (org,user), so this can never surface another user\'s connector, and no secret is in the view.
+     * Lists the caller\'s OWN connectors across every provider — the set `hanzo connector ls` prints.
+     */
+    async getIntegrationsConnectorsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ConnectorsOut>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/integrations/connectors`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ConnectorsOutFromJSON(jsonValue));
+    }
+
+    /**
+     * Lists the caller\'s OWN connectors across every provider — the set `hanzo connector ls` prints. Rows are keyed (org,user), so this can never surface another user\'s connector, and no secret is in the view.
+     * Lists the caller\'s OWN connectors across every provider — the set `hanzo connector ls` prints.
+     */
+    async getIntegrationsConnectors(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ConnectorsOut> {
+        const response = await this.getIntegrationsConnectorsRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Hands the custodied access token to its owner — the ONE place custody exits. The (org,user)-keyed row IS the same-user gate: another user\'s id is simply \"no row\" → 404. fresh() auto-rotates within the refreshSkew window; static providers degenerate to a plain kmsGet of Secrets[0]. Refresh tokens are NEVER returned — custody keeps the sink. The token is never logged.
+     * Hands the custodied access token to its owner — the ONE place custody exits.
+     */
+    async getIntegrationsConnectorsByIdTokenRaw(requestParameters: IntegrationsApiGetIntegrationsConnectorsByIdTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ConnectorTokenOut>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getIntegrationsConnectorsByIdToken().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/integrations/connectors/{id}/token`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ConnectorTokenOutFromJSON(jsonValue));
+    }
+
+    /**
+     * Hands the custodied access token to its owner — the ONE place custody exits. The (org,user)-keyed row IS the same-user gate: another user\'s id is simply \"no row\" → 404. fresh() auto-rotates within the refreshSkew window; static providers degenerate to a plain kmsGet of Secrets[0]. Refresh tokens are NEVER returned — custody keeps the sink. The token is never logged.
+     * Hands the custodied access token to its owner — the ONE place custody exits.
+     */
+    async getIntegrationsConnectorsByIdToken(requestParameters: IntegrationsApiGetIntegrationsConnectorsByIdTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ConnectorTokenOut> {
+        const response = await this.getIntegrationsConnectorsByIdTokenRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Lists the user-scoped provider cards — the catalog of what a user can connect, and how. Methods derive from capabilities (Device/Adopt/Verify — Mount asserts at least one), never from a parallel kind enum.
+     * Lists the user-scoped provider cards — the catalog of what a user can connect, and how.
+     */
+    async getIntegrationsConnectorsProvidersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ConnectorProvidersOut>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/integrations/connectors/providers`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ConnectorProvidersOutFromJSON(jsonValue));
+    }
+
+    /**
+     * Lists the user-scoped provider cards — the catalog of what a user can connect, and how. Methods derive from capabilities (Device/Adopt/Verify — Mount asserts at least one), never from a parallel kind enum.
+     * Lists the user-scoped provider cards — the catalog of what a user can connect, and how.
+     */
+    async getIntegrationsConnectorsProviders(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ConnectorProvidersOut> {
+        const response = await this.getIntegrationsConnectorsProvidersRaw(initOverrides);
+        return await response.value();
     }
 
     /**
@@ -581,6 +810,45 @@ export class IntegrationsApi extends runtime.BaseAPI {
      */
     async getIntegrationsGithubReposByRepoPages(requestParameters: IntegrationsApiGetIntegrationsGithubReposByRepoPagesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GithubPagesView> {
         const response = await this.getIntegrationsGithubReposByRepoPagesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Lists the projects the org\'s GitLab connection can reach — membership projects, most recently active first.
+     * Lists the projects the org\'s GitLab connection can reach — membership projects, most recently active first.
+     */
+    async getIntegrationsGitlabProjectsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GitlabProjectsOut>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/integrations/gitlab/projects`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => GitlabProjectsOutFromJSON(jsonValue));
+    }
+
+    /**
+     * Lists the projects the org\'s GitLab connection can reach — membership projects, most recently active first.
+     * Lists the projects the org\'s GitLab connection can reach — membership projects, most recently active first.
+     */
+    async getIntegrationsGitlabProjects(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GitlabProjectsOut> {
+        const response = await this.getIntegrationsGitlabProjectsRaw(initOverrides);
         return await response.value();
     }
 
@@ -1112,6 +1380,222 @@ export class IntegrationsApi extends runtime.BaseAPI {
      */
     async postIntegrationsByProviderVerify(requestParameters: IntegrationsApiPostIntegrationsByProviderVerifyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VerifyOut> {
         const response = await this.postIntegrationsByProviderVerifyRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Forces a token rotation for a connected connector, ahead of the automatic rotation a token read would do inside the expiry window. Only providers that declare a Refresh support it.
+     * Forces a token rotation for a connected connector, ahead of the automatic rotation a token read would do inside the expiry window.
+     */
+    async postIntegrationsConnectorsByIdRefreshRaw(requestParameters: IntegrationsApiPostIntegrationsConnectorsByIdRefreshRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RefreshOut>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling postIntegrationsConnectorsByIdRefresh().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/integrations/connectors/{id}/refresh`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => RefreshOutFromJSON(jsonValue));
+    }
+
+    /**
+     * Forces a token rotation for a connected connector, ahead of the automatic rotation a token read would do inside the expiry window. Only providers that declare a Refresh support it.
+     * Forces a token rotation for a connected connector, ahead of the automatic rotation a token read would do inside the expiry window.
+     */
+    async postIntegrationsConnectorsByIdRefresh(requestParameters: IntegrationsApiPostIntegrationsConnectorsByIdRefreshRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RefreshOut> {
+        const response = await this.postIntegrationsConnectorsByIdRefreshRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Is the direct intake path: a customer-held token/setup-token (Verify) or an externally obtained OAuth bundle from the CLI\'s local PKCE (Adopt). ALWAYS verify-before-store: a bad credential is refused and NOTHING is persisted (connectByCredential\'s fail-closed order).
+     * Is the direct intake path: a customer-held token/setup-token (Verify) or an externally obtained OAuth bundle from the CLI\'s local PKCE (Adopt).
+     */
+    async postIntegrationsConnectorsByProviderCredentialRaw(requestParameters: IntegrationsApiPostIntegrationsConnectorsByProviderCredentialRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CredentialOut>> {
+        if (requestParameters['provider'] == null) {
+            throw new runtime.RequiredError(
+                'provider',
+                'Required parameter "provider" was null or undefined when calling postIntegrationsConnectorsByProviderCredential().'
+            );
+        }
+
+        if (requestParameters['credentialIn'] == null) {
+            throw new runtime.RequiredError(
+                'credentialIn',
+                'Required parameter "credentialIn" was null or undefined when calling postIntegrationsConnectorsByProviderCredential().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/integrations/connectors/{provider}/credential`;
+        urlPath = urlPath.replace(`{${"provider"}}`, encodeURIComponent(String(requestParameters['provider'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: CredentialInToJSON(requestParameters['credentialIn']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => CredentialOutFromJSON(jsonValue));
+    }
+
+    /**
+     * Is the direct intake path: a customer-held token/setup-token (Verify) or an externally obtained OAuth bundle from the CLI\'s local PKCE (Adopt). ALWAYS verify-before-store: a bad credential is refused and NOTHING is persisted (connectByCredential\'s fail-closed order).
+     * Is the direct intake path: a customer-held token/setup-token (Verify) or an externally obtained OAuth bundle from the CLI\'s local PKCE (Adopt).
+     */
+    async postIntegrationsConnectorsByProviderCredential(requestParameters: IntegrationsApiPostIntegrationsConnectorsByProviderCredentialRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CredentialOut> {
+        const response = await this.postIntegrationsConnectorsByProviderCredentialRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Begins a device sign-in and returns the code to show the user plus how to poll for completion. KMS readiness is checked NOW rather than dead-ending the user at poll-done (connect() parity), and the per-provider connector cap is checked before the provider is called. The provider\'s device code is persisted only in the encrypted grants table and is NEVER returned.
+     * Begins a device sign-in and returns the code to show the user plus how to poll for completion.
+     */
+    async postIntegrationsConnectorsByProviderDeviceRaw(requestParameters: IntegrationsApiPostIntegrationsConnectorsByProviderDeviceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DeviceStartOut>> {
+        if (requestParameters['provider'] == null) {
+            throw new runtime.RequiredError(
+                'provider',
+                'Required parameter "provider" was null or undefined when calling postIntegrationsConnectorsByProviderDevice().'
+            );
+        }
+
+        if (requestParameters['deviceStartIn'] == null) {
+            throw new runtime.RequiredError(
+                'deviceStartIn',
+                'Required parameter "deviceStartIn" was null or undefined when calling postIntegrationsConnectorsByProviderDevice().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/integrations/connectors/{provider}/device`;
+        urlPath = urlPath.replace(`{${"provider"}}`, encodeURIComponent(String(requestParameters['provider'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: DeviceStartInToJSON(requestParameters['deviceStartIn']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => DeviceStartOutFromJSON(jsonValue));
+    }
+
+    /**
+     * Begins a device sign-in and returns the code to show the user plus how to poll for completion. KMS readiness is checked NOW rather than dead-ending the user at poll-done (connect() parity), and the per-provider connector cap is checked before the provider is called. The provider\'s device code is persisted only in the encrypted grants table and is NEVER returned.
+     * Begins a device sign-in and returns the code to show the user plus how to poll for completion.
+     */
+    async postIntegrationsConnectorsByProviderDevice(requestParameters: IntegrationsApiPostIntegrationsConnectorsByProviderDeviceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DeviceStartOut> {
+        const response = await this.postIntegrationsConnectorsByProviderDeviceRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Advances a device sign-in. Terminal outcomes are DATA, not errors (verifyConn {active:false} discipline) — the status set is closed: pending|connected|denied|expired. pollSlow collapses to \"pending\" on the wire; the raised cadence rides interval.
+     * Advances a device sign-in.
+     */
+    async postIntegrationsConnectorsByProviderDeviceByFlowPollRaw(requestParameters: IntegrationsApiPostIntegrationsConnectorsByProviderDeviceByFlowPollRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DevicePollOut>> {
+        if (requestParameters['provider'] == null) {
+            throw new runtime.RequiredError(
+                'provider',
+                'Required parameter "provider" was null or undefined when calling postIntegrationsConnectorsByProviderDeviceByFlowPoll().'
+            );
+        }
+
+        if (requestParameters['flow'] == null) {
+            throw new runtime.RequiredError(
+                'flow',
+                'Required parameter "flow" was null or undefined when calling postIntegrationsConnectorsByProviderDeviceByFlowPoll().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/integrations/connectors/{provider}/device/{flow}/poll`;
+        urlPath = urlPath.replace(`{${"provider"}}`, encodeURIComponent(String(requestParameters['provider'])));
+        urlPath = urlPath.replace(`{${"flow"}}`, encodeURIComponent(String(requestParameters['flow'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => DevicePollOutFromJSON(jsonValue));
+    }
+
+    /**
+     * Advances a device sign-in. Terminal outcomes are DATA, not errors (verifyConn {active:false} discipline) — the status set is closed: pending|connected|denied|expired. pollSlow collapses to \"pending\" on the wire; the raised cadence rides interval.
+     * Advances a device sign-in.
+     */
+    async postIntegrationsConnectorsByProviderDeviceByFlowPoll(requestParameters: IntegrationsApiPostIntegrationsConnectorsByProviderDeviceByFlowPollRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DevicePollOut> {
+        const response = await this.postIntegrationsConnectorsByProviderDeviceByFlowPollRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

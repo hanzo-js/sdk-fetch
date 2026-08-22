@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,19 +20,26 @@ import { mapValues } from '../runtime.js';
  */
 export interface EnvVarJSON {
     /**
-     * 
+     * Key is the variable's name in the container, which must match
+     * `^[A-Za-z_][A-Za-z0-9_]*$`. For a sealed value it is also the last segment
+     * of the KMS ref, so it is what identifies the value across a round trip.
      * @type {string}
      * @memberof EnvVarJSON
      */
     key?: string;
     /**
-     * 
+     * Secret says the value lives in KMS and never in the database. A caller may
+     * only ADD secrecy: the server seals a value whose key or shape looks like a
+     * credential anyway (secretshape.go), so an entry can come back secret that
+     * was not sent that way.
      * @type {boolean}
      * @memberof EnvVarJSON
      */
     secret?: boolean;
     /**
-     * 
+     * Value is the plaintext, and it is WRITE-ONLY once the entry is secret: a
+     * sealed value reads back as "", and sending "" again KEEPS what is sealed
+     * rather than wiping it. Only a non-empty value seals a new one.
      * @type {string}
      * @memberof EnvVarJSON
      */

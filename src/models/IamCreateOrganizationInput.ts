@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -53,6 +53,12 @@ export interface IamCreateOrganizationInput {
      * @memberof IamCreateOrganizationInput
      */
     accountMenu?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof IamCreateOrganizationInput
+     */
+    avatar?: string;
     /**
      * 
      * @type {number}
@@ -125,6 +131,12 @@ export interface IamCreateOrganizationInput {
      * @memberof IamCreateOrganizationInput
      */
     displayName?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof IamCreateOrganizationInput
+     */
+    emoji?: string;
     /**
      * 
      * @type {boolean}
@@ -416,6 +428,7 @@ export function IamCreateOrganizationInputFromJSONTyped(json: any, ignoreDiscrim
         
         'accountItems': json['accountItems'] == null ? undefined : ((json['accountItems'] as Array<any>).map(IamAccountItemFromJSON)),
         'accountMenu': json['accountMenu'] == null ? undefined : json['accountMenu'],
+        'avatar': json['avatar'] == null ? undefined : json['avatar'],
         'balanceCredit': json['balanceCredit'] == null ? undefined : json['balanceCredit'],
         'balanceCurrency': json['balanceCurrency'] == null ? undefined : json['balanceCurrency'],
         'countryCodes': json['countryCodes'] == null ? undefined : json['countryCodes'],
@@ -428,6 +441,7 @@ export function IamCreateOrganizationInputFromJSONTyped(json: any, ignoreDiscrim
         'deleted': json['deleted'] == null ? undefined : json['deleted'],
         'disableSignin': json['disableSignin'] == null ? undefined : json['disableSignin'],
         'displayName': json['displayName'] == null ? undefined : json['displayName'],
+        'emoji': json['emoji'] == null ? undefined : json['emoji'],
         'enableSoftDeletion': json['enableSoftDeletion'] == null ? undefined : json['enableSoftDeletion'],
         'enableTour': json['enableTour'] == null ? undefined : json['enableTour'],
         'failedSigninFrozenTime': json['failedSigninFrozenTime'] == null ? undefined : json['failedSigninFrozenTime'],
@@ -489,6 +503,7 @@ export function IamCreateOrganizationInputToJSONTyped(value?: IamCreateOrganizat
         
         'accountItems': value['accountItems'] == null ? undefined : ((value['accountItems'] as Array<any>).map(IamAccountItemToJSON)),
         'accountMenu': value['accountMenu'],
+        'avatar': value['avatar'],
         'balanceCredit': value['balanceCredit'],
         'balanceCurrency': value['balanceCurrency'],
         'countryCodes': value['countryCodes'],
@@ -501,6 +516,7 @@ export function IamCreateOrganizationInputToJSONTyped(value?: IamCreateOrganizat
         'deleted': value['deleted'],
         'disableSignin': value['disableSignin'],
         'displayName': value['displayName'],
+        'emoji': value['emoji'],
         'enableSoftDeletion': value['enableSoftDeletion'],
         'enableTour': value['enableTour'],
         'failedSigninFrozenTime': value['failedSigninFrozenTime'],

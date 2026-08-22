@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * Composed from each subsystem\'s own projection of its router, in the fleet\'s mount order — every operation below is a route the subsystem that publishes it registered. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -27,13 +27,13 @@ import {
     O11yMetricsResponseSummaryToJSON,
     O11yMetricsResponseSummaryToJSONTyped,
 } from './O11yMetricsResponseSummary.js';
-import type { O11yAvailabilityResponseRange } from './O11yAvailabilityResponseRange.js';
+import type { O11yMetricsResponseRange } from './O11yMetricsResponseRange.js';
 import {
-    O11yAvailabilityResponseRangeFromJSON,
-    O11yAvailabilityResponseRangeFromJSONTyped,
-    O11yAvailabilityResponseRangeToJSON,
-    O11yAvailabilityResponseRangeToJSONTyped,
-} from './O11yAvailabilityResponseRange.js';
+    O11yMetricsResponseRangeFromJSON,
+    O11yMetricsResponseRangeFromJSONTyped,
+    O11yMetricsResponseRangeToJSON,
+    O11yMetricsResponseRangeToJSONTyped,
+} from './O11yMetricsResponseRange.js';
 import type { O11yMetricsResponseSeries } from './O11yMetricsResponseSeries.js';
 import {
     O11yMetricsResponseSeriesFromJSON,
@@ -49,17 +49,17 @@ import {
  */
 export interface O11yMetricsResponse {
     /**
-     * 
+     * Product is the service these numbers are about, echoed back.
      * @type {string}
      * @memberof O11yMetricsResponse
      */
     product?: string;
     /**
      * 
-     * @type {O11yAvailabilityResponseRange}
+     * @type {O11yMetricsResponseRange}
      * @memberof O11yMetricsResponse
      */
-    range?: O11yAvailabilityResponseRange;
+    range?: O11yMetricsResponseRange;
     /**
      * 
      * @type {O11yMetricsResponseSeries}
@@ -98,7 +98,7 @@ export function O11yMetricsResponseFromJSONTyped(json: any, ignoreDiscriminator:
     return {
         
         'product': json['product'] == null ? undefined : json['product'],
-        'range': json['range'] == null ? undefined : O11yAvailabilityResponseRangeFromJSON(json['range']),
+        'range': json['range'] == null ? undefined : O11yMetricsResponseRangeFromJSON(json['range']),
         'series': json['series'] == null ? undefined : O11yMetricsResponseSeriesFromJSON(json['series']),
         'summary': json['summary'] == null ? undefined : O11yMetricsResponseSummaryFromJSON(json['summary']),
         'usage': json['usage'] == null ? undefined : O11yMetricsResponseUsageFromJSON(json['usage']),
@@ -117,7 +117,7 @@ export function O11yMetricsResponseToJSONTyped(value?: O11yMetricsResponse | nul
     return {
         
         'product': value['product'],
-        'range': O11yAvailabilityResponseRangeToJSON(value['range']),
+        'range': O11yMetricsResponseRangeToJSON(value['range']),
         'series': O11yMetricsResponseSeriesToJSON(value['series']),
         'summary': O11yMetricsResponseSummaryToJSON(value['summary']),
         'usage': O11yMetricsResponseUsageToJSON(value['usage']),
