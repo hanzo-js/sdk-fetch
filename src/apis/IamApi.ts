@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay routes, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -367,11 +367,6 @@ export interface IamApiGetIamCertsRequest {
 export interface IamApiGetIamCertsByOwnerByNameRequest {
     owner: string;
     name: string;
-}
-
-export interface IamApiGetIamGetAppLoginRequest {
-    clientId?: string;
-    responseType?: string;
 }
 
 export interface IamApiGetIamInvitationsRequest {
@@ -2448,91 +2443,6 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Returns the signed-in person\'s own account and the organization they belong to — what a console reads to draw the account menu.  Passwords, API secrets and MFA material are stripped. It answers for a session cookie or a bearer token alike.
-     * Returns the signed-in person\'s own account and the organization they belong to — what a console reads to draw the account menu.
-     */
-    async getIamGetAccountRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/get-account`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Returns the signed-in person\'s own account and the organization they belong to — what a console reads to draw the account menu.  Passwords, API secrets and MFA material are stripped. It answers for a session cookie or a bearer token alike.
-     * Returns the signed-in person\'s own account and the organization they belong to — what a console reads to draw the account menu.
-     */
-    async getIamGetAccount(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getIamGetAccountRaw(initOverrides);
-    }
-
-    /**
-     * Returns everything a login screen needs to draw itself for one application: its branding, and each sign-in method it offers with the provider details that method needs.  The client secret is masked. Read before anyone has signed in, so it carries only what is safe for a browser to see.
-     * Returns everything a login screen needs to draw itself for one application: its branding, and each sign-in method it offers with the provider details that method needs.
-     */
-    async getIamGetAppLoginRaw(requestParameters: IamApiGetIamGetAppLoginRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamAnswer>> {
-        const queryParameters: any = {};
-
-        if (requestParameters['clientId'] != null) {
-            queryParameters['clientId'] = requestParameters['clientId'];
-        }
-
-        if (requestParameters['responseType'] != null) {
-            queryParameters['responseType'] = requestParameters['responseType'];
-        }
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/get-app-login`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IamAnswerFromJSON(jsonValue));
-    }
-
-    /**
-     * Returns everything a login screen needs to draw itself for one application: its branding, and each sign-in method it offers with the provider details that method needs.  The client secret is masked. Read before anyone has signed in, so it carries only what is safe for a browser to see.
-     * Returns everything a login screen needs to draw itself for one application: its branding, and each sign-in method it offers with the provider details that method needs.
-     */
-    async getIamGetAppLogin(requestParameters: IamApiGetIamGetAppLoginRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamAnswer> {
-        const response = await this.getIamGetAppLoginRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
      * Returns your organization\'s invitations, newest first — who has been asked to join, on what terms, and how many seats each invitation still has left.  You see your own organization\'s invitations and no one else\'s; which organization that is comes from your credentials, not from the request.
      * Returns your organization\'s invitations, newest first — who has been asked to join, on what terms, and how many seats each invitation still has left.
      */
@@ -2729,7 +2639,7 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Answers which organization a publishable key belongs to — what a service calls to attribute a request that arrived carrying a key shipped in a browser. This is the noun spelling of `/v1/iam/resolve-key`, the same handler at the address that replaces it; both answer while callers migrate.  It names an ORGANIZATION and never a person. No path through it loads or returns a user, so a key placed in client code cannot become a way to learn who anyone is — which is the whole reason this is a separate door from the one below.  A key that is expired, secret rather than publishable, or simply unknown all answer with the same sentence and a `code` saying which it was. Only a confidential service that has already proved it may resolve keys reads that code — there is no anonymous caller here to probe which keys exist — and telling those apart is what lets a holder be told to re-mint an expired key instead of hunting a configuration error.
+     * Answers which organization a publishable key belongs to — what a service calls to attribute a request that arrived carrying a key shipped in a browser. This is the noun spelling of `/v1/iam/resolve-key`, the same handler at the address that replaces it; both answer while callers migrate.  It names an ORGANIZATION and never a person. No path through it loads or returns a user, so a key placed in client code cannot become a way to learn who anyone is — which is the whole reason this is a separate endpoint from the one below.  A key that is expired, secret rather than publishable, or simply unknown all answer with the same sentence and a `code` saying which it was. Only a confidential service that has already proved it may resolve keys reads that code — there is no anonymous caller here to probe which keys exist — and telling those apart is what lets a holder be told to re-mint an expired key instead of hunting a configuration error.
      * Resolve a PUBLISHABLE key to the organization that owns it
      */
     async getIamKeysOrgRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -2759,7 +2669,7 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Answers which organization a publishable key belongs to — what a service calls to attribute a request that arrived carrying a key shipped in a browser. This is the noun spelling of `/v1/iam/resolve-key`, the same handler at the address that replaces it; both answer while callers migrate.  It names an ORGANIZATION and never a person. No path through it loads or returns a user, so a key placed in client code cannot become a way to learn who anyone is — which is the whole reason this is a separate door from the one below.  A key that is expired, secret rather than publishable, or simply unknown all answer with the same sentence and a `code` saying which it was. Only a confidential service that has already proved it may resolve keys reads that code — there is no anonymous caller here to probe which keys exist — and telling those apart is what lets a holder be told to re-mint an expired key instead of hunting a configuration error.
+     * Answers which organization a publishable key belongs to — what a service calls to attribute a request that arrived carrying a key shipped in a browser. This is the noun spelling of `/v1/iam/resolve-key`, the same handler at the address that replaces it; both answer while callers migrate.  It names an ORGANIZATION and never a person. No path through it loads or returns a user, so a key placed in client code cannot become a way to learn who anyone is — which is the whole reason this is a separate endpoint from the one below.  A key that is expired, secret rather than publishable, or simply unknown all answer with the same sentence and a `code` saying which it was. Only a confidential service that has already proved it may resolve keys reads that code — there is no anonymous caller here to probe which keys exist — and telling those apart is what lets a holder be told to re-mint an expired key instead of hunting a configuration error.
      * Resolve a PUBLISHABLE key to the organization that owns it
      */
     async getIamKeysOrg(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
@@ -2767,7 +2677,7 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Answers who a secret key belongs to — the owner and name a gateway needs to attribute and bill a request that arrived carrying an `sk-`. This is the noun spelling of `/v1/iam/get-user?accessKey=`, the same handler at the address that replaces it; both answer while callers migrate.  It resolves a KEY and nothing else. The verb it replaces also reads a user by `?id=`, and carrying that here would make this a second address for the user read — the exact thing being retired. Ask for a person by name at the user read; ask here only what a credential resolves to.  Requires a confidential caller: the resolver authenticates as an app, so a request without that credential resolves nothing rather than falling back to an anonymous lookup. An unresolvable key answers with a `code` distinguishing expired from wrong-door from unknown, so the holder can be told which one cure applies.
+     * Answers who a secret key belongs to — the owner and name a gateway needs to attribute and bill a request that arrived carrying an `sk-`. This is the noun spelling of `/v1/iam/get-user?accessKey=`, the same handler at the address that replaces it; both answer while callers migrate.  It resolves a KEY and nothing else. The verb it replaces also reads a user by `?id=`, and carrying that here would make this a second address for the user read — the exact thing being retired. Ask for a person by name at the user read; ask here only what a credential resolves to.  Requires a confidential caller: the resolver authenticates as an app, so a request without that credential resolves nothing rather than falling back to an anonymous lookup. An unresolvable key answers with a `code` distinguishing expired from wrong-endpoint from unknown, so the holder can be told which one cure applies.
      * Resolve a SECRET key to the principal it authenticates
      */
     async getIamKeysPrincipalRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -2797,7 +2707,7 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Answers who a secret key belongs to — the owner and name a gateway needs to attribute and bill a request that arrived carrying an `sk-`. This is the noun spelling of `/v1/iam/get-user?accessKey=`, the same handler at the address that replaces it; both answer while callers migrate.  It resolves a KEY and nothing else. The verb it replaces also reads a user by `?id=`, and carrying that here would make this a second address for the user read — the exact thing being retired. Ask for a person by name at the user read; ask here only what a credential resolves to.  Requires a confidential caller: the resolver authenticates as an app, so a request without that credential resolves nothing rather than falling back to an anonymous lookup. An unresolvable key answers with a `code` distinguishing expired from wrong-door from unknown, so the holder can be told which one cure applies.
+     * Answers who a secret key belongs to — the owner and name a gateway needs to attribute and bill a request that arrived carrying an `sk-`. This is the noun spelling of `/v1/iam/get-user?accessKey=`, the same handler at the address that replaces it; both answer while callers migrate.  It resolves a KEY and nothing else. The verb it replaces also reads a user by `?id=`, and carrying that here would make this a second address for the user read — the exact thing being retired. Ask for a person by name at the user read; ask here only what a credential resolves to.  Requires a confidential caller: the resolver authenticates as an app, so a request without that credential resolves nothing rather than falling back to an anonymous lookup. An unresolvable key answers with a `code` distinguishing expired from wrong-endpoint from unknown, so the holder can be told which one cure applies.
      * Resolve a SECRET key to the principal it authenticates
      */
     async getIamKeysPrincipal(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
@@ -4542,7 +4452,7 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Returns the organizations you can act in, the ones you belong to first and the rest after, newest first, narrowed by an optional query against the name or the display name.  Platform operators see every organization; everyone else sees their own. Pass the cursor from the previous page to continue; an empty cursor in the answer means there is nothing more.  THE SCOPE IS THE HANDLER\'S OWN, so it holds at every door. The Guard refuses a bearerless request before this runs, but the agent door carries a typed op to its handler with no middleware in front of it — a handler that read no principal would answer such a caller with the whole registry. Reading the principal here is what makes the answer the same one over both.
+     * Returns the organizations you can act in, the ones you belong to first and the rest after, newest first, narrowed by an optional query against the name or the display name.  Platform operators see every organization; everyone else sees their own. Pass the cursor from the previous page to continue; an empty cursor in the answer means there is nothing more.  THE SCOPE IS THE HANDLER\'S OWN, so it holds at every endpoint. The Guard refuses a bearerless request before this runs, but the MCP server carries a typed op to its handler with no middleware in front of it — a handler that read no principal would answer such a caller with the whole registry. Reading the principal here is what makes the answer the same one over both.
      * Returns the organizations you can act in, the ones you belong to first and the rest after, newest first, narrowed by an optional query against the name or the display name.
      */
     async listOrganizationsRaw(requestParameters: IamApiListOrganizationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamListOrganizationsOutput>> {
@@ -4588,7 +4498,7 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Returns the organizations you can act in, the ones you belong to first and the rest after, newest first, narrowed by an optional query against the name or the display name.  Platform operators see every organization; everyone else sees their own. Pass the cursor from the previous page to continue; an empty cursor in the answer means there is nothing more.  THE SCOPE IS THE HANDLER\'S OWN, so it holds at every door. The Guard refuses a bearerless request before this runs, but the agent door carries a typed op to its handler with no middleware in front of it — a handler that read no principal would answer such a caller with the whole registry. Reading the principal here is what makes the answer the same one over both.
+     * Returns the organizations you can act in, the ones you belong to first and the rest after, newest first, narrowed by an optional query against the name or the display name.  Platform operators see every organization; everyone else sees their own. Pass the cursor from the previous page to continue; an empty cursor in the answer means there is nothing more.  THE SCOPE IS THE HANDLER\'S OWN, so it holds at every endpoint. The Guard refuses a bearerless request before this runs, but the MCP server carries a typed op to its handler with no middleware in front of it — a handler that read no principal would answer such a caller with the whole registry. Reading the principal here is what makes the answer the same one over both.
      * Returns the organizations you can act in, the ones you belong to first and the rest after, newest first, narrowed by an optional query against the name or the display name.
      */
     async listOrganizations(requestParameters: IamApiListOrganizationsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamListOrganizationsOutput> {
@@ -5122,44 +5032,6 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Turns a factor off, so sign-in stops asking for it. Naming no factor turns off ALL of them — the reset path. People may do this for themselves; doing it for somebody else takes an administrator, which is what makes it the way back in when a phone is lost.  The recovery codes go with the last factor: they are the way past a challenge, so keeping them alive for an account with nothing to challenge would leave a standing credential behind.
-     * Turns a factor off, so sign-in stops asking for it.
-     */
-    async postIamDeleteMfaRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/delete-mfa`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Turns a factor off, so sign-in stops asking for it. Naming no factor turns off ALL of them — the reset path. People may do this for themselves; doing it for somebody else takes an administrator, which is what makes it the way back in when a phone is lost.  The recovery codes go with the last factor: they are the way past a challenge, so keeping them alive for an account with nothing to challenge would leave a standing credential behind.
-     * Turns a factor off, so sign-in stops asking for it.
-     */
-    async postIamDeleteMfa(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postIamDeleteMfaRaw(initOverrides);
-    }
-
-    /**
      * Issues an invitation to join your organization — the code or link a new member redeems, with the role they arrive holding and the date it stops working. A name already used in the organization is refused.
      * Issues an invitation to join your organization — the code or link a new member redeems, with the role they arrive holding and the date it stops working.
      */
@@ -5206,44 +5078,6 @@ export class IamApi extends runtime.BaseAPI {
     async postIamInvitations(requestParameters: IamApiPostIamInvitationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamInvitation> {
         const response = await this.postIamInvitationsRaw(requestParameters, initOverrides);
         return await response.value();
-    }
-
-    /**
-     * Mints an access token for the `?id=<owner>/<name>` target user (optional `?aud=` resource, RFC 8707), issued by the authenticated + allow-listed confidential client. The token\'s subject + owner are the TARGET USER\'s, so a resource server scopes on the validated owner claim to the user\'s tenant — indistinguishable from a token the user obtained directly. Response is the camelCase `{accessToken, expiresIn}` body identity.ts consumes. Equivalent to the RFC 8693 token-exchange grant, minus the subject_token proof (the console has the user\'s id, not a token) — the reason this compat shim exists.
-     * Mints an access token for the `?id=<owner>/<name>` target user (optional `?aud=` resource, RFC 8707), issued by the authenticated + allow-listed confidential client.
-     */
-    async postIamIssueUserTokenRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/issue-user-token`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Mints an access token for the `?id=<owner>/<name>` target user (optional `?aud=` resource, RFC 8707), issued by the authenticated + allow-listed confidential client. The token\'s subject + owner are the TARGET USER\'s, so a resource server scopes on the validated owner claim to the user\'s tenant — indistinguishable from a token the user obtained directly. Response is the camelCase `{accessToken, expiresIn}` body identity.ts consumes. Equivalent to the RFC 8693 token-exchange grant, minus the subject_token proof (the console has the user\'s id, not a token) — the reason this compat shim exists.
-     * Mints an access token for the `?id=<owner>/<name>` target user (optional `?aud=` resource, RFC 8707), issued by the authenticated + allow-listed confidential client.
-     */
-    async postIamIssueUserToken(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postIamIssueUserTokenRaw(initOverrides);
     }
 
     /**
@@ -5521,44 +5355,6 @@ export class IamApi extends runtime.BaseAPI {
      */
     async postIamMfaSetupInitiate(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.postIamMfaSetupInitiateRaw(initOverrides);
-    }
-
-    /**
-     * (re)generates the target user\'s key of the requested TYPE and returns it once, over the shared authorizeMinter + mintTarget seam. `?type=secret` (the default) yields the confidential sk-; `?type=publishable` yields the pk- that is safe to ship in client JS and resolves to an org, never a principal.  It writes the schema.Key row that the resolvers actually read. schema.User.AccessKey is not a credential and nothing resolves it, so a key stamped there would authenticate nobody.
-     * (re)generates the target user\'s key of the requested TYPE and returns it once, over the shared authorizeMinter + mintTarget seam.
-     */
-    async postIamMintUserKeysRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/mint-user-keys`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * (re)generates the target user\'s key of the requested TYPE and returns it once, over the shared authorizeMinter + mintTarget seam. `?type=secret` (the default) yields the confidential sk-; `?type=publishable` yields the pk- that is safe to ship in client JS and resolves to an org, never a principal.  It writes the schema.Key row that the resolvers actually read. schema.User.AccessKey is not a credential and nothing resolves it, so a key stamped there would authenticate nobody.
-     * (re)generates the target user\'s key of the requested TYPE and returns it once, over the shared authorizeMinter + mintTarget seam.
-     */
-    async postIamMintUserKeys(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postIamMintUserKeysRaw(initOverrides);
     }
 
     /**
@@ -6173,44 +5969,6 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Clears the target user\'s key of the requested TYPE (immediate revoke). Scoped by the same `?type` field mint takes, so revoking the browser key leaves the server key working. A secret key\'s stored value is the sk- in its schema.Key row.
-     * Clears the target user\'s key of the requested TYPE (immediate revoke).
-     */
-    async postIamRevokeUserKeysRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/revoke-user-keys`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Clears the target user\'s key of the requested TYPE (immediate revoke). Scoped by the same `?type` field mint takes, so revoking the browser key leaves the server key working. A secret key\'s stored value is the sk- in its schema.Key row.
-     * Clears the target user\'s key of the requested TYPE (immediate revoke).
-     */
-    async postIamRevokeUserKeys(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postIamRevokeUserKeysRaw(initOverrides);
-    }
-
-    /**
      * Makes a role — a named group of people that permissions are granted to. Granting to a role rather than to each person is what keeps access correct as your team changes: add someone to the role and they inherit everything it can do. A name already used in your organization is refused.
      * Makes a role — a named group of people that permissions are granted to.
      */
@@ -6298,44 +6056,6 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Validates the request and asks otp to get a code to the person. The request fields are read via fiber\'s FormValue — the escape hatch zip exposes for form bodies (multipart or urlencoded) — since the typed JSON Bind does not apply here. v1 also accepts countryCode/method/checkUser/captchaType; iam ignores them (the captcha/forget/MFA flows those drive are not ported), and CAPTCHA verification is likewise not enforced — iam models no captcha provider — so the code is issued once the destination and application validate.
-     * Validates the request and asks otp to get a code to the person.
-     */
-    async postIamSendVerificationCodeRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/send-verification-code`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Validates the request and asks otp to get a code to the person. The request fields are read via fiber\'s FormValue — the escape hatch zip exposes for form bodies (multipart or urlencoded) — since the typed JSON Bind does not apply here. v1 also accepts countryCode/method/checkUser/captchaType; iam ignores them (the captcha/forget/MFA flows those drive are not ported), and CAPTCHA verification is likewise not enforced — iam models no captcha provider — so the code is issued once the destination and application validate.
-     * Validates the request and asks otp to get a code to the person.
-     */
-    async postIamSendVerificationCode(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postIamSendVerificationCodeRaw(initOverrides);
-    }
-
-    /**
      * Makes a service account — an identity for a program rather than a person, for a script, a bot or a deployment that has to authenticate on its own.  It comes back with its first key, and the secret half is shown ONCE, here. There is no way to read it again; if you lose it, rotate.
      * Makes a service account — an identity for a program rather than a person, for a script, a bot or a deployment that has to authenticate on its own.
      */
@@ -6417,44 +6137,6 @@ export class IamApi extends runtime.BaseAPI {
      */
     async postIamServiceAccountsByNameKeys(requestParameters: IamApiPostIamServiceAccountsByNameKeysRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.postIamServiceAccountsByNameKeysRaw(requestParameters, initOverrides);
-    }
-
-    /**
-     * Picks which second factor an account is asked for first when it has more than one. Only a factor the account actually holds: storing an unheld one told the login gate \"MFA is on\" — factor.Enabled reads that column — while leaving it nothing to ask for, so the sign-in required the password alone.
-     * Picks which second factor an account is asked for first when it has more than one.
-     */
-    async postIamSetPreferredMfaRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/set-preferred-mfa`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Picks which second factor an account is asked for first when it has more than one. Only a factor the account actually holds: storing an unheld one told the login gate \"MFA is on\" — factor.Enabled reads that column — while leaving it nothing to ask for, so the sign-in required the password alone.
-     * Picks which second factor an account is asked for first when it has more than one.
-     */
-    async postIamSetPreferredMfa(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postIamSetPreferredMfaRaw(initOverrides);
     }
 
     /**
@@ -6607,44 +6289,6 @@ export class IamApi extends runtime.BaseAPI {
      */
     async postIamUnlink(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.postIamUnlinkRaw(initOverrides);
-    }
-
-    /**
-     * Saves the calling person\'s own settings and returns the full set afterwards. Send only the settings you are changing — the rest are kept, so two screens can save at once without one undoing the other.
-     * Saves the calling person\'s own settings and returns the full set afterwards.
-     */
-    async postIamUpdatePreferencesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/iam/update-preferences`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Saves the calling person\'s own settings and returns the full set afterwards. Send only the settings you are changing — the rest are kept, so two screens can save at once without one undoing the other.
-     * Saves the calling person\'s own settings and returns the full set afterwards.
-     */
-    async postIamUpdatePreferences(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postIamUpdatePreferencesRaw(initOverrides);
     }
 
     /**

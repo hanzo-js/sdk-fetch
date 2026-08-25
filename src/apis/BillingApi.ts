@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay routes, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -21,12 +21,14 @@ import type {
   AlertSpec,
   BillingAccount,
   CapVerdict,
+  Charged,
   Collected,
   CreditBalance,
   CreditGrants,
   CryptoAsset,
   CryptoDeposit,
   CryptoOptions,
+  Detachment,
   FinanceLedgerEntry,
   Holder,
   Invoice,
@@ -36,11 +38,13 @@ import type {
   PaymentConfig,
   Payout,
   RaiseIn,
+  Recharge,
   Rollup,
   Subscription,
   SubscriptionRef,
   Subscriptions,
   Tier,
+  TopupIn,
   Transactions,
   WireInstructions,
 } from '../models/index.js';
@@ -57,6 +61,8 @@ import {
     BillingAccountToJSON,
     CapVerdictFromJSON,
     CapVerdictToJSON,
+    ChargedFromJSON,
+    ChargedToJSON,
     CollectedFromJSON,
     CollectedToJSON,
     CreditBalanceFromJSON,
@@ -69,6 +75,8 @@ import {
     CryptoDepositToJSON,
     CryptoOptionsFromJSON,
     CryptoOptionsToJSON,
+    DetachmentFromJSON,
+    DetachmentToJSON,
     FinanceLedgerEntryFromJSON,
     FinanceLedgerEntryToJSON,
     HolderFromJSON,
@@ -87,6 +95,8 @@ import {
     PayoutToJSON,
     RaiseInFromJSON,
     RaiseInToJSON,
+    RechargeFromJSON,
+    RechargeToJSON,
     RollupFromJSON,
     RollupToJSON,
     SubscriptionFromJSON,
@@ -97,6 +107,8 @@ import {
     SubscriptionsToJSON,
     TierFromJSON,
     TierToJSON,
+    TopupInFromJSON,
+    TopupInToJSON,
     TransactionsFromJSON,
     TransactionsToJSON,
     WireInstructionsFromJSON,
@@ -176,6 +188,16 @@ export interface BillingApiPostBillingCryptoDepositRequest {
 
 export interface BillingApiPostBillingModeRequest {
     modeIn: ModeIn;
+}
+
+export interface BillingApiPostBillingTopupRequest {
+    topupIn: TopupIn;
+    xIdempotencyKey?: string;
+}
+
+export interface BillingApiPostBillingTopupTokenRequest {
+    topupIn: TopupIn;
+    xIdempotencyKey?: string;
 }
 
 export interface BillingApiRaiseInvoiceRequest {
@@ -301,8 +323,8 @@ export class BillingApi extends runtime.BaseAPI {
     }
 
     /**
-     * Deletes a budget the caller\'s org owns and answers 204.  Removing a cap REMOVES A CEILING, so it takes the same bar as setting one: a validated org admin, the platform SuperAdmin, or the trusted in-process service token. A member who could delete the org\'s cap would have unbounded spend.  A cap this org does not own is NOT FOUND rather than refused — the same answer whether the id is unknown or belongs to another customer — so an id cannot be probed for existence by trying to delete it.
-     * Remove one spend cap
+     * Removes one of the caller\'s spend caps and answers 204.  Removing a cap RAISES what the org may spend, so it takes the same authority setting one does. The caps that remain still bind: this drops one, never the whole policy.
+     * Removes one of the caller\'s spend caps and answers 204.
      */
     async deleteBillingAlertsByIdRaw(requestParameters: BillingApiDeleteBillingAlertsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['id'] == null) {
@@ -339,18 +361,18 @@ export class BillingApi extends runtime.BaseAPI {
     }
 
     /**
-     * Deletes a budget the caller\'s org owns and answers 204.  Removing a cap REMOVES A CEILING, so it takes the same bar as setting one: a validated org admin, the platform SuperAdmin, or the trusted in-process service token. A member who could delete the org\'s cap would have unbounded spend.  A cap this org does not own is NOT FOUND rather than refused — the same answer whether the id is unknown or belongs to another customer — so an id cannot be probed for existence by trying to delete it.
-     * Remove one spend cap
+     * Removes one of the caller\'s spend caps and answers 204.  Removing a cap RAISES what the org may spend, so it takes the same authority setting one does. The caps that remain still bind: this drops one, never the whole policy.
+     * Removes one of the caller\'s spend caps and answers 204.
      */
     async deleteBillingAlertsById(requestParameters: BillingApiDeleteBillingAlertsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.deleteBillingAlertsByIdRaw(requestParameters, initOverrides);
     }
 
     /**
-     * Detaches the method at the processor and drops the row.  A method the caller does not own is NOT FOUND rather than refused — the same answer whether the id names nothing or names somebody else\'s card — so an id cannot be probed for existence.  A platform operator or the trusted in-process service token may act on any subject inside the org; everyone else may only remove their own.
-     * Remove one saved card or account
+     * Removes one card or account the caller has saved.  It detaches only the CALLER\'S own — the wallet this request bills from, resolved server-side — so an id belonging to another customer of the same org is not something this operation can reach. A platform or service caller detaches on the subject\'s behalf, and that authority is decided HERE, where the credential is, and travels as a value: authority decided twice is authority that eventually disagrees with itself.  The card is vaulted at the processor, so what goes is our token for it.
+     * Removes one card or account the caller has saved.
      */
-    async deleteBillingMethodsByIdRaw(requestParameters: BillingApiDeleteBillingMethodsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async deleteBillingMethodsByIdRaw(requestParameters: BillingApiDeleteBillingMethodsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Detachment>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -381,22 +403,23 @@ export class BillingApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => DetachmentFromJSON(jsonValue));
     }
 
     /**
-     * Detaches the method at the processor and drops the row.  A method the caller does not own is NOT FOUND rather than refused — the same answer whether the id names nothing or names somebody else\'s card — so an id cannot be probed for existence.  A platform operator or the trusted in-process service token may act on any subject inside the org; everyone else may only remove their own.
-     * Remove one saved card or account
+     * Removes one card or account the caller has saved.  It detaches only the CALLER\'S own — the wallet this request bills from, resolved server-side — so an id belonging to another customer of the same org is not something this operation can reach. A platform or service caller detaches on the subject\'s behalf, and that authority is decided HERE, where the credential is, and travels as a value: authority decided twice is authority that eventually disagrees with itself.  The card is vaulted at the processor, so what goes is our token for it.
+     * Removes one card or account the caller has saved.
      */
-    async deleteBillingMethodsById(requestParameters: BillingApiDeleteBillingMethodsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.deleteBillingMethodsByIdRaw(requestParameters, initOverrides);
+    async deleteBillingMethodsById(requestParameters: BillingApiDeleteBillingMethodsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Detachment> {
+        const response = await this.deleteBillingMethodsByIdRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Detaches the method at the processor and drops the row.  A method the caller does not own is NOT FOUND rather than refused — the same answer whether the id names nothing or names somebody else\'s card — so an id cannot be probed for existence.  A platform operator or the trusted in-process service token may act on any subject inside the org; everyone else may only remove their own.
-     * Remove one saved card or account
+     * DetachPortalMethod is DetachMethod at the address a hosted checkout addresses it by. One set of rows, two spellings: a card detached at either is gone from both, because there is one store behind them.
+     * DetachPortalMethod is DetachMethod at the address a hosted checkout addresses it by.
      */
-    async deleteBillingPortalMethodsByIdRaw(requestParameters: BillingApiDeleteBillingPortalMethodsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async deleteBillingPortalMethodsByIdRaw(requestParameters: BillingApiDeleteBillingPortalMethodsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Detachment>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -427,15 +450,16 @@ export class BillingApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => DetachmentFromJSON(jsonValue));
     }
 
     /**
-     * Detaches the method at the processor and drops the row.  A method the caller does not own is NOT FOUND rather than refused — the same answer whether the id names nothing or names somebody else\'s card — so an id cannot be probed for existence.  A platform operator or the trusted in-process service token may act on any subject inside the org; everyone else may only remove their own.
-     * Remove one saved card or account
+     * DetachPortalMethod is DetachMethod at the address a hosted checkout addresses it by. One set of rows, two spellings: a card detached at either is gone from both, because there is one store behind them.
+     * DetachPortalMethod is DetachMethod at the address a hosted checkout addresses it by.
      */
-    async deleteBillingPortalMethodsById(requestParameters: BillingApiDeleteBillingPortalMethodsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.deleteBillingPortalMethodsByIdRaw(requestParameters, initOverrides);
+    async deleteBillingPortalMethodsById(requestParameters: BillingApiDeleteBillingPortalMethodsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Detachment> {
+        const response = await this.deleteBillingPortalMethodsByIdRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
@@ -1842,10 +1866,10 @@ export class BillingApi extends runtime.BaseAPI {
     }
 
     /**
-     * Sweeps every organization and, for those with auto-recharge on whose available balance has dropped below their own threshold, charges the default card and credits the balance.  It charges cards across EVERY tenant, so it is platform authority only — never an org owner, who could otherwise sweep-charge saved cards estate-wide. Its caller is a schedule, not a person.  `orgs` is the population considered, not the row count: that difference is how a reader tells \'nobody was below threshold\' from \'the sweep never ran\'. One org\'s failure is reported in its own row and does not stop the rest.
-     * Recharge every org that has fallen below its threshold
+     * Sweeps every org\'s auto-recharge and answers what it did.  PLATFORM AUTHORITY ONLY. It charges saved cards across every tenant, so an org owner reaching it could sweep-charge the estate; a caller without it is refused before anything is charged.  The answer explains a sweep that charged nobody as readily as one that charged: it names how many orgs were considered and how many needed charging, with a row each.
+     * Sweeps every org\'s auto-recharge and answers what it did.
      */
-    async postBillingRechargeRunAllRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postBillingRechargeRunAllRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Recharge>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -1868,15 +1892,16 @@ export class BillingApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => RechargeFromJSON(jsonValue));
     }
 
     /**
-     * Sweeps every organization and, for those with auto-recharge on whose available balance has dropped below their own threshold, charges the default card and credits the balance.  It charges cards across EVERY tenant, so it is platform authority only — never an org owner, who could otherwise sweep-charge saved cards estate-wide. Its caller is a schedule, not a person.  `orgs` is the population considered, not the row count: that difference is how a reader tells \'nobody was below threshold\' from \'the sweep never ran\'. One org\'s failure is reported in its own row and does not stop the rest.
-     * Recharge every org that has fallen below its threshold
+     * Sweeps every org\'s auto-recharge and answers what it did.  PLATFORM AUTHORITY ONLY. It charges saved cards across every tenant, so an org owner reaching it could sweep-charge the estate; a caller without it is refused before anything is charged.  The answer explains a sweep that charged nobody as readily as one that charged: it names how many orgs were considered and how many needed charging, with a row each.
+     * Sweeps every org\'s auto-recharge and answers what it did.
      */
-    async postBillingRechargeRunAll(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postBillingRechargeRunAllRaw(initOverrides);
+    async postBillingRechargeRunAll(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Recharge> {
+        const response = await this.postBillingRechargeRunAllRaw(initOverrides);
+        return await response.value();
     }
 
     /**
@@ -1918,13 +1943,26 @@ export class BillingApi extends runtime.BaseAPI {
     }
 
     /**
-     * Charges a saved card and credits the caller\'s prepaid wallet.  The method must belong to the caller: one that does not is NOT FOUND rather than refused, so an id cannot be probed for existence. A saved row whose card is no longer chargeable is 422 — add the card again — which is a different thing to do than a decline (402) or a bad amount (400).  Retries behave exactly as they do for a token top-up: same key, same replay, same exactly-once at the processor.
-     * Add funds with a card already on file
+     * Charges a card the caller already saved and credits the balance. Same receipt and the same retry safety as the token endpoint; the only difference is which card, so a caller topping up from a saved method never re-enters one.
+     * Charges a card the caller already saved and credits the balance.
      */
-    async postBillingTopupRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postBillingTopupRaw(requestParameters: BillingApiPostBillingTopupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Charged>> {
+        if (requestParameters['topupIn'] == null) {
+            throw new runtime.RequiredError(
+                'topupIn',
+                'Required parameter "topupIn" was null or undefined when calling postBillingTopup().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (requestParameters['xIdempotencyKey'] != null) {
+            headerParameters['X-Idempotency-Key'] = String(requestParameters['xIdempotencyKey']);
+        }
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -1942,27 +1980,42 @@ export class BillingApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: TopupInToJSON(requestParameters['topupIn']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => ChargedFromJSON(jsonValue));
     }
 
     /**
-     * Charges a saved card and credits the caller\'s prepaid wallet.  The method must belong to the caller: one that does not is NOT FOUND rather than refused, so an id cannot be probed for existence. A saved row whose card is no longer chargeable is 422 — add the card again — which is a different thing to do than a decline (402) or a bad amount (400).  Retries behave exactly as they do for a token top-up: same key, same replay, same exactly-once at the processor.
-     * Add funds with a card already on file
+     * Charges a card the caller already saved and credits the balance. Same receipt and the same retry safety as the token endpoint; the only difference is which card, so a caller topping up from a saved method never re-enters one.
+     * Charges a card the caller already saved and credits the balance.
      */
-    async postBillingTopup(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postBillingTopupRaw(initOverrides);
+    async postBillingTopup(requestParameters: BillingApiPostBillingTopupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Charged> {
+        const response = await this.postBillingTopupRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Charges a card token from the browser\'s payment SDK and credits the caller\'s prepaid wallet — the cold-customer path, where nothing has to be saved first.  The wallet credited is the CALLER\'S OWN, resolved from their signed identity. It is never a value in the request: a client-set selector is how a customer once topped up one account while their usage drew from another.  `X-Idempotency-Key` makes a retry safe. With one, a repeat replays the first result; without one, the same amount from the same subject inside a short window does too. The key reaches the processor as well as our own guard, so the charge is exactly-once at the gateway even if our guard store is down.  The amount is bounded server-side. A decline is 402 and nothing is credited.
-     * Add funds with a single-use card token
+     * Charges a single-use card token and credits the caller\'s balance.  The token comes from the payment form and is vaulted as part of the charge, so no card number reaches this service and none is stored here. The receipt names the ledger entry, the new balance, and the PROCESSOR\'s own reference — which is the only field that proves money moved at the gateway rather than only in our ledger.  Retry-safe on X-Idempotency-Key: the same key settles one charge and returns the first receipt.
+     * Charges a single-use card token and credits the caller\'s balance.
      */
-    async postBillingTopupTokenRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postBillingTopupTokenRaw(requestParameters: BillingApiPostBillingTopupTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Charged>> {
+        if (requestParameters['topupIn'] == null) {
+            throw new runtime.RequiredError(
+                'topupIn',
+                'Required parameter "topupIn" was null or undefined when calling postBillingTopupToken().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (requestParameters['xIdempotencyKey'] != null) {
+            headerParameters['X-Idempotency-Key'] = String(requestParameters['xIdempotencyKey']);
+        }
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -1980,17 +2033,19 @@ export class BillingApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: TopupInToJSON(requestParameters['topupIn']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => ChargedFromJSON(jsonValue));
     }
 
     /**
-     * Charges a card token from the browser\'s payment SDK and credits the caller\'s prepaid wallet — the cold-customer path, where nothing has to be saved first.  The wallet credited is the CALLER\'S OWN, resolved from their signed identity. It is never a value in the request: a client-set selector is how a customer once topped up one account while their usage drew from another.  `X-Idempotency-Key` makes a retry safe. With one, a repeat replays the first result; without one, the same amount from the same subject inside a short window does too. The key reaches the processor as well as our own guard, so the charge is exactly-once at the gateway even if our guard store is down.  The amount is bounded server-side. A decline is 402 and nothing is credited.
-     * Add funds with a single-use card token
+     * Charges a single-use card token and credits the caller\'s balance.  The token comes from the payment form and is vaulted as part of the charge, so no card number reaches this service and none is stored here. The receipt names the ledger entry, the new balance, and the PROCESSOR\'s own reference — which is the only field that proves money moved at the gateway rather than only in our ledger.  Retry-safe on X-Idempotency-Key: the same key settles one charge and returns the first receipt.
+     * Charges a single-use card token and credits the caller\'s balance.
      */
-    async postBillingTopupToken(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postBillingTopupTokenRaw(initOverrides);
+    async postBillingTopupToken(requestParameters: BillingApiPostBillingTopupTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Charged> {
+        const response = await this.postBillingTopupTokenRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**

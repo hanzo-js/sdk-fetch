@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay routes, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -1338,7 +1338,7 @@ export class MarketingApi extends runtime.BaseAPI {
     }
 
     /**
-     * Publishes a post NOW, synchronously, whatever its schedule. No social connector is wired today, so every channel answers an honest 501 naming the seam a real one would plug into, and the post is recorded failed with that exact reason — never a faked \"published\".
+     * Publishes a post NOW, synchronously, whatever its schedule. No social connector is wired today, so every channel answers an honest 501 naming the client a real one would plug into, and the post is recorded failed with that exact reason — never a faked \"published\".
      * Publishes a post NOW, synchronously, whatever its schedule.
      */
     async postMarketingCalendarByIdPublishRaw(requestParameters: MarketingApiPostMarketingCalendarByIdPublishRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CalendarPost>> {
@@ -1376,7 +1376,7 @@ export class MarketingApi extends runtime.BaseAPI {
     }
 
     /**
-     * Publishes a post NOW, synchronously, whatever its schedule. No social connector is wired today, so every channel answers an honest 501 naming the seam a real one would plug into, and the post is recorded failed with that exact reason — never a faked \"published\".
+     * Publishes a post NOW, synchronously, whatever its schedule. No social connector is wired today, so every channel answers an honest 501 naming the client a real one would plug into, and the post is recorded failed with that exact reason — never a faked \"published\".
      * Publishes a post NOW, synchronously, whatever its schedule.
      */
     async postMarketingCalendarByIdPublish(requestParameters: MarketingApiPostMarketingCalendarByIdPublishRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CalendarPost> {

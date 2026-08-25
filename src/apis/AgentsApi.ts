@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay routes, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -25,7 +25,11 @@ import type {
   CodingStartIn,
   CodingStarted,
   ControlDrain,
+  ControlIn,
+  ControlResult,
   CreateAgentIn,
+  EventIn,
+  EventView,
   MetricsView,
   PatchSessionIn,
   PatchTargetIn,
@@ -65,8 +69,16 @@ import {
     CodingStartedToJSON,
     ControlDrainFromJSON,
     ControlDrainToJSON,
+    ControlInFromJSON,
+    ControlInToJSON,
+    ControlResultFromJSON,
+    ControlResultToJSON,
     CreateAgentInFromJSON,
     CreateAgentInToJSON,
+    EventInFromJSON,
+    EventInToJSON,
+    EventViewFromJSON,
+    EventViewToJSON,
     MetricsViewFromJSON,
     MetricsViewToJSON,
     PatchSessionInFromJSON,
@@ -200,22 +212,27 @@ export interface AgentsApiPostAgentsSessionsRequest {
 
 export interface AgentsApiPostAgentsSessionsByIdEventsRequest {
     id: string;
+    eventIn: EventIn;
 }
 
 export interface AgentsApiPostAgentsSessionsByIdMessageRequest {
     id: string;
+    controlIn: ControlIn;
 }
 
 export interface AgentsApiPostAgentsSessionsByIdPauseRequest {
     id: string;
+    controlIn: ControlIn;
 }
 
 export interface AgentsApiPostAgentsSessionsByIdResumeRequest {
     id: string;
+    controlIn: ControlIn;
 }
 
 export interface AgentsApiPostAgentsSessionsByIdStopRequest {
     id: string;
+    controlIn: ControlIn;
 }
 
 export interface AgentsApiPostAgentsTargetsRequest {
@@ -1453,7 +1470,7 @@ export class AgentsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Runs a coding task on a repository: clones it into a sandbox, lets a model read and edit the code, run the tests, and push the work to a branch. Say the thing you want done — \"fix the failing auth test in hanzoai/cloud\" — and the run infers the repo, the branch and the plan. No prefix, no ceremony.  It answers 202 with the run\'s handle the moment the run is ADMITTED — not when it finishes. A coding run takes minutes; holding a request open for one would tie a connection to a model loop and give the caller nothing it cannot get better from the session stream.  The handle is a session id, and that is deliberate: the session is already the run\'s durable record and its live stream (/v1/agents/sessions/{id}/stream), so this door does not grow a progress endpoint, a status endpoint or a cancel endpoint of its own. One way to watch a run, whoever started it.  It is also how work CONTINUES. Pass an earlier run\'s session as `after` and this one starts from where that one stopped, so \"now add tests for it\" builds on the branch already pushed instead of a fresh clone. The follow-up still gets its own branch and its own session — one run, one branch, always reviewable on its own.
+     * Runs a coding task on a repository: clones it into a sandbox, lets a model read and edit the code, run the tests, and push the work to a branch. Say the thing you want done — \"fix the failing auth test in hanzoai/cloud\" — and the run infers the repo, the branch and the plan. No prefix, no ceremony.  It answers 202 with the run\'s handle the moment the run is ADMITTED — not when it finishes. A coding run takes minutes; holding a request open for one would tie a connection to a model loop and give the caller nothing it cannot get better from the session stream.  The handle is a session id, and that is deliberate: the session is already the run\'s durable record and its live stream (/v1/agents/sessions/{id}/stream), so this op does not grow a progress endpoint, a status endpoint or a cancel endpoint of its own. One way to watch a run, whoever started it.  It is also how work CONTINUES. Pass an earlier run\'s session as `after` and this one starts from where that one stopped, so \"now add tests for it\" builds on the branch already pushed instead of a fresh clone. The follow-up still gets its own branch and its own session — one run, one branch, always reviewable on its own.
      * Start one autonomous coding run against a repo in the caller\'s org
      */
     async postAgentsCodingRaw(requestParameters: AgentsApiPostAgentsCodingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CodingStarted>> {
@@ -1493,7 +1510,7 @@ export class AgentsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Runs a coding task on a repository: clones it into a sandbox, lets a model read and edit the code, run the tests, and push the work to a branch. Say the thing you want done — \"fix the failing auth test in hanzoai/cloud\" — and the run infers the repo, the branch and the plan. No prefix, no ceremony.  It answers 202 with the run\'s handle the moment the run is ADMITTED — not when it finishes. A coding run takes minutes; holding a request open for one would tie a connection to a model loop and give the caller nothing it cannot get better from the session stream.  The handle is a session id, and that is deliberate: the session is already the run\'s durable record and its live stream (/v1/agents/sessions/{id}/stream), so this door does not grow a progress endpoint, a status endpoint or a cancel endpoint of its own. One way to watch a run, whoever started it.  It is also how work CONTINUES. Pass an earlier run\'s session as `after` and this one starts from where that one stopped, so \"now add tests for it\" builds on the branch already pushed instead of a fresh clone. The follow-up still gets its own branch and its own session — one run, one branch, always reviewable on its own.
+     * Runs a coding task on a repository: clones it into a sandbox, lets a model read and edit the code, run the tests, and push the work to a branch. Say the thing you want done — \"fix the failing auth test in hanzoai/cloud\" — and the run infers the repo, the branch and the plan. No prefix, no ceremony.  It answers 202 with the run\'s handle the moment the run is ADMITTED — not when it finishes. A coding run takes minutes; holding a request open for one would tie a connection to a model loop and give the caller nothing it cannot get better from the session stream.  The handle is a session id, and that is deliberate: the session is already the run\'s durable record and its live stream (/v1/agents/sessions/{id}/stream), so this op does not grow a progress endpoint, a status endpoint or a cancel endpoint of its own. One way to watch a run, whoever started it.  It is also how work CONTINUES. Pass an earlier run\'s session as `after` and this one starts from where that one stopped, so \"now add tests for it\" builds on the branch already pushed instead of a fresh clone. The follow-up still gets its own branch and its own session — one run, one branch, always reviewable on its own.
      * Start one autonomous coding run against a repo in the caller\'s org
      */
     async postAgentsCoding(requestParameters: AgentsApiPostAgentsCodingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CodingStarted> {
@@ -1551,10 +1568,10 @@ export class AgentsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Records a message, tool-call, spawn, log, status or control turn against the session and answers 201 with the stored event, including the monotonic `seq` the store assigned — the cursor every reader pages from. The same turn is fanned out live to every stream subscriber watching that session\'s tree.  Requires a validated principal carrying an org, and the session must already exist IN THAT ORG: an id belonging to another tenant is a 404 exactly like one that does not exist, so the log can never be written across a tenant boundary. `actor` defaults to the calling principal when the body names none. `kind` must be one of the six above, and `payload` must be valid JSON of at most 64 KiB.  The payload is scanned for credentials BEFORE it is stored, and a hit REFUSES the write with 422 rather than redacting it: {status, code: \"secret_in_transcript\", error, findings:[…]}, each finding naming the rule, severity, line, a masked preview and a SHA-256 fingerprint the author can match against the value they rotate. The detected value itself appears nowhere in that body, because it was never stored. That in-band findings array is the reason this operation cannot be typed.
-     * Append one turn to a session\'s ordered log.
+     * Records one turn of a session\'s transcript and answers 201 with it.  THE TURN IS SCANNED BEFORE IT IS STORED. The same engine the code-security surface runs reads the payload at this boundary, and a credential in it refuses the append with 422 rather than redacting it — a redacted transcript is one that still had the secret in it once, and this way the author learns which value to rotate. The refusal carries every finding: the rule, the severity, the line, a MASKED preview and the fingerprint. The secret is never in the answer.
+     * Records one turn of a session\'s transcript and answers 201 with it.
      */
-    async postAgentsSessionsByIdEventsRaw(requestParameters: AgentsApiPostAgentsSessionsByIdEventsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postAgentsSessionsByIdEventsRaw(requestParameters: AgentsApiPostAgentsSessionsByIdEventsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<EventView>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -1562,9 +1579,18 @@ export class AgentsApi extends runtime.BaseAPI {
             );
         }
 
+        if (requestParameters['eventIn'] == null) {
+            throw new runtime.RequiredError(
+                'eventIn',
+                'Required parameter "eventIn" was null or undefined when calling postAgentsSessionsByIdEvents().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -1583,24 +1609,26 @@ export class AgentsApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: EventInToJSON(requestParameters['eventIn']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => EventViewFromJSON(jsonValue));
     }
 
     /**
-     * Records a message, tool-call, spawn, log, status or control turn against the session and answers 201 with the stored event, including the monotonic `seq` the store assigned — the cursor every reader pages from. The same turn is fanned out live to every stream subscriber watching that session\'s tree.  Requires a validated principal carrying an org, and the session must already exist IN THAT ORG: an id belonging to another tenant is a 404 exactly like one that does not exist, so the log can never be written across a tenant boundary. `actor` defaults to the calling principal when the body names none. `kind` must be one of the six above, and `payload` must be valid JSON of at most 64 KiB.  The payload is scanned for credentials BEFORE it is stored, and a hit REFUSES the write with 422 rather than redacting it: {status, code: \"secret_in_transcript\", error, findings:[…]}, each finding naming the rule, severity, line, a masked preview and a SHA-256 fingerprint the author can match against the value they rotate. The detected value itself appears nowhere in that body, because it was never stored. That in-band findings array is the reason this operation cannot be typed.
-     * Append one turn to a session\'s ordered log.
+     * Records one turn of a session\'s transcript and answers 201 with it.  THE TURN IS SCANNED BEFORE IT IS STORED. The same engine the code-security surface runs reads the payload at this boundary, and a credential in it refuses the append with 422 rather than redacting it — a redacted transcript is one that still had the secret in it once, and this way the author learns which value to rotate. The refusal carries every finding: the rule, the severity, the line, a MASKED preview and the fingerprint. The secret is never in the answer.
+     * Records one turn of a session\'s transcript and answers 201 with it.
      */
-    async postAgentsSessionsByIdEvents(requestParameters: AgentsApiPostAgentsSessionsByIdEventsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postAgentsSessionsByIdEventsRaw(requestParameters, initOverrides);
+    async postAgentsSessionsByIdEvents(requestParameters: AgentsApiPostAgentsSessionsByIdEventsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<EventView> {
+        const response = await this.postAgentsSessionsByIdEventsRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Records `message` as a durable control event carrying the caller\'s text and answers 200 with {command, event, forwarded} — this is how a dashboard steers an agent mid-run. It is the one command with a required body: a `message` (up to 16 KiB) or a `payload`, and 400 with neither. The credential scan that guards an appended turn covers `payload` here; `message` is bounded but not scanned.   Requires a validated principal carrying an org, and the session must exist IN THAT ORG — a foreign id is a 404, so no tenant can steer another\'s agents. A FINISHED session (done or error) refuses every command with 409: a run that has ended cannot be steered.  THE COMMAND IS AN INTENT, NOT A STATE CHANGE. Nothing here writes the session\'s status. A 200 means the command was durably recorded and delivered, never that the agent has actually paused, resumed or stopped; the status becomes paused, done or error only when the surface running the agent reports it back through a session update. That surface learns of the command in one of two ways: a task-backed session (one carrying a workflow id, with a tasks backend wired) has it forwarded to the durable-execution engine, and `forwarded` says so; everything else is record-only, and the running surface — a locally started `hanzo code` session, for one — drains it by polling the session\'s control endpoint. Today that is every session: the only controller wired forwards nothing, so `forwarded` is false and polling is how a command arrives. If a forward is attempted and fails, the answer is 502 stating that the command was recorded but not forwarded: the intent is never lost.
-     * Send text into a running session.
+     * Sends a steering message to a running session — the endpoint a human or another agent interrupts through. It requires a `message` or a `payload`; the other three commands do not.
+     * Sends a steering message to a running session — the endpoint a human or another agent interrupts through.
      */
-    async postAgentsSessionsByIdMessageRaw(requestParameters: AgentsApiPostAgentsSessionsByIdMessageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postAgentsSessionsByIdMessageRaw(requestParameters: AgentsApiPostAgentsSessionsByIdMessageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ControlResult>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -1608,9 +1636,18 @@ export class AgentsApi extends runtime.BaseAPI {
             );
         }
 
+        if (requestParameters['controlIn'] == null) {
+            throw new runtime.RequiredError(
+                'controlIn',
+                'Required parameter "controlIn" was null or undefined when calling postAgentsSessionsByIdMessage().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -1629,24 +1666,26 @@ export class AgentsApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: ControlInToJSON(requestParameters['controlIn']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => ControlResultFromJSON(jsonValue));
     }
 
     /**
-     * Records `message` as a durable control event carrying the caller\'s text and answers 200 with {command, event, forwarded} — this is how a dashboard steers an agent mid-run. It is the one command with a required body: a `message` (up to 16 KiB) or a `payload`, and 400 with neither. The credential scan that guards an appended turn covers `payload` here; `message` is bounded but not scanned.   Requires a validated principal carrying an org, and the session must exist IN THAT ORG — a foreign id is a 404, so no tenant can steer another\'s agents. A FINISHED session (done or error) refuses every command with 409: a run that has ended cannot be steered.  THE COMMAND IS AN INTENT, NOT A STATE CHANGE. Nothing here writes the session\'s status. A 200 means the command was durably recorded and delivered, never that the agent has actually paused, resumed or stopped; the status becomes paused, done or error only when the surface running the agent reports it back through a session update. That surface learns of the command in one of two ways: a task-backed session (one carrying a workflow id, with a tasks backend wired) has it forwarded to the durable-execution engine, and `forwarded` says so; everything else is record-only, and the running surface — a locally started `hanzo code` session, for one — drains it by polling the session\'s control endpoint. Today that is every session: the only controller wired forwards nothing, so `forwarded` is false and polling is how a command arrives. If a forward is attempted and fails, the answer is 502 stating that the command was recorded but not forwarded: the intent is never lost.
-     * Send text into a running session.
+     * Sends a steering message to a running session — the endpoint a human or another agent interrupts through. It requires a `message` or a `payload`; the other three commands do not.
+     * Sends a steering message to a running session — the endpoint a human or another agent interrupts through.
      */
-    async postAgentsSessionsByIdMessage(requestParameters: AgentsApiPostAgentsSessionsByIdMessageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postAgentsSessionsByIdMessageRaw(requestParameters, initOverrides);
+    async postAgentsSessionsByIdMessage(requestParameters: AgentsApiPostAgentsSessionsByIdMessageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ControlResult> {
+        const response = await this.postAgentsSessionsByIdMessageRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Records `pause` as a durable control event on the session and answers 200 with {command, event, forwarded} — the stored event carries the `seq` that orders it against every other turn.   Requires a validated principal carrying an org, and the session must exist IN THAT ORG — a foreign id is a 404, so no tenant can steer another\'s agents. A FINISHED session (done or error) refuses every command with 409: a run that has ended cannot be steered.  THE COMMAND IS AN INTENT, NOT A STATE CHANGE. Nothing here writes the session\'s status. A 200 means the command was durably recorded and delivered, never that the agent has actually paused, resumed or stopped; the status becomes paused, done or error only when the surface running the agent reports it back through a session update. That surface learns of the command in one of two ways: a task-backed session (one carrying a workflow id, with a tasks backend wired) has it forwarded to the durable-execution engine, and `forwarded` says so; everything else is record-only, and the running surface — a locally started `hanzo code` session, for one — drains it by polling the session\'s control endpoint. Today that is every session: the only controller wired forwards nothing, so `forwarded` is false and polling is how a command arrives. If a forward is attempted and fails, the answer is 502 stating that the command was recorded but not forwarded: the intent is never lost.
-     * Ask a running session to pause.
+     * Asks a running session to pause. Recorded durably, and forwarded to the durable-execution engine when the session is task-backed.
+     * Asks a running session to pause.
      */
-    async postAgentsSessionsByIdPauseRaw(requestParameters: AgentsApiPostAgentsSessionsByIdPauseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postAgentsSessionsByIdPauseRaw(requestParameters: AgentsApiPostAgentsSessionsByIdPauseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ControlResult>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -1654,9 +1693,18 @@ export class AgentsApi extends runtime.BaseAPI {
             );
         }
 
+        if (requestParameters['controlIn'] == null) {
+            throw new runtime.RequiredError(
+                'controlIn',
+                'Required parameter "controlIn" was null or undefined when calling postAgentsSessionsByIdPause().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -1675,24 +1723,26 @@ export class AgentsApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: ControlInToJSON(requestParameters['controlIn']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => ControlResultFromJSON(jsonValue));
     }
 
     /**
-     * Records `pause` as a durable control event on the session and answers 200 with {command, event, forwarded} — the stored event carries the `seq` that orders it against every other turn.   Requires a validated principal carrying an org, and the session must exist IN THAT ORG — a foreign id is a 404, so no tenant can steer another\'s agents. A FINISHED session (done or error) refuses every command with 409: a run that has ended cannot be steered.  THE COMMAND IS AN INTENT, NOT A STATE CHANGE. Nothing here writes the session\'s status. A 200 means the command was durably recorded and delivered, never that the agent has actually paused, resumed or stopped; the status becomes paused, done or error only when the surface running the agent reports it back through a session update. That surface learns of the command in one of two ways: a task-backed session (one carrying a workflow id, with a tasks backend wired) has it forwarded to the durable-execution engine, and `forwarded` says so; everything else is record-only, and the running surface — a locally started `hanzo code` session, for one — drains it by polling the session\'s control endpoint. Today that is every session: the only controller wired forwards nothing, so `forwarded` is false and polling is how a command arrives. If a forward is attempted and fails, the answer is 502 stating that the command was recorded but not forwarded: the intent is never lost.
-     * Ask a running session to pause.
+     * Asks a running session to pause. Recorded durably, and forwarded to the durable-execution engine when the session is task-backed.
+     * Asks a running session to pause.
      */
-    async postAgentsSessionsByIdPause(requestParameters: AgentsApiPostAgentsSessionsByIdPauseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postAgentsSessionsByIdPauseRaw(requestParameters, initOverrides);
+    async postAgentsSessionsByIdPause(requestParameters: AgentsApiPostAgentsSessionsByIdPauseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ControlResult> {
+        const response = await this.postAgentsSessionsByIdPauseRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Records `resume` as a durable control event on the session and answers 200 with {command, event, forwarded}. The session is NOT required to be paused first: the only status this refuses is a finished one, because the live status is the running surface\'s to report rather than this endpoint\'s to enforce.   Requires a validated principal carrying an org, and the session must exist IN THAT ORG — a foreign id is a 404, so no tenant can steer another\'s agents. A FINISHED session (done or error) refuses every command with 409: a run that has ended cannot be steered.  THE COMMAND IS AN INTENT, NOT A STATE CHANGE. Nothing here writes the session\'s status. A 200 means the command was durably recorded and delivered, never that the agent has actually paused, resumed or stopped; the status becomes paused, done or error only when the surface running the agent reports it back through a session update. That surface learns of the command in one of two ways: a task-backed session (one carrying a workflow id, with a tasks backend wired) has it forwarded to the durable-execution engine, and `forwarded` says so; everything else is record-only, and the running surface — a locally started `hanzo code` session, for one — drains it by polling the session\'s control endpoint. Today that is every session: the only controller wired forwards nothing, so `forwarded` is false and polling is how a command arrives. If a forward is attempted and fails, the answer is 502 stating that the command was recorded but not forwarded: the intent is never lost.
-     * Ask a paused session to carry on.
+     * Asks a paused session to continue, on the same terms as a pause.
+     * Asks a paused session to continue, on the same terms as a pause.
      */
-    async postAgentsSessionsByIdResumeRaw(requestParameters: AgentsApiPostAgentsSessionsByIdResumeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postAgentsSessionsByIdResumeRaw(requestParameters: AgentsApiPostAgentsSessionsByIdResumeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ControlResult>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -1700,9 +1750,18 @@ export class AgentsApi extends runtime.BaseAPI {
             );
         }
 
+        if (requestParameters['controlIn'] == null) {
+            throw new runtime.RequiredError(
+                'controlIn',
+                'Required parameter "controlIn" was null or undefined when calling postAgentsSessionsByIdResume().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -1721,24 +1780,26 @@ export class AgentsApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: ControlInToJSON(requestParameters['controlIn']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => ControlResultFromJSON(jsonValue));
     }
 
     /**
-     * Records `resume` as a durable control event on the session and answers 200 with {command, event, forwarded}. The session is NOT required to be paused first: the only status this refuses is a finished one, because the live status is the running surface\'s to report rather than this endpoint\'s to enforce.   Requires a validated principal carrying an org, and the session must exist IN THAT ORG — a foreign id is a 404, so no tenant can steer another\'s agents. A FINISHED session (done or error) refuses every command with 409: a run that has ended cannot be steered.  THE COMMAND IS AN INTENT, NOT A STATE CHANGE. Nothing here writes the session\'s status. A 200 means the command was durably recorded and delivered, never that the agent has actually paused, resumed or stopped; the status becomes paused, done or error only when the surface running the agent reports it back through a session update. That surface learns of the command in one of two ways: a task-backed session (one carrying a workflow id, with a tasks backend wired) has it forwarded to the durable-execution engine, and `forwarded` says so; everything else is record-only, and the running surface — a locally started `hanzo code` session, for one — drains it by polling the session\'s control endpoint. Today that is every session: the only controller wired forwards nothing, so `forwarded` is false and polling is how a command arrives. If a forward is attempted and fails, the answer is 502 stating that the command was recorded but not forwarded: the intent is never lost.
-     * Ask a paused session to carry on.
+     * Asks a paused session to continue, on the same terms as a pause.
+     * Asks a paused session to continue, on the same terms as a pause.
      */
-    async postAgentsSessionsByIdResume(requestParameters: AgentsApiPostAgentsSessionsByIdResumeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postAgentsSessionsByIdResumeRaw(requestParameters, initOverrides);
+    async postAgentsSessionsByIdResume(requestParameters: AgentsApiPostAgentsSessionsByIdResumeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ControlResult> {
+        const response = await this.postAgentsSessionsByIdResumeRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Records `stop` as a durable control event on the session and answers 200 with {command, event, forwarded}. Stop is the one command that CANCELS a task-backed session\'s durable workflow instead of signalling it — pause, resume and message are cooperative signals the workflow decides how to act on, while this tears it down, with the request\'s `message` recorded as the cancellation reason (a default stands in when none is given).   Requires a validated principal carrying an org, and the session must exist IN THAT ORG — a foreign id is a 404, so no tenant can steer another\'s agents. A FINISHED session (done or error) refuses every command with 409: a run that has ended cannot be steered.  THE COMMAND IS AN INTENT, NOT A STATE CHANGE. Nothing here writes the session\'s status. A 200 means the command was durably recorded and delivered, never that the agent has actually paused, resumed or stopped; the status becomes paused, done or error only when the surface running the agent reports it back through a session update. That surface learns of the command in one of two ways: a task-backed session (one carrying a workflow id, with a tasks backend wired) has it forwarded to the durable-execution engine, and `forwarded` says so; everything else is record-only, and the running surface — a locally started `hanzo code` session, for one — drains it by polling the session\'s control endpoint. Today that is every session: the only controller wired forwards nothing, so `forwarded` is false and polling is how a command arrives. If a forward is attempted and fails, the answer is 502 stating that the command was recorded but not forwarded: the intent is never lost.
-     * Ask a session to stop for good.
+     * Ends a running session. `message` is recorded as the cancellation reason, which is what a later reader of the transcript sees.  STOPPING IS NOT DELETING: the session, its transcript and anything it produced stay readable. A session that has already finished is 409 rather than a second stop.
+     * Ends a running session.
      */
-    async postAgentsSessionsByIdStopRaw(requestParameters: AgentsApiPostAgentsSessionsByIdStopRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postAgentsSessionsByIdStopRaw(requestParameters: AgentsApiPostAgentsSessionsByIdStopRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ControlResult>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -1746,9 +1807,18 @@ export class AgentsApi extends runtime.BaseAPI {
             );
         }
 
+        if (requestParameters['controlIn'] == null) {
+            throw new runtime.RequiredError(
+                'controlIn',
+                'Required parameter "controlIn" was null or undefined when calling postAgentsSessionsByIdStop().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -1767,17 +1837,19 @@ export class AgentsApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: ControlInToJSON(requestParameters['controlIn']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => ControlResultFromJSON(jsonValue));
     }
 
     /**
-     * Records `stop` as a durable control event on the session and answers 200 with {command, event, forwarded}. Stop is the one command that CANCELS a task-backed session\'s durable workflow instead of signalling it — pause, resume and message are cooperative signals the workflow decides how to act on, while this tears it down, with the request\'s `message` recorded as the cancellation reason (a default stands in when none is given).   Requires a validated principal carrying an org, and the session must exist IN THAT ORG — a foreign id is a 404, so no tenant can steer another\'s agents. A FINISHED session (done or error) refuses every command with 409: a run that has ended cannot be steered.  THE COMMAND IS AN INTENT, NOT A STATE CHANGE. Nothing here writes the session\'s status. A 200 means the command was durably recorded and delivered, never that the agent has actually paused, resumed or stopped; the status becomes paused, done or error only when the surface running the agent reports it back through a session update. That surface learns of the command in one of two ways: a task-backed session (one carrying a workflow id, with a tasks backend wired) has it forwarded to the durable-execution engine, and `forwarded` says so; everything else is record-only, and the running surface — a locally started `hanzo code` session, for one — drains it by polling the session\'s control endpoint. Today that is every session: the only controller wired forwards nothing, so `forwarded` is false and polling is how a command arrives. If a forward is attempted and fails, the answer is 502 stating that the command was recorded but not forwarded: the intent is never lost.
-     * Ask a session to stop for good.
+     * Ends a running session. `message` is recorded as the cancellation reason, which is what a later reader of the transcript sees.  STOPPING IS NOT DELETING: the session, its transcript and anything it produced stay readable. A session that has already finished is 409 rather than a second stop.
+     * Ends a running session.
      */
-    async postAgentsSessionsByIdStop(requestParameters: AgentsApiPostAgentsSessionsByIdStopRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postAgentsSessionsByIdStopRaw(requestParameters, initOverrides);
+    async postAgentsSessionsByIdStop(requestParameters: AgentsApiPostAgentsSessionsByIdStopRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ControlResult> {
+        const response = await this.postAgentsSessionsByIdStopRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**

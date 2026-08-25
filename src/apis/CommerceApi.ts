@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay routes, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -68,8 +68,9 @@ export interface CommerceApiDeleteCommerceProductByProductidRequest {
     productid: string;
 }
 
-export interface CommerceApiDeleteCommerceRatesEntriesBySlugRequest {
-    slug: string;
+export interface CommerceApiDeleteCommerceRatesEntriesByProductByMeterRequest {
+    product: string;
+    meter: string;
 }
 
 export interface CommerceApiDeleteCommerceReturnByReturnidRequest {
@@ -491,8 +492,9 @@ export interface CommerceApiPutCommerceProductByProductidRequest {
     productid: string;
 }
 
-export interface CommerceApiPutCommerceRatesEntriesBySlugRequest {
-    slug: string;
+export interface CommerceApiPutCommerceRatesEntriesByProductByMeterRequest {
+    product: string;
+    meter: string;
 }
 
 export interface CommerceApiPutCommerceReturnByReturnidRequest {
@@ -888,11 +890,18 @@ export class CommerceApi extends runtime.BaseAPI {
      * Deletes the row. ARCHIVING is usually what is wanted instead — a deleted rate cannot price a historical charge, so a past invoice that has to re-resolve its rate finds nothing to read. Reach for status=archived unless the rate never priced anything. SuperAdmin only.
      * Remove a rate outright
      */
-    async deleteCommerceRatesEntriesBySlugRaw(requestParameters: CommerceApiDeleteCommerceRatesEntriesBySlugRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters['slug'] == null) {
+    async deleteCommerceRatesEntriesByProductByMeterRaw(requestParameters: CommerceApiDeleteCommerceRatesEntriesByProductByMeterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['product'] == null) {
             throw new runtime.RequiredError(
-                'slug',
-                'Required parameter "slug" was null or undefined when calling deleteCommerceRatesEntriesBySlug().'
+                'product',
+                'Required parameter "product" was null or undefined when calling deleteCommerceRatesEntriesByProductByMeter().'
+            );
+        }
+
+        if (requestParameters['meter'] == null) {
+            throw new runtime.RequiredError(
+                'meter',
+                'Required parameter "meter" was null or undefined when calling deleteCommerceRatesEntriesByProductByMeter().'
             );
         }
 
@@ -909,8 +918,9 @@ export class CommerceApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/commerce/rates/entries/{slug}`;
-        urlPath = urlPath.replace(`{${"slug"}}`, encodeURIComponent(String(requestParameters['slug'])));
+        let urlPath = `/v1/commerce/rates/entries/{product}/{meter}`;
+        urlPath = urlPath.replace(`{${"product"}}`, encodeURIComponent(String(requestParameters['product'])));
+        urlPath = urlPath.replace(`{${"meter"}}`, encodeURIComponent(String(requestParameters['meter'])));
 
         const response = await this.request({
             path: urlPath,
@@ -926,8 +936,8 @@ export class CommerceApi extends runtime.BaseAPI {
      * Deletes the row. ARCHIVING is usually what is wanted instead — a deleted rate cannot price a historical charge, so a past invoice that has to re-resolve its rate finds nothing to read. Reach for status=archived unless the rate never priced anything. SuperAdmin only.
      * Remove a rate outright
      */
-    async deleteCommerceRatesEntriesBySlug(requestParameters: CommerceApiDeleteCommerceRatesEntriesBySlugRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.deleteCommerceRatesEntriesBySlugRaw(requestParameters, initOverrides);
+    async deleteCommerceRatesEntriesByProductByMeter(requestParameters: CommerceApiDeleteCommerceRatesEntriesByProductByMeterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteCommerceRatesEntriesByProductByMeterRaw(requestParameters, initOverrides);
     }
 
     /**
@@ -4878,7 +4888,7 @@ export class CommerceApi extends runtime.BaseAPI {
     }
 
     /**
-     * Pulls the upstream model list and lands it through the same upsert the push door uses, so the rule that a sync owns cost and an administrator owns price holds no matter which door a row came through. It takes no body — the upstream is READ rather than told. If that upstream cannot be read the call answers 502 and writes NOTHING: a sync that cannot see its source must never conclude the source is empty, because that conclusion would withdraw every model on sale. The gate is a PLATFORM principal so the scheduled job\'s service token qualifies.
+     * Pulls the upstream model list and lands it through the same upsert the push endpoint uses, so the rule that a sync owns cost and an administrator owns price holds no matter which endpoint a row came through. It takes no body — the upstream is READ rather than told. If that upstream cannot be read the call answers 502 and writes NOTHING: a sync that cannot see its source must never conclude the source is empty, because that conclusion would withdraw every model on sale. The gate is a PLATFORM principal so the scheduled job\'s service token qualifies.
      * Refresh the model catalog by reading the upstream provider
      */
     async postCommerceCatalogModelsRefreshRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -4908,7 +4918,7 @@ export class CommerceApi extends runtime.BaseAPI {
     }
 
     /**
-     * Pulls the upstream model list and lands it through the same upsert the push door uses, so the rule that a sync owns cost and an administrator owns price holds no matter which door a row came through. It takes no body — the upstream is READ rather than told. If that upstream cannot be read the call answers 502 and writes NOTHING: a sync that cannot see its source must never conclude the source is empty, because that conclusion would withdraw every model on sale. The gate is a PLATFORM principal so the scheduled job\'s service token qualifies.
+     * Pulls the upstream model list and lands it through the same upsert the push endpoint uses, so the rule that a sync owns cost and an administrator owns price holds no matter which endpoint a row came through. It takes no body — the upstream is READ rather than told. If that upstream cannot be read the call answers 502 and writes NOTHING: a sync that cannot see its source must never conclude the source is empty, because that conclusion would withdraw every model on sale. The gate is a PLATFORM principal so the scheduled job\'s service token qualifies.
      * Refresh the model catalog by reading the upstream provider
      */
     async postCommerceCatalogModelsRefresh(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
@@ -5572,7 +5582,7 @@ export class CommerceApi extends runtime.BaseAPI {
     }
 
     /**
-     * Takes an array of rates and seeds the authority from it. This is the seed, driven from admin rather than compiled in, because 506 published prices in an embed made a price change wait for a build. It RECONCILES: a row that matches is left alone, a row that has drifted is corrected, and a row an operator edited is skipped — so importing the same document twice is a no-op and importing a corrected one moves exactly the rows that changed. Answers what it received, created, corrected and left unchanged, so an import that changes nothing reads as nothing to do rather than as a failure. An empty array is refused 400. SuperAdmin only.
+     * Takes an array of rates and seeds the authority from it — the same reconcile the boot catalog runs, driven from admin instead. It RECONCILES: a row that matches is left alone, a row that has drifted is corrected, and a row an operator edited is skipped — so importing the same document twice is a no-op and importing a corrected one moves exactly the rows that changed. Answers what it received, created, corrected and left unchanged, so an import that changes nothing reads as nothing to do rather than as a failure. An empty array is refused 400. SuperAdmin only.
      * Load the published price document, reconciling rather than replacing
      */
     async postCommerceRatesImportRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -5602,7 +5612,7 @@ export class CommerceApi extends runtime.BaseAPI {
     }
 
     /**
-     * Takes an array of rates and seeds the authority from it. This is the seed, driven from admin rather than compiled in, because 506 published prices in an embed made a price change wait for a build. It RECONCILES: a row that matches is left alone, a row that has drifted is corrected, and a row an operator edited is skipped — so importing the same document twice is a no-op and importing a corrected one moves exactly the rows that changed. Answers what it received, created, corrected and left unchanged, so an import that changes nothing reads as nothing to do rather than as a failure. An empty array is refused 400. SuperAdmin only.
+     * Takes an array of rates and seeds the authority from it — the same reconcile the boot catalog runs, driven from admin instead. It RECONCILES: a row that matches is left alone, a row that has drifted is corrected, and a row an operator edited is skipped — so importing the same document twice is a no-op and importing a corrected one moves exactly the rows that changed. Answers what it received, created, corrected and left unchanged, so an import that changes nothing reads as nothing to do rather than as a failure. An empty array is refused 400. SuperAdmin only.
      * Load the published price document, reconciling rather than replacing
      */
     async postCommerceRatesImport(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
@@ -7835,11 +7845,18 @@ export class CommerceApi extends runtime.BaseAPI {
      * Edits one rate and MARKS it edited, which is the whole contract with the importer: an operator\'s price outranks the document it came from, so a later import leaves this row alone. Without that mark a price set here would apply, work, and silently revert on the next import. Only the editable fields move; identity and bookkeeping are not writable from the body. SuperAdmin only.
      * Edit a rate, and mark it as operator-set
      */
-    async putCommerceRatesEntriesBySlugRaw(requestParameters: CommerceApiPutCommerceRatesEntriesBySlugRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters['slug'] == null) {
+    async putCommerceRatesEntriesByProductByMeterRaw(requestParameters: CommerceApiPutCommerceRatesEntriesByProductByMeterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['product'] == null) {
             throw new runtime.RequiredError(
-                'slug',
-                'Required parameter "slug" was null or undefined when calling putCommerceRatesEntriesBySlug().'
+                'product',
+                'Required parameter "product" was null or undefined when calling putCommerceRatesEntriesByProductByMeter().'
+            );
+        }
+
+        if (requestParameters['meter'] == null) {
+            throw new runtime.RequiredError(
+                'meter',
+                'Required parameter "meter" was null or undefined when calling putCommerceRatesEntriesByProductByMeter().'
             );
         }
 
@@ -7856,8 +7873,9 @@ export class CommerceApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/commerce/rates/entries/{slug}`;
-        urlPath = urlPath.replace(`{${"slug"}}`, encodeURIComponent(String(requestParameters['slug'])));
+        let urlPath = `/v1/commerce/rates/entries/{product}/{meter}`;
+        urlPath = urlPath.replace(`{${"product"}}`, encodeURIComponent(String(requestParameters['product'])));
+        urlPath = urlPath.replace(`{${"meter"}}`, encodeURIComponent(String(requestParameters['meter'])));
 
         const response = await this.request({
             path: urlPath,
@@ -7873,8 +7891,8 @@ export class CommerceApi extends runtime.BaseAPI {
      * Edits one rate and MARKS it edited, which is the whole contract with the importer: an operator\'s price outranks the document it came from, so a later import leaves this row alone. Without that mark a price set here would apply, work, and silently revert on the next import. Only the editable fields move; identity and bookkeeping are not writable from the body. SuperAdmin only.
      * Edit a rate, and mark it as operator-set
      */
-    async putCommerceRatesEntriesBySlug(requestParameters: CommerceApiPutCommerceRatesEntriesBySlugRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.putCommerceRatesEntriesBySlugRaw(requestParameters, initOverrides);
+    async putCommerceRatesEntriesByProductByMeter(requestParameters: CommerceApiPutCommerceRatesEntriesByProductByMeterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.putCommerceRatesEntriesByProductByMeterRaw(requestParameters, initOverrides);
     }
 
     /**
@@ -8541,7 +8559,7 @@ export class CommerceApi extends runtime.BaseAPI {
     }
 
     /**
-     * Takes a payment: charges a single-use card token and credits the caller\'s org balance, exactly once.  This is the operation behind \"collect money from a customer\". It runs the SAME core the console\'s card top-up runs (commerce billing.TakePayment), so the server-side amount bounds, the idempotency guard and the ledger credit are shared rather than reimplemented — a second charge path would eventually double-charge somebody.  The ORG is the caller\'s, taken from the validated principal and never from the input, so a payment can only ever credit the account of whoever made the call.  A payment is RISK-SCREENED before the card is charged, so this can be refused without any money moving: 403 means the screen did not authorise it, and 503 means the screen could not reach a decision — that one is worth retrying, and no charge was attempted either way.  Send an idempotencyKey. An agent retries by construction, and the key is what turns a retry into a replay of the first receipt instead of a second charge.  The answer states whether it settled in SANDBOX or live mode (`test`), and carries the processor\'s own reference (`processorRef`) so the charge can be reconciled against the processor rather than taken on trust.  A named builder, not a closure, so zipdoc can lift this prose into the registry.  It BUILDS the handler rather than being it, because the screen has to sit inside the value every projection of this op dispatches to — see exposePayments. `charge` is the money move, `take` is the screened door onto it, and the only registrable one is the second.
+     * Takes a payment: charges a single-use card token and credits the caller\'s org balance, exactly once.  This is the operation behind \"collect money from a customer\". It runs the SAME core the console\'s card top-up runs (commerce billing.TakePayment), so the server-side amount bounds, the idempotency guard and the ledger credit are shared rather than reimplemented — a second charge path would eventually double-charge somebody.  The ORG is the caller\'s, taken from the validated principal and never from the input, so a payment can only ever credit the account of whoever made the call.  A payment is RISK-SCREENED before the card is charged, so this can be refused without any money moving: 403 means the screen did not authorise it, and 503 means the screen could not reach a decision — that one is worth retrying, and no charge was attempted either way.  Send an idempotencyKey. An agent retries by construction, and the key is what turns a retry into a replay of the first receipt instead of a second charge.  The answer states whether it settled in SANDBOX or live mode (`test`), and carries the processor\'s own reference (`processorRef`) so the charge can be reconciled against the processor rather than taken on trust.  A named builder, not a closure, so zipdoc can lift this prose into the registry.  It BUILDS the handler rather than being it, because the screen has to sit inside the value every projection of this op dispatches to — see exposePayments. `charge` is the money move, `take` is the screened entry point onto it, and the only registrable one is the second.
      * Take a card payment and credit the org\'s balance
      */
     async takePaymentRaw(requestParameters: CommerceApiTakePaymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PaymentOut>> {
@@ -8581,7 +8599,7 @@ export class CommerceApi extends runtime.BaseAPI {
     }
 
     /**
-     * Takes a payment: charges a single-use card token and credits the caller\'s org balance, exactly once.  This is the operation behind \"collect money from a customer\". It runs the SAME core the console\'s card top-up runs (commerce billing.TakePayment), so the server-side amount bounds, the idempotency guard and the ledger credit are shared rather than reimplemented — a second charge path would eventually double-charge somebody.  The ORG is the caller\'s, taken from the validated principal and never from the input, so a payment can only ever credit the account of whoever made the call.  A payment is RISK-SCREENED before the card is charged, so this can be refused without any money moving: 403 means the screen did not authorise it, and 503 means the screen could not reach a decision — that one is worth retrying, and no charge was attempted either way.  Send an idempotencyKey. An agent retries by construction, and the key is what turns a retry into a replay of the first receipt instead of a second charge.  The answer states whether it settled in SANDBOX or live mode (`test`), and carries the processor\'s own reference (`processorRef`) so the charge can be reconciled against the processor rather than taken on trust.  A named builder, not a closure, so zipdoc can lift this prose into the registry.  It BUILDS the handler rather than being it, because the screen has to sit inside the value every projection of this op dispatches to — see exposePayments. `charge` is the money move, `take` is the screened door onto it, and the only registrable one is the second.
+     * Takes a payment: charges a single-use card token and credits the caller\'s org balance, exactly once.  This is the operation behind \"collect money from a customer\". It runs the SAME core the console\'s card top-up runs (commerce billing.TakePayment), so the server-side amount bounds, the idempotency guard and the ledger credit are shared rather than reimplemented — a second charge path would eventually double-charge somebody.  The ORG is the caller\'s, taken from the validated principal and never from the input, so a payment can only ever credit the account of whoever made the call.  A payment is RISK-SCREENED before the card is charged, so this can be refused without any money moving: 403 means the screen did not authorise it, and 503 means the screen could not reach a decision — that one is worth retrying, and no charge was attempted either way.  Send an idempotencyKey. An agent retries by construction, and the key is what turns a retry into a replay of the first receipt instead of a second charge.  The answer states whether it settled in SANDBOX or live mode (`test`), and carries the processor\'s own reference (`processorRef`) so the charge can be reconciled against the processor rather than taken on trust.  A named builder, not a closure, so zipdoc can lift this prose into the registry.  It BUILDS the handler rather than being it, because the screen has to sit inside the value every projection of this op dispatches to — see exposePayments. `charge` is the money move, `take` is the screened entry point onto it, and the only registrable one is the second.
      * Take a card payment and credit the org\'s balance
      */
     async takePayment(requestParameters: CommerceApiTakePaymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PaymentOut> {

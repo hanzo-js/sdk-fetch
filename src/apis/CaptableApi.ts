@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay routes, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -17,20 +17,33 @@ import * as runtime from '../runtime.js';
 import type {
   CaptableCompany,
   CaptableCompanyUpdate,
+  CaptableConvertibleIn,
+  CaptableCreated,
   CaptableDeleted,
+  CaptableEquityPlanIn,
   CaptableEquityPlans,
+  CaptableInvested,
+  CaptableInvestmentIn,
   CaptableInvestments,
   CaptableNotes,
+  CaptableOptionIn,
   CaptableOptions,
   CaptableRoundCloseRequest,
   CaptableRoundDetail,
+  CaptableRoundIn,
   CaptableRounds,
+  CaptableSafeIn,
   CaptableSafes,
   CaptableShareClass,
+  CaptableShareClassAmend,
+  CaptableShareClassIn,
+  CaptableShareIn,
+  CaptableShareTransfer,
   CaptableShares,
   CaptableStakeholder,
   CaptableStakeholderPatch,
   CaptableSummary,
+  CaptableTransferred,
   CaptableUpdated,
 } from '../models/index.js';
 import {
@@ -38,26 +51,50 @@ import {
     CaptableCompanyToJSON,
     CaptableCompanyUpdateFromJSON,
     CaptableCompanyUpdateToJSON,
+    CaptableConvertibleInFromJSON,
+    CaptableConvertibleInToJSON,
+    CaptableCreatedFromJSON,
+    CaptableCreatedToJSON,
     CaptableDeletedFromJSON,
     CaptableDeletedToJSON,
+    CaptableEquityPlanInFromJSON,
+    CaptableEquityPlanInToJSON,
     CaptableEquityPlansFromJSON,
     CaptableEquityPlansToJSON,
+    CaptableInvestedFromJSON,
+    CaptableInvestedToJSON,
+    CaptableInvestmentInFromJSON,
+    CaptableInvestmentInToJSON,
     CaptableInvestmentsFromJSON,
     CaptableInvestmentsToJSON,
     CaptableNotesFromJSON,
     CaptableNotesToJSON,
+    CaptableOptionInFromJSON,
+    CaptableOptionInToJSON,
     CaptableOptionsFromJSON,
     CaptableOptionsToJSON,
     CaptableRoundCloseRequestFromJSON,
     CaptableRoundCloseRequestToJSON,
     CaptableRoundDetailFromJSON,
     CaptableRoundDetailToJSON,
+    CaptableRoundInFromJSON,
+    CaptableRoundInToJSON,
     CaptableRoundsFromJSON,
     CaptableRoundsToJSON,
+    CaptableSafeInFromJSON,
+    CaptableSafeInToJSON,
     CaptableSafesFromJSON,
     CaptableSafesToJSON,
     CaptableShareClassFromJSON,
     CaptableShareClassToJSON,
+    CaptableShareClassAmendFromJSON,
+    CaptableShareClassAmendToJSON,
+    CaptableShareClassInFromJSON,
+    CaptableShareClassInToJSON,
+    CaptableShareInFromJSON,
+    CaptableShareInToJSON,
+    CaptableShareTransferFromJSON,
+    CaptableShareTransferToJSON,
     CaptableSharesFromJSON,
     CaptableSharesToJSON,
     CaptableStakeholderFromJSON,
@@ -66,6 +103,8 @@ import {
     CaptableStakeholderPatchToJSON,
     CaptableSummaryFromJSON,
     CaptableSummaryToJSON,
+    CaptableTransferredFromJSON,
+    CaptableTransferredToJSON,
     CaptableUpdatedFromJSON,
     CaptableUpdatedToJSON,
 } from '../models/index.js';
@@ -96,11 +135,32 @@ export interface CaptableApiGetCaptableRoundsByIdRequest {
 
 export interface CaptableApiPatchCaptableClassesByIdRequest {
     id: string;
+    captableShareClassAmend: CaptableShareClassAmend;
 }
 
 export interface CaptableApiPatchCaptableStakeholdersByIdRequest {
     id: string;
     captableStakeholderPatch: CaptableStakeholderPatch;
+}
+
+export interface CaptableApiPostCaptableClassesRequest {
+    captableShareClassIn: CaptableShareClassIn;
+}
+
+export interface CaptableApiPostCaptableConvertiblesRequest {
+    captableConvertibleIn: CaptableConvertibleIn;
+}
+
+export interface CaptableApiPostCaptableOptionsRequest {
+    captableOptionIn: CaptableOptionIn;
+}
+
+export interface CaptableApiPostCaptablePlansRequest {
+    captableEquityPlanIn: CaptableEquityPlanIn;
+}
+
+export interface CaptableApiPostCaptableRoundsRequest {
+    captableRoundIn: CaptableRoundIn;
 }
 
 export interface CaptableApiPostCaptableRoundsByIdCloseRequest {
@@ -110,6 +170,19 @@ export interface CaptableApiPostCaptableRoundsByIdCloseRequest {
 
 export interface CaptableApiPostCaptableRoundsByIdInvestmentsRequest {
     id: string;
+    captableInvestmentIn: CaptableInvestmentIn;
+}
+
+export interface CaptableApiPostCaptableSafesRequest {
+    captableSafeIn: CaptableSafeIn;
+}
+
+export interface CaptableApiPostCaptableSharesRequest {
+    captableShareIn: CaptableShareIn;
+}
+
+export interface CaptableApiPostCaptableSharesTransferRequest {
+    captableShareTransfer: CaptableShareTransfer;
 }
 
 export interface CaptableApiPutCaptableCompanyRequest {
@@ -833,10 +906,10 @@ export class CaptableApi extends runtime.BaseAPI {
     }
 
     /**
-     * Rewrites one share class — the amendment path for a class whose authorized count, price, seniority or preference terms have changed.  It REPLACES the class rather than merging into it: every field is taken from this body, so an omitted field resets to the create-time default instead of keeping its current value. Send the full class. The index and the derived prefix are unchanged by an amendment. An id that is not this company\'s is not found.  Writes the caller\'s OWN cap table: the org resolved from the validated principal selects the tenant\'s store and scopes every row, so there is no field by which a caller can write into another company\'s table; a request with no validated org is refused. The whole write runs in one transaction, so a refusal leaves nothing behind. Validation is the cap-table bundle\'s and so is its refusal: a bad body comes back as {success:false, message, errors:[…]} with the failing fields listed, and numeric fields accept a number OR a numeric string. Bodies are capped at 1 MiB.
-     * Amend a share class
+     * Replaces one share class\'s terms.  It is a full REPLACE and not a merge, despite the PATCH: every field is written as sent, so a field omitted is written empty rather than left alone. Send the whole class. The method is PATCH because the resource is addressed by id, not because the body is partial — and getting that backwards silently blanks terms every later issuance prices against.
+     * Replaces one share class\'s terms.
      */
-    async patchCaptableClassesByIdRaw(requestParameters: CaptableApiPatchCaptableClassesByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async patchCaptableClassesByIdRaw(requestParameters: CaptableApiPatchCaptableClassesByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CaptableUpdated>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -844,9 +917,18 @@ export class CaptableApi extends runtime.BaseAPI {
             );
         }
 
+        if (requestParameters['captableShareClassAmend'] == null) {
+            throw new runtime.RequiredError(
+                'captableShareClassAmend',
+                'Required parameter "captableShareClassAmend" was null or undefined when calling patchCaptableClassesById().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -865,17 +947,19 @@ export class CaptableApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
+            body: CaptableShareClassAmendToJSON(requestParameters['captableShareClassAmend']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => CaptableUpdatedFromJSON(jsonValue));
     }
 
     /**
-     * Rewrites one share class — the amendment path for a class whose authorized count, price, seniority or preference terms have changed.  It REPLACES the class rather than merging into it: every field is taken from this body, so an omitted field resets to the create-time default instead of keeping its current value. Send the full class. The index and the derived prefix are unchanged by an amendment. An id that is not this company\'s is not found.  Writes the caller\'s OWN cap table: the org resolved from the validated principal selects the tenant\'s store and scopes every row, so there is no field by which a caller can write into another company\'s table; a request with no validated org is refused. The whole write runs in one transaction, so a refusal leaves nothing behind. Validation is the cap-table bundle\'s and so is its refusal: a bad body comes back as {success:false, message, errors:[…]} with the failing fields listed, and numeric fields accept a number OR a numeric string. Bodies are capped at 1 MiB.
-     * Amend a share class
+     * Replaces one share class\'s terms.  It is a full REPLACE and not a merge, despite the PATCH: every field is written as sent, so a field omitted is written empty rather than left alone. Send the whole class. The method is PATCH because the resource is addressed by id, not because the body is partial — and getting that backwards silently blanks terms every later issuance prices against.
+     * Replaces one share class\'s terms.
      */
-    async patchCaptableClassesById(requestParameters: CaptableApiPatchCaptableClassesByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.patchCaptableClassesByIdRaw(requestParameters, initOverrides);
+    async patchCaptableClassesById(requestParameters: CaptableApiPatchCaptableClassesByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CaptableUpdated> {
+        const response = await this.patchCaptableClassesByIdRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
@@ -936,13 +1020,22 @@ export class CaptableApi extends runtime.BaseAPI {
     }
 
     /**
-     * Creates a class of stock — its authorized share count, votes per share, par and issue price, seniority, conversion rights and liquidation/participation multiples — which is what shares, priced rounds and equity plans are then issued against.  Two fields are the company\'s to assign, not the caller\'s: the class index auto-increments per company, and the certificate prefix is DERIVED from the class type (CS for COMMON, PS for anything else), so a prefix in the body is ignored.  Writes the caller\'s OWN cap table: the org resolved from the validated principal selects the tenant\'s store and scopes every row, so there is no field by which a caller can write into another company\'s table; a request with no validated org is refused. The whole write runs in one transaction, so a refusal leaves nothing behind. Validation is the cap-table bundle\'s and so is its refusal: a bad body comes back as {success:false, message, errors:[…]} with the failing fields listed, and numeric fields accept a number OR a numeric string. Bodies are capped at 1 MiB.
-     * Define a share class
+     * Defines a new class of shares.  Every field but convertsToShareClassId is required — a class is the instrument every later issuance prices against, so a partially-specified one would silently mis-value every share issued into it. `seniority` orders liquidation preference with LOWER first.
+     * Defines a new class of shares.
      */
-    async postCaptableClassesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postCaptableClassesRaw(requestParameters: CaptableApiPostCaptableClassesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CaptableCreated>> {
+        if (requestParameters['captableShareClassIn'] == null) {
+            throw new runtime.RequiredError(
+                'captableShareClassIn',
+                'Required parameter "captableShareClassIn" was null or undefined when calling postCaptableClasses().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -960,27 +1053,38 @@ export class CaptableApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: CaptableShareClassInToJSON(requestParameters['captableShareClassIn']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => CaptableCreatedFromJSON(jsonValue));
     }
 
     /**
-     * Creates a class of stock — its authorized share count, votes per share, par and issue price, seniority, conversion rights and liquidation/participation multiples — which is what shares, priced rounds and equity plans are then issued against.  Two fields are the company\'s to assign, not the caller\'s: the class index auto-increments per company, and the certificate prefix is DERIVED from the class type (CS for COMMON, PS for anything else), so a prefix in the body is ignored.  Writes the caller\'s OWN cap table: the org resolved from the validated principal selects the tenant\'s store and scopes every row, so there is no field by which a caller can write into another company\'s table; a request with no validated org is refused. The whole write runs in one transaction, so a refusal leaves nothing behind. Validation is the cap-table bundle\'s and so is its refusal: a bad body comes back as {success:false, message, errors:[…]} with the failing fields listed, and numeric fields accept a number OR a numeric string. Bodies are capped at 1 MiB.
-     * Define a share class
+     * Defines a new class of shares.  Every field but convertsToShareClassId is required — a class is the instrument every later issuance prices against, so a partially-specified one would silently mis-value every share issued into it. `seniority` orders liquidation preference with LOWER first.
+     * Defines a new class of shares.
      */
-    async postCaptableClasses(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postCaptableClassesRaw(initOverrides);
+    async postCaptableClasses(requestParameters: CaptableApiPostCaptableClassesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CaptableCreated> {
+        const response = await this.postCaptableClassesRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Records a convertible note held by a stakeholder: the principal, the conversion cap, discount and interest rate, MFN, and the issue and board-approval dates.  The stakeholder must already exist in this company, and the note\'s public id must be unused there — a reused id is a conflict rather than an overwrite. Like a SAFE, this records the instrument only; conversion is not performed here.  Writes the caller\'s OWN cap table: the org resolved from the validated principal selects the tenant\'s store and scopes every row, so there is no field by which a caller can write into another company\'s table; a request with no validated org is refused. The whole write runs in one transaction, so a refusal leaves nothing behind. Validation is the cap-table bundle\'s and so is its refusal: a bad body comes back as {success:false, message, errors:[…]} with the failing fields listed, and numeric fields accept a number OR a numeric string. Bodies are capped at 1 MiB.
-     * Record a convertible note
+     * Records a convertible note.
+     * Records a convertible note.
      */
-    async postCaptableConvertiblesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postCaptableConvertiblesRaw(requestParameters: CaptableApiPostCaptableConvertiblesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CaptableCreated>> {
+        if (requestParameters['captableConvertibleIn'] == null) {
+            throw new runtime.RequiredError(
+                'captableConvertibleIn',
+                'Required parameter "captableConvertibleIn" was null or undefined when calling postCaptableConvertibles().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -998,27 +1102,38 @@ export class CaptableApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: CaptableConvertibleInToJSON(requestParameters['captableConvertibleIn']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => CaptableCreatedFromJSON(jsonValue));
     }
 
     /**
-     * Records a convertible note held by a stakeholder: the principal, the conversion cap, discount and interest rate, MFN, and the issue and board-approval dates.  The stakeholder must already exist in this company, and the note\'s public id must be unused there — a reused id is a conflict rather than an overwrite. Like a SAFE, this records the instrument only; conversion is not performed here.  Writes the caller\'s OWN cap table: the org resolved from the validated principal selects the tenant\'s store and scopes every row, so there is no field by which a caller can write into another company\'s table; a request with no validated org is refused. The whole write runs in one transaction, so a refusal leaves nothing behind. Validation is the cap-table bundle\'s and so is its refusal: a bad body comes back as {success:false, message, errors:[…]} with the failing fields listed, and numeric fields accept a number OR a numeric string. Bodies are capped at 1 MiB.
-     * Record a convertible note
+     * Records a convertible note.
+     * Records a convertible note.
      */
-    async postCaptableConvertibles(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postCaptableConvertiblesRaw(initOverrides);
+    async postCaptableConvertibles(requestParameters: CaptableApiPostCaptableConvertiblesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CaptableCreated> {
+        const response = await this.postCaptableConvertiblesRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Records an option grant to a stakeholder under an equity plan — quantity, exercise price, ISO/NSO type, cliff and vesting years, and the issue, expiration, vesting-start, board-approval and Rule 144 dates.  The stakeholder and the equity plan must both already exist in this company, and the grant id must be unused there — a reused grant id is a conflict, so a grant can never be overwritten by a later one carrying the same number.  Writes the caller\'s OWN cap table: the org resolved from the validated principal selects the tenant\'s store and scopes every row, so there is no field by which a caller can write into another company\'s table; a request with no validated org is refused. The whole write runs in one transaction, so a refusal leaves nothing behind. Validation is the cap-table bundle\'s and so is its refusal: a bad body comes back as {success:false, message, errors:[…]} with the failing fields listed, and numeric fields accept a number OR a numeric string. Bodies are capped at 1 MiB.
-     * Grant options from an equity plan
+     * Grants options to a stakeholder from an equity plan.
+     * Grants options to a stakeholder from an equity plan.
      */
-    async postCaptableOptionsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postCaptableOptionsRaw(requestParameters: CaptableApiPostCaptableOptionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CaptableCreated>> {
+        if (requestParameters['captableOptionIn'] == null) {
+            throw new runtime.RequiredError(
+                'captableOptionIn',
+                'Required parameter "captableOptionIn" was null or undefined when calling postCaptableOptions().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -1036,27 +1151,38 @@ export class CaptableApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: CaptableOptionInToJSON(requestParameters['captableOptionIn']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => CaptableCreatedFromJSON(jsonValue));
     }
 
     /**
-     * Records an option grant to a stakeholder under an equity plan — quantity, exercise price, ISO/NSO type, cliff and vesting years, and the issue, expiration, vesting-start, board-approval and Rule 144 dates.  The stakeholder and the equity plan must both already exist in this company, and the grant id must be unused there — a reused grant id is a conflict, so a grant can never be overwritten by a later one carrying the same number.  Writes the caller\'s OWN cap table: the org resolved from the validated principal selects the tenant\'s store and scopes every row, so there is no field by which a caller can write into another company\'s table; a request with no validated org is refused. The whole write runs in one transaction, so a refusal leaves nothing behind. Validation is the cap-table bundle\'s and so is its refusal: a bad body comes back as {success:false, message, errors:[…]} with the failing fields listed, and numeric fields accept a number OR a numeric string. Bodies are capped at 1 MiB.
-     * Grant options from an equity plan
+     * Grants options to a stakeholder from an equity plan.
+     * Grants options to a stakeholder from an equity plan.
      */
-    async postCaptableOptions(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postCaptableOptionsRaw(initOverrides);
+    async postCaptableOptions(requestParameters: CaptableApiPostCaptableOptionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CaptableCreated> {
+        const response = await this.postCaptableOptionsRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Reserves a pool of shares out of a share class for option grants, with the board approval and effective dates and what happens to cancelled options.  The share class must already exist in this company — a plan cannot reserve out of nothing. Note the field name the bundle reads for the cancellation behaviour is `defaultCancellatonBehavior`; that spelling is the wire, and a correctly spelled key is simply not seen.  Writes the caller\'s OWN cap table: the org resolved from the validated principal selects the tenant\'s store and scopes every row, so there is no field by which a caller can write into another company\'s table; a request with no validated org is refused. The whole write runs in one transaction, so a refusal leaves nothing behind. Validation is the cap-table bundle\'s and so is its refusal: a bad body comes back as {success:false, message, errors:[…]} with the failing fields listed, and numeric fields accept a number OR a numeric string. Bodies are capped at 1 MiB.
-     * Open an equity incentive plan
+     * Opens an equity plan that options are granted from.
+     * Opens an equity plan that options are granted from.
      */
-    async postCaptablePlansRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postCaptablePlansRaw(requestParameters: CaptableApiPostCaptablePlansRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CaptableCreated>> {
+        if (requestParameters['captableEquityPlanIn'] == null) {
+            throw new runtime.RequiredError(
+                'captableEquityPlanIn',
+                'Required parameter "captableEquityPlanIn" was null or undefined when calling postCaptablePlans().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -1074,27 +1200,38 @@ export class CaptableApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: CaptableEquityPlanInToJSON(requestParameters['captableEquityPlanIn']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => CaptableCreatedFromJSON(jsonValue));
     }
 
     /**
-     * Reserves a pool of shares out of a share class for option grants, with the board approval and effective dates and what happens to cancelled options.  The share class must already exist in this company — a plan cannot reserve out of nothing. Note the field name the bundle reads for the cancellation behaviour is `defaultCancellatonBehavior`; that spelling is the wire, and a correctly spelled key is simply not seen.  Writes the caller\'s OWN cap table: the org resolved from the validated principal selects the tenant\'s store and scopes every row, so there is no field by which a caller can write into another company\'s table; a request with no validated org is refused. The whole write runs in one transaction, so a refusal leaves nothing behind. Validation is the cap-table bundle\'s and so is its refusal: a bad body comes back as {success:false, message, errors:[…]} with the failing fields listed, and numeric fields accept a number OR a numeric string. Bodies are capped at 1 MiB.
-     * Open an equity incentive plan
+     * Opens an equity plan that options are granted from.
+     * Opens an equity plan that options are granted from.
      */
-    async postCaptablePlans(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postCaptablePlansRaw(initOverrides);
+    async postCaptablePlans(requestParameters: CaptableApiPostCaptablePlansRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CaptableCreated> {
+        const response = await this.postCaptablePlansRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Opens a round with its name, type and target amount. It starts OPEN with nothing raised; investments are then added to it, and closing it is its own call.  A PRICED round is the constrained case: it requires a share class that exists in this company and a price per share above zero, because that price is what converts each investment into issued shares. Its pre-money valuation is optional. A non-priced round carries none of the three.  Writes the caller\'s OWN cap table: the org resolved from the validated principal selects the tenant\'s store and scopes every row, so there is no field by which a caller can write into another company\'s table; a request with no validated org is refused. The whole write runs in one transaction, so a refusal leaves nothing behind. Validation is the cap-table bundle\'s and so is its refusal: a bad body comes back as {success:false, message, errors:[…]} with the failing fields listed, and numeric fields accept a number OR a numeric string. Bodies are capped at 1 MiB.
-     * Open a funding round
+     * Opens a priced round that investments can be added to.  The round opens OPEN; investing into a closed one is refused.
+     * Opens a priced round that investments can be added to.
      */
-    async postCaptableRoundsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postCaptableRoundsRaw(requestParameters: CaptableApiPostCaptableRoundsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CaptableCreated>> {
+        if (requestParameters['captableRoundIn'] == null) {
+            throw new runtime.RequiredError(
+                'captableRoundIn',
+                'Required parameter "captableRoundIn" was null or undefined when calling postCaptableRounds().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -1112,17 +1249,19 @@ export class CaptableApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: CaptableRoundInToJSON(requestParameters['captableRoundIn']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => CaptableCreatedFromJSON(jsonValue));
     }
 
     /**
-     * Opens a round with its name, type and target amount. It starts OPEN with nothing raised; investments are then added to it, and closing it is its own call.  A PRICED round is the constrained case: it requires a share class that exists in this company and a price per share above zero, because that price is what converts each investment into issued shares. Its pre-money valuation is optional. A non-priced round carries none of the three.  Writes the caller\'s OWN cap table: the org resolved from the validated principal selects the tenant\'s store and scopes every row, so there is no field by which a caller can write into another company\'s table; a request with no validated org is refused. The whole write runs in one transaction, so a refusal leaves nothing behind. Validation is the cap-table bundle\'s and so is its refusal: a bad body comes back as {success:false, message, errors:[…]} with the failing fields listed, and numeric fields accept a number OR a numeric string. Bodies are capped at 1 MiB.
-     * Open a funding round
+     * Opens a priced round that investments can be added to.  The round opens OPEN; investing into a closed one is refused.
+     * Opens a priced round that investments can be added to.
      */
-    async postCaptableRounds(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postCaptableRoundsRaw(initOverrides);
+    async postCaptableRounds(requestParameters: CaptableApiPostCaptableRoundsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CaptableCreated> {
+        const response = await this.postCaptableRoundsRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
@@ -1183,10 +1322,10 @@ export class CaptableApi extends runtime.BaseAPI {
     }
 
     /**
-     * Records what a stakeholder put into a round and adds it to the round\'s raised total.  On a PRICED round this ISSUES SHARES as well as recording the money: the amount is divided by the round\'s price per share, rounded DOWN to whole shares, and a new certificate for them is issued to the investor in the round\'s share class — so an amount too small to buy one whole share is refused rather than recorded as a zero-share investment. On a non-priced round the money is recorded and no shares are issued.  The round must exist in this company and still be OPEN — a closed round refuses further investment — and the investor must already be a stakeholder here. The date defaults to today when omitted.  Writes the caller\'s OWN cap table: the org resolved from the validated principal selects the tenant\'s store and scopes every row, so there is no field by which a caller can write into another company\'s table; a request with no validated org is refused. The whole write runs in one transaction, so a refusal leaves nothing behind. Validation is the cap-table bundle\'s and so is its refusal: a bad body comes back as {success:false, message, errors:[…]} with the failing fields listed, and numeric fields accept a number OR a numeric string. Bodies are capped at 1 MiB.
-     * Record an investment into a round
+     * Records one investor\'s money into an open round.  The round must be OPEN; investing into a closed one is refused. Where the round carries a price per share, the investment also issues the shares it buys and the answer names them.
+     * Records one investor\'s money into an open round.
      */
-    async postCaptableRoundsByIdInvestmentsRaw(requestParameters: CaptableApiPostCaptableRoundsByIdInvestmentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postCaptableRoundsByIdInvestmentsRaw(requestParameters: CaptableApiPostCaptableRoundsByIdInvestmentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CaptableInvested>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -1194,9 +1333,18 @@ export class CaptableApi extends runtime.BaseAPI {
             );
         }
 
+        if (requestParameters['captableInvestmentIn'] == null) {
+            throw new runtime.RequiredError(
+                'captableInvestmentIn',
+                'Required parameter "captableInvestmentIn" was null or undefined when calling postCaptableRoundsByIdInvestments().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -1215,27 +1363,38 @@ export class CaptableApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: CaptableInvestmentInToJSON(requestParameters['captableInvestmentIn']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => CaptableInvestedFromJSON(jsonValue));
     }
 
     /**
-     * Records what a stakeholder put into a round and adds it to the round\'s raised total.  On a PRICED round this ISSUES SHARES as well as recording the money: the amount is divided by the round\'s price per share, rounded DOWN to whole shares, and a new certificate for them is issued to the investor in the round\'s share class — so an amount too small to buy one whole share is refused rather than recorded as a zero-share investment. On a non-priced round the money is recorded and no shares are issued.  The round must exist in this company and still be OPEN — a closed round refuses further investment — and the investor must already be a stakeholder here. The date defaults to today when omitted.  Writes the caller\'s OWN cap table: the org resolved from the validated principal selects the tenant\'s store and scopes every row, so there is no field by which a caller can write into another company\'s table; a request with no validated org is refused. The whole write runs in one transaction, so a refusal leaves nothing behind. Validation is the cap-table bundle\'s and so is its refusal: a bad body comes back as {success:false, message, errors:[…]} with the failing fields listed, and numeric fields accept a number OR a numeric string. Bodies are capped at 1 MiB.
-     * Record an investment into a round
+     * Records one investor\'s money into an open round.  The round must be OPEN; investing into a closed one is refused. Where the round carries a price per share, the investment also issues the shares it buys and the answer names them.
+     * Records one investor\'s money into an open round.
      */
-    async postCaptableRoundsByIdInvestments(requestParameters: CaptableApiPostCaptableRoundsByIdInvestmentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postCaptableRoundsByIdInvestmentsRaw(requestParameters, initOverrides);
+    async postCaptableRoundsByIdInvestments(requestParameters: CaptableApiPostCaptableRoundsByIdInvestmentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CaptableInvested> {
+        const response = await this.postCaptableRoundsByIdInvestmentsRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Records a Simple Agreement for Future Equity held by a stakeholder: the capital in, the valuation cap and discount, MFN and pro-rata rights, pre- or post-money type, and the issue and board-approval dates.  The stakeholder must already exist in this company, and the SAFE\'s public id must be unused there — a reused id is a conflict rather than an overwrite. This records the instrument; it does not convert it, so nothing is issued against a share class until a round does that.  Writes the caller\'s OWN cap table: the org resolved from the validated principal selects the tenant\'s store and scopes every row, so there is no field by which a caller can write into another company\'s table; a request with no validated org is refused. The whole write runs in one transaction, so a refusal leaves nothing behind. Validation is the cap-table bundle\'s and so is its refusal: a bad body comes back as {success:false, message, errors:[…]} with the failing fields listed, and numeric fields accept a number OR a numeric string. Bodies are capped at 1 MiB.
-     * Record a SAFE
+     * Records a SAFE — a simple agreement for future equity.
+     * Records a SAFE — a simple agreement for future equity.
      */
-    async postCaptableSafesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postCaptableSafesRaw(requestParameters: CaptableApiPostCaptableSafesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CaptableCreated>> {
+        if (requestParameters['captableSafeIn'] == null) {
+            throw new runtime.RequiredError(
+                'captableSafeIn',
+                'Required parameter "captableSafeIn" was null or undefined when calling postCaptableSafes().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -1253,27 +1412,38 @@ export class CaptableApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: CaptableSafeInToJSON(requestParameters['captableSafeIn']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => CaptableCreatedFromJSON(jsonValue));
     }
 
     /**
-     * Records a Simple Agreement for Future Equity held by a stakeholder: the capital in, the valuation cap and discount, MFN and pro-rata rights, pre- or post-money type, and the issue and board-approval dates.  The stakeholder must already exist in this company, and the SAFE\'s public id must be unused there — a reused id is a conflict rather than an overwrite. This records the instrument; it does not convert it, so nothing is issued against a share class until a round does that.  Writes the caller\'s OWN cap table: the org resolved from the validated principal selects the tenant\'s store and scopes every row, so there is no field by which a caller can write into another company\'s table; a request with no validated org is refused. The whole write runs in one transaction, so a refusal leaves nothing behind. Validation is the cap-table bundle\'s and so is its refusal: a bad body comes back as {success:false, message, errors:[…]} with the failing fields listed, and numeric fields accept a number OR a numeric string. Bodies are capped at 1 MiB.
-     * Record a SAFE
+     * Records a SAFE — a simple agreement for future equity.
+     * Records a SAFE — a simple agreement for future equity.
      */
-    async postCaptableSafes(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postCaptableSafesRaw(initOverrides);
+    async postCaptableSafes(requestParameters: CaptableApiPostCaptableSafesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CaptableCreated> {
+        const response = await this.postCaptableSafesRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Issues shares of a class to a stakeholder as a certificate: quantity, price and capital contributed, the vesting cliff and term, the legends on the certificate, and the issue, Rule 144, vesting-start and board-approval dates.  Both the stakeholder and the share class must already exist in this company, and the certificate id must be unused there — a reused id is a conflict, never a silent overwrite of an existing certificate.  Writes the caller\'s OWN cap table: the org resolved from the validated principal selects the tenant\'s store and scopes every row, so there is no field by which a caller can write into another company\'s table; a request with no validated org is refused. The whole write runs in one transaction, so a refusal leaves nothing behind. Validation is the cap-table bundle\'s and so is its refusal: a bad body comes back as {success:false, message, errors:[…]} with the failing fields listed, and numeric fields accept a number OR a numeric string. Bodies are capped at 1 MiB.
-     * Issue a share certificate
+     * Issues a share certificate to a stakeholder.  The certificate id must be UNIQUE within the company — a duplicate is refused 409, not silently merged — and both the stakeholder and the share class must belong to this company, so an id from another tenant is a 400 rather than a cross-company issuance.
+     * Issues a share certificate to a stakeholder.
      */
-    async postCaptableSharesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postCaptableSharesRaw(requestParameters: CaptableApiPostCaptableSharesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CaptableCreated>> {
+        if (requestParameters['captableShareIn'] == null) {
+            throw new runtime.RequiredError(
+                'captableShareIn',
+                'Required parameter "captableShareIn" was null or undefined when calling postCaptableShares().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -1291,27 +1461,38 @@ export class CaptableApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: CaptableShareInToJSON(requestParameters['captableShareIn']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => CaptableCreatedFromJSON(jsonValue));
     }
 
     /**
-     * Issues shares of a class to a stakeholder as a certificate: quantity, price and capital contributed, the vesting cliff and term, the legends on the certificate, and the issue, Rule 144, vesting-start and board-approval dates.  Both the stakeholder and the share class must already exist in this company, and the certificate id must be unused there — a reused id is a conflict, never a silent overwrite of an existing certificate.  Writes the caller\'s OWN cap table: the org resolved from the validated principal selects the tenant\'s store and scopes every row, so there is no field by which a caller can write into another company\'s table; a request with no validated org is refused. The whole write runs in one transaction, so a refusal leaves nothing behind. Validation is the cap-table bundle\'s and so is its refusal: a bad body comes back as {success:false, message, errors:[…]} with the failing fields listed, and numeric fields accept a number OR a numeric string. Bodies are capped at 1 MiB.
-     * Issue a share certificate
+     * Issues a share certificate to a stakeholder.  The certificate id must be UNIQUE within the company — a duplicate is refused 409, not silently merged — and both the stakeholder and the share class must belong to this company, so an id from another tenant is a 400 rather than a cross-company issuance.
+     * Issues a share certificate to a stakeholder.
      */
-    async postCaptableShares(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postCaptableSharesRaw(initOverrides);
+    async postCaptableShares(requestParameters: CaptableApiPostCaptableSharesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CaptableCreated> {
+        const response = await this.postCaptableSharesRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
-     * Moves shares from one certificate to another stakeholder, in one atomic step.  OMITTING `quantity` transfers the WHOLE certificate, which simply reassigns it and answers newShareId null — that is the difference between a full and a partial transfer, and it is why quantity is absent rather than zero. A partial transfer shrinks the source certificate and issues a NEW one to the recipient, so it requires a `certificateId` for that new certificate and refuses a reused one. The quantity must be between 1 and what the source certificate actually holds; the recipient must be a stakeholder of this same company.  Writes the caller\'s OWN cap table: the org resolved from the validated principal selects the tenant\'s store and scopes every row, so there is no field by which a caller can write into another company\'s table; a request with no validated org is refused. The whole write runs in one transaction, so a refusal leaves nothing behind. Validation is the cap-table bundle\'s and so is its refusal: a bad body comes back as {success:false, message, errors:[…]} with the failing fields listed, and numeric fields accept a number OR a numeric string. Bodies are capped at 1 MiB.
-     * Transfer shares to another stakeholder
+     * Moves shares from one stakeholder to another.  Omit `quantity` to transfer the whole certificate, which REASSIGNS it and mints no new share. Send a quantity below the amount held to SPLIT it — the source certificate keeps the remainder, and a split additionally requires `certificateId` for the new certificate, which must be unique in the company. A quantity outside 1..held is refused, so a transfer can never over-issue.  Both outcomes answer 200: a transfer records a movement between holders and mints no security of its own, which is why this is not a 201 the way an investment is.
+     * Moves shares from one stakeholder to another.
      */
-    async postCaptableSharesTransferRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postCaptableSharesTransferRaw(requestParameters: CaptableApiPostCaptableSharesTransferRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CaptableTransferred>> {
+        if (requestParameters['captableShareTransfer'] == null) {
+            throw new runtime.RequiredError(
+                'captableShareTransfer',
+                'Required parameter "captableShareTransfer" was null or undefined when calling postCaptableSharesTransfer().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -1329,17 +1510,19 @@ export class CaptableApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: CaptableShareTransferToJSON(requestParameters['captableShareTransfer']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => CaptableTransferredFromJSON(jsonValue));
     }
 
     /**
-     * Moves shares from one certificate to another stakeholder, in one atomic step.  OMITTING `quantity` transfers the WHOLE certificate, which simply reassigns it and answers newShareId null — that is the difference between a full and a partial transfer, and it is why quantity is absent rather than zero. A partial transfer shrinks the source certificate and issues a NEW one to the recipient, so it requires a `certificateId` for that new certificate and refuses a reused one. The quantity must be between 1 and what the source certificate actually holds; the recipient must be a stakeholder of this same company.  Writes the caller\'s OWN cap table: the org resolved from the validated principal selects the tenant\'s store and scopes every row, so there is no field by which a caller can write into another company\'s table; a request with no validated org is refused. The whole write runs in one transaction, so a refusal leaves nothing behind. Validation is the cap-table bundle\'s and so is its refusal: a bad body comes back as {success:false, message, errors:[…]} with the failing fields listed, and numeric fields accept a number OR a numeric string. Bodies are capped at 1 MiB.
-     * Transfer shares to another stakeholder
+     * Moves shares from one stakeholder to another.  Omit `quantity` to transfer the whole certificate, which REASSIGNS it and mints no new share. Send a quantity below the amount held to SPLIT it — the source certificate keeps the remainder, and a split additionally requires `certificateId` for the new certificate, which must be unique in the company. A quantity outside 1..held is refused, so a transfer can never over-issue.  Both outcomes answer 200: a transfer records a movement between holders and mints no security of its own, which is why this is not a 201 the way an investment is.
+     * Moves shares from one stakeholder to another.
      */
-    async postCaptableSharesTransfer(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postCaptableSharesTransferRaw(initOverrides);
+    async postCaptableSharesTransfer(requestParameters: CaptableApiPostCaptableSharesTransferRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CaptableTransferred> {
+        const response = await this.postCaptableSharesTransferRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**

@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay routes, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -76,9 +76,9 @@ export interface CodingStartIn {
      */
     prompt?: string;
     /**
-     * ReplyChannel / ReplyThread are WHERE THE RUN NARRATES ITSELF, when the door
-     * that started it has somewhere for it to talk. Empty means nobody is
-     * listening and the run simply does not narrate — which is the app door's
+     * ReplyChannel / ReplyThread are WHERE THE RUN NARRATES ITSELF, when the
+     * surface that started it has somewhere for it to talk. Empty means nobody is
+     * listening and the run simply does not narrate — which is the app surface's
      * case, because /v1/agents/coding hands back a session id and the session stream is
      * a better progress feed than any message could be.
      * 

@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay routes, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -87,7 +87,7 @@ export interface CreateAgentIn {
     /**
      * Tools are the tool names this agent may call. Omitted or empty grants NONE —
      * that default is the agent's authority and is not widened anywhere. The single
-     * entry "*" means whatever the fleet's tool door serves at the time of each run.
+     * entry "*" means whatever the fleet's MCP server serves at the time of each run.
      * @type {Array<string>}
      * @memberof CreateAgentIn
      */

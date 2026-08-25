@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay routes, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -48,8 +48,8 @@ export interface WorldApiPutWorldPipelineRequest {
 export class WorldApi extends runtime.BaseAPI {
 
     /**
-     * Answers GET /v1/world — the product\'s front door, naming every wire this surface answers on.  It exists because two of those wires are INVISIBLE to the generated document. /v1/world/mcp and /v1/world/zap are carved off the cloud catch-all by the ingress and answered by world-gw, so the cloud router never serves them — and openapi.Describe renders prose only for a route the router actually serves, which is the very property that keeps the document from being able to claim an operation nothing answers. Both addresses are real and public, so without this op the only way to learn they exist is to read the ingress config. This is where that fact lives, in the product\'s own surface.  Public on purpose: discovery precedes credentials. It reports addresses and protocols only — never feed data, and never the caller\'s plan, which GET /v1/world/limits owns — so there is nothing here to leak.
-     * Answers GET /v1/world — the product\'s front door, naming every wire this surface answers on.
+     * Answers GET /v1/world — the product\'s public endpoint, naming every wire this surface answers on.  It exists because two of those wires are INVISIBLE to the generated document. /v1/world/mcp and /v1/world/zap are carved off the cloud catch-all by the ingress and answered by world-gw, so the cloud router never serves them — and openapi.Describe renders prose only for a route the router actually serves, which is the very property that keeps the document from being able to claim an operation nothing answers. Both addresses are real and public, so without this op the only way to learn they exist is to read the ingress config. This is where that fact lives, in the product\'s own surface.  Public on purpose: discovery precedes credentials. It reports addresses and protocols only — never feed data, and never the caller\'s plan, which GET /v1/world/limits owns — so there is nothing here to leak.
+     * Answers GET /v1/world — the product\'s public endpoint, naming every wire this surface answers on.
      */
     async getWorldRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<WorldIndex>> {
         const queryParameters: any = {};
@@ -78,8 +78,8 @@ export class WorldApi extends runtime.BaseAPI {
     }
 
     /**
-     * Answers GET /v1/world — the product\'s front door, naming every wire this surface answers on.  It exists because two of those wires are INVISIBLE to the generated document. /v1/world/mcp and /v1/world/zap are carved off the cloud catch-all by the ingress and answered by world-gw, so the cloud router never serves them — and openapi.Describe renders prose only for a route the router actually serves, which is the very property that keeps the document from being able to claim an operation nothing answers. Both addresses are real and public, so without this op the only way to learn they exist is to read the ingress config. This is where that fact lives, in the product\'s own surface.  Public on purpose: discovery precedes credentials. It reports addresses and protocols only — never feed data, and never the caller\'s plan, which GET /v1/world/limits owns — so there is nothing here to leak.
-     * Answers GET /v1/world — the product\'s front door, naming every wire this surface answers on.
+     * Answers GET /v1/world — the product\'s public endpoint, naming every wire this surface answers on.  It exists because two of those wires are INVISIBLE to the generated document. /v1/world/mcp and /v1/world/zap are carved off the cloud catch-all by the ingress and answered by world-gw, so the cloud router never serves them — and openapi.Describe renders prose only for a route the router actually serves, which is the very property that keeps the document from being able to claim an operation nothing answers. Both addresses are real and public, so without this op the only way to learn they exist is to read the ingress config. This is where that fact lives, in the product\'s own surface.  Public on purpose: discovery precedes credentials. It reports addresses and protocols only — never feed data, and never the caller\'s plan, which GET /v1/world/limits owns — so there is nothing here to leak.
+     * Answers GET /v1/world — the product\'s public endpoint, naming every wire this surface answers on.
      */
     async getWorld(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<WorldIndex> {
         const response = await this.getWorldRaw(initOverrides);

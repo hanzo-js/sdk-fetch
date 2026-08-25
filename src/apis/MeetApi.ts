@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay routes, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -16,11 +16,29 @@
 import * as runtime from '../runtime.js';
 import type {
   MeetHealth,
+  RecordIn,
+  Recording,
 } from '../models/index.js';
 import {
     MeetHealthFromJSON,
     MeetHealthToJSON,
+    RecordInFromJSON,
+    RecordInToJSON,
+    RecordingFromJSON,
+    RecordingToJSON,
 } from '../models/index.js';
+
+export interface MeetApiMeetRecordReadRequest {
+    room: string;
+}
+
+export interface MeetApiMeetRecordStartRequest {
+    recordIn: RecordIn;
+}
+
+export interface MeetApiMeetRecordStopRequest {
+    room: string;
+}
 
 /**
  * 
@@ -102,6 +120,155 @@ export class MeetApi extends runtime.BaseAPI {
      */
     async getMeetSession(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.getMeetSessionRaw(initOverrides);
+    }
+
+    /**
+     * Answers what is being recorded in a room, and where the file went.  It reports the recording that is RUNNING, and once none is, the most recent one the media server still holds — with its final status and its object. That second case is the one that matters for finding a file: the answer to a start is the only other place the location appears, and a client that lost it, or a colleague who was not the one to press record, has nowhere else to look.  It is behind the same check as starting one: where a recording of a private conversation is kept is a fact about that conversation, so it is told to the people the room admits and to nobody else.
+     * What is being recorded in a room, and where the file goes
+     */
+    async meetRecordReadRaw(requestParameters: MeetApiMeetRecordReadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Recording>> {
+        if (requestParameters['room'] == null) {
+            throw new runtime.RequiredError(
+                'room',
+                'Required parameter "room" was null or undefined when calling meetRecordRead().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['room'] != null) {
+            queryParameters['room'] = requestParameters['room'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/meet/record`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => RecordingFromJSON(jsonValue));
+    }
+
+    /**
+     * Answers what is being recorded in a room, and where the file went.  It reports the recording that is RUNNING, and once none is, the most recent one the media server still holds — with its final status and its object. That second case is the one that matters for finding a file: the answer to a start is the only other place the location appears, and a client that lost it, or a colleague who was not the one to press record, has nowhere else to look.  It is behind the same check as starting one: where a recording of a private conversation is kept is a fact about that conversation, so it is told to the people the room admits and to nobody else.
+     * What is being recorded in a room, and where the file goes
+     */
+    async meetRecordRead(requestParameters: MeetApiMeetRecordReadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Recording> {
+        const response = await this.meetRecordReadRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Begins recording a room, or hands back the recording already running.  A recording is a durable artifact of a conversation, so only someone this room would admit may make one: the caller is authorized by the SAME decision /v1/meet/getToken makes about the same room, and refused with the same 401.  A SECOND START RETURNS THE FIRST rather than refusing it. There is at most one recording per room and this operation\'s job is to establish that there is one — which is already true when a colleague, or the caller\'s own double-click, started it a moment ago. The answer is the same shape either way, naming the recording that is actually running, so a client never has to tell the two cases apart to find the id.  A deployment with no media server address or no object store answers 503 naming which, because a recording that silently does not happen is worse than one that is refused. The reason reaches only a caller this room already admits.
+     * Start recording a room, or return the recording already running
+     */
+    async meetRecordStartRaw(requestParameters: MeetApiMeetRecordStartRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Recording>> {
+        if (requestParameters['recordIn'] == null) {
+            throw new runtime.RequiredError(
+                'recordIn',
+                'Required parameter "recordIn" was null or undefined when calling meetRecordStart().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/meet/record`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: RecordInToJSON(requestParameters['recordIn']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => RecordingFromJSON(jsonValue));
+    }
+
+    /**
+     * Begins recording a room, or hands back the recording already running.  A recording is a durable artifact of a conversation, so only someone this room would admit may make one: the caller is authorized by the SAME decision /v1/meet/getToken makes about the same room, and refused with the same 401.  A SECOND START RETURNS THE FIRST rather than refusing it. There is at most one recording per room and this operation\'s job is to establish that there is one — which is already true when a colleague, or the caller\'s own double-click, started it a moment ago. The answer is the same shape either way, naming the recording that is actually running, so a client never has to tell the two cases apart to find the id.  A deployment with no media server address or no object store answers 503 naming which, because a recording that silently does not happen is worse than one that is refused. The reason reaches only a caller this room already admits.
+     * Start recording a room, or return the recording already running
+     */
+    async meetRecordStart(requestParameters: MeetApiMeetRecordStartRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Recording> {
+        const response = await this.meetRecordStartRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Ends a room\'s recording — EVERY one of them.  Whoever the room admits may stop it, including someone who did not start it: a person being recorded has to be able to end it, and a rule that only the starter may stop would deny exactly that. Stopping is free — a caller made to pay to stop being recorded would be paying for the wrong thing.  200 MEANS THE ROOM IS NOT BEING RECORDED, and that is why this ends all of them rather than the first. \"At most one per room\" is an invariant this surface wants and cannot impose: reading the list and starting are two calls, and two replicas racing through that window both start. When the list comes back holding two, two is the truth — and ending one while answering 200 tells the person withdrawing consent that it stopped while a second worker keeps writing. A stop that cannot finish the job says so instead.  Stopping a room that is not being recorded is not an error. The answer names the room with no recording on it, which is the state the caller asked for.
+     * Stop a room\'s recording
+     */
+    async meetRecordStopRaw(requestParameters: MeetApiMeetRecordStopRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Recording>> {
+        if (requestParameters['room'] == null) {
+            throw new runtime.RequiredError(
+                'room',
+                'Required parameter "room" was null or undefined when calling meetRecordStop().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['room'] != null) {
+            queryParameters['room'] = requestParameters['room'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/meet/record`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => RecordingFromJSON(jsonValue));
+    }
+
+    /**
+     * Ends a room\'s recording — EVERY one of them.  Whoever the room admits may stop it, including someone who did not start it: a person being recorded has to be able to end it, and a rule that only the starter may stop would deny exactly that. Stopping is free — a caller made to pay to stop being recorded would be paying for the wrong thing.  200 MEANS THE ROOM IS NOT BEING RECORDED, and that is why this ends all of them rather than the first. \"At most one per room\" is an invariant this surface wants and cannot impose: reading the list and starting are two calls, and two replicas racing through that window both start. When the list comes back holding two, two is the truth — and ending one while answering 200 tells the person withdrawing consent that it stopped while a second worker keeps writing. A stop that cannot finish the job says so instead.  Stopping a room that is not being recorded is not an error. The answer names the room with no recording on it, which is the state the caller asked for.
+     * Stop a room\'s recording
+     */
+    async meetRecordStop(requestParameters: MeetApiMeetRecordStopRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Recording> {
+        const response = await this.meetRecordStopRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**

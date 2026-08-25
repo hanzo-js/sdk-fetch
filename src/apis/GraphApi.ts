@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay routes, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -67,6 +67,13 @@ export interface GraphApiGraphReadRequest {
 
 export interface GraphApiGraphResolveRequest {
     graphResolveIn: GraphResolveIn;
+}
+
+export interface GraphApiGraphSearchRequest {
+    q?: string;
+    relation?: string;
+    asOf?: string;
+    limit?: number;
 }
 
 export interface GraphApiPostGraphGraphqlRequest {
@@ -277,6 +284,61 @@ export class GraphApi extends runtime.BaseAPI {
     }
 
     /**
+     * Finds assertions by their text where read finds them by their keys.  It is the READ with one more term, not a second way to leave the store: same order, same ceiling, same tenancy, and searching composes with narrowing by relation and by instant because all of them are terms of one filter.  It resolves nothing. What matches is what was asserted, including claims that were later corrected — which is the honest answer to \"where is this mentioned\" and the reason the caller then asks resolve about what it found.
+     * Find assertions by their text rather than by an entity key
+     */
+    async graphSearchRaw(requestParameters: GraphApiGraphSearchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GraphReadOut>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['q'] != null) {
+            queryParameters['q'] = requestParameters['q'];
+        }
+
+        if (requestParameters['relation'] != null) {
+            queryParameters['relation'] = requestParameters['relation'];
+        }
+
+        if (requestParameters['asOf'] != null) {
+            queryParameters['as_of'] = requestParameters['asOf'];
+        }
+
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/graph/search`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => GraphReadOutFromJSON(jsonValue));
+    }
+
+    /**
+     * Finds assertions by their text where read finds them by their keys.  It is the READ with one more term, not a second way to leave the store: same order, same ceiling, same tenancy, and searching composes with narrowing by relation and by instant because all of them are terms of one filter.  It resolves nothing. What matches is what was asserted, including claims that were later corrected — which is the honest answer to \"where is this mentioned\" and the reason the caller then asks resolve about what it found.
+     * Find assertions by their text rather than by an entity key
+     */
+    async graphSearch(requestParameters: GraphApiGraphSearchRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GraphReadOut> {
+        const response = await this.graphSearchRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * The relations in use, and the rule that resolves a conflict
      */
     async graphVocabularyRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GraphVocabularyOut>> {
@@ -314,7 +376,7 @@ export class GraphApi extends runtime.BaseAPI {
     }
 
     /**
-     * Runs a GraphQL query against this organization\'s assertions.  It is the one door here a caller can TRAVERSE: the REST ops each answer a single question, so composing them — the entities this one points at, and what each of those resolves to — costs a request per hop with the intermediate keys held by the caller. Here that is one query and the nesting is the answer\'s shape.  It adds no way to ask anything new. Every field runs the SAME operation the matching REST route runs, so the tenancy, the as-of bound, the traversal bounds and the conflict rule are the ones already in force; the schema is served by introspection.  A query that cannot run answers 200 with an `errors` list, which is the wire every GraphQL client parses.
+     * Runs a GraphQL query against this organization\'s assertions.  It is the one endpoint here a caller can TRAVERSE: the REST ops each answer a single question, so composing them — the entities this one points at, and what each of those resolves to — costs a request per hop with the intermediate keys held by the caller. Here that is one query and the nesting is the answer\'s shape.  It adds no way to ask anything new. Every field runs the SAME operation the matching REST route runs, so the tenancy, the as-of bound, the traversal bounds and the conflict rule are the ones already in force; the schema is served by introspection.  A query that cannot run answers 200 with an `errors` list, which is the wire every GraphQL client parses.
      * Ask the graph in one request, traversing.
      */
     async postGraphGraphqlRaw(requestParameters: GraphApiPostGraphGraphqlRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GraphQLOut>> {
@@ -347,7 +409,7 @@ export class GraphApi extends runtime.BaseAPI {
     }
 
     /**
-     * Runs a GraphQL query against this organization\'s assertions.  It is the one door here a caller can TRAVERSE: the REST ops each answer a single question, so composing them — the entities this one points at, and what each of those resolves to — costs a request per hop with the intermediate keys held by the caller. Here that is one query and the nesting is the answer\'s shape.  It adds no way to ask anything new. Every field runs the SAME operation the matching REST route runs, so the tenancy, the as-of bound, the traversal bounds and the conflict rule are the ones already in force; the schema is served by introspection.  A query that cannot run answers 200 with an `errors` list, which is the wire every GraphQL client parses.
+     * Runs a GraphQL query against this organization\'s assertions.  It is the one endpoint here a caller can TRAVERSE: the REST ops each answer a single question, so composing them — the entities this one points at, and what each of those resolves to — costs a request per hop with the intermediate keys held by the caller. Here that is one query and the nesting is the answer\'s shape.  It adds no way to ask anything new. Every field runs the SAME operation the matching REST route runs, so the tenancy, the as-of bound, the traversal bounds and the conflict rule are the ones already in force; the schema is served by introspection.  A query that cannot run answers 200 with an `errors` list, which is the wire every GraphQL client parses.
      * Ask the graph in one request, traversing.
      */
     async postGraphGraphql(requestParameters: GraphApiPostGraphGraphqlRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GraphQLOut> {
