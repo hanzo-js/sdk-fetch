@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay routes, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -32,6 +32,7 @@ import type {
   ProjectsRelease,
   ProjectsSite,
   ProjectsSiteDeploy,
+  ProjectsStar,
   ProjectsUpdate,
   TagConfig,
 } from '../models/index.js';
@@ -70,6 +71,8 @@ import {
     ProjectsSiteToJSON,
     ProjectsSiteDeployFromJSON,
     ProjectsSiteDeployToJSON,
+    ProjectsStarFromJSON,
+    ProjectsStarToJSON,
     ProjectsUpdateFromJSON,
     ProjectsUpdateToJSON,
     TagConfigFromJSON,
@@ -83,6 +86,10 @@ export interface ProjectsApiDeleteProjectsBySlugRequest {
 export interface ProjectsApiDeleteProjectsBySlugDomainsByHostRequest {
     slug: string;
     host: string;
+}
+
+export interface ProjectsApiDeleteProjectsBySlugStarRequest {
+    slug: string;
 }
 
 export interface ProjectsApiGetProjectsBySlugRequest {
@@ -178,6 +185,10 @@ export interface ProjectsApiPostProjectsSitesRequest {
 
 export interface ProjectsApiPostProjectsSitesDeployRequest {
     projectsDeploySite: ProjectsDeploySite;
+}
+
+export interface ProjectsApiPutProjectsBySlugStarRequest {
+    slug: string;
 }
 
 /**
@@ -283,6 +294,53 @@ export class ProjectsApi extends runtime.BaseAPI {
      */
     async deleteProjectsBySlugDomainsByHost(requestParameters: ProjectsApiDeleteProjectsBySlugDomainsByHostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.deleteProjectsBySlugDomainsByHostRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Removes the caller\'s own bookmark from a project, and answers whether it is starred afterwards.  It removes only YOUR star — the same one star wrote — so a project other people have starred stays on their lists. Unstarring one you had not starred is not an error; it leaves it unstarred.
+     * Removes the caller\'s own bookmark from a project, and answers whether it is starred afterwards.
+     */
+    async deleteProjectsBySlugStarRaw(requestParameters: ProjectsApiDeleteProjectsBySlugStarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsStar>> {
+        if (requestParameters['slug'] == null) {
+            throw new runtime.RequiredError(
+                'slug',
+                'Required parameter "slug" was null or undefined when calling deleteProjectsBySlugStar().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/projects/{slug}/star`;
+        urlPath = urlPath.replace(`{${"slug"}}`, encodeURIComponent(String(requestParameters['slug'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ProjectsStarFromJSON(jsonValue));
+    }
+
+    /**
+     * Removes the caller\'s own bookmark from a project, and answers whether it is starred afterwards.  It removes only YOUR star — the same one star wrote — so a project other people have starred stays on their lists. Unstarring one you had not starred is not an error; it leaves it unstarred.
+     * Removes the caller\'s own bookmark from a project, and answers whether it is starred afterwards.
+     */
+    async deleteProjectsBySlugStar(requestParameters: ProjectsApiDeleteProjectsBySlugStarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsStar> {
+        const response = await this.deleteProjectsBySlugStarRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
@@ -1433,7 +1491,7 @@ export class ProjectsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Generates a self-contained, mobile-responsive static site from a natural-language brief and deploys it live in one call.  One inference call turns `brief` (capped at 8 KiB) into a file manifest, which then runs through the SAME validation, guards and viewport guarantee as a hand-supplied manifest: index.html required at the root, absolute and traversal paths rejected, per-file and total size capped, and a mobile viewport meta tag injected into every HTML document that lacks one. The generated site is fully inline — no CDNs, no remote fonts or images — so it is CSP-safe. `slug` and `name` are optional: the model\'s own title is preferred, and a slug is derived or minted when none is given.  It writes into the SAME org-scoped store as /v1/projects — it ensures a project (framework `static`) for the resolved slug and records a deployment — so this is a second door onto one publish pipeline, not a second copy of project state. Ordering is the billing contract: the hosting gate runs BEFORE any inference or upload, so a denied gate generates and uploads NOTHING, and the debit lands once, only after the site is actually live. The tokens are billed to the same ledger the hosting fee was reserved against.  Answers 503 when object storage or inference is unconfigured, and 400 when the model\'s manifest cannot be parsed or fails the guards.  Scope: a validated principal is required (403 without one) and the site is published into THAT principal\'s org.
+     * Generates a self-contained, mobile-responsive static site from a natural-language brief and deploys it live in one call.  One inference call turns `brief` (capped at 8 KiB) into a file manifest, which then runs through the SAME validation, guards and viewport guarantee as a hand-supplied manifest: index.html required at the root, absolute and traversal paths rejected, per-file and total size capped, and a mobile viewport meta tag injected into every HTML document that lacks one. The generated site is fully inline — no CDNs, no remote fonts or images — so it is CSP-safe. `slug` and `name` are optional: the model\'s own title is preferred, and a slug is derived or minted when none is given.  It writes into the SAME org-scoped store as /v1/projects — it ensures a project (framework `static`) for the resolved slug and records a deployment — so this is a second entry point to one publish pipeline, not a second copy of project state. Ordering is the billing contract: the hosting gate runs BEFORE any inference or upload, so a denied gate generates and uploads NOTHING, and the debit lands once, only after the site is actually live. The tokens are billed to the same ledger the hosting fee was reserved against.  Answers 503 when object storage or inference is unconfigured, and 400 when the model\'s manifest cannot be parsed or fails the guards.  Scope: a validated principal is required (403 without one) and the site is published into THAT principal\'s org.
      * Generates a self-contained, mobile-responsive static site from a natural-language brief and deploys it live in one call.
      */
     async postProjectsSitesRaw(requestParameters: ProjectsApiPostProjectsSitesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsSiteDeploy>> {
@@ -1473,7 +1531,7 @@ export class ProjectsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Generates a self-contained, mobile-responsive static site from a natural-language brief and deploys it live in one call.  One inference call turns `brief` (capped at 8 KiB) into a file manifest, which then runs through the SAME validation, guards and viewport guarantee as a hand-supplied manifest: index.html required at the root, absolute and traversal paths rejected, per-file and total size capped, and a mobile viewport meta tag injected into every HTML document that lacks one. The generated site is fully inline — no CDNs, no remote fonts or images — so it is CSP-safe. `slug` and `name` are optional: the model\'s own title is preferred, and a slug is derived or minted when none is given.  It writes into the SAME org-scoped store as /v1/projects — it ensures a project (framework `static`) for the resolved slug and records a deployment — so this is a second door onto one publish pipeline, not a second copy of project state. Ordering is the billing contract: the hosting gate runs BEFORE any inference or upload, so a denied gate generates and uploads NOTHING, and the debit lands once, only after the site is actually live. The tokens are billed to the same ledger the hosting fee was reserved against.  Answers 503 when object storage or inference is unconfigured, and 400 when the model\'s manifest cannot be parsed or fails the guards.  Scope: a validated principal is required (403 without one) and the site is published into THAT principal\'s org.
+     * Generates a self-contained, mobile-responsive static site from a natural-language brief and deploys it live in one call.  One inference call turns `brief` (capped at 8 KiB) into a file manifest, which then runs through the SAME validation, guards and viewport guarantee as a hand-supplied manifest: index.html required at the root, absolute and traversal paths rejected, per-file and total size capped, and a mobile viewport meta tag injected into every HTML document that lacks one. The generated site is fully inline — no CDNs, no remote fonts or images — so it is CSP-safe. `slug` and `name` are optional: the model\'s own title is preferred, and a slug is derived or minted when none is given.  It writes into the SAME org-scoped store as /v1/projects — it ensures a project (framework `static`) for the resolved slug and records a deployment — so this is a second entry point to one publish pipeline, not a second copy of project state. Ordering is the billing contract: the hosting gate runs BEFORE any inference or upload, so a denied gate generates and uploads NOTHING, and the debit lands once, only after the site is actually live. The tokens are billed to the same ledger the hosting fee was reserved against.  Answers 503 when object storage or inference is unconfigured, and 400 when the model\'s manifest cannot be parsed or fails the guards.  Scope: a validated principal is required (403 without one) and the site is published into THAT principal\'s org.
      * Generates a self-contained, mobile-responsive static site from a natural-language brief and deploys it live in one call.
      */
     async postProjectsSites(requestParameters: ProjectsApiPostProjectsSitesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsSiteDeploy> {
@@ -1527,6 +1585,53 @@ export class ProjectsApi extends runtime.BaseAPI {
      */
     async postProjectsSitesDeploy(requestParameters: ProjectsApiPostProjectsSitesDeployRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsSiteDeploy> {
         const response = await this.postProjectsSitesDeployRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Bookmarks a project for the person calling, and answers whether it is starred afterwards.  The star is YOURS: it is keyed by you as well as by the project, so two people see two answers for the same one and starring it says nothing about anybody else\'s list. Starring a project you have already starred leaves it starred.
+     * Bookmarks a project for the person calling, and answers whether it is starred afterwards.
+     */
+    async putProjectsBySlugStarRaw(requestParameters: ProjectsApiPutProjectsBySlugStarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsStar>> {
+        if (requestParameters['slug'] == null) {
+            throw new runtime.RequiredError(
+                'slug',
+                'Required parameter "slug" was null or undefined when calling putProjectsBySlugStar().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/projects/{slug}/star`;
+        urlPath = urlPath.replace(`{${"slug"}}`, encodeURIComponent(String(requestParameters['slug'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ProjectsStarFromJSON(jsonValue));
+    }
+
+    /**
+     * Bookmarks a project for the person calling, and answers whether it is starred afterwards.  The star is YOURS: it is keyed by you as well as by the project, so two people see two answers for the same one and starring it says nothing about anybody else\'s list. Starring a project you have already starred leaves it starred.
+     * Bookmarks a project for the person calling, and answers whether it is starred afterwards.
+     */
+    async putProjectsBySlugStar(requestParameters: ProjectsApiPutProjectsBySlugStarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsStar> {
+        const response = await this.putProjectsBySlugStarRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

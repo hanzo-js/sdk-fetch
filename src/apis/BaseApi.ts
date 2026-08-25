@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay routes, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -16,16 +16,109 @@
 import * as runtime from '../runtime.js';
 import type {
   BaseHealth,
+  BaseView,
 } from '../models/index.js';
 import {
     BaseHealthFromJSON,
     BaseHealthToJSON,
+    BaseViewFromJSON,
+    BaseViewToJSON,
 } from '../models/index.js';
+
+export interface BaseApiGetBaseBasesByOrgRequest {
+    org: string;
+}
 
 /**
  * 
  */
 export class BaseApi extends runtime.BaseAPI {
+
+    /**
+     * Lists every Base the caller can reach, one per org their token carries.  The orgs come from IAM\'s signed membership set, so the list is exactly the orgs the caller is a member of and cannot be widened by asking. It is the account-wide view: a Base is per org, so this is one entry per org and there is nothing to page.  A caller with no membership set — a machine credential, an API key — reaches no Base and receives an empty list rather than a refusal, because holding no membership is an answer and not a failure.
+     * Lists every Base the caller can reach, one per org their token carries.
+     */
+    async getBaseBasesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<BaseView>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/base/bases`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(BaseViewFromJSON));
+    }
+
+    /**
+     * Lists every Base the caller can reach, one per org their token carries.  The orgs come from IAM\'s signed membership set, so the list is exactly the orgs the caller is a member of and cannot be widened by asking. It is the account-wide view: a Base is per org, so this is one entry per org and there is nothing to page.  A caller with no membership set — a machine credential, an API key — reaches no Base and receives an empty list rather than a refusal, because holding no membership is an answer and not a failure.
+     * Lists every Base the caller can reach, one per org their token carries.
+     */
+    async getBaseBases(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<BaseView>> {
+        const response = await this.getBaseBasesRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Describes ONE org\'s Base — whether its store exists, and what it occupies.  The org must be one the caller\'s token carries; any other is not found, so this cannot be used to learn which orgs exist. That check is the same membership set the listing is built from, which is why the two can never disagree about what a caller may see.
+     * Describes ONE org\'s Base — whether its store exists, and what it occupies.
+     */
+    async getBaseBasesByOrgRaw(requestParameters: BaseApiGetBaseBasesByOrgRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BaseView>> {
+        if (requestParameters['org'] == null) {
+            throw new runtime.RequiredError(
+                'org',
+                'Required parameter "org" was null or undefined when calling getBaseBasesByOrg().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/base/bases/{org}`;
+        urlPath = urlPath.replace(`{${"org"}}`, encodeURIComponent(String(requestParameters['org'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => BaseViewFromJSON(jsonValue));
+    }
+
+    /**
+     * Describes ONE org\'s Base — whether its store exists, and what it occupies.  The org must be one the caller\'s token carries; any other is not found, so this cannot be used to learn which orgs exist. That check is the same membership set the listing is built from, which is why the two can never disagree about what a caller may see.
+     * Describes ONE org\'s Base — whether its store exists, and what it occupies.
+     */
+    async getBaseBasesByOrg(requestParameters: BaseApiGetBaseBasesByOrgRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BaseView> {
+        const response = await this.getBaseBasesByOrgRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * Reports that the base subsystem is serving.  It is deliberately INDEPENDENT of whether this deployment actually embeds the Base engine: the route answers before the CLOUD_BASE_EMBED gate and before the /v1/base/_* wildcard, so a liveness probe measures the process rather than an optional feature, and the wildcard can never shadow it. It reads no tenant, so a prober that sends no principal is answered rather than refused.

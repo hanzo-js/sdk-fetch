@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay routes, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -41,9 +41,9 @@ export interface AiMCPSurface {
      */
     names?: Array<string>;
     /**
-     * Tools is how many tools THIS PROCESS's door carries: its own typed-op
+     * Tools is how many tools THIS PROCESS's MCP server carries: its own typed-op
      * registry, projected. It is the only number a subsystem can state honestly —
-     * what the FLEET's door carries is a question only the host can ask, and it
+     * what the FLEET's server carries is a question only the host can ask, and it
      * asks it by asking every subsystem (POST /v1/mcp, tools/list).
      * @type {number}
      * @memberof AiMCPSurface

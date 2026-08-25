@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay routes, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,37 +20,45 @@ import { mapValues } from '../runtime.js';
  */
 export interface UserEnablementItem {
     /**
-     * beta && not yet opted in
+     * CanOptIn is whether POST /v1/pricing/enablement/optin would do anything
+     * here: the item is in beta and this org is not on its list yet. False for a
+     * caller with no validated org, who has no org to enrol.
      * @type {boolean}
      * @memberof UserEnablementItem
      */
     canOptIn?: boolean;
     /**
-     * visible to the caller's org
+     * Effective is whether the caller's org may use the item right now, which is
+     * the field to branch on: true for any ga item, for a beta this org holds,
+     * and never for an off one.
      * @type {boolean}
      * @memberof UserEnablementItem
      */
     effective?: boolean;
     /**
-     * 
+     * ID is the item within that namespace — a model id, a provider name, or a
+     * feature key.
      * @type {string}
      * @memberof UserEnablementItem
      */
     id?: string;
     /**
-     * 
+     * Kind is the namespace the id lives in: "model", "provider" or "feature".
      * @type {string}
      * @memberof UserEnablementItem
      */
     kind?: string;
     /**
-     * caller's org on the beta list
+     * OptedIn is whether the caller's org is on this item's beta grant list. It
+     * can be true on an "off" item — the list survives the kill switch and is
+     * simply ignored while it is thrown — so it does not imply Effective.
      * @type {boolean}
      * @memberof UserEnablementItem
      */
     optedIn?: boolean;
     /**
-     * off|beta|ga
+     * State is the item's GLOBAL availability — "off", "beta" or "ga" — which is
+     * the operator's setting and not this caller's answer. Effective is that.
      * @type {string}
      * @memberof UserEnablementItem
      */

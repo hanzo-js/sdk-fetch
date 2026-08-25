@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay routes, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -644,10 +644,10 @@ export class GuideApi extends runtime.BaseAPI {
     }
 
     /**
-     * Moves one step of the caller org\'s journey to done and answers the whole refreshed journey, which is what unblocks everything downstream of it.  Dependency-GATED like start: finishing a step whose prerequisites are themselves unfinished is 409 carrying `{error, step, blockedBy}` naming what is in the way, not a silent success. A step id the org\'s active journey does not contain is 404. Skipping is the ungated alternative — a founder declaring a step does not apply — and it lives at /skip.  Requires a validated org; 403 without one. The mark is recorded as `manual`, and /reset returns the step to todo.
-     * Mark a step of your org\'s journey finished
+     * Marks one step of the caller org\'s journey complete and returns the refreshed journey.  Dependency-GATED, exactly as start is: a step whose prerequisites are unfinished is refused 409 carrying {error, step, blockedBy} naming what is in the way.
+     * Marks one step of the caller org\'s journey complete and returns the refreshed journey.
      */
-    async postGuideStepsByIdDoneRaw(requestParameters: GuideApiPostGuideStepsByIdDoneRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postGuideStepsByIdDoneRaw(requestParameters: GuideApiPostGuideStepsByIdDoneRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OverviewView>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -678,15 +678,16 @@ export class GuideApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => OverviewViewFromJSON(jsonValue));
     }
 
     /**
-     * Moves one step of the caller org\'s journey to done and answers the whole refreshed journey, which is what unblocks everything downstream of it.  Dependency-GATED like start: finishing a step whose prerequisites are themselves unfinished is 409 carrying `{error, step, blockedBy}` naming what is in the way, not a silent success. A step id the org\'s active journey does not contain is 404. Skipping is the ungated alternative — a founder declaring a step does not apply — and it lives at /skip.  Requires a validated org; 403 without one. The mark is recorded as `manual`, and /reset returns the step to todo.
-     * Mark a step of your org\'s journey finished
+     * Marks one step of the caller org\'s journey complete and returns the refreshed journey.  Dependency-GATED, exactly as start is: a step whose prerequisites are unfinished is refused 409 carrying {error, step, blockedBy} naming what is in the way.
+     * Marks one step of the caller org\'s journey complete and returns the refreshed journey.
      */
-    async postGuideStepsByIdDone(requestParameters: GuideApiPostGuideStepsByIdDoneRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postGuideStepsByIdDoneRaw(requestParameters, initOverrides);
+    async postGuideStepsByIdDone(requestParameters: GuideApiPostGuideStepsByIdDoneRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OverviewView> {
+        const response = await this.postGuideStepsByIdDoneRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
@@ -784,10 +785,10 @@ export class GuideApi extends runtime.BaseAPI {
     }
 
     /**
-     * Moves one step of the caller org\'s journey to in-progress and answers the whole refreshed journey, so a console needs no second read.  The transition is dependency-GATED, and that is why the answer set is wider than a success: a step whose prerequisites are unfinished is 409 carrying `{error, step, blockedBy}`, where `blockedBy` names the exact steps in the way — enough to render the blockage rather than merely report it. A step id the org\'s active journey does not contain is 404.  Requires a validated org; 403 without one, and the journey read and written is that org\'s alone. The mark is recorded as `manual`, and the journey is reconciled against the auto-detectors on every read, so a step the org has demonstrably completed elsewhere can still be moved to done underneath it.
-     * Mark a step of your org\'s journey started
+     * Marks one step of the caller org\'s journey in progress and returns the refreshed journey.  Dependency-GATED: a step whose prerequisites are unfinished is refused 409 carrying {error, step, blockedBy}, where blockedBy names the exact steps in the way — enough to render the reason without asking again.
+     * Marks one step of the caller org\'s journey in progress and returns the refreshed journey.
      */
-    async postGuideStepsByIdStartRaw(requestParameters: GuideApiPostGuideStepsByIdStartRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postGuideStepsByIdStartRaw(requestParameters: GuideApiPostGuideStepsByIdStartRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OverviewView>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -818,15 +819,16 @@ export class GuideApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => OverviewViewFromJSON(jsonValue));
     }
 
     /**
-     * Moves one step of the caller org\'s journey to in-progress and answers the whole refreshed journey, so a console needs no second read.  The transition is dependency-GATED, and that is why the answer set is wider than a success: a step whose prerequisites are unfinished is 409 carrying `{error, step, blockedBy}`, where `blockedBy` names the exact steps in the way — enough to render the blockage rather than merely report it. A step id the org\'s active journey does not contain is 404.  Requires a validated org; 403 without one, and the journey read and written is that org\'s alone. The mark is recorded as `manual`, and the journey is reconciled against the auto-detectors on every read, so a step the org has demonstrably completed elsewhere can still be moved to done underneath it.
-     * Mark a step of your org\'s journey started
+     * Marks one step of the caller org\'s journey in progress and returns the refreshed journey.  Dependency-GATED: a step whose prerequisites are unfinished is refused 409 carrying {error, step, blockedBy}, where blockedBy names the exact steps in the way — enough to render the reason without asking again.
+     * Marks one step of the caller org\'s journey in progress and returns the refreshed journey.
      */
-    async postGuideStepsByIdStart(requestParameters: GuideApiPostGuideStepsByIdStartRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postGuideStepsByIdStartRaw(requestParameters, initOverrides);
+    async postGuideStepsByIdStart(requestParameters: GuideApiPostGuideStepsByIdStartRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OverviewView> {
+        const response = await this.postGuideStepsByIdStartRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**

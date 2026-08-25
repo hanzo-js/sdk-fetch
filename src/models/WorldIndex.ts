@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay routes, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -40,9 +40,10 @@ export interface WorldIndex {
      */
     summary?: string;
     /**
-     * Wires is every protocol door onto World, REST first. It is deliberately NOT
-     * a list of REST operations: GET /v1/openapi.json is the one enumeration of
-     * those, and a second copy here would be a second thing to keep true.
+     * Wires is every protocol entry point onto World, REST first. It is
+     * deliberately NOT a list of REST operations: GET /v1/openapi.json is the one
+     * enumeration of those, and a second copy here would be a second thing to keep
+     * true.
      * @type {Array<WorldWire>}
      * @memberof WorldIndex
      */

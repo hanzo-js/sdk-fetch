@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay routes, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -775,7 +775,7 @@ export class SandboxApi extends runtime.BaseAPI {
     }
 
     /**
-     * Mints a short-lived grant to open the screen of a desktop sandbox. Same properties as the terminal ticket, for the other door.
+     * Mints a short-lived grant to open the screen of a desktop sandbox. Same properties as the terminal ticket, for the other endpoint.
      * Mints a short-lived grant to open the screen of a desktop sandbox.
      */
     async postSandboxByIdScreenTicketRaw(requestParameters: SandboxApiPostSandboxByIdScreenTicketRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TicketGrant>> {
@@ -813,7 +813,7 @@ export class SandboxApi extends runtime.BaseAPI {
     }
 
     /**
-     * Mints a short-lived grant to open the screen of a desktop sandbox. Same properties as the terminal ticket, for the other door.
+     * Mints a short-lived grant to open the screen of a desktop sandbox. Same properties as the terminal ticket, for the other endpoint.
      * Mints a short-lived grant to open the screen of a desktop sandbox.
      */
     async postSandboxByIdScreenTicket(requestParameters: SandboxApiPostSandboxByIdScreenTicketRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TicketGrant> {

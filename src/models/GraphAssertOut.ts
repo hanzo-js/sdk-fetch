@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay routes, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -40,7 +40,7 @@ export interface GraphAssertOut {
      */
     recorded?: number;
     /**
-     * Refused is how many members were turned away at the door, before the store
+     * Refused is how many members were turned away on arrival, before the store
      * was touched — a missing entity, a timestamp that is not RFC 3339, a
      * confidence outside [0,1]. The rest of the batch was still recorded.
      * @type {number}

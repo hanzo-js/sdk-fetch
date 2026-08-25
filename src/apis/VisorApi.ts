@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay routes, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -897,10 +897,10 @@ export class VisorApi extends runtime.BaseAPI {
     }
 
     /**
-     * Lists the launch regions the compute catalog offers, passed through verbatim from the provider so the shape stays the provider\'s single source of truth. The catalog is GLOBAL, not per-tenant: no owner is forwarded and every org sees the same list. It is still gated — a validated principal is required, 403 without one — because the catalog is what backs the launch drawer, not public marketing copy.
-     * The regions a machine or GPU can be launched into
+     * Regions lists the regions a machine can be launched in.  The catalog is GLOBAL — identical for every tenant — so no owner is forwarded upstream. It is still org-gated, because a catalog is a map of what this deployment can spend money in and an anonymous caller has no business reading it.
+     * Regions lists the regions a machine can be launched in.
      */
-    async getVisorComputeRegionsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getVisorComputeRegionsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -923,22 +923,27 @@ export class VisorApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return new runtime.JSONApiResponse<any>(response);
+        } else {
+            return new runtime.TextApiResponse(response) as any;
+        }
     }
 
     /**
-     * Lists the launch regions the compute catalog offers, passed through verbatim from the provider so the shape stays the provider\'s single source of truth. The catalog is GLOBAL, not per-tenant: no owner is forwarded and every org sees the same list. It is still gated — a validated principal is required, 403 without one — because the catalog is what backs the launch drawer, not public marketing copy.
-     * The regions a machine or GPU can be launched into
+     * Regions lists the regions a machine can be launched in.  The catalog is GLOBAL — identical for every tenant — so no owner is forwarded upstream. It is still org-gated, because a catalog is a map of what this deployment can spend money in and an anonymous caller has no business reading it.
+     * Regions lists the regions a machine can be launched in.
      */
-    async getVisorComputeRegions(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getVisorComputeRegionsRaw(initOverrides);
+    async getVisorComputeRegions(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
+        const response = await this.getVisorComputeRegionsRaw(initOverrides);
+        return await response.value();
     }
 
     /**
-     * Lists the instance sizes the compute catalog offers, passed through verbatim from the provider so the shape stays the provider\'s single source of truth. These are the values `size` accepts on a launch. The catalog is GLOBAL, not per-tenant: no owner is forwarded and every org sees the same list. It is still gated — a validated principal is required, 403 without one.
-     * The machine and GPU sizes that can be launched
+     * Sizes lists the machine sizes available to launch, with their specifications.  Global and org-gated, exactly as the region catalog is, and for the same reasons.
+     * Sizes lists the machine sizes available to launch, with their specifications.
      */
-    async getVisorComputeSizesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getVisorComputeSizesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -961,15 +966,20 @@ export class VisorApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return new runtime.JSONApiResponse<any>(response);
+        } else {
+            return new runtime.TextApiResponse(response) as any;
+        }
     }
 
     /**
-     * Lists the instance sizes the compute catalog offers, passed through verbatim from the provider so the shape stays the provider\'s single source of truth. These are the values `size` accepts on a launch. The catalog is GLOBAL, not per-tenant: no owner is forwarded and every org sees the same list. It is still gated — a validated principal is required, 403 without one.
-     * The machine and GPU sizes that can be launched
+     * Sizes lists the machine sizes available to launch, with their specifications.  Global and org-gated, exactly as the region catalog is, and for the same reasons.
+     * Sizes lists the machine sizes available to launch, with their specifications.
      */
-    async getVisorComputeSizes(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getVisorComputeSizesRaw(initOverrides);
+    async getVisorComputeSizes(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
+        const response = await this.getVisorComputeSizesRaw(initOverrides);
+        return await response.value();
     }
 
     /**

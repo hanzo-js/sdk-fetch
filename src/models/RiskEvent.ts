@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay routes, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -26,7 +26,7 @@ export interface RiskEvent {
      * accepted, because a future timestamp moves the aggregates' leading edge and
      * leaves every later event for that subject reading as though it never
      * happened. History older than the window is folded in from your own event
-     * surface, not through this door.
+     * surface, not through this endpoint.
      * @type {string}
      * @memberof RiskEvent
      */

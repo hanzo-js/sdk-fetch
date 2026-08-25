@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay routes, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,92 +20,26 @@ import { mapValues } from '../runtime.js';
  */
 export interface Listing {
     /**
-     * Category groups the listing in the shop window. Free text — no vocabulary,
-     * nothing validates it — and unlike Description it is silently cut to 4096
-     * bytes rather than refused. Empty means ungrouped.
+     * LastModified is when the BYTES last changed, as RFC 3339 in UTC to the
+     * second — `2026-01-02T03:04:05Z`, the sandbox's own `date -u -r` on the file.
+     * It is an mtime and not a creation time, so a file a later run overwrote
+     * carries that run's clock. Never empty: a row exists only because `find`
+     * stat-ed the file.
      * @type {string}
      * @memberof Listing
      */
-    category?: string;
+    lastModified?: string;
     /**
-     * CreatedAt is when the listing was published, in Unix SECONDS, minted at
-     * insert. Every listing read orders by it descending, so it is the shop's
-     * ordering key as well as its age.
-     * @type {number}
-     * @memberof Listing
-     */
-    createdAt?: number;
-    /**
-     * Currency is the ISO 4217 code Price is quoted in; Create defaults it to "USD"
-     * when the publisher names none. It is a LABEL that travels to the shop window:
-     * publish parses Price with money.ParseUSD and the x402 terms carry no
-     * currency, so another code here changes what is displayed, not what is charged.
+     * Name is the file's IDENTIFIER, `{session_id}/{fileId}` whole — never the bare
+     * filename, and never URL-escaped. It is exactly what GET /v1/exec/download
+     * takes after its prefix, and hanzo.chat matches it as a PREFIX
+     * (`name.startsWith(session + "/")`) to decide which rows belong to a session
+     * it is holding. `fileId` is the path RELATIVE to the session's artifact
+     * directory, so it carries `/` for anything the run wrote in a sub-directory.
      * @type {string}
      * @memberof Listing
      */
-    currency?: string;
-    /**
-     * Description is the long copy. Publish REFUSES one past 4096 bytes rather
-     * than truncating it, so what is stored is what was sent; empty is allowed.
-     * @type {string}
-     * @memberof Listing
-     */
-    description?: string;
-    /**
-     * ID is the listing's id, minted here as "lst_" + 16 hex characters. A
-     * publisher cannot choose it: Create overwrites whatever arrives. It is unique
-     * within PublisherOrg (the primary key is the pair), and it is the path segment
-     * DELETE /v1/marketplace/listings/:id takes.
-     * @type {string}
-     * @memberof Listing
-     */
-    id?: string;
-    /**
-     * 
-     * @type {any}
-     * @memberof Listing
-     */
-    price?: any | null;
-    /**
-     * Public is whether other orgs can discover the listing. It also decides
-     * ENFORCEMENT: only public rows reach the price table, so a private listing
-     * with a price charges nobody. False leaves the row visible to its publisher
-     * alone.
-     * @type {boolean}
-     * @memberof Listing
-     */
-    _public?: boolean;
-    /**
-     * PublisherOrg is the org that published the listing, taken from the validated
-     * principal and never off the wire. It is also the PAYEE org — Recipient is
-     * resolved inside it — and the isolation key: a publisher reads and deletes
-     * only rows carrying its own org.
-     * @type {string}
-     * @memberof Listing
-     */
-    publisherOrg?: string;
-    /**
-     * seller payout WALLET ID, in PublisherOrg.
-     * @type {string}
-     * @memberof Listing
-     */
-    recipient?: string;
-    /**
-     * Title is the shop-window name, required and refused past 200 bytes. It is
-     * what discovery paints over the tool's registry name.
-     * @type {string}
-     * @memberof Listing
-     */
-    title?: string;
-    /**
-     * Tool is the registry name of the offered capability, in the flat fleet-wide
-     * tool namespace. It resolved in the publisher's own scope at publish time, so
-     * no listing advertises a capability that did not exist; it is also the key the
-     * price table looks a dispatch up by.
-     * @type {string}
-     * @memberof Listing
-     */
-    tool?: string;
+    name?: string;
 }
 
 /**
@@ -125,17 +59,8 @@ export function ListingFromJSONTyped(json: any, ignoreDiscriminator: boolean): L
     }
     return {
         
-        'category': json['category'] == null ? undefined : json['category'],
-        'createdAt': json['createdAt'] == null ? undefined : json['createdAt'],
-        'currency': json['currency'] == null ? undefined : json['currency'],
-        'description': json['description'] == null ? undefined : json['description'],
-        'id': json['id'] == null ? undefined : json['id'],
-        'price': json['price'] == null ? undefined : json['price'],
-        '_public': json['public'] == null ? undefined : json['public'],
-        'publisherOrg': json['publisherOrg'] == null ? undefined : json['publisherOrg'],
-        'recipient': json['recipient'] == null ? undefined : json['recipient'],
-        'title': json['title'] == null ? undefined : json['title'],
-        'tool': json['tool'] == null ? undefined : json['tool'],
+        'lastModified': json['lastModified'] == null ? undefined : json['lastModified'],
+        'name': json['name'] == null ? undefined : json['name'],
     };
 }
 
@@ -150,17 +75,8 @@ export function ListingToJSONTyped(value?: Listing | null, ignoreDiscriminator: 
 
     return {
         
-        'category': value['category'],
-        'createdAt': value['createdAt'],
-        'currency': value['currency'],
-        'description': value['description'],
-        'id': value['id'],
-        'price': value['price'],
-        'public': value['_public'],
-        'publisherOrg': value['publisherOrg'],
-        'recipient': value['recipient'],
-        'title': value['title'],
-        'tool': value['tool'],
+        'lastModified': value['lastModified'],
+        'name': value['name'],
     };
 }
 

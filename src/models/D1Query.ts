@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay routes, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -20,13 +20,17 @@ import { mapValues } from '../runtime.js';
  */
 export interface D1Query {
     /**
-     * 
+     * Params are the statement's bound values, in the order its `?` placeholders
+     * appear — a string, a number, a boolean or null, whatever the column takes.
+     * Absent means the statement carries no placeholders; bind values here rather
+     * than interpolating them into the statement.
      * @type {Array<any>}
      * @memberof D1Query
      */
     params?: Array<any>;
     /**
-     * 
+     * SQL is the statement to run. Blank (or absent) is refused before anything
+     * reaches D1.
      * @type {string}
      * @memberof D1Query
      */

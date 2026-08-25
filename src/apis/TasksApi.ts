@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay routes, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -21,7 +21,7 @@ import * as runtime from '../runtime.js';
 export class TasksApi extends runtime.BaseAPI {
 
     /**
-     * Answers 307 with Location /v1/tasks/ — this address serves nothing itself. The redirect is a routing fact derived from the engine\'s subtree, decided before any handler runs, so it is the same on every method.  A 307 preserves both the method and the body, so a client that follows redirects re-sends the request unchanged to /v1/tasks/ and nothing is lost. A client that does NOT follow redirects sees only the 307 and performs no work — address /v1/tasks/ directly and the hop disappears.
+     * Answers 307 with Location /v1/tasks/ — this address serves nothing itself. The status and the Location are the same on every method; a GET additionally carries the short HTML body a browser falls back to when it does not follow the redirect itself.  A 307 preserves both the method and the body, so a client that follows redirects re-sends the request unchanged to /v1/tasks/ and nothing is lost. A client that does NOT follow redirects sees only the 307 and performs no work — address /v1/tasks/ directly and the hop disappears.
      * Redirect to the tasks API root
      */
     async deleteTasksRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -51,7 +51,7 @@ export class TasksApi extends runtime.BaseAPI {
     }
 
     /**
-     * Answers 307 with Location /v1/tasks/ — this address serves nothing itself. The redirect is a routing fact derived from the engine\'s subtree, decided before any handler runs, so it is the same on every method.  A 307 preserves both the method and the body, so a client that follows redirects re-sends the request unchanged to /v1/tasks/ and nothing is lost. A client that does NOT follow redirects sees only the 307 and performs no work — address /v1/tasks/ directly and the hop disappears.
+     * Answers 307 with Location /v1/tasks/ — this address serves nothing itself. The status and the Location are the same on every method; a GET additionally carries the short HTML body a browser falls back to when it does not follow the redirect itself.  A 307 preserves both the method and the body, so a client that follows redirects re-sends the request unchanged to /v1/tasks/ and nothing is lost. A client that does NOT follow redirects sees only the 307 and performs no work — address /v1/tasks/ directly and the hop disappears.
      * Redirect to the tasks API root
      */
     async deleteTasks(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
@@ -59,7 +59,7 @@ export class TasksApi extends runtime.BaseAPI {
     }
 
     /**
-     * Answers 307 with Location /v1/tasks/ — this address serves nothing itself. The redirect is a routing fact derived from the engine\'s subtree, decided before any handler runs, so it is the same on every method.  A 307 preserves both the method and the body, so a client that follows redirects re-sends the request unchanged to /v1/tasks/ and nothing is lost. A client that does NOT follow redirects sees only the 307 and performs no work — address /v1/tasks/ directly and the hop disappears.
+     * Answers 307 with Location /v1/tasks/ — this address serves nothing itself. The status and the Location are the same on every method; a GET additionally carries the short HTML body a browser falls back to when it does not follow the redirect itself.  A 307 preserves both the method and the body, so a client that follows redirects re-sends the request unchanged to /v1/tasks/ and nothing is lost. A client that does NOT follow redirects sees only the 307 and performs no work — address /v1/tasks/ directly and the hop disappears.
      * Redirect to the tasks API root
      */
     async getTasksRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -89,7 +89,7 @@ export class TasksApi extends runtime.BaseAPI {
     }
 
     /**
-     * Answers 307 with Location /v1/tasks/ — this address serves nothing itself. The redirect is a routing fact derived from the engine\'s subtree, decided before any handler runs, so it is the same on every method.  A 307 preserves both the method and the body, so a client that follows redirects re-sends the request unchanged to /v1/tasks/ and nothing is lost. A client that does NOT follow redirects sees only the 307 and performs no work — address /v1/tasks/ directly and the hop disappears.
+     * Answers 307 with Location /v1/tasks/ — this address serves nothing itself. The status and the Location are the same on every method; a GET additionally carries the short HTML body a browser falls back to when it does not follow the redirect itself.  A 307 preserves both the method and the body, so a client that follows redirects re-sends the request unchanged to /v1/tasks/ and nothing is lost. A client that does NOT follow redirects sees only the 307 and performs no work — address /v1/tasks/ directly and the hop disappears.
      * Redirect to the tasks API root
      */
     async getTasks(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
@@ -97,7 +97,7 @@ export class TasksApi extends runtime.BaseAPI {
     }
 
     /**
-     * Answers 307 with Location /v1/tasks/ — this address serves nothing itself. The redirect is a routing fact derived from the engine\'s subtree, decided before any handler runs, so it is the same on every method.  A 307 preserves both the method and the body, so a client that follows redirects re-sends the request unchanged to /v1/tasks/ and nothing is lost. A client that does NOT follow redirects sees only the 307 and performs no work — address /v1/tasks/ directly and the hop disappears.
+     * Answers 307 with Location /v1/tasks/ — this address serves nothing itself. The status and the Location are the same on every method; a GET additionally carries the short HTML body a browser falls back to when it does not follow the redirect itself.  A 307 preserves both the method and the body, so a client that follows redirects re-sends the request unchanged to /v1/tasks/ and nothing is lost. A client that does NOT follow redirects sees only the 307 and performs no work — address /v1/tasks/ directly and the hop disappears.
      * Redirect to the tasks API root
      */
     async patchTasksRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -127,7 +127,7 @@ export class TasksApi extends runtime.BaseAPI {
     }
 
     /**
-     * Answers 307 with Location /v1/tasks/ — this address serves nothing itself. The redirect is a routing fact derived from the engine\'s subtree, decided before any handler runs, so it is the same on every method.  A 307 preserves both the method and the body, so a client that follows redirects re-sends the request unchanged to /v1/tasks/ and nothing is lost. A client that does NOT follow redirects sees only the 307 and performs no work — address /v1/tasks/ directly and the hop disappears.
+     * Answers 307 with Location /v1/tasks/ — this address serves nothing itself. The status and the Location are the same on every method; a GET additionally carries the short HTML body a browser falls back to when it does not follow the redirect itself.  A 307 preserves both the method and the body, so a client that follows redirects re-sends the request unchanged to /v1/tasks/ and nothing is lost. A client that does NOT follow redirects sees only the 307 and performs no work — address /v1/tasks/ directly and the hop disappears.
      * Redirect to the tasks API root
      */
     async patchTasks(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
@@ -135,7 +135,7 @@ export class TasksApi extends runtime.BaseAPI {
     }
 
     /**
-     * Answers 307 with Location /v1/tasks/ — this address serves nothing itself. The redirect is a routing fact derived from the engine\'s subtree, decided before any handler runs, so it is the same on every method.  A 307 preserves both the method and the body, so a client that follows redirects re-sends the request unchanged to /v1/tasks/ and nothing is lost. A client that does NOT follow redirects sees only the 307 and performs no work — address /v1/tasks/ directly and the hop disappears.
+     * Answers 307 with Location /v1/tasks/ — this address serves nothing itself. The status and the Location are the same on every method; a GET additionally carries the short HTML body a browser falls back to when it does not follow the redirect itself.  A 307 preserves both the method and the body, so a client that follows redirects re-sends the request unchanged to /v1/tasks/ and nothing is lost. A client that does NOT follow redirects sees only the 307 and performs no work — address /v1/tasks/ directly and the hop disappears.
      * Redirect to the tasks API root
      */
     async postTasksRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -165,7 +165,7 @@ export class TasksApi extends runtime.BaseAPI {
     }
 
     /**
-     * Answers 307 with Location /v1/tasks/ — this address serves nothing itself. The redirect is a routing fact derived from the engine\'s subtree, decided before any handler runs, so it is the same on every method.  A 307 preserves both the method and the body, so a client that follows redirects re-sends the request unchanged to /v1/tasks/ and nothing is lost. A client that does NOT follow redirects sees only the 307 and performs no work — address /v1/tasks/ directly and the hop disappears.
+     * Answers 307 with Location /v1/tasks/ — this address serves nothing itself. The status and the Location are the same on every method; a GET additionally carries the short HTML body a browser falls back to when it does not follow the redirect itself.  A 307 preserves both the method and the body, so a client that follows redirects re-sends the request unchanged to /v1/tasks/ and nothing is lost. A client that does NOT follow redirects sees only the 307 and performs no work — address /v1/tasks/ directly and the hop disappears.
      * Redirect to the tasks API root
      */
     async postTasks(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
@@ -173,7 +173,7 @@ export class TasksApi extends runtime.BaseAPI {
     }
 
     /**
-     * Answers 307 with Location /v1/tasks/ — this address serves nothing itself. The redirect is a routing fact derived from the engine\'s subtree, decided before any handler runs, so it is the same on every method.  A 307 preserves both the method and the body, so a client that follows redirects re-sends the request unchanged to /v1/tasks/ and nothing is lost. A client that does NOT follow redirects sees only the 307 and performs no work — address /v1/tasks/ directly and the hop disappears.
+     * Answers 307 with Location /v1/tasks/ — this address serves nothing itself. The status and the Location are the same on every method; a GET additionally carries the short HTML body a browser falls back to when it does not follow the redirect itself.  A 307 preserves both the method and the body, so a client that follows redirects re-sends the request unchanged to /v1/tasks/ and nothing is lost. A client that does NOT follow redirects sees only the 307 and performs no work — address /v1/tasks/ directly and the hop disappears.
      * Redirect to the tasks API root
      */
     async putTasksRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -203,7 +203,7 @@ export class TasksApi extends runtime.BaseAPI {
     }
 
     /**
-     * Answers 307 with Location /v1/tasks/ — this address serves nothing itself. The redirect is a routing fact derived from the engine\'s subtree, decided before any handler runs, so it is the same on every method.  A 307 preserves both the method and the body, so a client that follows redirects re-sends the request unchanged to /v1/tasks/ and nothing is lost. A client that does NOT follow redirects sees only the 307 and performs no work — address /v1/tasks/ directly and the hop disappears.
+     * Answers 307 with Location /v1/tasks/ — this address serves nothing itself. The status and the Location are the same on every method; a GET additionally carries the short HTML body a browser falls back to when it does not follow the redirect itself.  A 307 preserves both the method and the body, so a client that follows redirects re-sends the request unchanged to /v1/tasks/ and nothing is lost. A client that does NOT follow redirects sees only the 307 and performs no work — address /v1/tasks/ directly and the hop disappears.
      * Redirect to the tasks API root
      */
     async putTasks(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {

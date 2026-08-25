@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Hanzo Cloud API
- * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay doors, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
+ * The Hanzo Cloud API as a customer calls it: every operation under /v1/ except the operator\'s admin product, relay routes, legacy spellings and capabilities still reached by flag. Tagged by product: the first path segment after /v1/.
  *
  * The version of the OpenAPI document: v1
  * 
@@ -62,7 +62,7 @@ export interface HealthReport {
      * (warehouse.go). It is reported on the DEGRADED report too, and deliberately: a
      * warehouse that is unreachable is exactly when facts start failing their
      * deliveries, so suppressing the number here would hide it precisely when it
-     * moves. ANY NON-ZERO VALUE IS AN ALARM — it counts data the door already
+     * moves. ANY NON-ZERO VALUE IS AN ALARM — it counts data the endpoint already
      * answered 200 for.
      * @type {Loss}
      * @memberof HealthReport
