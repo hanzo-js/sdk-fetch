@@ -20,6 +20,7 @@ import type {
   IssueHits,
   IssueView,
   NewIssue,
+  RoomWork,
   TodoProject,
 } from '../models/index.js';
 import {
@@ -33,6 +34,8 @@ import {
     IssueViewToJSON,
     NewIssueFromJSON,
     NewIssueToJSON,
+    RoomWorkFromJSON,
+    RoomWorkToJSON,
     TodoProjectFromJSON,
     TodoProjectToJSON,
 } from '../models/index.js';
@@ -57,6 +60,7 @@ export interface TodoApiGetTodoIssuesRequest {
     status?: string;
     kind?: string;
     repo?: string;
+    room?: string;
     source?: string;
     assignee?: string;
     limit?: number;
@@ -79,6 +83,10 @@ export interface TodoApiGetTodoProjectsByKeyIssuesRequest {
 export interface TodoApiGetTodoProjectsByKeyIssuesByNumRequest {
     key: string;
     num: number;
+}
+
+export interface TodoApiGetTodoRoomsByRoomRequest {
+    room: string;
 }
 
 export interface TodoApiPatchTodoProjectsByKeyRequest {
@@ -244,6 +252,10 @@ export class TodoApi extends runtime.BaseAPI {
 
         if (requestParameters['repo'] != null) {
             queryParameters['repo'] = requestParameters['repo'];
+        }
+
+        if (requestParameters['room'] != null) {
+            queryParameters['room'] = requestParameters['room'];
         }
 
         if (requestParameters['source'] != null) {
@@ -499,6 +511,53 @@ export class TodoApi extends runtime.BaseAPI {
      */
     async getTodoProjectsByKeyIssuesByNum(requestParameters: TodoApiGetTodoProjectsByKeyIssuesByNumRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IssueView> {
         const response = await this.getTodoProjectsByKeyIssuesByNumRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Summarises one room\'s work.  The room is opaque here and is deliberately not resolved: this package cannot say whether a room exists — apps/team owns that document — so an unknown room answers an EMPTY board rather than a 404. That is the honest answer and the useful one: a channel that has never had an item filed in it and a channel id that was mistyped both have no work, and inventing a distinction would require this surface to hold a second copy of the room list (HIP-0523 §2 forbids it, and it would drift the first time a room was renamed).  Tenancy is the validated principal\'s org and nothing else, so a caller cannot read another tenant\'s channel by naming its room.
+     * Summarises one room\'s work.
+     */
+    async getTodoRoomsByRoomRaw(requestParameters: TodoApiGetTodoRoomsByRoomRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RoomWork>> {
+        if (requestParameters['room'] == null) {
+            throw new runtime.RequiredError(
+                'room',
+                'Required parameter "room" was null or undefined when calling getTodoRoomsByRoom().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/todo/rooms/{room}`;
+        urlPath = urlPath.replace(`{${"room"}}`, encodeURIComponent(String(requestParameters['room'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => RoomWorkFromJSON(jsonValue));
+    }
+
+    /**
+     * Summarises one room\'s work.  The room is opaque here and is deliberately not resolved: this package cannot say whether a room exists — apps/team owns that document — so an unknown room answers an EMPTY board rather than a 404. That is the honest answer and the useful one: a channel that has never had an item filed in it and a channel id that was mistyped both have no work, and inventing a distinction would require this surface to hold a second copy of the room list (HIP-0523 §2 forbids it, and it would drift the first time a room was renamed).  Tenancy is the validated principal\'s org and nothing else, so a caller cannot read another tenant\'s channel by naming its room.
+     * Summarises one room\'s work.
+     */
+    async getTodoRoomsByRoom(requestParameters: TodoApiGetTodoRoomsByRoomRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RoomWork> {
+        const response = await this.getTodoRoomsByRoomRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

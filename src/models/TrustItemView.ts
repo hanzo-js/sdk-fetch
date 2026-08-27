@@ -56,13 +56,14 @@ export interface TrustItemView {
      */
     id?: string;
     /**
-     * Kind is what it is.
+     * Kind is one of report, letter, policy, questionnaire, subprocessor, article
+     * or update — the closed set the public centre knows how to draw.
      * @type {string}
      * @memberof TrustItemView
      */
     kind?: string;
     /**
-     * Name is its title.
+     * Name is the label the centre lists it under.
      * @type {string}
      * @memberof TrustItemView
      */

@@ -28,7 +28,8 @@ import {
  */
 export interface DataroomDocumentOne {
     /**
-     * Document is the document itself.
+     * Document is the requested document's METADATA. Its bytes are a separate
+     * read, GET /v1/dataroom/documents/{id}/file.
      * @type {DataroomDocument}
      * @memberof DataroomDocumentOne
      */

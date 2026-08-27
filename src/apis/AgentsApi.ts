@@ -159,6 +159,7 @@ export interface AgentsApiGetAgentsSessionsRequest {
     parent?: string;
     status?: string;
     project?: string;
+    room?: string;
     limit?: number;
 }
 
@@ -858,6 +859,10 @@ export class AgentsApi extends runtime.BaseAPI {
 
         if (requestParameters['project'] != null) {
             queryParameters['project'] = requestParameters['project'];
+        }
+
+        if (requestParameters['room'] != null) {
+            queryParameters['room'] = requestParameters['room'];
         }
 
         if (requestParameters['limit'] != null) {

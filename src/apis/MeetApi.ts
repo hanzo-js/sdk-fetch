@@ -15,11 +15,14 @@
 
 import * as runtime from '../runtime.js';
 import type {
+  Call,
   MeetHealth,
   RecordIn,
   Recording,
 } from '../models/index.js';
 import {
+    CallFromJSON,
+    CallToJSON,
     MeetHealthFromJSON,
     MeetHealthToJSON,
     RecordInFromJSON,
@@ -27,6 +30,11 @@ import {
     RecordingFromJSON,
     RecordingToJSON,
 } from '../models/index.js';
+
+export interface MeetApiMeetCallRequest {
+    workspace: string;
+    room: string;
+}
 
 export interface MeetApiMeetRecordReadRequest {
     room: string;
@@ -120,6 +128,67 @@ export class MeetApi extends runtime.BaseAPI {
      */
     async getMeetSession(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.getMeetSessionRaw(initOverrides);
+    }
+
+    /**
+     * Answers where a room\'s call happens, for a caller who may join it.  It is the \"resolved at render\" half of HIP-0523 §12: a surface showing a channel asks for the room\'s call at the moment it draws one, rather than reading a media room name someone stored on the room. Nothing here is persisted and nothing is created — a media room begins existing when the first participant connects and stops when the last leaves, so there is no call to create and none to clean up.  AUTHORIZATION IS THE JOIN DECISION, unchanged and shared. It delegates to state.admits, the same function POST /v1/meet/getToken and all three recording operations admit on, so a caller who is told where a call is, is a caller who could have joined it. Answering the address to someone who cannot join would make this a workspace-membership oracle for anyone who can guess a room id.  It deliberately does NOT report whether a call is in progress. That is a fact the media server holds and this binary would have to ask for it over the network, which is a different decision with a different failure mode — and reporting \"nobody is in this call\" when the question could not be asked would be exactly the unknown-rendered-as-zero this surface refuses elsewhere.
+     * Where a room\'s call happens
+     */
+    async meetCallRaw(requestParameters: MeetApiMeetCallRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Call>> {
+        if (requestParameters['workspace'] == null) {
+            throw new runtime.RequiredError(
+                'workspace',
+                'Required parameter "workspace" was null or undefined when calling meetCall().'
+            );
+        }
+
+        if (requestParameters['room'] == null) {
+            throw new runtime.RequiredError(
+                'room',
+                'Required parameter "room" was null or undefined when calling meetCall().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['workspace'] != null) {
+            queryParameters['workspace'] = requestParameters['workspace'];
+        }
+
+        if (requestParameters['room'] != null) {
+            queryParameters['room'] = requestParameters['room'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/meet/call`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => CallFromJSON(jsonValue));
+    }
+
+    /**
+     * Answers where a room\'s call happens, for a caller who may join it.  It is the \"resolved at render\" half of HIP-0523 §12: a surface showing a channel asks for the room\'s call at the moment it draws one, rather than reading a media room name someone stored on the room. Nothing here is persisted and nothing is created — a media room begins existing when the first participant connects and stops when the last leaves, so there is no call to create and none to clean up.  AUTHORIZATION IS THE JOIN DECISION, unchanged and shared. It delegates to state.admits, the same function POST /v1/meet/getToken and all three recording operations admit on, so a caller who is told where a call is, is a caller who could have joined it. Answering the address to someone who cannot join would make this a workspace-membership oracle for anyone who can guess a room id.  It deliberately does NOT report whether a call is in progress. That is a fact the media server holds and this binary would have to ask for it over the network, which is a different decision with a different failure mode — and reporting \"nobody is in this call\" when the question could not be asked would be exactly the unknown-rendered-as-zero this surface refuses elsewhere.
+     * Where a room\'s call happens
+     */
+    async meetCall(requestParameters: MeetApiMeetCallRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Call> {
+        const response = await this.meetCallRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**

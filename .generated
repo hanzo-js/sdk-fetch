@@ -31,6 +31,7 @@ src/apis/DataroomApi.ts
 src/apis/DatasetApi.ts
 src/apis/DeployApi.ts
 src/apis/DestinationApi.ts
+src/apis/DnsApi.ts
 src/apis/DomainApi.ts
 src/apis/EngineApi.ts
 src/apis/EntitlementApi.ts
@@ -2119,6 +2120,7 @@ src/models/RollbackReq.ts
 src/models/Rollup.ts
 src/models/RollupAllotment.ts
 src/models/RollupBalance.ts
+src/models/RoomWork.ts
 src/models/Root.ts
 src/models/RoundInput.ts
 src/models/RoundOut.ts
@@ -2320,6 +2322,9 @@ src/models/TariffIn.ts
 src/models/Taxon.ts
 src/models/TaxonIn.ts
 src/models/Taxonomy.ts
+src/models/TeamRoom.ts
+src/models/TeamRoomBind.ts
+src/models/TeamRooms.ts
 src/models/TemplateCatalog.ts
 src/models/TemplateOverride.ts
 src/models/TemplateReply.ts

@@ -94,6 +94,15 @@ export interface RegisterReq {
      */
     repo?: string;
     /**
+     * Room is the collaborative room this run was started in (HIP-0523), so a
+     * workspace view can list the sessions of one room. It is PROVENANCE and is set
+     * only here: there is deliberately no way to move a session to another room, so
+     * it is absent from the patch input and from UpdateSession's SET list.
+     * @type {string}
+     * @memberof RegisterReq
+     */
+    room?: string;
+    /**
      * Status opens the session in one of running, paused, done or error. Empty means
      * running. A TERMINAL status here (done, error) records a session that has
      * already finished — its end time is stamped now — and nothing can move it
@@ -169,6 +178,7 @@ export function RegisterReqFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'provider': json['provider'] == null ? undefined : json['provider'],
         'published': json['published'] == null ? undefined : json['published'],
         'repo': json['repo'] == null ? undefined : json['repo'],
+        'room': json['room'] == null ? undefined : json['room'],
         'status': json['status'] == null ? undefined : json['status'],
         'target': json['target'] == null ? undefined : json['target'],
         'taskRunId': json['taskRunId'] == null ? undefined : json['taskRunId'],
@@ -199,6 +209,7 @@ export function RegisterReqToJSONTyped(value?: RegisterReq | null, ignoreDiscrim
         'provider': value['provider'],
         'published': value['published'],
         'repo': value['repo'],
+        'room': value['room'],
         'status': value['status'],
         'target': value['target'],
         'taskRunId': value['taskRunId'],
