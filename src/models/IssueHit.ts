@@ -63,6 +63,15 @@ export interface IssueHit {
      */
     repo?: string;
     /**
+     * Room is the collaboration room the issue belongs to, spelled
+     * "<workspace>_<room>" — empty when it is not room-bound, which is most of
+     * them. It is here so an org-wide search says which channel each item came
+     * from without a second read.
+     * @type {string}
+     * @memberof IssueHit
+     */
+    room?: string;
+    /**
      * Source is which surface opened it: team, git, crm, helpdesk, cms or agent.
      * "git" is how the mirrored forge and GitHub rows are spelled.
      * @type {string}
@@ -117,6 +126,7 @@ export function IssueHitFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         'priority': json['priority'] == null ? undefined : json['priority'],
         'project': json['project'] == null ? undefined : json['project'],
         'repo': json['repo'] == null ? undefined : json['repo'],
+        'room': json['room'] == null ? undefined : json['room'],
         'source': json['source'] == null ? undefined : json['source'],
         'status': json['status'] == null ? undefined : json['status'],
         'title': json['title'] == null ? undefined : json['title'],
@@ -141,6 +151,7 @@ export function IssueHitToJSONTyped(value?: IssueHit | null, ignoreDiscriminator
         'priority': value['priority'],
         'project': value['project'],
         'repo': value['repo'],
+        'room': value['room'],
         'source': value['source'],
         'status': value['status'],
         'title': value['title'],

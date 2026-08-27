@@ -164,6 +164,12 @@ export interface SessionDetail {
      * @type {string}
      * @memberof SessionDetail
      */
+    room?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SessionDetail
+     */
     rootSessionId?: string;
     /**
      * 
@@ -251,6 +257,7 @@ export function SessionDetailFromJSONTyped(json: any, ignoreDiscriminator: boole
         'published': json['published'] == null ? undefined : json['published'],
         'recentEvents': json['recentEvents'] == null ? undefined : ((json['recentEvents'] as Array<any>).map(EventViewFromJSON)),
         'repo': json['repo'] == null ? undefined : json['repo'],
+        'room': json['room'] == null ? undefined : json['room'],
         'rootSessionId': json['rootSessionId'] == null ? undefined : json['rootSessionId'],
         'startedAt': json['startedAt'] == null ? undefined : json['startedAt'],
         'status': json['status'] == null ? undefined : json['status'],
@@ -293,6 +300,7 @@ export function SessionDetailToJSONTyped(value?: SessionDetail | null, ignoreDis
         'published': value['published'],
         'recentEvents': value['recentEvents'] == null ? undefined : ((value['recentEvents'] as Array<any>).map(EventViewToJSON)),
         'repo': value['repo'],
+        'room': value['room'],
         'rootSessionId': value['rootSessionId'],
         'startedAt': value['startedAt'],
         'status': value['status'],

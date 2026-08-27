@@ -23,6 +23,9 @@ import type {
   PlanInfo,
   ProviderInfo,
   StatsOut,
+  TeamRoom,
+  TeamRoomBind,
+  TeamRooms,
 } from '../models/index.js';
 import {
     BotRosterFromJSON,
@@ -41,6 +44,12 @@ import {
     ProviderInfoToJSON,
     StatsOutFromJSON,
     StatsOutToJSON,
+    TeamRoomFromJSON,
+    TeamRoomToJSON,
+    TeamRoomBindFromJSON,
+    TeamRoomBindToJSON,
+    TeamRoomsFromJSON,
+    TeamRoomsToJSON,
 } from '../models/index.js';
 
 export interface TeamApiDeleteTeamFilesByWorkspaceByFilenameRequest {
@@ -82,6 +91,11 @@ export interface TeamApiPostTeamCollaboratorRpcByDocumentidRequest {
 export interface TeamApiPostTeamFilesByWorkspaceRequest {
     workspace: string;
     body?: Blob;
+}
+
+export interface TeamApiPutTeamRoomsByIdRequest {
+    id: string;
+    teamRoomBind: TeamRoomBind;
 }
 
 /**
@@ -528,6 +542,45 @@ export class TeamApi extends runtime.BaseAPI {
     }
 
     /**
+     * Returns every room of the caller\'s org, across the workspaces it owns, with the work facet each carries.  It reads the SAME Chunter documents the transactor serves, so a room opened in the Team client appears here with no sync, and a facet written here is read by anything holding the document. Direct messages are included: a room between two people is a room with no name, not a different kind of thing.
+     * Returns every room of the caller\'s org, across the workspaces it owns, with the work facet each carries.
+     */
+    async getTeamRoomsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TeamRooms>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/team/rooms`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TeamRoomsFromJSON(jsonValue));
+    }
+
+    /**
+     * Returns every room of the caller\'s org, across the workspaces it owns, with the work facet each carries.  It reads the SAME Chunter documents the transactor serves, so a room opened in the Team client appears here with no sync, and a facet written here is read by anything holding the document. Direct messages are included: a room between two people is a room with no name, not a different kind of thing.
+     * Returns every room of the caller\'s org, across the workspaces it owns, with the work facet each carries.
+     */
+    async getTeamRooms(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TeamRooms> {
+        const response = await this.getTeamRoomsRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Statistics returns the transactor\'s live sessions for the workspace the caller\'s credential names — the endpoint the front\'s workspace switcher and server panel poll on the transactor base. `token` carries the same two lanes the socket\'s path segment does: a workspace UUID names the workspace and is authorized against the membership rows, an HS256 workspace token names it in its signed claims. activeSessions carries ONLY that one workspace, never another tenant\'s sessions. An unverifiable credential, or one the caller is no member under, is 401.
      * Statistics returns the transactor\'s live sessions for the workspace the caller\'s credential names — the endpoint the front\'s workspace switcher and server panel poll on the transactor base.
      */
@@ -879,6 +932,63 @@ export class TeamApi extends runtime.BaseAPI {
      */
     async putTeamAccountCookie(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CookieAck> {
         const response = await this.putTeamAccountCookieRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * States what a room is for: its lifecycle intent, and what it is about. It answers the room as it now stands.  The write is a platform MIXIN on the room document, applied through the SAME applyTx path the Team client\'s own writes take and broadcast to every connected client — so a room bound here updates live in an open workspace rather than on the next reload.
+     * States what a room is for: its lifecycle intent, and what it is about.
+     */
+    async putTeamRoomsByIdRaw(requestParameters: TeamApiPutTeamRoomsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TeamRoom>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling putTeamRoomsById().'
+            );
+        }
+
+        if (requestParameters['teamRoomBind'] == null) {
+            throw new runtime.RequiredError(
+                'teamRoomBind',
+                'Required parameter "teamRoomBind" was null or undefined when calling putTeamRoomsById().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/team/rooms/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: TeamRoomBindToJSON(requestParameters['teamRoomBind']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TeamRoomFromJSON(jsonValue));
+    }
+
+    /**
+     * States what a room is for: its lifecycle intent, and what it is about. It answers the room as it now stands.  The write is a platform MIXIN on the room document, applied through the SAME applyTx path the Team client\'s own writes take and broadcast to every connected client — so a room bound here updates live in an open workspace rather than on the next reload.
+     * States what a room is for: its lifecycle intent, and what it is about.
+     */
+    async putTeamRoomsById(requestParameters: TeamApiPutTeamRoomsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TeamRoom> {
+        const response = await this.putTeamRoomsByIdRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

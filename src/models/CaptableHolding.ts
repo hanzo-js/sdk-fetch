@@ -51,7 +51,7 @@ export interface CaptableHolding {
      */
     shares?: number;
     /**
-     * StakeholderID is the stakeholder.
+     * StakeholderID addresses the stakeholder these totals are for.
      * @type {string}
      * @memberof CaptableHolding
      */

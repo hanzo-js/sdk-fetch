@@ -21,14 +21,14 @@ import { mapValues } from '../runtime.js';
 export interface CsrfResp {
     /**
      * Token is the value to send back in the X-CSRF-Token header. It is bound to the
-     * caller's identity, so it authorizes writes as them and as nobody else.
+     * caller's identity, so it authorizes changes as them and as nobody else.
      * @type {string}
      * @memberof CsrfResp
      */
     csrfToken?: string;
     /**
      * ExpiresIn is the token's lifetime in seconds. Fetch a new one when it lapses;
-     * a write with an expired token is refused.
+     * a change with an expired token is refused.
      * @type {number}
      * @memberof CsrfResp
      */

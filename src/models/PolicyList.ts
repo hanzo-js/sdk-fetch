@@ -20,7 +20,8 @@ import { mapValues } from '../runtime.js';
  */
 export interface PolicyList {
     /**
-     * Policies is the list.
+     * Policies is the organization's published policy documents, each as the
+     * centre holds it.
      * @type {Array<any>}
      * @memberof PolicyList
      */

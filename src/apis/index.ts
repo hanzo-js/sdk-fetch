@@ -33,6 +33,7 @@ export * from './DataroomApi.js';
 export * from './DatasetApi.js';
 export * from './DeployApi.js';
 export * from './DestinationApi.js';
+export * from './DnsApi.js';
 export * from './DomainApi.js';
 export * from './EngineApi.js';
 export * from './EntitlementApi.js';
