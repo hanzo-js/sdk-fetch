@@ -2101,6 +2101,7 @@ export * from './SeriesPoint.js';
 export * from './SessionDetail.js';
 export * from './SessionEnded.js';
 export * from './SessionList.js';
+export * from './SessionProgress.js';
 export * from './SessionUser.js';
 export * from './SessionView.js';
 export * from './SetEnvReq.js';

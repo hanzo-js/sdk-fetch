@@ -27,6 +27,13 @@ import {
     SessionViewToJSON,
     SessionViewToJSONTyped,
 } from './SessionView.js';
+import type { SessionProgress } from './SessionProgress.js';
+import {
+    SessionProgressFromJSON,
+    SessionProgressFromJSONTyped,
+    SessionProgressToJSON,
+    SessionProgressToJSONTyped,
+} from './SessionProgress.js';
 import type { EventView } from './EventView.js';
 import {
     EventViewFromJSON,
@@ -127,6 +134,12 @@ export interface SessionDetail {
      * @memberof SessionDetail
      */
     parentSessionId?: string;
+    /**
+     * 
+     * @type {SessionProgress}
+     * @memberof SessionDetail
+     */
+    progress?: SessionProgress;
     /**
      * 
      * @type {string}
@@ -252,6 +265,7 @@ export function SessionDetailFromJSONTyped(json: any, ignoreDiscriminator: boole
         'lastEvent': json['lastEvent'] == null ? undefined : LastEventViewFromJSON(json['lastEvent']),
         'org': json['org'] == null ? undefined : json['org'],
         'parentSessionId': json['parentSessionId'] == null ? undefined : json['parentSessionId'],
+        'progress': json['progress'] == null ? undefined : SessionProgressFromJSON(json['progress']),
         'project': json['project'] == null ? undefined : json['project'],
         'provider': json['provider'] == null ? undefined : json['provider'],
         'published': json['published'] == null ? undefined : json['published'],
@@ -295,6 +309,7 @@ export function SessionDetailToJSONTyped(value?: SessionDetail | null, ignoreDis
         'lastEvent': LastEventViewToJSON(value['lastEvent']),
         'org': value['org'],
         'parentSessionId': value['parentSessionId'],
+        'progress': SessionProgressToJSON(value['progress']),
         'project': value['project'],
         'provider': value['provider'],
         'published': value['published'],

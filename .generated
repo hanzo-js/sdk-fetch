@@ -2219,6 +2219,7 @@ src/models/SeriesPoint.ts
 src/models/SessionDetail.ts
 src/models/SessionEnded.ts
 src/models/SessionList.ts
+src/models/SessionProgress.ts
 src/models/SessionUser.ts
 src/models/SessionView.ts
 src/models/SetEnvReq.ts
