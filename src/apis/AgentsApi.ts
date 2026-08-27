@@ -40,6 +40,7 @@ import type {
   RunList,
   SessionDetail,
   SessionList,
+  SessionProgress,
   SessionView,
   TargetDeleted,
   TargetList,
@@ -99,6 +100,8 @@ import {
     SessionDetailToJSON,
     SessionListFromJSON,
     SessionListToJSON,
+    SessionProgressFromJSON,
+    SessionProgressToJSON,
     SessionViewFromJSON,
     SessionViewToJSON,
     TargetDeletedFromJSON,
@@ -170,6 +173,10 @@ export interface AgentsApiGetAgentsSessionsByIdRequest {
 export interface AgentsApiGetAgentsSessionsByIdControlRequest {
     id: string;
     after?: number;
+}
+
+export interface AgentsApiGetAgentsSessionsByIdProgressRequest {
+    id: string;
 }
 
 export interface AgentsApiGetAgentsSessionsByIdTreeRequest {
@@ -996,6 +1003,53 @@ export class AgentsApi extends runtime.BaseAPI {
      */
     async getAgentsSessionsByIdControl(requestParameters: AgentsApiGetAgentsSessionsByIdControlRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ControlDrain> {
         const response = await this.getAgentsSessionsByIdControlRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns how far along one run is: the share of its goal that is done, whether it is running, blocked or finished, and a line saying what it is doing right now.  It is a MODEL ESTIMATE read off the run\'s own transcript, not a measurement — `estimated` says so on every answer, and a run whose progress cannot be told reports phase \"unknown\" with no percentage rather than a zero it does not mean. A session that has already finished answers from its own status instead, and is marked not estimated.  The list and detail reads carry the same value; this address is the one that WAITS. Where the stored estimate has gone stale it is remade before answering, so a human deciding whether to step into a run gets a current reading rather than the last poll\'s — which costs one small completion, charged to the same wallet the session already names, at most once every thirty seconds per run.
+     * Returns how far along one run is: the share of its goal that is done, whether it is running, blocked or finished, and a line saying what it is doing right now.
+     */
+    async getAgentsSessionsByIdProgressRaw(requestParameters: AgentsApiGetAgentsSessionsByIdProgressRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SessionProgress>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getAgentsSessionsByIdProgress().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/agents/sessions/{id}/progress`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => SessionProgressFromJSON(jsonValue));
+    }
+
+    /**
+     * Returns how far along one run is: the share of its goal that is done, whether it is running, blocked or finished, and a line saying what it is doing right now.  It is a MODEL ESTIMATE read off the run\'s own transcript, not a measurement — `estimated` says so on every answer, and a run whose progress cannot be told reports phase \"unknown\" with no percentage rather than a zero it does not mean. A session that has already finished answers from its own status instead, and is marked not estimated.  The list and detail reads carry the same value; this address is the one that WAITS. Where the stored estimate has gone stale it is remade before answering, so a human deciding whether to step into a run gets a current reading rather than the last poll\'s — which costs one small completion, charged to the same wallet the session already names, at most once every thirty seconds per run.
+     * Returns how far along one run is: the share of its goal that is done, whether it is running, blocked or finished, and a line saying what it is doing right now.
+     */
+    async getAgentsSessionsByIdProgress(requestParameters: AgentsApiGetAgentsSessionsByIdProgressRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SessionProgress> {
+        const response = await this.getAgentsSessionsByIdProgressRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

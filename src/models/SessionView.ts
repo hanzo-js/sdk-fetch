@@ -20,6 +20,13 @@ import {
     LastEventViewToJSON,
     LastEventViewToJSONTyped,
 } from './LastEventView.js';
+import type { SessionProgress } from './SessionProgress.js';
+import {
+    SessionProgressFromJSON,
+    SessionProgressFromJSONTyped,
+    SessionProgressToJSON,
+    SessionProgressToJSONTyped,
+} from './SessionProgress.js';
 
 /**
  * 
@@ -128,6 +135,16 @@ export interface SessionView {
      * @memberof SessionView
      */
     parentSessionId?: string;
+    /**
+     * Progress is how far along this run is — a share of its goal, a phase, and a
+     * line saying what it is doing. Always present, so a board never branches on
+     * whether it is there; `phase` says "unknown" when nothing has estimated it.
+     * It is a MODEL ESTIMATE wherever `estimated` is true, and the row's own word
+     * where it is false. See progress.go.
+     * @type {SessionProgress}
+     * @memberof SessionView
+     */
+    progress?: SessionProgress;
     /**
      * The readable build: the product this session built and whether its story
      * is public (provenance.go).
@@ -273,6 +290,7 @@ export function SessionViewFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'lastEvent': json['lastEvent'] == null ? undefined : LastEventViewFromJSON(json['lastEvent']),
         'org': json['org'] == null ? undefined : json['org'],
         'parentSessionId': json['parentSessionId'] == null ? undefined : json['parentSessionId'],
+        'progress': json['progress'] == null ? undefined : SessionProgressFromJSON(json['progress']),
         'project': json['project'] == null ? undefined : json['project'],
         'provider': json['provider'] == null ? undefined : json['provider'],
         'published': json['published'] == null ? undefined : json['published'],
@@ -314,6 +332,7 @@ export function SessionViewToJSONTyped(value?: SessionView | null, ignoreDiscrim
         'lastEvent': LastEventViewToJSON(value['lastEvent']),
         'org': value['org'],
         'parentSessionId': value['parentSessionId'],
+        'progress': SessionProgressToJSON(value['progress']),
         'project': value['project'],
         'provider': value['provider'],
         'published': value['published'],
