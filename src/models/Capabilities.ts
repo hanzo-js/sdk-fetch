@@ -33,7 +33,7 @@ export interface Capabilities {
      * 	approval — a reference to an approval request (`approval.id`), rendered as
      * 	           approve/deny controls bound to that id.
      * 
-     * False on all four transports this pass, and nothing refuses a send for it:
+     * False on every transport, and nothing refuses a send for it:
      * actions are accepted, validated per kind, and flattened by renderText to one
      * line each after the text — `[label] command`, `[label] url`,
      * `[label] opt | opt`, `[label] approval requested: <id>`. So a caller that
@@ -45,10 +45,12 @@ export interface Capabilities {
     actions?: boolean;
     /**
      * DM is whether the transport carries a DIRECT message at all. True for slack,
-     * teams and telegram. False for discord, honestly: that ingress is guild-scoped
-     * slash commands — an interaction without a guild id is refused at the endpoint —
-     * so nothing ever arrives classified as a DM, no reply route is ever learned
-     * for one, and a send addressed at a Discord DM is refused 409.
+     * teams, telegram and whatsapp — whatsapp is nothing else, since the Cloud API
+     * addresses a person's number and there is no room a third party joins. False
+     * for discord, honestly: that ingress is guild-scoped slash commands — an
+     * interaction without a guild id is refused at the endpoint — so nothing ever
+     * arrives classified as a DM, no reply route is ever learned for one, and a
+     * send addressed at a Discord DM is refused 409.
      * @type {boolean}
      * @memberof Capabilities
      */
@@ -56,16 +58,19 @@ export interface Capabilities {
     /**
      * Group is whether the transport carries multi-person rooms — a Discord guild
      * channel, a Slack channel, a Teams channel or group chat, a Telegram group or
-     * supergroup. True on all four.
+     * supergroup. False on whatsapp alone, which has no such room to carry.
      * @type {boolean}
      * @memberof Capabilities
      */
     group?: boolean;
     /**
-     * Media is whether the transport renders an ATTACHMENT natively. False on all
-     * four this pass, and a send is not refused for it: renderText flattens each
+     * Media is whether the transport renders an ATTACHMENT natively. False
+     * everywhere, and a send is not refused for it: renderText flattens each
      * attachment to one `kind: url (mime)` line after the text rather than dropping
-     * it.
+     * it. A transport whose egress hands its door the raw text would drop the
+     * attachment instead, and an attachment-only send would reach the platform
+     * with nothing to say — which is why the flag and the flattening are pinned
+     * together.
      * @type {boolean}
      * @memberof Capabilities
      */
@@ -75,8 +80,8 @@ export interface Capabilities {
      * slack alone: it is the only transport whose ingress reports a thread
      * (thread_ts, published as the envelope's replyTo) and whose send posts back
      * into it. Discord's replyTo makes an inline reply rather than a thread,
-     * Telegram's answers one message id, and Teams carries no reply target at all —
-     * a replyTo sent to it is ignored.
+     * Telegram's and WhatsApp's each quote one message, and Teams carries no reply
+     * target at all — a replyTo sent to it is ignored.
      * @type {boolean}
      * @memberof Capabilities
      */

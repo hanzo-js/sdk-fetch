@@ -23,8 +23,8 @@ export interface AllowlistView {
      * AccessGroups is the org's named sender sets, as group name -> channel ->
      * member entries, held once for the whole org. A DM or Group entry written
      * `accessGroup:<name>` admits any sender listed under that name for THIS
-     * channel, or under the channel `*`, which is how one set covers all four
-     * transports. Replaced wholesale by the PUT.
+     * channel, or under the channel `*`, which is how one set covers every
+     * transport at once. Replaced wholesale by the PUT.
      * @type {{ [key: string]: { [key: string]: Array<string>; }; }}
      * @memberof AllowlistView
      */

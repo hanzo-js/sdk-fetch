@@ -82,8 +82,8 @@ export interface ChannelView {
      */
     groupPolicy?: string;
     /**
-     * ID is the fixed transport identifier — discord, slack, teams or telegram —
-     * and the value every route on this surface names a channel by, including the
+     * ID is the fixed transport identifier — discord, slack, teams, telegram or
+     * whatsapp — and the value every route on this surface names a channel by, including the
      * `:channel` segment of the send path. The listing is always in that order.
      * @type {string}
      * @memberof ChannelView
