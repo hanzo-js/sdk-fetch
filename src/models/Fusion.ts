@@ -31,25 +31,25 @@ import {
 /**
  * 
  * @export
- * @interface Response
+ * @interface Fusion
  */
-export interface Response {
+export interface Fusion {
     /**
      * Backends is the per-leg report. Always populated.
      * @type {Array<BackendStatus>}
-     * @memberof Response
+     * @memberof Fusion
      */
     backends?: Array<BackendStatus>;
     /**
      * Hits is the fused, ranked result set.
      * @type {Array<Hit>}
-     * @memberof Response
+     * @memberof Fusion
      */
     hits?: Array<Hit>;
     /**
      * Mode is the mode actually used after `auto` resolution.
      * @type {string}
-     * @memberof Response
+     * @memberof Fusion
      */
     mode?: string;
     /**
@@ -58,7 +58,7 @@ export interface Response {
      *   partial     at least one leg failed; Hits holds the survivors' results.
      *   unavailable every consulted leg failed; Hits is empty AND that is stated.
      * @type {string}
-     * @memberof Response
+     * @memberof Fusion
      */
     status?: string;
     /**
@@ -66,23 +66,23 @@ export interface Response {
      * consulted, plus fusion and paging. Each leg's own share is in
      * Backends[].TookMS; the legs run in sequence, so this is at least their sum.
      * @type {number}
-     * @memberof Response
+     * @memberof Fusion
      */
     tookMs?: number;
 }
 
 /**
- * Check if a given object implements the Response interface.
+ * Check if a given object implements the Fusion interface.
  */
-export function instanceOfResponse(value: object): value is Response {
+export function instanceOfFusion(value: object): value is Fusion {
     return true;
 }
 
-export function ResponseFromJSON(json: any): Response {
-    return ResponseFromJSONTyped(json, false);
+export function FusionFromJSON(json: any): Fusion {
+    return FusionFromJSONTyped(json, false);
 }
 
-export function ResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): Response {
+export function FusionFromJSONTyped(json: any, ignoreDiscriminator: boolean): Fusion {
     if (json == null) {
         return json;
     }
@@ -96,11 +96,11 @@ export function ResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
     };
 }
 
-export function ResponseToJSON(json: any): Response {
-    return ResponseToJSONTyped(json, false);
+export function FusionToJSON(json: any): Fusion {
+    return FusionToJSONTyped(json, false);
 }
 
-export function ResponseToJSONTyped(value?: Response | null, ignoreDiscriminator: boolean = false): any {
+export function FusionToJSONTyped(value?: Fusion | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

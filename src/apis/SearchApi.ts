@@ -15,14 +15,14 @@
 
 import * as runtime from '../runtime.js';
 import type {
+  Fusion,
   Request,
-  Response,
 } from '../models/index.js';
 import {
+    FusionFromJSON,
+    FusionToJSON,
     RequestFromJSON,
     RequestToJSON,
-    ResponseFromJSON,
-    ResponseToJSON,
 } from '../models/index.js';
 
 export interface SearchApiSearchRequest {
@@ -38,7 +38,7 @@ export class SearchApi extends runtime.BaseAPI {
      * Is the typed op behind POST /v1/search. It does exactly two things the in-process entry point must not do: resolve the tenant from the validated principal, and refuse when there is none. Everything else is ForOrg.
      * Hybrid search over the org\'s own corpora
      */
-    async searchRaw(requestParameters: SearchApiSearchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Response>> {
+    async searchRaw(requestParameters: SearchApiSearchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Fusion>> {
         if (requestParameters['request'] == null) {
             throw new runtime.RequiredError(
                 'request',
@@ -71,14 +71,14 @@ export class SearchApi extends runtime.BaseAPI {
             body: RequestToJSON(requestParameters['request']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => FusionFromJSON(jsonValue));
     }
 
     /**
      * Is the typed op behind POST /v1/search. It does exactly two things the in-process entry point must not do: resolve the tenant from the validated principal, and refuse when there is none. Everything else is ForOrg.
      * Hybrid search over the org\'s own corpora
      */
-    async search(requestParameters: SearchApiSearchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Response> {
+    async search(requestParameters: SearchApiSearchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Fusion> {
         const response = await this.searchRaw(requestParameters, initOverrides);
         return await response.value();
     }
