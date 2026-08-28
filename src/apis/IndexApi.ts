@@ -28,7 +28,6 @@ import type {
   IndexTask,
   IndexVersion,
   IndexView,
-  PostIndexIndexesByUidDocumentsDeleteBatchRequest,
 } from '../models/index.js';
 import {
     IndexDocumentsFromJSON,
@@ -57,8 +56,6 @@ import {
     IndexVersionToJSON,
     IndexViewFromJSON,
     IndexViewToJSON,
-    PostIndexIndexesByUidDocumentsDeleteBatchRequestFromJSON,
-    PostIndexIndexesByUidDocumentsDeleteBatchRequestToJSON,
 } from '../models/index.js';
 
 export interface IndexApiDeleteIndexIndexesByUidRequest {
@@ -107,9 +104,9 @@ export interface IndexApiPostIndexIndexesByUidDocumentsRequest {
     requestBody?: Array<any> | null;
 }
 
-export interface IndexApiPostIndexIndexesByUidDocumentsDeleteBatchOperationRequest {
+export interface IndexApiPostIndexIndexesByUidDocumentsDeleteBatchRequest {
     uid: string;
-    arraystringArraynumber?: Array<string> | Array<number> | null;
+    requestBody?: Array<any> | null;
 }
 
 export interface IndexApiPostIndexIndexesByUidSearchRequest {
@@ -800,7 +797,7 @@ export class IndexApi extends runtime.BaseAPI {
      * Removes every named document from the caller\'s own index. The body is the dialect\'s own: a bare array of primary keys, which may be strings or numbers. A key that is not there is not an error, so a client reconciling its own corpus can send one list rather than checking each key first.  The tenant is the org minted from the VALIDATED bearer\'s owner claim, never a client-supplied header. Without a validated principal the answer is 403 carrying the dialect\'s `invalid_api_key` body.  The 202 and its `enqueued` task are DIALECT COMPATIBILITY, not a promise of later work: the documents are already gone when this answers.
      * Delete many documents by primary key in one call
      */
-    async postIndexIndexesByUidDocumentsDeleteBatchRaw(requestParameters: IndexApiPostIndexIndexesByUidDocumentsDeleteBatchOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IndexEnqueued>> {
+    async postIndexIndexesByUidDocumentsDeleteBatchRaw(requestParameters: IndexApiPostIndexIndexesByUidDocumentsDeleteBatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IndexEnqueued>> {
         if (requestParameters['uid'] == null) {
             throw new runtime.RequiredError(
                 'uid',
@@ -831,7 +828,7 @@ export class IndexApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: Array&lt;string&gt; | Array&lt;number&gt;ToJSON(requestParameters['arraystringArraynumber']),
+            body: requestParameters['requestBody'],
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => IndexEnqueuedFromJSON(jsonValue));
@@ -841,7 +838,7 @@ export class IndexApi extends runtime.BaseAPI {
      * Removes every named document from the caller\'s own index. The body is the dialect\'s own: a bare array of primary keys, which may be strings or numbers. A key that is not there is not an error, so a client reconciling its own corpus can send one list rather than checking each key first.  The tenant is the org minted from the VALIDATED bearer\'s owner claim, never a client-supplied header. Without a validated principal the answer is 403 carrying the dialect\'s `invalid_api_key` body.  The 202 and its `enqueued` task are DIALECT COMPATIBILITY, not a promise of later work: the documents are already gone when this answers.
      * Delete many documents by primary key in one call
      */
-    async postIndexIndexesByUidDocumentsDeleteBatch(requestParameters: IndexApiPostIndexIndexesByUidDocumentsDeleteBatchOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IndexEnqueued> {
+    async postIndexIndexesByUidDocumentsDeleteBatch(requestParameters: IndexApiPostIndexIndexesByUidDocumentsDeleteBatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IndexEnqueued> {
         const response = await this.postIndexIndexesByUidDocumentsDeleteBatchRaw(requestParameters, initOverrides);
         return await response.value();
     }

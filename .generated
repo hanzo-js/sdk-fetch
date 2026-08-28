@@ -1890,7 +1890,6 @@ src/models/PoolScale.ts
 src/models/PopulatedFlow.ts
 src/models/Position.ts
 src/models/PostEventRequest.ts
-src/models/PostIndexIndexesByUidDocumentsDeleteBatchRequest.ts
 src/models/PostList.ts
 src/models/PrefsView.ts
 src/models/Preset.ts
