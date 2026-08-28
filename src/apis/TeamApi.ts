@@ -71,10 +71,6 @@ export interface TeamApiGetTeamFilesByWorkspaceByFilenameRequest {
     filename: string;
 }
 
-export interface TeamApiGetTeamTransactorApiV1StatisticsRequest {
-    token?: string;
-}
-
 export interface TeamApiGetTeamTransactorByTokenRequest {
     token: string;
 }
@@ -577,49 +573,6 @@ export class TeamApi extends runtime.BaseAPI {
      */
     async getTeamRooms(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TeamRooms> {
         const response = await this.getTeamRoomsRaw(initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Statistics returns the transactor\'s live sessions for the workspace the caller\'s credential names — the endpoint the front\'s workspace switcher and server panel poll on the transactor base. `token` carries the same two lanes the socket\'s path segment does: a workspace UUID names the workspace and is authorized against the membership rows, an HS256 workspace token names it in its signed claims. activeSessions carries ONLY that one workspace, never another tenant\'s sessions. An unverifiable credential, or one the caller is no member under, is 401.
-     * Statistics returns the transactor\'s live sessions for the workspace the caller\'s credential names — the endpoint the front\'s workspace switcher and server panel poll on the transactor base.
-     */
-    async getTeamTransactorApiV1StatisticsRaw(requestParameters: TeamApiGetTeamTransactorApiV1StatisticsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StatsOut>> {
-        const queryParameters: any = {};
-
-        if (requestParameters['token'] != null) {
-            queryParameters['token'] = requestParameters['token'];
-        }
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/team/transactor/api/v1/statistics`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => StatsOutFromJSON(jsonValue));
-    }
-
-    /**
-     * Statistics returns the transactor\'s live sessions for the workspace the caller\'s credential names — the endpoint the front\'s workspace switcher and server panel poll on the transactor base. `token` carries the same two lanes the socket\'s path segment does: a workspace UUID names the workspace and is authorized against the membership rows, an HS256 workspace token names it in its signed claims. activeSessions carries ONLY that one workspace, never another tenant\'s sessions. An unverifiable credential, or one the caller is no member under, is 401.
-     * Statistics returns the transactor\'s live sessions for the workspace the caller\'s credential names — the endpoint the front\'s workspace switcher and server panel poll on the transactor base.
-     */
-    async getTeamTransactorApiV1Statistics(requestParameters: TeamApiGetTeamTransactorApiV1StatisticsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StatsOut> {
-        const response = await this.getTeamTransactorApiV1StatisticsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

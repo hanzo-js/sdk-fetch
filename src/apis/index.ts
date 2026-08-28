@@ -28,7 +28,6 @@ export * from './CompanyApi.js';
 export * from './ComplianceApi.js';
 export * from './ContentApi.js';
 export * from './CrawlApi.js';
-export * from './CrmApi.js';
 export * from './DataroomApi.js';
 export * from './DatasetApi.js';
 export * from './DeployApi.js';
