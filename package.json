@@ -1,6 +1,6 @@
 {
   "name": "hanzoai-fetch",
-  "version": "0.1.0",
+  "version": "8.5.156",
   "description": "The Hanzo API client for fetch runtimes — Workers, Deno, Bun, browsers. No dependencies.",
   "author": "Hanzo <dev@hanzo.ai>",
   "license": "Apache-2.0",
