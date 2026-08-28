@@ -1772,7 +1772,6 @@ export * from './PoolScale.js';
 export * from './PopulatedFlow.js';
 export * from './Position.js';
 export * from './PostEventRequest.js';
-export * from './PostIndexIndexesByUidDocumentsDeleteBatchRequest.js';
 export * from './PostList.js';
 export * from './PrefsView.js';
 export * from './Preset.js';
