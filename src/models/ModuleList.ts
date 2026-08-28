@@ -13,13 +13,13 @@
  */
 
 import { mapValues } from '../runtime.js';
-import type { ModuleInfo } from './ModuleInfo.js';
+import type { Module } from './Module.js';
 import {
-    ModuleInfoFromJSON,
-    ModuleInfoFromJSONTyped,
-    ModuleInfoToJSON,
-    ModuleInfoToJSONTyped,
-} from './ModuleInfo.js';
+    ModuleFromJSON,
+    ModuleFromJSONTyped,
+    ModuleToJSON,
+    ModuleToJSONTyped,
+} from './Module.js';
 
 /**
  * 
@@ -28,11 +28,12 @@ import {
  */
 export interface ModuleList {
     /**
-     * Data is every module compiled into this binary, with the DocTypes it installs.
-     * @type {Array<ModuleInfo>}
+     * Data is every module compiled into this binary, with the DocTypes it installs
+     * and whether the caller's org has turned it on.
+     * @type {Array<Module>}
      * @memberof ModuleList
      */
-    data?: Array<ModuleInfo>;
+    data?: Array<Module>;
 }
 
 /**
@@ -52,7 +53,7 @@ export function ModuleListFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     }
     return {
         
-        'data': json['data'] == null ? undefined : ((json['data'] as Array<any>).map(ModuleInfoFromJSON)),
+        'data': json['data'] == null ? undefined : ((json['data'] as Array<any>).map(ModuleFromJSON)),
     };
 }
 
@@ -67,7 +68,7 @@ export function ModuleListToJSONTyped(value?: ModuleList | null, ignoreDiscrimin
 
     return {
         
-        'data': value['data'] == null ? undefined : ((value['data'] as Array<any>).map(ModuleInfoToJSON)),
+        'data': value['data'] == null ? undefined : ((value['data'] as Array<any>).map(ModuleToJSON)),
     };
 }
 
