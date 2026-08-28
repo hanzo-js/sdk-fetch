@@ -20,31 +20,44 @@ import { mapValues } from '../runtime.js';
  */
 export interface Call {
     /**
-     * Name is the media room to join: the value POST /v1/meet/getToken takes as
-     * roomName, and the value the media server keys participants on.
+     * Agent names the Hanzo assistant handling the call. Set means the call was
+     * answered by that assistant rather than connected to a person.
      * @type {string}
      * @memberof Call
      */
-    name?: string;
+    agent?: string;
     /**
-     * Ready reports that this deployment can mint a join token for this room. It
-     * is false on a deployment holding no media-server key, where Name is still
-     * correct — the name is a property of the room and the key is a property of
-     * the deployment, so a caller learns the room's identity either way and
-     * learns not to offer a join button.
-     * @type {boolean}
-     * @memberof Call
-     */
-    ready?: boolean;
-    /**
-     * WS is where the media plane is — the address a client opens its own
-     * browser-to-server connection to. Empty when this deployment has not been
-     * told where its media server lives, which is reported rather than refused:
-     * a surface can say a call is unavailable without a second request.
+     * From is the calling number in E.164. It must be one this org holds: a carrier
+     * refuses an origination from a number nobody proved they own.
      * @type {string}
      * @memberof Call
      */
-    ws?: string;
+    from?: string;
+    /**
+     * ID is the carrier's handle for the call — what a hangup or a lookup names.
+     * @type {string}
+     * @memberof Call
+     */
+    id?: string;
+    /**
+     * Org is the tenant the call was placed for or received by.
+     * @type {string}
+     * @memberof Call
+     */
+    org?: string;
+    /**
+     * Status is where the call is: "queued", "ringing", "answered", "completed" or
+     * "failed". Only the last two are terminal.
+     * @type {string}
+     * @memberof Call
+     */
+    status?: string;
+    /**
+     * To is the called number in E.164.
+     * @type {string}
+     * @memberof Call
+     */
+    to?: string;
 }
 
 /**
@@ -64,9 +77,12 @@ export function CallFromJSONTyped(json: any, ignoreDiscriminator: boolean): Call
     }
     return {
         
-        'name': json['name'] == null ? undefined : json['name'],
-        'ready': json['ready'] == null ? undefined : json['ready'],
-        'ws': json['ws'] == null ? undefined : json['ws'],
+        'agent': json['agent'] == null ? undefined : json['agent'],
+        'from': json['from'] == null ? undefined : json['from'],
+        'id': json['id'] == null ? undefined : json['id'],
+        'org': json['org'] == null ? undefined : json['org'],
+        'status': json['status'] == null ? undefined : json['status'],
+        'to': json['to'] == null ? undefined : json['to'],
     };
 }
 
@@ -81,9 +97,12 @@ export function CallToJSONTyped(value?: Call | null, ignoreDiscriminator: boolea
 
     return {
         
-        'name': value['name'],
-        'ready': value['ready'],
-        'ws': value['ws'],
+        'agent': value['agent'],
+        'from': value['from'],
+        'id': value['id'],
+        'org': value['org'],
+        'status': value['status'],
+        'to': value['to'],
     };
 }
 
