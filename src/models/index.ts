@@ -2296,6 +2296,7 @@ export * from './ValidatorList.js';
 export * from './Variant.js';
 export * from './VendorRow.js';
 export * from './VendorsOut.js';
+export * from './Venue.js';
 export * from './Verdict.js';
 export * from './VerificationDecision.js';
 export * from './VerificationReq.js';
