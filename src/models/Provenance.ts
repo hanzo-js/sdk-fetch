@@ -16,16 +16,16 @@ import { mapValues } from '../runtime.js';
 /**
  * 
  * @export
- * @interface Match
+ * @interface Provenance
  */
-export interface Match {
+export interface Provenance {
     /**
      * Backend is the leg that contributed this match: "index" (lexical), "vector"
      * (semantic) or "code" (the org's repositories). It is the same name that leg
-     * reports itself under in Response.Backends, so a hit can be traced to a
+     * reports itself under in Fusion.Backends, so a hit can be traced to a
      * status.
      * @type {string}
-     * @memberof Match
+     * @memberof Provenance
      */
     backend?: string;
     /**
@@ -34,7 +34,7 @@ export interface Match {
      * score: RRF adds 1/(60+rank) per leg, which is why a document two legs ranked
      * second beats one a single leg ranked first.
      * @type {number}
-     * @memberof Match
+     * @memberof Provenance
      */
     rank?: number;
     /**
@@ -44,23 +44,23 @@ export interface Match {
      * The vector leg reports Qdrant's cosine similarity; the lexical leg exposes no
      * per-row score and reports 0, meaning "unscored", not "scored zero".
      * @type {number}
-     * @memberof Match
+     * @memberof Provenance
      */
     score?: number;
 }
 
 /**
- * Check if a given object implements the Match interface.
+ * Check if a given object implements the Provenance interface.
  */
-export function instanceOfMatch(value: object): value is Match {
+export function instanceOfProvenance(value: object): value is Provenance {
     return true;
 }
 
-export function MatchFromJSON(json: any): Match {
-    return MatchFromJSONTyped(json, false);
+export function ProvenanceFromJSON(json: any): Provenance {
+    return ProvenanceFromJSONTyped(json, false);
 }
 
-export function MatchFromJSONTyped(json: any, ignoreDiscriminator: boolean): Match {
+export function ProvenanceFromJSONTyped(json: any, ignoreDiscriminator: boolean): Provenance {
     if (json == null) {
         return json;
     }
@@ -72,11 +72,11 @@ export function MatchFromJSONTyped(json: any, ignoreDiscriminator: boolean): Mat
     };
 }
 
-export function MatchToJSON(json: any): Match {
-    return MatchToJSONTyped(json, false);
+export function ProvenanceToJSON(json: any): Provenance {
+    return ProvenanceToJSONTyped(json, false);
 }
 
-export function MatchToJSONTyped(value?: Match | null, ignoreDiscriminator: boolean = false): any {
+export function ProvenanceToJSONTyped(value?: Provenance | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
