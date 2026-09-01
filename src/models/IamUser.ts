@@ -20,13 +20,6 @@ import {
     IamAddressToJSON,
     IamAddressToJSONTyped,
 } from './IamAddress.js';
-import type { IamPermission } from './IamPermission.js';
-import {
-    IamPermissionFromJSON,
-    IamPermissionFromJSONTyped,
-    IamPermissionToJSON,
-    IamPermissionToJSONTyped,
-} from './IamPermission.js';
 import type { IamMfaItem } from './IamMfaItem.js';
 import {
     IamMfaItemFromJSON,
@@ -48,13 +41,6 @@ import {
     IamFaceIdToJSON,
     IamFaceIdToJSONTyped,
 } from './IamFaceId.js';
-import type { IamRole } from './IamRole.js';
-import {
-    IamRoleFromJSON,
-    IamRoleFromJSONTyped,
-    IamRoleToJSON,
-    IamRoleToJSONTyped,
-} from './IamRole.js';
 import type { IamMfaProps } from './IamMfaProps.js';
 import {
     IamMfaPropsFromJSON,
@@ -92,10 +78,13 @@ import {
 export interface IamUser {
     /**
      * API credentials. AccessSecret / AccessSecretHash / the OAuth tokens are
-     * bearer material. AccessSecretHash MUST persist (orm stores via JSON; a
-     * json:"-" field is never saved), so it carries a real json tag and the
-     * handler's redact() strips it (and AccessSecret + the token fields) before
-     * responding.
+     * bearer material, so Mask blanks them and the handler's redact() strips them
+     * before responding. They carry real json tags because a field orm never saves
+     * is a field that silently vanishes.
+     * 
+     * A presented secret is resolved through Key.AccessSecretDigest and nowhere
+     * else, so no credential is ISSUED into these columns: they hold what older
+     * rows left behind, and every writer that touches them clears them.
      * @type {string}
      * @memberof IamUser
      */
@@ -509,12 +498,6 @@ export interface IamUser {
      * @memberof IamUser
      */
     google?: string;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof IamUser
-     */
-    groups?: Array<string>;
     /**
      * 
      * @type {string}
@@ -959,12 +942,6 @@ export interface IamUser {
     permanentAvatar?: string;
     /**
      * 
-     * @type {Array<IamPermission>}
-     * @memberof IamUser
-     */
-    permissions?: Array<IamPermission>;
-    /**
-     * 
      * @type {string}
      * @memberof IamUser
      */
@@ -1029,13 +1006,6 @@ export interface IamUser {
      * @memberof IamUser
      */
     registerType?: string;
-    /**
-     * Authorization attachments. Roles and Permissions are computed on read
-     * from the authz store and carried here for API parity with v1.
-     * @type {Array<IamRole>}
-     * @memberof IamUser
-     */
-    roles?: Array<IamRole>;
     /**
      * 
      * @type {string}
@@ -1343,7 +1313,6 @@ export function IamUserFromJSONTyped(json: any, ignoreDiscriminator: boolean): I
         'github': json['github'] == null ? undefined : json['github'],
         'gitlab': json['gitlab'] == null ? undefined : json['gitlab'],
         'google': json['google'] == null ? undefined : json['google'],
-        'groups': json['groups'] == null ? undefined : json['groups'],
         'hash': json['hash'] == null ? undefined : json['hash'],
         'heroku': json['heroku'] == null ? undefined : json['heroku'],
         'homepage': json['homepage'] == null ? undefined : json['homepage'],
@@ -1412,7 +1381,6 @@ export function IamUserFromJSONTyped(json: any, ignoreDiscriminator: boolean): I
         'patreon': json['patreon'] == null ? undefined : json['patreon'],
         'paypal': json['paypal'] == null ? undefined : json['paypal'],
         'permanentAvatar': json['permanentAvatar'] == null ? undefined : json['permanentAvatar'],
-        'permissions': json['permissions'] == null ? undefined : ((json['permissions'] as Array<any>).map(IamPermissionFromJSON)),
         'phone': json['phone'] == null ? undefined : json['phone'],
         'preHash': json['preHash'] == null ? undefined : json['preHash'],
         'preferredMfaType': json['preferredMfaType'] == null ? undefined : json['preferredMfaType'],
@@ -1424,7 +1392,6 @@ export function IamUserFromJSONTyped(json: any, ignoreDiscriminator: boolean): I
         'region': json['region'] == null ? undefined : json['region'],
         'registerSource': json['registerSource'] == null ? undefined : json['registerSource'],
         'registerType': json['registerType'] == null ? undefined : json['registerType'],
-        'roles': json['roles'] == null ? undefined : ((json['roles'] as Array<any>).map(IamRoleFromJSON)),
         'salesforce': json['salesforce'] == null ? undefined : json['salesforce'],
         'score': json['score'] == null ? undefined : json['score'],
         'shopify': json['shopify'] == null ? undefined : json['shopify'],
@@ -1544,7 +1511,6 @@ export function IamUserToJSONTyped(value?: IamUser | null, ignoreDiscriminator: 
         'github': value['github'],
         'gitlab': value['gitlab'],
         'google': value['google'],
-        'groups': value['groups'],
         'hash': value['hash'],
         'heroku': value['heroku'],
         'homepage': value['homepage'],
@@ -1613,7 +1579,6 @@ export function IamUserToJSONTyped(value?: IamUser | null, ignoreDiscriminator: 
         'patreon': value['patreon'],
         'paypal': value['paypal'],
         'permanentAvatar': value['permanentAvatar'],
-        'permissions': value['permissions'] == null ? undefined : ((value['permissions'] as Array<any>).map(IamPermissionToJSON)),
         'phone': value['phone'],
         'preHash': value['preHash'],
         'preferredMfaType': value['preferredMfaType'],
@@ -1625,7 +1590,6 @@ export function IamUserToJSONTyped(value?: IamUser | null, ignoreDiscriminator: 
         'region': value['region'],
         'registerSource': value['registerSource'],
         'registerType': value['registerType'],
-        'roles': value['roles'] == null ? undefined : ((value['roles'] as Array<any>).map(IamRoleToJSON)),
         'salesforce': value['salesforce'],
         'score': value['score'],
         'shopify': value['shopify'],

@@ -47,7 +47,7 @@ export interface GraphNode {
      */
     title?: string;
     /**
-     * kb-page | kb-memory | kb-source | kb-connector | unresolved
+     * kb.page | kb.memory | kb.source | kb.connector | unresolved
      * @type {string}
      * @memberof GraphNode
      */

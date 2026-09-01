@@ -179,7 +179,7 @@ export interface SessionView {
     /**
      * Room is the collaborative room this run was started in (HIP-0523), empty
      * when it came from anywhere else — a CLI, a schedule, an API call. It is what
-     * lets a workspace view show the runs of one room beside its messages.
+     * lets a space view show the runs of one room beside its messages.
      * @type {string}
      * @memberof SessionView
      */

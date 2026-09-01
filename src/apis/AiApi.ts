@@ -4438,45 +4438,6 @@ export class AiApi extends runtime.BaseAPI {
     }
 
     /**
-     * Cross-tenant listing. Admin-only; a tenant caller is refused.
-     * List messages across tenants
-     */
-    async getAiMessagesGlobalRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAiMessages200Response>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/ai/messages/global`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetAiMessages200ResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Cross-tenant listing. Admin-only; a tenant caller is refused.
-     * List messages across tenants
-     */
-    async getAiMessagesGlobal(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAiMessages200Response> {
-        const response = await this.getAiMessagesGlobalRaw(initOverrides);
-        return await response.value();
-    }
-
-    /**
      * List the caller\'s nodes.
      * List nodes
      */

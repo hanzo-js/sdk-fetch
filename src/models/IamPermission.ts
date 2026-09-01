@@ -87,12 +87,6 @@ export interface IamPermission {
     effect?: string;
     /**
      * 
-     * @type {Array<string>}
-     * @memberof IamPermission
-     */
-    groups?: Array<string>;
-    /**
-     * 
      * @type {string}
      * @memberof IamPermission
      */
@@ -156,6 +150,12 @@ export interface IamPermission {
     submitter?: string;
     /**
      * 
+     * @type {Array<string>}
+     * @memberof IamPermission
+     */
+    teams?: Array<string>;
+    /**
+     * 
      * @type {Date}
      * @memberof IamPermission
      */
@@ -196,7 +196,6 @@ export function IamPermissionFromJSONTyped(json: any, ignoreDiscriminator: boole
         'displayName': json['displayName'] == null ? undefined : json['displayName'],
         'domains': json['domains'] == null ? undefined : json['domains'],
         'effect': json['effect'] == null ? undefined : json['effect'],
-        'groups': json['groups'] == null ? undefined : json['groups'],
         'id': json['id'] == null ? undefined : json['id'],
         'isEnabled': json['isEnabled'] == null ? undefined : json['isEnabled'],
         'model': json['model'] == null ? undefined : json['model'],
@@ -207,6 +206,7 @@ export function IamPermissionFromJSONTyped(json: any, ignoreDiscriminator: boole
         'roles': json['roles'] == null ? undefined : json['roles'],
         'state': json['state'] == null ? undefined : json['state'],
         'submitter': json['submitter'] == null ? undefined : json['submitter'],
+        'teams': json['teams'] == null ? undefined : json['teams'],
         'updatedAt': json['updatedAt'] == null ? undefined : (new Date(json['updatedAt'])),
         'users': json['users'] == null ? undefined : json['users'],
     };
@@ -234,7 +234,6 @@ export function IamPermissionToJSONTyped(value?: IamPermission | null, ignoreDis
         'displayName': value['displayName'],
         'domains': value['domains'],
         'effect': value['effect'],
-        'groups': value['groups'],
         'id': value['id'],
         'isEnabled': value['isEnabled'],
         'model': value['model'],
@@ -245,6 +244,7 @@ export function IamPermissionToJSONTyped(value?: IamPermission | null, ignoreDis
         'roles': value['roles'],
         'state': value['state'],
         'submitter': value['submitter'],
+        'teams': value['teams'],
         'updatedAt': value['updatedAt'] == null ? undefined : ((value['updatedAt']).toISOString()),
         'users': value['users'],
     };

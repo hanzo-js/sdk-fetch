@@ -19,9 +19,6 @@ import type {
   CartItemSet,
   CartOpen,
   Liveness,
-  PaymentIn,
-  PaymentOut,
-  PaymentRecord,
 } from '../models/index.js';
 import {
     CartFromJSON,
@@ -32,12 +29,6 @@ import {
     CartOpenToJSON,
     LivenessFromJSON,
     LivenessToJSON,
-    PaymentInFromJSON,
-    PaymentInToJSON,
-    PaymentOutFromJSON,
-    PaymentOutToJSON,
-    PaymentRecordFromJSON,
-    PaymentRecordToJSON,
 } from '../models/index.js';
 
 export interface CommerceApiDeleteCommerceCollectionByCollectionidRequest {
@@ -228,10 +219,6 @@ export interface CommerceApiGetCommerceWatchlistByWatchlistidRequest {
 
 export interface CommerceApiGetCommerceWebhookByWebhookidRequest {
     webhookid: string;
-}
-
-export interface CommerceApiGetPaymentRequest {
-    id: string;
 }
 
 export interface CommerceApiOpenCartRequest {
@@ -553,10 +540,6 @@ export interface CommerceApiPutCommerceWebhookByWebhookidRequest {
 export interface CommerceApiSetCartItemRequest {
     id: string;
     cartItemSet: CartItemSet;
-}
-
-export interface CommerceApiTakePaymentRequest {
-    paymentIn: PaymentIn;
 }
 
 /**
@@ -3831,53 +3814,6 @@ export class CommerceApi extends runtime.BaseAPI {
      */
     async getCommerceWebhookByWebhookid(requestParameters: CommerceApiGetCommerceWebhookByWebhookidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.getCommerceWebhookByWebhookidRaw(requestParameters, initOverrides);
-    }
-
-    /**
-     * Reads one settled payment out of the caller\'s org ledger.  The org scopes the read by construction — the ledger is namespaced to it — so an id belonging to another tenant is simply not found rather than found and then filtered. A ledger row that is not a payment is likewise not found, so this cannot be used to walk the org\'s usage debits.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
-     * Read one settled payment by its id
-     */
-    async getPaymentRaw(requestParameters: CommerceApiGetPaymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PaymentRecord>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling getPayment().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/commerce/payments/{id}`;
-        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => PaymentRecordFromJSON(jsonValue));
-    }
-
-    /**
-     * Reads one settled payment out of the caller\'s org ledger.  The org scopes the read by construction — the ledger is namespaced to it — so an id belonging to another tenant is simply not found rather than found and then filtered. A ledger row that is not a payment is likewise not found, so this cannot be used to walk the org\'s usage debits.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
-     * Read one settled payment by its id
-     */
-    async getPayment(requestParameters: CommerceApiGetPaymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PaymentRecord> {
-        const response = await this.getPaymentRaw(requestParameters, initOverrides);
-        return await response.value();
     }
 
     /**
@@ -8555,55 +8491,6 @@ export class CommerceApi extends runtime.BaseAPI {
      */
     async setCartItem(requestParameters: CommerceApiSetCartItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cart> {
         const response = await this.setCartItemRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Takes a payment: charges a single-use card token and credits the caller\'s org balance, exactly once.  This is the operation behind \"collect money from a customer\". It runs the SAME core the console\'s card top-up runs (commerce billing.TakePayment), so the server-side amount bounds, the idempotency guard and the ledger credit are shared rather than reimplemented — a second charge path would eventually double-charge somebody.  The ORG is the caller\'s, taken from the validated principal and never from the input, so a payment can only ever credit the account of whoever made the call.  A payment is RISK-SCREENED before the card is charged, so this can be refused without any money moving: 403 means the screen did not authorise it, and 503 means the screen could not reach a decision — that one is worth retrying, and no charge was attempted either way.  Send an idempotencyKey. An agent retries by construction, and the key is what turns a retry into a replay of the first receipt instead of a second charge.  The answer states whether it settled in SANDBOX or live mode (`test`), and carries the processor\'s own reference (`processorRef`) so the charge can be reconciled against the processor rather than taken on trust.  A named builder, not a closure, so zipdoc can lift this prose into the registry.  It BUILDS the handler rather than being it, because the screen has to sit inside the value every projection of this op dispatches to — see exposePayments. `charge` is the money move, `take` is the screened entry point onto it, and the only registrable one is the second.
-     * Take a card payment and credit the org\'s balance
-     */
-    async takePaymentRaw(requestParameters: CommerceApiTakePaymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PaymentOut>> {
-        if (requestParameters['paymentIn'] == null) {
-            throw new runtime.RequiredError(
-                'paymentIn',
-                'Required parameter "paymentIn" was null or undefined when calling takePayment().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/commerce/payments`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: PaymentInToJSON(requestParameters['paymentIn']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => PaymentOutFromJSON(jsonValue));
-    }
-
-    /**
-     * Takes a payment: charges a single-use card token and credits the caller\'s org balance, exactly once.  This is the operation behind \"collect money from a customer\". It runs the SAME core the console\'s card top-up runs (commerce billing.TakePayment), so the server-side amount bounds, the idempotency guard and the ledger credit are shared rather than reimplemented — a second charge path would eventually double-charge somebody.  The ORG is the caller\'s, taken from the validated principal and never from the input, so a payment can only ever credit the account of whoever made the call.  A payment is RISK-SCREENED before the card is charged, so this can be refused without any money moving: 403 means the screen did not authorise it, and 503 means the screen could not reach a decision — that one is worth retrying, and no charge was attempted either way.  Send an idempotencyKey. An agent retries by construction, and the key is what turns a retry into a replay of the first receipt instead of a second charge.  The answer states whether it settled in SANDBOX or live mode (`test`), and carries the processor\'s own reference (`processorRef`) so the charge can be reconciled against the processor rather than taken on trust.  A named builder, not a closure, so zipdoc can lift this prose into the registry.  It BUILDS the handler rather than being it, because the screen has to sit inside the value every projection of this op dispatches to — see exposePayments. `charge` is the money move, `take` is the screened entry point onto it, and the only registrable one is the second.
-     * Take a card payment and credit the org\'s balance
-     */
-    async takePayment(requestParameters: CommerceApiTakePaymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PaymentOut> {
-        const response = await this.takePaymentRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

@@ -57,12 +57,6 @@ export interface IamRole {
     domains?: Array<string>;
     /**
      * 
-     * @type {Array<string>}
-     * @memberof IamRole
-     */
-    groups?: Array<string>;
-    /**
-     * 
      * @type {string}
      * @memberof IamRole
      */
@@ -91,6 +85,12 @@ export interface IamRole {
      * @memberof IamRole
      */
     roles?: Array<string>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof IamRole
+     */
+    teams?: Array<string>;
     /**
      * 
      * @type {Date}
@@ -128,12 +128,12 @@ export function IamRoleFromJSONTyped(json: any, ignoreDiscriminator: boolean): I
         'description': json['description'] == null ? undefined : json['description'],
         'displayName': json['displayName'] == null ? undefined : json['displayName'],
         'domains': json['domains'] == null ? undefined : json['domains'],
-        'groups': json['groups'] == null ? undefined : json['groups'],
         'id': json['id'] == null ? undefined : json['id'],
         'isEnabled': json['isEnabled'] == null ? undefined : json['isEnabled'],
         'name': json['name'] == null ? undefined : json['name'],
         'owner': json['owner'] == null ? undefined : json['owner'],
         'roles': json['roles'] == null ? undefined : json['roles'],
+        'teams': json['teams'] == null ? undefined : json['teams'],
         'updatedAt': json['updatedAt'] == null ? undefined : (new Date(json['updatedAt'])),
         'users': json['users'] == null ? undefined : json['users'],
     };
@@ -156,12 +156,12 @@ export function IamRoleToJSONTyped(value?: IamRole | null, ignoreDiscriminator: 
         'description': value['description'],
         'displayName': value['displayName'],
         'domains': value['domains'],
-        'groups': value['groups'],
         'id': value['id'],
         'isEnabled': value['isEnabled'],
         'name': value['name'],
         'owner': value['owner'],
         'roles': value['roles'],
+        'teams': value['teams'],
         'updatedAt': value['updatedAt'] == null ? undefined : ((value['updatedAt']).toISOString()),
         'users': value['users'],
     };

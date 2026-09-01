@@ -32,7 +32,7 @@ import {
 } from '../models/index.js';
 
 export interface MeetApiMeetCallRequest {
-    workspace: string;
+    space: string;
     room: string;
 }
 
@@ -93,7 +93,7 @@ export class MeetApi extends runtime.BaseAPI {
     }
 
     /**
-     * Answers the three facts the native lobby cannot know on its own: the identity a seat would be taken under, the LiveKit address the browser dials, and the workspaces this caller may open a room in.  It is the SAME decision getToken makes, asked before the room exists rather than after it is named. A room is bound to its tenant by its name\'s leading workspace segment, and only a workspace this answer lists will be admitted — so the lobby offers exactly what the mint would grant, and a person is never shown a room they would then be refused. Workspaces the caller holds only a guest role in are omitted for that reason.  An empty list is a real answer, not a fault: an IAM identity with no workspace has no room to open, and the lobby says so instead of failing.  `ws` is empty when this deployment has not been told where its media plane is (LIVEKIT_WS). Token minting is unaffected — the published office client supplies its own address — so this is a degraded native UI, not a degraded service, and the lobby refuses to dial rather than guessing a host.
+     * Answers the three facts the native lobby cannot know on its own: the identity a seat would be taken under, the LiveKit address the browser dials, and the spaces this caller may open a room in.  It is the SAME decision getToken makes, asked before the room exists rather than after it is named. A room is bound to its tenant by its name\'s leading space segment, and only a space this answer lists will be admitted — so the lobby offers exactly what the mint would grant, and a person is never shown a room they would then be refused. Spaces the caller holds only a guest role in are omitted for that reason.  An empty list is a real answer, not a fault: an IAM identity with no space has no room to open, and the lobby says so instead of failing.  `ws` is empty when this deployment has not been told where its media plane is (LIVEKIT_WS). Token minting is unaffected — the published office client supplies its own address — so this is a degraded native UI, not a degraded service, and the lobby refuses to dial rather than guessing a host.
      * What this caller may open a room in
      */
     async getMeetSessionRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -123,7 +123,7 @@ export class MeetApi extends runtime.BaseAPI {
     }
 
     /**
-     * Answers the three facts the native lobby cannot know on its own: the identity a seat would be taken under, the LiveKit address the browser dials, and the workspaces this caller may open a room in.  It is the SAME decision getToken makes, asked before the room exists rather than after it is named. A room is bound to its tenant by its name\'s leading workspace segment, and only a workspace this answer lists will be admitted — so the lobby offers exactly what the mint would grant, and a person is never shown a room they would then be refused. Workspaces the caller holds only a guest role in are omitted for that reason.  An empty list is a real answer, not a fault: an IAM identity with no workspace has no room to open, and the lobby says so instead of failing.  `ws` is empty when this deployment has not been told where its media plane is (LIVEKIT_WS). Token minting is unaffected — the published office client supplies its own address — so this is a degraded native UI, not a degraded service, and the lobby refuses to dial rather than guessing a host.
+     * Answers the three facts the native lobby cannot know on its own: the identity a seat would be taken under, the LiveKit address the browser dials, and the spaces this caller may open a room in.  It is the SAME decision getToken makes, asked before the room exists rather than after it is named. A room is bound to its tenant by its name\'s leading space segment, and only a space this answer lists will be admitted — so the lobby offers exactly what the mint would grant, and a person is never shown a room they would then be refused. Spaces the caller holds only a guest role in are omitted for that reason.  An empty list is a real answer, not a fault: an IAM identity with no space has no room to open, and the lobby says so instead of failing.  `ws` is empty when this deployment has not been told where its media plane is (LIVEKIT_WS). Token minting is unaffected — the published office client supplies its own address — so this is a degraded native UI, not a degraded service, and the lobby refuses to dial rather than guessing a host.
      * What this caller may open a room in
      */
     async getMeetSession(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
@@ -131,14 +131,14 @@ export class MeetApi extends runtime.BaseAPI {
     }
 
     /**
-     * Answers where a room\'s call happens, for a caller who may join it.  It is the \"resolved at render\" half of HIP-0523 §12: a surface showing a channel asks for the room\'s call at the moment it draws one, rather than reading a media room name someone stored on the room. Nothing here is persisted and nothing is created — a media room begins existing when the first participant connects and stops when the last leaves, so there is no call to create and none to clean up.  AUTHORIZATION IS THE JOIN DECISION, unchanged and shared. It delegates to state.admits, the same function POST /v1/meet/getToken and all three recording operations admit on, so a caller who is told where a call is, is a caller who could have joined it. Answering the address to someone who cannot join would make this a workspace-membership oracle for anyone who can guess a room id.  It deliberately does NOT report whether a call is in progress. That is a fact the media server holds and this binary would have to ask for it over the network, which is a different decision with a different failure mode — and reporting \"nobody is in this call\" when the question could not be asked would be exactly the unknown-rendered-as-zero this surface refuses elsewhere.
+     * Answers where a room\'s call happens, for a caller who may join it.  It is the \"resolved at render\" half of HIP-0523 §12: a surface showing a channel asks for the room\'s call at the moment it draws one, rather than reading a media room name someone stored on the room. Nothing here is persisted and nothing is created — a media room begins existing when the first participant connects and stops when the last leaves, so there is no call to create and none to clean up.  AUTHORIZATION IS THE JOIN DECISION, unchanged and shared. It delegates to state.admits, the same function POST /v1/meet/getToken and all three recording operations admit on, so a caller who is told where a call is, is a caller who could have joined it. Answering the address to someone who cannot join would make this a space-membership oracle for anyone who can guess a room id.  It deliberately does NOT report whether a call is in progress. That is a fact the media server holds and this binary would have to ask for it over the network, which is a different decision with a different failure mode — and reporting \"nobody is in this call\" when the question could not be asked would be exactly the unknown-rendered-as-zero this surface refuses elsewhere.
      * Where a room\'s call happens
      */
     async meetCallRaw(requestParameters: MeetApiMeetCallRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Venue>> {
-        if (requestParameters['workspace'] == null) {
+        if (requestParameters['space'] == null) {
             throw new runtime.RequiredError(
-                'workspace',
-                'Required parameter "workspace" was null or undefined when calling meetCall().'
+                'space',
+                'Required parameter "space" was null or undefined when calling meetCall().'
             );
         }
 
@@ -151,8 +151,8 @@ export class MeetApi extends runtime.BaseAPI {
 
         const queryParameters: any = {};
 
-        if (requestParameters['workspace'] != null) {
-            queryParameters['workspace'] = requestParameters['workspace'];
+        if (requestParameters['space'] != null) {
+            queryParameters['space'] = requestParameters['space'];
         }
 
         if (requestParameters['room'] != null) {
@@ -183,7 +183,7 @@ export class MeetApi extends runtime.BaseAPI {
     }
 
     /**
-     * Answers where a room\'s call happens, for a caller who may join it.  It is the \"resolved at render\" half of HIP-0523 §12: a surface showing a channel asks for the room\'s call at the moment it draws one, rather than reading a media room name someone stored on the room. Nothing here is persisted and nothing is created — a media room begins existing when the first participant connects and stops when the last leaves, so there is no call to create and none to clean up.  AUTHORIZATION IS THE JOIN DECISION, unchanged and shared. It delegates to state.admits, the same function POST /v1/meet/getToken and all three recording operations admit on, so a caller who is told where a call is, is a caller who could have joined it. Answering the address to someone who cannot join would make this a workspace-membership oracle for anyone who can guess a room id.  It deliberately does NOT report whether a call is in progress. That is a fact the media server holds and this binary would have to ask for it over the network, which is a different decision with a different failure mode — and reporting \"nobody is in this call\" when the question could not be asked would be exactly the unknown-rendered-as-zero this surface refuses elsewhere.
+     * Answers where a room\'s call happens, for a caller who may join it.  It is the \"resolved at render\" half of HIP-0523 §12: a surface showing a channel asks for the room\'s call at the moment it draws one, rather than reading a media room name someone stored on the room. Nothing here is persisted and nothing is created — a media room begins existing when the first participant connects and stops when the last leaves, so there is no call to create and none to clean up.  AUTHORIZATION IS THE JOIN DECISION, unchanged and shared. It delegates to state.admits, the same function POST /v1/meet/getToken and all three recording operations admit on, so a caller who is told where a call is, is a caller who could have joined it. Answering the address to someone who cannot join would make this a space-membership oracle for anyone who can guess a room id.  It deliberately does NOT report whether a call is in progress. That is a fact the media server holds and this binary would have to ask for it over the network, which is a different decision with a different failure mode — and reporting \"nobody is in this call\" when the question could not be asked would be exactly the unknown-rendered-as-zero this surface refuses elsewhere.
      * Where a room\'s call happens
      */
     async meetCall(requestParameters: MeetApiMeetCallRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Venue> {
@@ -341,7 +341,7 @@ export class MeetApi extends runtime.BaseAPI {
     }
 
     /**
-     * Answers with a LiveKit join token for exactly the room named in the body. The body is the RAW token as text/plain — one opaque string, not JSON and not wrapped in an envelope, which is what the office client reads.  The caller presents its workspace session as a Bearer. Every clause is a refusal: the session must verify, its SIGNED workspace claim must equal the room\'s leading name segment — rooms are named `<workspace>_<room>_<id>`, and that prefix is the only thing binding a room to a tenant — and the session must carry a privileged workspace role, so a guest is refused rather than seated.  The participant identity is the SESSION\'S, never the body\'s. `_id` is accepted for compatibility with the published client bundle and deliberately ignored: LiveKit treats the identity as unique and ejects a duplicate, so honouring a caller-chosen one would let anyone in a workspace kick out a colleague and impersonate them. `participantName` is a display name only.  An unconfigured deployment answers 503 under its own name rather than 404, and the refusal states only that the office is unconfigured — the reason names key material and stays in the boot log.
+     * Answers with a LiveKit join token for exactly the room named in the body. The body is the RAW token as text/plain — one opaque string, not JSON and not wrapped in an envelope, which is what the office client reads.  The caller presents its space session as a Bearer. Every clause is a refusal: the session must verify, its SIGNED space claim must equal the room\'s leading name segment — rooms are named `<space>_<room>_<id>`, and that prefix is the only thing binding a room to a tenant — and the session must carry a privileged space role, so a guest is refused rather than seated.  The participant identity is the SESSION\'S, never the body\'s. `_id` is accepted for compatibility with the published client bundle and deliberately ignored: LiveKit treats the identity as unique and ejects a duplicate, so honouring a caller-chosen one would let anyone in a space kick out a colleague and impersonate them. `participantName` is a display name only.  An unconfigured deployment answers 503 under its own name rather than 404, and the refusal states only that the office is unconfigured — the reason names key material and stays in the boot log.
      * Mint a join token for one video room
      */
     async postMeetGettokenRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -371,7 +371,7 @@ export class MeetApi extends runtime.BaseAPI {
     }
 
     /**
-     * Answers with a LiveKit join token for exactly the room named in the body. The body is the RAW token as text/plain — one opaque string, not JSON and not wrapped in an envelope, which is what the office client reads.  The caller presents its workspace session as a Bearer. Every clause is a refusal: the session must verify, its SIGNED workspace claim must equal the room\'s leading name segment — rooms are named `<workspace>_<room>_<id>`, and that prefix is the only thing binding a room to a tenant — and the session must carry a privileged workspace role, so a guest is refused rather than seated.  The participant identity is the SESSION\'S, never the body\'s. `_id` is accepted for compatibility with the published client bundle and deliberately ignored: LiveKit treats the identity as unique and ejects a duplicate, so honouring a caller-chosen one would let anyone in a workspace kick out a colleague and impersonate them. `participantName` is a display name only.  An unconfigured deployment answers 503 under its own name rather than 404, and the refusal states only that the office is unconfigured — the reason names key material and stays in the boot log.
+     * Answers with a LiveKit join token for exactly the room named in the body. The body is the RAW token as text/plain — one opaque string, not JSON and not wrapped in an envelope, which is what the office client reads.  The caller presents its space session as a Bearer. Every clause is a refusal: the session must verify, its SIGNED space claim must equal the room\'s leading name segment — rooms are named `<space>_<room>_<id>`, and that prefix is the only thing binding a room to a tenant — and the session must carry a privileged space role, so a guest is refused rather than seated.  The participant identity is the SESSION\'S, never the body\'s. `_id` is accepted for compatibility with the published client bundle and deliberately ignored: LiveKit treats the identity as unique and ejects a duplicate, so honouring a caller-chosen one would let anyone in a space kick out a colleague and impersonate them. `participantName` is a display name only.  An unconfigured deployment answers 503 under its own name rather than 404, and the refusal states only that the office is unconfigured — the reason names key material and stays in the boot log.
      * Mint a join token for one video room
      */
     async postMeetGettoken(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {

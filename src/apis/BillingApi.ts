@@ -19,6 +19,8 @@ import type {
   Alert,
   AlertPatch,
   AlertSpec,
+  AutoRecharge,
+  AutoRechargeEdit,
   BillingAccount,
   CapVerdict,
   Charged,
@@ -45,6 +47,7 @@ import type {
   Subscriptions,
   Tier,
   TopupIn,
+  Transaction,
   Transactions,
   WireInstructions,
 } from '../models/index.js';
@@ -57,6 +60,10 @@ import {
     AlertPatchToJSON,
     AlertSpecFromJSON,
     AlertSpecToJSON,
+    AutoRechargeFromJSON,
+    AutoRechargeToJSON,
+    AutoRechargeEditFromJSON,
+    AutoRechargeEditToJSON,
     BillingAccountFromJSON,
     BillingAccountToJSON,
     CapVerdictFromJSON,
@@ -109,6 +116,8 @@ import {
     TierToJSON,
     TopupInFromJSON,
     TopupInToJSON,
+    TransactionFromJSON,
+    TransactionToJSON,
     TransactionsFromJSON,
     TransactionsToJSON,
     WireInstructionsFromJSON,
@@ -165,6 +174,10 @@ export interface BillingApiGetBillingTransactionsRequest {
     offset?: string;
 }
 
+export interface BillingApiGetBillingTransactionsByIdRequest {
+    id: string;
+}
+
 export interface BillingApiGetInvoiceRequest {
     id: string;
 }
@@ -198,6 +211,10 @@ export interface BillingApiPostBillingTopupRequest {
 export interface BillingApiPostBillingTopupTokenRequest {
     topupIn: TopupIn;
     xIdempotencyKey?: string;
+}
+
+export interface BillingApiPutBillingRechargeRequest {
+    autoRechargeEdit: AutoRechargeEdit;
 }
 
 export interface BillingApiRaiseInvoiceRequest {
@@ -1169,6 +1186,45 @@ export class BillingApi extends runtime.BaseAPI {
     }
 
     /**
+     * Reads the caller\'s auto-reload rule: top the balance up by `amountCents` whenever it falls below `thresholdCents`, charging the card on file off-session. It is the same setting every prepaid AI account calls auto-reload.  An org that has never set one reads as disabled with zeroes rather than as an error — \"no rule\" answers the question — and `stored` is how a caller tells never-configured from deliberately-off.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Reads the caller\'s auto-reload rule: top the balance up by `amountCents` whenever it falls below `thresholdCents`, charging the card on file off-session.
+     */
+    async getBillingRechargeRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AutoRecharge>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/billing/recharge`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AutoRechargeFromJSON(jsonValue));
+    }
+
+    /**
+     * Reads the caller\'s auto-reload rule: top the balance up by `amountCents` whenever it falls below `thresholdCents`, charging the card on file off-session. It is the same setting every prepaid AI account calls auto-reload.  An org that has never set one reads as disabled with zeroes rather than as an error — \"no rule\" answers the question — and `stored` is how a caller tells never-configured from deliberately-off.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Reads the caller\'s auto-reload rule: top the balance up by `amountCents` whenever it falls below `thresholdCents`, charging the card on file off-session.
+     */
+    async getBillingRecharge(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AutoRecharge> {
+        const response = await this.getBillingRechargeRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Answers the PUBLIC half of this org\'s processor configuration — the ids a browser needs to tokenize a card, and the environment it must tokenize against.  It carries no secret: an application id is published to every checkout page by design. What matters is that it names the SAME processor account the charge will be made on, because a card vaulted against one account and charged against another is a card that saves and then cannot be used.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
      * Answers the PUBLIC half of this org\'s processor configuration — the ids a browser needs to tokenize a card, and the environment it must tokenize against.
      */
@@ -1333,6 +1389,53 @@ export class BillingApi extends runtime.BaseAPI {
      */
     async getBillingTransactions(requestParameters: BillingApiGetBillingTransactionsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Transactions> {
         const response = await this.getBillingTransactionsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Reads one ledger entry by its id.  It is the MEMBER of the collection beside it rather than a second way to ask — the same rows GET /v1/billing/transactions lists, addressed one at a time. A top-up receipt is read here, because a receipt IS a ledger entry: the id this takes is the `transactionId` a top-up hands back.  The read is narrower than the list: commerce\'s core loads the row and refuses anything that is not a deposit, so a row that exists but is not a top-up answers 404. That asymmetry is stated rather than closed, because widening a money read to make two shapes match is not a change worth making for symmetry.  The books are the caller\'s own and cannot be named, so a guessed id misses rather than reaching another tenant\'s ledger.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Reads one ledger entry by its id.
+     */
+    async getBillingTransactionsByIdRaw(requestParameters: BillingApiGetBillingTransactionsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Transaction>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getBillingTransactionsById().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/billing/transactions/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TransactionFromJSON(jsonValue));
+    }
+
+    /**
+     * Reads one ledger entry by its id.  It is the MEMBER of the collection beside it rather than a second way to ask — the same rows GET /v1/billing/transactions lists, addressed one at a time. A top-up receipt is read here, because a receipt IS a ledger entry: the id this takes is the `transactionId` a top-up hands back.  The read is narrower than the list: commerce\'s core loads the row and refuses anything that is not a deposit, so a row that exists but is not a top-up answers 404. That asymmetry is stated rather than closed, because widening a money read to make two shapes match is not a change worth making for symmetry.  The books are the caller\'s own and cannot be named, so a guessed id misses rather than reaching another tenant\'s ledger.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Reads one ledger entry by its id.
+     */
+    async getBillingTransactionsById(requestParameters: BillingApiGetBillingTransactionsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Transaction> {
+        const response = await this.getBillingTransactionsByIdRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -2045,6 +2148,55 @@ export class BillingApi extends runtime.BaseAPI {
      */
     async postBillingTopupToken(requestParameters: BillingApiPostBillingTopupTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Charged> {
         const response = await this.postBillingTopupTokenRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Sets the caller\'s auto-reload rule, and answers with the rule as stored.  ENABLING REQUIRES A CARD ON FILE (400), because the sweep charges off-session: a rule naming no chargeable method is a promise the schedule cannot keep. A non-positive amount and a negative threshold are refused the same way, each naming the field that was wrong.  The rule is the caller\'s OWN. The org comes from the validated principal and the body names none, so there is no field a write could be steered through onto another tenant\'s schedule.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Sets the caller\'s auto-reload rule, and answers with the rule as stored.
+     */
+    async putBillingRechargeRaw(requestParameters: BillingApiPutBillingRechargeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AutoRecharge>> {
+        if (requestParameters['autoRechargeEdit'] == null) {
+            throw new runtime.RequiredError(
+                'autoRechargeEdit',
+                'Required parameter "autoRechargeEdit" was null or undefined when calling putBillingRecharge().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/billing/recharge`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: AutoRechargeEditToJSON(requestParameters['autoRechargeEdit']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AutoRechargeFromJSON(jsonValue));
+    }
+
+    /**
+     * Sets the caller\'s auto-reload rule, and answers with the rule as stored.  ENABLING REQUIRES A CARD ON FILE (400), because the sweep charges off-session: a rule naming no chargeable method is a promise the schedule cannot keep. A non-positive amount and a negative threshold are refused the same way, each naming the field that was wrong.  The rule is the caller\'s OWN. The org comes from the validated principal and the body names none, so there is no field a write could be steered through onto another tenant\'s schedule.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * Sets the caller\'s auto-reload rule, and answers with the rule as stored.
+     */
+    async putBillingRecharge(requestParameters: BillingApiPutBillingRechargeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AutoRecharge> {
+        const response = await this.putBillingRechargeRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

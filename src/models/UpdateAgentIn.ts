@@ -20,6 +20,14 @@ import { mapValues } from '../runtime.js';
  */
 export interface UpdateAgentIn {
     /**
+     * Avatar and Emoji re-draw the agent. Sending either replaces the pair, so
+     * setting an image clears a glyph and "" for both goes back to the initial —
+     * there is no state where a row holds two answers.
+     * @type {string}
+     * @memberof UpdateAgentIn
+     */
+    avatar?: string;
+    /**
      * ComputeRef re-binds (or, with "", unbinds) the visor machine. Opaque here.
      * @type {string}
      * @memberof UpdateAgentIn
@@ -31,6 +39,14 @@ export interface UpdateAgentIn {
      * @memberof UpdateAgentIn
      */
     description?: string;
+    /**
+     * Emoji re-draws the agent as a glyph. Sending either of the pair replaces
+     * BOTH, so setting a glyph clears an image and "" for both goes back to the
+     * initial — there is no state where a row holds two answers.
+     * @type {string}
+     * @memberof UpdateAgentIn
+     */
+    emoji?: string;
     /**
      * ExecutionMode switches between one-shot and long-running. The RESULTING
      * mode+schedule are validated together, so switching to long-running without a
@@ -102,8 +118,10 @@ export function UpdateAgentInFromJSONTyped(json: any, ignoreDiscriminator: boole
     }
     return {
         
+        'avatar': json['avatar'] == null ? undefined : json['avatar'],
         'computeRef': json['computeRef'] == null ? undefined : json['computeRef'],
         'description': json['description'] == null ? undefined : json['description'],
+        'emoji': json['emoji'] == null ? undefined : json['emoji'],
         'executionMode': json['executionMode'] == null ? undefined : json['executionMode'],
         'instructions': json['instructions'] == null ? undefined : json['instructions'],
         'model': json['model'] == null ? undefined : json['model'],
@@ -125,8 +143,10 @@ export function UpdateAgentInToJSONTyped(value?: UpdateAgentIn | null, ignoreDis
 
     return {
         
+        'avatar': value['avatar'],
         'computeRef': value['computeRef'],
         'description': value['description'],
+        'emoji': value['emoji'],
         'executionMode': value['executionMode'],
         'instructions': value['instructions'],
         'model': value['model'],

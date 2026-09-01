@@ -27,7 +27,7 @@ export interface AllowlistPutIn {
      */
     accessGroups?: { [key: string]: { [key: string]: Array<string>; }; };
     /**
-     * Channel is the transport to edit: discord, slack, teams, telegram or whatsapp.
+     * Channel is the transport to edit: discord, github, linear, slack, teams, telegram or whatsapp.
      * Required; an unknown value is a 404.
      * @type {string}
      * @memberof AllowlistPutIn

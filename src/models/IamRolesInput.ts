@@ -45,12 +45,6 @@ export interface IamRolesInput {
     domains?: Array<string>;
     /**
      * 
-     * @type {Array<string>}
-     * @memberof IamRolesInput
-     */
-    groups?: Array<string>;
-    /**
-     * 
      * @type {boolean}
      * @memberof IamRolesInput
      */
@@ -73,6 +67,12 @@ export interface IamRolesInput {
      * @memberof IamRolesInput
      */
     roles?: Array<string>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof IamRolesInput
+     */
+    teams?: Array<string>;
     /**
      * 
      * @type {Array<string>}
@@ -102,11 +102,11 @@ export function IamRolesInputFromJSONTyped(json: any, ignoreDiscriminator: boole
         'description': json['description'] == null ? undefined : json['description'],
         'displayName': json['displayName'] == null ? undefined : json['displayName'],
         'domains': json['domains'] == null ? undefined : json['domains'],
-        'groups': json['groups'] == null ? undefined : json['groups'],
         'isEnabled': json['isEnabled'] == null ? undefined : json['isEnabled'],
         'name': json['name'] == null ? undefined : json['name'],
         'owner': json['owner'] == null ? undefined : json['owner'],
         'roles': json['roles'] == null ? undefined : json['roles'],
+        'teams': json['teams'] == null ? undefined : json['teams'],
         'users': json['users'] == null ? undefined : json['users'],
     };
 }
@@ -126,11 +126,11 @@ export function IamRolesInputToJSONTyped(value?: IamRolesInput | null, ignoreDis
         'description': value['description'],
         'displayName': value['displayName'],
         'domains': value['domains'],
-        'groups': value['groups'],
         'isEnabled': value['isEnabled'],
         'name': value['name'],
         'owner': value['owner'],
         'roles': value['roles'],
+        'teams': value['teams'],
         'users': value['users'],
     };
 }

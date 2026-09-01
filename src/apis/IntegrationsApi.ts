@@ -46,6 +46,12 @@ import type {
   GithubSearchOut,
   GithubSearchReq,
   GitlabProjectsOut,
+  LinearBackfillIn,
+  LinearBackfillResult,
+  LinearClaimIn,
+  LinearClaimOut,
+  LinearCommentIn,
+  LinearCommentOut,
   ListOut,
   ProviderView,
   RefreshOut,
@@ -114,6 +120,18 @@ import {
     GithubSearchReqToJSON,
     GitlabProjectsOutFromJSON,
     GitlabProjectsOutToJSON,
+    LinearBackfillInFromJSON,
+    LinearBackfillInToJSON,
+    LinearBackfillResultFromJSON,
+    LinearBackfillResultToJSON,
+    LinearClaimInFromJSON,
+    LinearClaimInToJSON,
+    LinearClaimOutFromJSON,
+    LinearClaimOutToJSON,
+    LinearCommentInFromJSON,
+    LinearCommentInToJSON,
+    LinearCommentOutFromJSON,
+    LinearCommentOutToJSON,
     ListOutFromJSON,
     ListOutToJSON,
     ProviderViewFromJSON,
@@ -207,6 +225,18 @@ export interface IntegrationsApiPostIntegrationsGithubReposImportRequest {
 
 export interface IntegrationsApiPostIntegrationsGithubSearchRequest {
     githubSearchReq: GithubSearchReq;
+}
+
+export interface IntegrationsApiPostIntegrationsLinearClaimRequest {
+    linearClaimIn: LinearClaimIn;
+}
+
+export interface IntegrationsApiPostIntegrationsLinearCommentsRequest {
+    linearCommentIn: LinearCommentIn;
+}
+
+export interface IntegrationsApiPostIntegrationsLinearIssuesBackfillRequest {
+    linearBackfillIn: LinearBackfillIn;
 }
 
 export interface IntegrationsApiPostIntegrationsOpenrouterWebhookRequest {
@@ -2060,6 +2090,191 @@ export class IntegrationsApi extends runtime.BaseAPI {
      */
     async postIntegrationsGithubWebhook(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.postIntegrationsGithubWebhookRaw(initOverrides);
+    }
+
+    /**
+     * Binds the caller\'s Linear organization to the org and seals the webhook secret. The organization is READ from the caller\'s own key, never taken from the body: a person can only bind an organization they are a member of. An organization another org already holds is refused.
+     * Binds the caller\'s Linear organization to the org and seals the webhook secret.
+     */
+    async postIntegrationsLinearClaimRaw(requestParameters: IntegrationsApiPostIntegrationsLinearClaimRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LinearClaimOut>> {
+        if (requestParameters['linearClaimIn'] == null) {
+            throw new runtime.RequiredError(
+                'linearClaimIn',
+                'Required parameter "linearClaimIn" was null or undefined when calling postIntegrationsLinearClaim().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/integrations/linear/claim`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: LinearClaimInToJSON(requestParameters['linearClaimIn']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => LinearClaimOutFromJSON(jsonValue));
+    }
+
+    /**
+     * Binds the caller\'s Linear organization to the org and seals the webhook secret. The organization is READ from the caller\'s own key, never taken from the body: a person can only bind an organization they are a member of. An organization another org already holds is refused.
+     * Binds the caller\'s Linear organization to the org and seals the webhook secret.
+     */
+    async postIntegrationsLinearClaim(requestParameters: IntegrationsApiPostIntegrationsLinearClaimRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LinearClaimOut> {
+        const response = await this.postIntegrationsLinearClaimRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Posts a comment on a Linear issue with the caller\'s own key, so it carries their name. This is the op an agent is offered when it should answer in Linear rather than in chat.
+     * Posts a comment on a Linear issue with the caller\'s own key, so it carries their name.
+     */
+    async postIntegrationsLinearCommentsRaw(requestParameters: IntegrationsApiPostIntegrationsLinearCommentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LinearCommentOut>> {
+        if (requestParameters['linearCommentIn'] == null) {
+            throw new runtime.RequiredError(
+                'linearCommentIn',
+                'Required parameter "linearCommentIn" was null or undefined when calling postIntegrationsLinearComments().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/integrations/linear/comments`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: LinearCommentInToJSON(requestParameters['linearCommentIn']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => LinearCommentOutFromJSON(jsonValue));
+    }
+
+    /**
+     * Posts a comment on a Linear issue with the caller\'s own key, so it carries their name. This is the op an agent is offered when it should answer in Linear rather than in chat.
+     * Posts a comment on a Linear issue with the caller\'s own key, so it carries their name.
+     */
+    async postIntegrationsLinearComments(requestParameters: IntegrationsApiPostIntegrationsLinearCommentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LinearCommentOut> {
+        const response = await this.postIntegrationsLinearCommentsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Seeds the native todo with the EXISTING Linear issues the caller\'s key can see (default state=open); the webhook keeps them live thereafter. Synchronous and bounded, idempotent by ExtRef.
+     * Seeds the native todo with the EXISTING Linear issues the caller\'s key can see (default state=open); the webhook keeps them live thereafter.
+     */
+    async postIntegrationsLinearIssuesBackfillRaw(requestParameters: IntegrationsApiPostIntegrationsLinearIssuesBackfillRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LinearBackfillResult>> {
+        if (requestParameters['linearBackfillIn'] == null) {
+            throw new runtime.RequiredError(
+                'linearBackfillIn',
+                'Required parameter "linearBackfillIn" was null or undefined when calling postIntegrationsLinearIssuesBackfill().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/integrations/linear/issues/backfill`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: LinearBackfillInToJSON(requestParameters['linearBackfillIn']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => LinearBackfillResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Seeds the native todo with the EXISTING Linear issues the caller\'s key can see (default state=open); the webhook keeps them live thereafter. Synchronous and bounded, idempotent by ExtRef.
+     * Seeds the native todo with the EXISTING Linear issues the caller\'s key can see (default state=open); the webhook keeps them live thereafter.
+     */
+    async postIntegrationsLinearIssuesBackfill(requestParameters: IntegrationsApiPostIntegrationsLinearIssuesBackfillRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LinearBackfillResult> {
+        const response = await this.postIntegrationsLinearIssuesBackfillRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * The address Linear delivers Issue and Comment events to. An issue event is mirrored into the native todo — idempotently by identifier, so ENG-123 is one row however many times it is edited, moved or closed — and every issue and comment event is handed to the automations engine as a verified trigger, which is how an org runs an agent when an issue is assigned to it or a comment mentions it. A remove is never propagated: the native side is canonical.  It answers a benign 200 for what it does not act on — an unknown organization, other event types — so Linear does not retry-storm. A bad signature and a delivery older than a minute are 401; only a sink failure is 502.  The delivery names its Linear organization; that organization\'s own webhook secret — sealed at /v1/integrations/linear/claim — verifies the HMAC over the raw body, so the tenant is the organization the signature proves, never a header.  The caller here is the PLATFORM, not a Hanzo tenant, so there is no bearer and no principal. The signature check IS the authentication, and it fails closed. The tenant is never read from the payload either: it is resolved from the verified platform identifier through the connection map, so an event from a workspace nobody connected does nothing. Refusals are written with their own status rather than being flattened to a 500, so a rejected signature reads as 401 and a malformed body as 400.
+     * Linear webhook
+     */
+    async postIntegrationsLinearWebhookRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/integrations/linear/webhook`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * The address Linear delivers Issue and Comment events to. An issue event is mirrored into the native todo — idempotently by identifier, so ENG-123 is one row however many times it is edited, moved or closed — and every issue and comment event is handed to the automations engine as a verified trigger, which is how an org runs an agent when an issue is assigned to it or a comment mentions it. A remove is never propagated: the native side is canonical.  It answers a benign 200 for what it does not act on — an unknown organization, other event types — so Linear does not retry-storm. A bad signature and a delivery older than a minute are 401; only a sink failure is 502.  The delivery names its Linear organization; that organization\'s own webhook secret — sealed at /v1/integrations/linear/claim — verifies the HMAC over the raw body, so the tenant is the organization the signature proves, never a header.  The caller here is the PLATFORM, not a Hanzo tenant, so there is no bearer and no principal. The signature check IS the authentication, and it fails closed. The tenant is never read from the payload either: it is resolved from the verified platform identifier through the connection map, so an event from a workspace nobody connected does nothing. Refusals are written with their own status rather than being flattened to a 500, so a rejected signature reads as 401 and a malformed body as 400.
+     * Linear webhook
+     */
+    async postIntegrationsLinearWebhook(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postIntegrationsLinearWebhookRaw(initOverrides);
     }
 
     /**

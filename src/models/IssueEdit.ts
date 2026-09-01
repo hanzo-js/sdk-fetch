@@ -20,6 +20,20 @@ import { mapValues } from '../runtime.js';
  */
 export interface IssueEdit {
     /**
+     * Assignee hands the work to somebody — a person or an agent, by the name
+     * they are known by on the forge. "" TAKES IT OFF whoever holds it, which is
+     * why this is a pointer: absent leaves the holder alone.
+     * 
+     * It is the other half of `claim`, which that handler already named: a claim
+     * takes work for the CALLER and refuses to name anyone else, because giving
+     * work away is a different act with different authority. This is that act,
+     * and until it existed a board could only be worked by whoever clicked
+     * first — an agent could never be given anything.
+     * @type {string}
+     * @memberof IssueEdit
+     */
+    assignee?: string;
+    /**
      * Description rewrites the body.
      * @type {string}
      * @memberof IssueEdit
@@ -74,6 +88,7 @@ export function IssueEditFromJSONTyped(json: any, ignoreDiscriminator: boolean):
     }
     return {
         
+        'assignee': json['assignee'] == null ? undefined : json['assignee'],
         'description': json['description'] == null ? undefined : json['description'],
         'key': json['key'] == null ? undefined : json['key'],
         'num': json['num'] == null ? undefined : json['num'],
@@ -94,6 +109,7 @@ export function IssueEditToJSONTyped(value?: IssueEdit | null, ignoreDiscriminat
 
     return {
         
+        'assignee': value['assignee'],
         'description': value['description'],
         'key': value['key'],
         'num': value['num'],

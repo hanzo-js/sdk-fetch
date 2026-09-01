@@ -44,13 +44,13 @@ export interface TeamRoomBind {
      */
     life?: string;
     /**
-     * Workspace names the workspace holding the room. It is required, because
-     * a room id is unique only within one and searching every workspace for a
+     * Space names the space holding the room. It is required, because
+     * a room id is unique only within one and searching every space for a
      * matching id would make the write's target depend on iteration order.
      * @type {string}
      * @memberof TeamRoomBind
      */
-    workspace?: string;
+    space?: string;
 }
 
 /**
@@ -73,7 +73,7 @@ export function TeamRoomBindFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'bindings': json['bindings'] == null ? undefined : json['bindings'],
         'id': json['id'] == null ? undefined : json['id'],
         'life': json['life'] == null ? undefined : json['life'],
-        'workspace': json['workspace'] == null ? undefined : json['workspace'],
+        'space': json['space'] == null ? undefined : json['space'],
     };
 }
 
@@ -91,7 +91,7 @@ export function TeamRoomBindToJSONTyped(value?: TeamRoomBind | null, ignoreDiscr
         'bindings': value['bindings'],
         'id': value['id'],
         'life': value['life'],
-        'workspace': value['workspace'],
+        'space': value['space'],
     };
 }
 

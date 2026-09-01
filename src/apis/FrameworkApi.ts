@@ -21,8 +21,6 @@ import type {
   Install,
   ModuleList,
   ModuleState,
-  RoleAssignment,
-  RoleList,
   SummaryView,
 } from '../models/index.js';
 import {
@@ -38,10 +36,6 @@ import {
     ModuleListToJSON,
     ModuleStateFromJSON,
     ModuleStateToJSON,
-    RoleAssignmentFromJSON,
-    RoleAssignmentToJSON,
-    RoleListFromJSON,
-    RoleListToJSON,
     SummaryViewFromJSON,
     SummaryViewToJSON,
 } from '../models/index.js';
@@ -53,11 +47,6 @@ export interface FrameworkApiDeleteFrameworkByDoctypeByNameRequest {
 
 export interface FrameworkApiDeleteFrameworkDoctypesByNameRequest {
     name: string;
-}
-
-export interface FrameworkApiDeleteFrameworkRolesByUserByRoleRequest {
-    user: string;
-    role: string;
 }
 
 export interface FrameworkApiGetFrameworkByDoctypeRequest {
@@ -101,10 +90,6 @@ export interface FrameworkApiPostFrameworkDoctypesRequest {
 
 export interface FrameworkApiPostFrameworkModulesByModuleInstallRequest {
     module: string;
-}
-
-export interface FrameworkApiPostFrameworkRolesRequest {
-    roleAssignment: RoleAssignment;
 }
 
 export interface FrameworkApiPutFrameworkByDoctypeByNameRequest {
@@ -220,60 +205,6 @@ export class FrameworkApi extends runtime.BaseAPI {
      */
     async deleteFrameworkDoctypesByName(requestParameters: FrameworkApiDeleteFrameworkDoctypesByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.deleteFrameworkDoctypesByNameRaw(requestParameters, initOverrides);
-    }
-
-    /**
-     * Removes one (user, role) grant in the caller\'s org. Manager-only. Answers 204; a grant that does not exist is not found.
-     * Removes one (user, role) grant in the caller\'s org.
-     */
-    async deleteFrameworkRolesByUserByRoleRaw(requestParameters: FrameworkApiDeleteFrameworkRolesByUserByRoleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters['user'] == null) {
-            throw new runtime.RequiredError(
-                'user',
-                'Required parameter "user" was null or undefined when calling deleteFrameworkRolesByUserByRole().'
-            );
-        }
-
-        if (requestParameters['role'] == null) {
-            throw new runtime.RequiredError(
-                'role',
-                'Required parameter "role" was null or undefined when calling deleteFrameworkRolesByUserByRole().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/framework/roles/{user}/{role}`;
-        urlPath = urlPath.replace(`{${"user"}}`, encodeURIComponent(String(requestParameters['user'])));
-        urlPath = urlPath.replace(`{${"role"}}`, encodeURIComponent(String(requestParameters['role'])));
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'DELETE',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Removes one (user, role) grant in the caller\'s org. Manager-only. Answers 204; a grant that does not exist is not found.
-     * Removes one (user, role) grant in the caller\'s org.
-     */
-    async deleteFrameworkRolesByUserByRole(requestParameters: FrameworkApiDeleteFrameworkRolesByUserByRoleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.deleteFrameworkRolesByUserByRoleRaw(requestParameters, initOverrides);
     }
 
     /**
@@ -567,45 +498,6 @@ export class FrameworkApi extends runtime.BaseAPI {
     }
 
     /**
-     * Returns every (user, role) assignment in the caller\'s org. Roles are what DocType permissions are written against, so this is the grant table the permission calculus resolves a member\'s rights from.
-     * Returns every (user, role) assignment in the caller\'s org.
-     */
-    async getFrameworkRolesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RoleList>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/framework/roles`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => RoleListFromJSON(jsonValue));
-    }
-
-    /**
-     * Returns every (user, role) assignment in the caller\'s org. Roles are what DocType permissions are written against, so this is the grant table the permission calculus resolves a member\'s rights from.
-     * Returns every (user, role) assignment in the caller\'s org.
-     */
-    async getFrameworkRoles(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RoleList> {
-        const response = await this.getFrameworkRolesRaw(initOverrides);
-        return await response.value();
-    }
-
-    /**
      * Reports how much of the DocType surface the caller\'s org uses: how many DocTypes it has defined, and how many documents exist across them.
      * Reports how much of the DocType surface the caller\'s org uses: how many DocTypes it has defined, and how many documents exist across them.
      */
@@ -893,55 +785,6 @@ export class FrameworkApi extends runtime.BaseAPI {
      */
     async postFrameworkModulesByModuleInstall(requestParameters: FrameworkApiPostFrameworkModulesByModuleInstallRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Install> {
         const response = await this.postFrameworkModulesByModuleInstallRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Grants one user one role in the caller\'s org — how a member gains rights on a DocType, since permissions name roles and never users. Manager-only. Answers 201.
-     * Grants one user one role in the caller\'s org — how a member gains rights on a DocType, since permissions name roles and never users.
-     */
-    async postFrameworkRolesRaw(requestParameters: FrameworkApiPostFrameworkRolesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RoleAssignment>> {
-        if (requestParameters['roleAssignment'] == null) {
-            throw new runtime.RequiredError(
-                'roleAssignment',
-                'Required parameter "roleAssignment" was null or undefined when calling postFrameworkRoles().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/framework/roles`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: RoleAssignmentToJSON(requestParameters['roleAssignment']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => RoleAssignmentFromJSON(jsonValue));
-    }
-
-    /**
-     * Grants one user one role in the caller\'s org — how a member gains rights on a DocType, since permissions name roles and never users. Manager-only. Answers 201.
-     * Grants one user one role in the caller\'s org — how a member gains rights on a DocType, since permissions name roles and never users.
-     */
-    async postFrameworkRoles(requestParameters: FrameworkApiPostFrameworkRolesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RoleAssignment> {
-        const response = await this.postFrameworkRolesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
