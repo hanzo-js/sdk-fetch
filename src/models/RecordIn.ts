@@ -21,7 +21,7 @@ import { mapValues } from '../runtime.js';
 export interface RecordIn {
     /**
      * Room is the LiveKit room, named the way the office client names one
-     * (`<workspace>_<name>_<id>`). Its leading segment is what binds the room to a
+     * (`<space>_<name>_<id>`). Its leading segment is what binds the room to a
      * tenant, and it is the segment the caller's membership is checked against.
      * @type {string}
      * @memberof RecordIn

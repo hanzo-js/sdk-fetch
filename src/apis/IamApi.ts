@@ -67,6 +67,11 @@ import type {
   IamRolesListOutput,
   IamSession,
   IamSetAvatarInput,
+  IamSetProfileInput,
+  IamTeam,
+  IamTeamsDeleteOutput,
+  IamTeamsInput,
+  IamTeamsListOutput,
   IamToken,
   IamTokenMutation,
   IamTokenResult,
@@ -189,6 +194,16 @@ import {
     IamSessionToJSON,
     IamSetAvatarInputFromJSON,
     IamSetAvatarInputToJSON,
+    IamSetProfileInputFromJSON,
+    IamSetProfileInputToJSON,
+    IamTeamFromJSON,
+    IamTeamToJSON,
+    IamTeamsDeleteOutputFromJSON,
+    IamTeamsDeleteOutputToJSON,
+    IamTeamsInputFromJSON,
+    IamTeamsInputToJSON,
+    IamTeamsListOutputFromJSON,
+    IamTeamsListOutputToJSON,
     IamTokenFromJSON,
     IamTokenToJSON,
     IamTokenMutationFromJSON,
@@ -289,6 +304,10 @@ export interface IamApiDeleteIamScimV2UsersByOwnerByNameRequest {
 }
 
 export interface IamApiDeleteIamServiceAccountsByNameRequest {
+    name: string;
+}
+
+export interface IamApiDeleteIamTeamsByNameRequest {
     name: string;
 }
 
@@ -438,8 +457,12 @@ export interface IamApiGetIamServiceAccountsRequest {
     pageSize?: number;
 }
 
+export interface IamApiGetIamTeamsByNameRequest {
+    name: string;
+}
+
 export interface IamApiGetIamUsersRequest {
-    owner: string;
+    owner?: string;
     email?: string;
     limit?: number;
     offset?: number;
@@ -498,7 +521,7 @@ export interface IamApiListProvidersRequest {
 }
 
 export interface IamApiListSessionsRequest {
-    owner: string;
+    owner?: string;
     name?: string;
     application?: string;
 }
@@ -563,6 +586,10 @@ export interface IamApiPostIamRolesRequest {
 
 export interface IamApiPostIamServiceAccountsByNameKeysRequest {
     name: string;
+}
+
+export interface IamApiPostIamTeamsRequest {
+    iamTeamsInput: IamTeamsInput;
 }
 
 export interface IamApiPostIamUsersRequest {
@@ -643,6 +670,11 @@ export interface IamApiPutIamScimV2UsersByOwnerByNameRequest {
     name: string;
 }
 
+export interface IamApiPutIamTeamsByNameRequest {
+    name: string;
+    iamTeamsInput: IamTeamsInput;
+}
+
 export interface IamApiPutIamUsersByOwnerByNameRequest {
     owner: string;
     name: string;
@@ -657,6 +689,10 @@ export interface IamApiPutIamWorkspacesByOwnerByNameRequest {
 
 export interface IamApiSetOrganizationAvatarRequest {
     iamSetAvatarInput: IamSetAvatarInput;
+}
+
+export interface IamApiSetOrganizationProfileRequest {
+    iamSetProfileInput: IamSetProfileInput;
 }
 
 export interface IamApiUpdateOrganizationRequest {
@@ -902,8 +938,8 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Records a sign-in. Signing in again from another browser adds to the session rather than replacing it, so one person can be signed in from a laptop and a phone at once.  Ask for an exclusive sign-in and the opposite holds: the new sign-in is the only one left and every other browser is signed out. That is the setting to use when one person may hold only one live session at a time.
-     * Records a sign-in.
+     * Records a sign-in and answers with the cookie id it minted. Signing in again from another browser adds to the session rather than replacing it, so one person can be signed in from a laptop and a phone at once.  Ask for an exclusive sign-in and the opposite holds: the new sign-in is the only one left and every other browser is signed out. That is the setting to use when one person may hold only one live session at a time.
+     * Records a sign-in and answers with the cookie id it minted.
      */
     async createSessionRaw(requestParameters: IamApiCreateSessionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamSession>> {
         if (requestParameters['iamCreateSessionIn'] == null) {
@@ -942,8 +978,8 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Records a sign-in. Signing in again from another browser adds to the session rather than replacing it, so one person can be signed in from a laptop and a phone at once.  Ask for an exclusive sign-in and the opposite holds: the new sign-in is the only one left and every other browser is signed out. That is the setting to use when one person may hold only one live session at a time.
-     * Records a sign-in.
+     * Records a sign-in and answers with the cookie id it minted. Signing in again from another browser adds to the session rather than replacing it, so one person can be signed in from a laptop and a phone at once.  Ask for an exclusive sign-in and the opposite holds: the new sign-in is the only one left and every other browser is signed out. That is the setting to use when one person may hold only one live session at a time.
+     * Records a sign-in and answers with the cookie id it minted.
      */
     async createSession(requestParameters: IamApiCreateSessionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamSession> {
         const response = await this.createSessionRaw(requestParameters, initOverrides);
@@ -1526,6 +1562,53 @@ export class IamApi extends runtime.BaseAPI {
      */
     async deleteIamServiceAccountsByName(requestParameters: IamApiDeleteIamServiceAccountsByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.deleteIamServiceAccountsByNameRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Removes a team. Everyone in it loses the access it carried; their accounts, and any other team they are in, are untouched.
+     * Removes a team.
+     */
+    async deleteIamTeamsByNameRaw(requestParameters: IamApiDeleteIamTeamsByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamTeamsDeleteOutput>> {
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling deleteIamTeamsByName().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/iam/teams/{name}`;
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IamTeamsDeleteOutputFromJSON(jsonValue));
+    }
+
+    /**
+     * Removes a team. Everyone in it loses the access it carried; their accounts, and any other team they are in, are untouched.
+     * Removes a team.
+     */
+    async deleteIamTeamsByName(requestParameters: IamApiDeleteIamTeamsByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamTeamsDeleteOutput> {
+        const response = await this.deleteIamTeamsByNameRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
@@ -2541,8 +2624,8 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Returns your organization\'s API keys, newest first — what each is called, what it may reach, and its publishable half. Secret halves are never listed.
-     * Returns your organization\'s API keys, newest first — what each is called, what it may reach, and its publishable half.
+     * Returns an organization\'s API keys, newest first — what each is called, what it may reach, and its publishable half. Secret halves are never listed.  Which organization comes from your credentials, not from the request: you read your own and no one else\'s. The capability that admits a confidential client to this collection does not itself name a tenant, so the tenant is decided here.
+     * Returns an organization\'s API keys, newest first — what each is called, what it may reach, and its publishable half.
      */
     async getIamKeysRaw(requestParameters: IamApiGetIamKeysRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamListResponse>> {
         const queryParameters: any = {};
@@ -2575,8 +2658,8 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Returns your organization\'s API keys, newest first — what each is called, what it may reach, and its publishable half. Secret halves are never listed.
-     * Returns your organization\'s API keys, newest first — what each is called, what it may reach, and its publishable half.
+     * Returns an organization\'s API keys, newest first — what each is called, what it may reach, and its publishable half. Secret halves are never listed.  Which organization comes from your credentials, not from the request: you read your own and no one else\'s. The capability that admits a confidential client to this collection does not itself name a tenant, so the tenant is decided here.
+     * Returns an organization\'s API keys, newest first — what each is called, what it may reach, and its publishable half.
      */
     async getIamKeys(requestParameters: IamApiGetIamKeysRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamListResponse> {
         const response = await this.getIamKeysRaw(requestParameters, initOverrides);
@@ -2753,7 +2836,7 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Answers either question about who belongs where: which organizations one person can act in, or who can act in one organization.  Both are org-scoped: a non-SuperAdmin may ask about ITS OWN org\'s roster, or about a user whose home org is its own, and nothing else. The bound comes from the verified credential via authz.Scope, so a request parameter can never widen it — a membership row names who may act and spend in an org, so a cross-tenant read is a customer roster leak.
+     * Answers either question about who belongs where: which organizations one person can act in, or who can act in one organization.  Both are org-scoped: a non-SuperAdmin may ask about ITS OWN org\'s roster, or about a user whose home org is its own, and nothing else. The bound comes from the verified credential via principal.Scope, so a request parameter can never widen it — a membership row names who may act and spend in an org, so a cross-tenant read is a customer roster leak.
      * Answers either question about who belongs where: which organizations one person can act in, or who can act in one organization.
      */
     async getIamMembershipsRaw(requestParameters: IamApiGetIamMembershipsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamAnswer>> {
@@ -2791,7 +2874,7 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Answers either question about who belongs where: which organizations one person can act in, or who can act in one organization.  Both are org-scoped: a non-SuperAdmin may ask about ITS OWN org\'s roster, or about a user whose home org is its own, and nothing else. The bound comes from the verified credential via authz.Scope, so a request parameter can never widen it — a membership row names who may act and spend in an org, so a cross-tenant read is a customer roster leak.
+     * Answers either question about who belongs where: which organizations one person can act in, or who can act in one organization.  Both are org-scoped: a non-SuperAdmin may ask about ITS OWN org\'s roster, or about a user whose home org is its own, and nothing else. The bound comes from the verified credential via principal.Scope, so a request parameter can never widen it — a membership row names who may act and spend in an org, so a cross-tenant read is a customer roster leak.
      * Answers either question about who belongs where: which organizations one person can act in, or who can act in one organization.
      */
     async getIamMemberships(requestParameters: IamApiGetIamMembershipsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamAnswer> {
@@ -3684,17 +3767,96 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Returns a page of the people in your organization, with the total so you can page through the rest. Passwords, API secrets and MFA material are stripped from every entry.
-     * Returns a page of the people in your organization, with the total so you can page through the rest.
+     * Returns your organization\'s teams, newest first — each a named set of people that roles and permissions are granted to.  You see your own organization\'s teams and no one else\'s; which organization that is comes from your credentials, not from the request.
+     * Returns your organization\'s teams, newest first — each a named set of people that roles and permissions are granted to.
      */
-    async getIamUsersRaw(requestParameters: IamApiGetIamUsersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamUsersListOutput>> {
-        if (requestParameters['owner'] == null) {
+    async getIamTeamsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamTeamsListOutput>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/iam/teams`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IamTeamsListOutputFromJSON(jsonValue));
+    }
+
+    /**
+     * Returns your organization\'s teams, newest first — each a named set of people that roles and permissions are granted to.  You see your own organization\'s teams and no one else\'s; which organization that is comes from your credentials, not from the request.
+     * Returns your organization\'s teams, newest first — each a named set of people that roles and permissions are granted to.
+     */
+    async getIamTeams(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamTeamsListOutput> {
+        const response = await this.getIamTeamsRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns one team: who is in it.
+     * Returns one team: who is in it.
+     */
+    async getIamTeamsByNameRaw(requestParameters: IamApiGetIamTeamsByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamTeam>> {
+        if (requestParameters['name'] == null) {
             throw new runtime.RequiredError(
-                'owner',
-                'Required parameter "owner" was null or undefined when calling getIamUsers().'
+                'name',
+                'Required parameter "name" was null or undefined when calling getIamTeamsByName().'
             );
         }
 
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/iam/teams/{name}`;
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IamTeamFromJSON(jsonValue));
+    }
+
+    /**
+     * Returns one team: who is in it.
+     * Returns one team: who is in it.
+     */
+    async getIamTeamsByName(requestParameters: IamApiGetIamTeamsByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamTeam> {
+        const response = await this.getIamTeamsByNameRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns a page of the people in an organization, with the total so you can page through the rest. Passwords, API secrets and MFA material are stripped from every entry.  Which organization comes from your credentials, not from the request: you read your own and no one else\'s, and a credential whose scope spans tenants reads the tenant it names — or, naming none, every one of them.
+     * Returns a page of the people in an organization, with the total so you can page through the rest.
+     */
+    async getIamUsersRaw(requestParameters: IamApiGetIamUsersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamUsersListOutput>> {
         const queryParameters: any = {};
 
         if (requestParameters['owner'] != null) {
@@ -3737,10 +3899,10 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Returns a page of the people in your organization, with the total so you can page through the rest. Passwords, API secrets and MFA material are stripped from every entry.
-     * Returns a page of the people in your organization, with the total so you can page through the rest.
+     * Returns a page of the people in an organization, with the total so you can page through the rest. Passwords, API secrets and MFA material are stripped from every entry.  Which organization comes from your credentials, not from the request: you read your own and no one else\'s, and a credential whose scope spans tenants reads the tenant it names — or, naming none, every one of them.
+     * Returns a page of the people in an organization, with the total so you can page through the rest.
      */
-    async getIamUsers(requestParameters: IamApiGetIamUsersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamUsersListOutput> {
+    async getIamUsers(requestParameters: IamApiGetIamUsersRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamUsersListOutput> {
         const response = await this.getIamUsersRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -4550,17 +4712,10 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Returns who is currently signed in to your organization, newest first, and can be narrowed to one person or one application. It is what you read before signing someone out.
-     * Returns who is currently signed in to your organization, newest first, and can be narrowed to one person or one application.
+     * Returns who is currently signed in to an organization, newest first, and can be narrowed to one person or one application. It is what you read before signing someone out.  Which organization comes from your credentials, not from the request: you read your own and no one else\'s. A session row names a live account and the applications it is signed in to, so the tenant is decided here rather than taken from the query.
+     * Returns who is currently signed in to an organization, newest first, and can be narrowed to one person or one application.
      */
     async listSessionsRaw(requestParameters: IamApiListSessionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamListSessionsOut>> {
-        if (requestParameters['owner'] == null) {
-            throw new runtime.RequiredError(
-                'owner',
-                'Required parameter "owner" was null or undefined when calling listSessions().'
-            );
-        }
-
         const queryParameters: any = {};
 
         if (requestParameters['owner'] != null) {
@@ -4599,10 +4754,10 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Returns who is currently signed in to your organization, newest first, and can be narrowed to one person or one application. It is what you read before signing someone out.
-     * Returns who is currently signed in to your organization, newest first, and can be narrowed to one person or one application.
+     * Returns who is currently signed in to an organization, newest first, and can be narrowed to one person or one application. It is what you read before signing someone out.  Which organization comes from your credentials, not from the request: you read your own and no one else\'s. A session row names a live account and the applications it is signed in to, so the tenant is decided here rather than taken from the query.
+     * Returns who is currently signed in to an organization, newest first, and can be narrowed to one person or one application.
      */
-    async listSessions(requestParameters: IamApiListSessionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamListSessionsOut> {
+    async listSessions(requestParameters: IamApiListSessionsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamListSessionsOut> {
         const response = await this.listSessionsRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -6216,6 +6371,55 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
+     * Makes a team — a named set of people that roles and permissions grant to. Granting to a team rather than to each person keeps access correct as people come and go: add someone and they inherit what the team can do. A name already used in your organization is refused.
+     * Makes a team — a named set of people that roles and permissions grant to.
+     */
+    async postIamTeamsRaw(requestParameters: IamApiPostIamTeamsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamTeam>> {
+        if (requestParameters['iamTeamsInput'] == null) {
+            throw new runtime.RequiredError(
+                'iamTeamsInput',
+                'Required parameter "iamTeamsInput" was null or undefined when calling postIamTeams().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/iam/teams`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: IamTeamsInputToJSON(requestParameters['iamTeamsInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IamTeamFromJSON(jsonValue));
+    }
+
+    /**
+     * Makes a team — a named set of people that roles and permissions grant to. Granting to a team rather than to each person keeps access correct as people come and go: add someone and they inherit what the team can do. A name already used in your organization is refused.
+     * Makes a team — a named set of people that roles and permissions grant to.
+     */
+    async postIamTeams(requestParameters: IamApiPostIamTeamsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamTeam> {
+        const response = await this.postIamTeamsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Mints an access token for the `?id=<owner>/<name>` target user (optional `?aud=` resource, RFC 8707), issued by the authenticated + allow-listed confidential client. The token\'s subject + owner are the TARGET USER\'s, so a resource server scopes on the validated owner claim to the user\'s tenant — indistinguishable from a token the user obtained directly. Response is the camelCase `{accessToken, expiresIn}` body identity.ts consumes. Equivalent to the RFC 8693 token-exchange grant, minus the subject_token proof (the console has the user\'s id, not a token) — the reason this compat shim exists.
      * Mints an access token for the `?id=<owner>/<name>` target user (optional `?aud=` resource, RFC 8707), issued by the authenticated + allow-listed confidential client.
      */
@@ -7322,6 +7526,63 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
+     * Changes who is in a team. Access changes for everyone in it as soon as the write lands. The name and the created stamp do not change.
+     * Changes who is in a team.
+     */
+    async putIamTeamsByNameRaw(requestParameters: IamApiPutIamTeamsByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamTeam>> {
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling putIamTeamsByName().'
+            );
+        }
+
+        if (requestParameters['iamTeamsInput'] == null) {
+            throw new runtime.RequiredError(
+                'iamTeamsInput',
+                'Required parameter "iamTeamsInput" was null or undefined when calling putIamTeamsByName().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/iam/teams/{name}`;
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: IamTeamsInputToJSON(requestParameters['iamTeamsInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IamTeamFromJSON(jsonValue));
+    }
+
+    /**
+     * Changes who is in a team. Access changes for everyone in it as soon as the write lands. The name and the created stamp do not change.
+     * Changes who is in a team.
+     */
+    async putIamTeamsByName(requestParameters: IamApiPutIamTeamsByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamTeam> {
+        const response = await this.putIamTeamsByNameRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Changes a person\'s profile, their roles, or the credentials they sign in with. Send a password to reset it; leave it out and their current one keeps working.  Who they are does not change: their organization, username and the identifier their existing sessions are keyed on all survive the write, so an update never signs anyone out.
      * Changes a person\'s profile, their roles, or the credentials they sign in with.
      */
@@ -7501,6 +7762,55 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
+     * Changes how an organization reads: its display name, its website and its favicon.  IT EXISTS FOR THE REASON SetAvatar DOES, and the reason is worth stating because the obvious alternative is a trap. Update REPLACES the whole record, so a caller that wants to change one field has to send every other field back — and a record read back first arrives MASKED, so the read half of that read-modify-write hands you \"***\" for the master password and the salt, and the write half stores it. Renaming an organization through Update therefore costs it its credential settings; sending only the new name costs it everything else. Neither is a rename.  So this writes the fields it names and touches nothing else. A nil pointer is not sent and not changed; an empty string is sent and clears the field.
+     * Changes how an organization reads: its display name, its website and its favicon.
+     */
+    async setOrganizationProfileRaw(requestParameters: IamApiSetOrganizationProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamOrganization>> {
+        if (requestParameters['iamSetProfileInput'] == null) {
+            throw new runtime.RequiredError(
+                'iamSetProfileInput',
+                'Required parameter "iamSetProfileInput" was null or undefined when calling setOrganizationProfile().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/iam/organizations/profile`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: IamSetProfileInputToJSON(requestParameters['iamSetProfileInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IamOrganizationFromJSON(jsonValue));
+    }
+
+    /**
+     * Changes how an organization reads: its display name, its website and its favicon.  IT EXISTS FOR THE REASON SetAvatar DOES, and the reason is worth stating because the obvious alternative is a trap. Update REPLACES the whole record, so a caller that wants to change one field has to send every other field back — and a record read back first arrives MASKED, so the read half of that read-modify-write hands you \"***\" for the master password and the salt, and the write half stores it. Renaming an organization through Update therefore costs it its credential settings; sending only the new name costs it everything else. Neither is a rename.  So this writes the fields it names and touches nothing else. A nil pointer is not sent and not changed; an empty string is sent and clears the field.
+     * Changes how an organization reads: its display name, its website and its favicon.
+     */
+    async setOrganizationProfile(requestParameters: IamApiSetOrganizationProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamOrganization> {
+        const response = await this.setOrganizationProfileRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Changes an organization\'s display, its defaults and the sign-in rules everyone in it inherits. Which organization it is does not change, and neither does when it was created.
      * Changes an organization\'s display, its defaults and the sign-in rules everyone in it inherits.
      */
@@ -7631,8 +7941,8 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Replaces the set of browsers a session covers — signing out the ones you leave off while the session itself stays live. A session that does not exist is reported as missing rather than created.
-     * Replaces the set of browsers a session covers — signing out the ones you leave off while the session itself stays live.
+     * Names the browsers a session keeps — signing out the ones you leave off while the session itself stays live. A session that does not exist is reported as missing rather than created.
+     * Names the browsers a session keeps — signing out the ones you leave off while the session itself stays live.
      */
     async updateSessionRaw(requestParameters: IamApiUpdateSessionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IamSession>> {
         if (requestParameters['owner'] == null) {
@@ -7695,8 +8005,8 @@ export class IamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Replaces the set of browsers a session covers — signing out the ones you leave off while the session itself stays live. A session that does not exist is reported as missing rather than created.
-     * Replaces the set of browsers a session covers — signing out the ones you leave off while the session itself stays live.
+     * Names the browsers a session keeps — signing out the ones you leave off while the session itself stays live. A session that does not exist is reported as missing rather than created.
+     * Names the browsers a session keeps — signing out the ones you leave off while the session itself stays live.
      */
     async updateSession(requestParameters: IamApiUpdateSessionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IamSession> {
         const response = await this.updateSessionRaw(requestParameters, initOverrides);

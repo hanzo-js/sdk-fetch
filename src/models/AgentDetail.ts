@@ -32,6 +32,12 @@ export interface AgentDetail {
      * @type {string}
      * @memberof AgentDetail
      */
+    avatar?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AgentDetail
+     */
     computeRef?: string;
     /**
      * 
@@ -45,6 +51,12 @@ export interface AgentDetail {
      * @memberof AgentDetail
      */
     description?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AgentDetail
+     */
+    emoji?: string;
     /**
      * 
      * @type {string}
@@ -139,9 +151,11 @@ export function AgentDetailFromJSONTyped(json: any, ignoreDiscriminator: boolean
     }
     return {
         
+        'avatar': json['avatar'] == null ? undefined : json['avatar'],
         'computeRef': json['computeRef'] == null ? undefined : json['computeRef'],
         'createdAt': json['createdAt'] == null ? undefined : json['createdAt'],
         'description': json['description'] == null ? undefined : json['description'],
+        'emoji': json['emoji'] == null ? undefined : json['emoji'],
         'executionMode': json['executionMode'] == null ? undefined : json['executionMode'],
         'id': json['id'] == null ? undefined : json['id'],
         'instructions': json['instructions'] == null ? undefined : json['instructions'],
@@ -168,9 +182,11 @@ export function AgentDetailToJSONTyped(value?: AgentDetail | null, ignoreDiscrim
 
     return {
         
+        'avatar': value['avatar'],
         'computeRef': value['computeRef'],
         'createdAt': value['createdAt'],
         'description': value['description'],
+        'emoji': value['emoji'],
         'executionMode': value['executionMode'],
         'id': value['id'],
         'instructions': value['instructions'],

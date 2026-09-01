@@ -29,7 +29,7 @@ import {
 export interface CollabRequest {
     /**
      * DocumentID addresses the document field, as
-     * "<workspaceUuid>|<objectClass>|<objectId>|<objectAttr>" — the
+     * "<spaceUuid>|<objectClass>|<objectId>|<objectAttr>" — the
      * collaborator-client encodeDocumentId shape, from the path.
      * @type {string}
      * @memberof CollabRequest

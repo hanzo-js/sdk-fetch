@@ -18,6 +18,8 @@ import type {
   AllowlistPutIn,
   AllowlistView,
   ApprovePairingIn,
+  ChannelAgents,
+  ChannelAgentsPut,
   ChatChannels,
   InboxPage,
   PairingApproved,
@@ -30,6 +32,10 @@ import {
     AllowlistViewToJSON,
     ApprovePairingInFromJSON,
     ApprovePairingInToJSON,
+    ChannelAgentsFromJSON,
+    ChannelAgentsToJSON,
+    ChannelAgentsPutFromJSON,
+    ChannelAgentsPutToJSON,
     ChatChannelsFromJSON,
     ChatChannelsToJSON,
     InboxPageFromJSON,
@@ -39,6 +45,10 @@ import {
     PairingQueueFromJSON,
     PairingQueueToJSON,
 } from '../models/index.js';
+
+export interface ChannelsApiGetChannelsAgentRequest {
+    channel?: string;
+}
 
 export interface ChannelsApiGetChannelsAllowlistRequest {
     channel?: string;
@@ -55,6 +65,10 @@ export interface ChannelsApiPostChannelsByChannelSendRequest {
 
 export interface ChannelsApiPostChannelsPairingApproveRequest {
     approvePairingIn: ApprovePairingIn;
+}
+
+export interface ChannelsApiPutChannelsAgentRequest {
+    channelAgentsPut: ChannelAgentsPut;
 }
 
 export interface ChannelsApiPutChannelsAllowlistRequest {
@@ -102,6 +116,49 @@ export class ChannelsApi extends runtime.BaseAPI {
      */
     async getChannels(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ChatChannels> {
         const response = await this.getChannelsRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns which agent answers the caller org\'s channel: the default and every room bound to another agent.
+     * Returns which agent answers the caller org\'s channel: the default and every room bound to another agent.
+     */
+    async getChannelsAgentRaw(requestParameters: ChannelsApiGetChannelsAgentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ChannelAgents>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['channel'] != null) {
+            queryParameters['channel'] = requestParameters['channel'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/channels/agent`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ChannelAgentsFromJSON(jsonValue));
+    }
+
+    /**
+     * Returns which agent answers the caller org\'s channel: the default and every room bound to another agent.
+     * Returns which agent answers the caller org\'s channel: the default and every room bound to another agent.
+     */
+    async getChannelsAgent(requestParameters: ChannelsApiGetChannelsAgentRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ChannelAgents> {
+        const response = await this.getChannelsAgentRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -235,7 +292,7 @@ export class ChannelsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Delivers text, attachments and actions to one room on a connected chat transport — discord, slack, teams, telegram or whatsapp — and answers that transport\'s own receipt, the `messageId` it assigned and the Unix second it landed. An unknown channel is a 404.  The body is the envelope\'s NARROW outbound projection: `room`, `text`, `attachments`, `actions`, `replyTo` and `idempotency`, and nothing else. Identity is not a field — the channel is the path segment and the sender is the caller\'s validated org — so a body carrying `sender`, `account` or `channel` is refused with 400 rather than having it silently dropped. `room.id` is required, and so is something to say: text, or at least one attachment.  Requires a validated principal; 403 without one. The room must already belong to the caller\'s org — each transport verifies the binding itself, so a room this org has not bound is 403 and a room whose route the bot has never learned is 409, meaning someone has to message the bot there first. A route learned only so a pairing reply could be delivered lasts exactly as long as that pairing request does, so a room whose sender was never approved goes back to 409 within the hour. A transport that fails answers 502 carrying status and shape only, never a token.  Sending is at-most-once only if you ask for it: pass an `idempotency` string and a replay answers 200 with the PRIOR receipt instead of sending twice, while a send that fails releases the key so the caller can re-attempt. Bodies over 1 MiB are refused. Every transport currently renders text only, so attachments and actions are flattened deterministically to one line each after the text rather than dropped.
+     * Delivers text, attachments and actions to one room on a connected chat transport — discord, github, linear, slack, teams, telegram or whatsapp — and answers that transport\'s own receipt, the `messageId` it assigned and the Unix second it landed. An unknown channel is a 404.  The body is the envelope\'s NARROW outbound projection: `room`, `text`, `attachments`, `actions`, `replyTo` and `idempotency`, and nothing else. Identity is not a field — the channel is the path segment and the sender is the caller\'s validated org — so a body carrying `sender`, `account` or `channel` is refused with 400 rather than having it silently dropped. `room.id` is required, and so is something to say: text, or at least one attachment.  Requires a validated principal; 403 without one. The room must already belong to the caller\'s org — each transport verifies the binding itself, so a room this org has not bound is 403 and a room whose route the bot has never learned is 409, meaning someone has to message the bot there first. A route learned only so a pairing reply could be delivered lasts exactly as long as that pairing request does, so a room whose sender was never approved goes back to 409 within the hour. A transport that fails answers 502 carrying status and shape only, never a token.  Sending is at-most-once only if you ask for it: pass an `idempotency` string and a replay answers 200 with the PRIOR receipt instead of sending twice, while a send that fails releases the key so the caller can re-attempt. Bodies over 1 MiB are refused. Every transport currently renders text only, so attachments and actions are flattened deterministically to one line each after the text rather than dropped.
      * Send a message from your org\'s bot to one chat room
      */
     async postChannelsByChannelSendRaw(requestParameters: ChannelsApiPostChannelsByChannelSendRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -273,7 +330,7 @@ export class ChannelsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Delivers text, attachments and actions to one room on a connected chat transport — discord, slack, teams, telegram or whatsapp — and answers that transport\'s own receipt, the `messageId` it assigned and the Unix second it landed. An unknown channel is a 404.  The body is the envelope\'s NARROW outbound projection: `room`, `text`, `attachments`, `actions`, `replyTo` and `idempotency`, and nothing else. Identity is not a field — the channel is the path segment and the sender is the caller\'s validated org — so a body carrying `sender`, `account` or `channel` is refused with 400 rather than having it silently dropped. `room.id` is required, and so is something to say: text, or at least one attachment.  Requires a validated principal; 403 without one. The room must already belong to the caller\'s org — each transport verifies the binding itself, so a room this org has not bound is 403 and a room whose route the bot has never learned is 409, meaning someone has to message the bot there first. A route learned only so a pairing reply could be delivered lasts exactly as long as that pairing request does, so a room whose sender was never approved goes back to 409 within the hour. A transport that fails answers 502 carrying status and shape only, never a token.  Sending is at-most-once only if you ask for it: pass an `idempotency` string and a replay answers 200 with the PRIOR receipt instead of sending twice, while a send that fails releases the key so the caller can re-attempt. Bodies over 1 MiB are refused. Every transport currently renders text only, so attachments and actions are flattened deterministically to one line each after the text rather than dropped.
+     * Delivers text, attachments and actions to one room on a connected chat transport — discord, github, linear, slack, teams, telegram or whatsapp — and answers that transport\'s own receipt, the `messageId` it assigned and the Unix second it landed. An unknown channel is a 404.  The body is the envelope\'s NARROW outbound projection: `room`, `text`, `attachments`, `actions`, `replyTo` and `idempotency`, and nothing else. Identity is not a field — the channel is the path segment and the sender is the caller\'s validated org — so a body carrying `sender`, `account` or `channel` is refused with 400 rather than having it silently dropped. `room.id` is required, and so is something to say: text, or at least one attachment.  Requires a validated principal; 403 without one. The room must already belong to the caller\'s org — each transport verifies the binding itself, so a room this org has not bound is 403 and a room whose route the bot has never learned is 409, meaning someone has to message the bot there first. A route learned only so a pairing reply could be delivered lasts exactly as long as that pairing request does, so a room whose sender was never approved goes back to 409 within the hour. A transport that fails answers 502 carrying status and shape only, never a token.  Sending is at-most-once only if you ask for it: pass an `idempotency` string and a replay answers 200 with the PRIOR receipt instead of sending twice, while a send that fails releases the key so the caller can re-attempt. Bodies over 1 MiB are refused. Every transport currently renders text only, so attachments and actions are flattened deterministically to one line each after the text rather than dropped.
      * Send a message from your org\'s bot to one chat room
      */
     async postChannelsByChannelSend(requestParameters: ChannelsApiPostChannelsByChannelSendRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
@@ -326,6 +383,55 @@ export class ChannelsApi extends runtime.BaseAPI {
      */
     async postChannelsPairingApprove(requestParameters: ChannelsApiPostChannelsPairingApproveRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PairingApproved> {
         const response = await this.postChannelsPairingApproveRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Binds agents to the caller org\'s channel and answers the bindings as GET would. It requires ORG ADMIN. The agent is named by its ref — the name an org gave it at POST /v1/agents, or a built-in such as dev, des or vi.
+     * Binds agents to the caller org\'s channel and answers the bindings as GET would.
+     */
+    async putChannelsAgentRaw(requestParameters: ChannelsApiPutChannelsAgentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ChannelAgents>> {
+        if (requestParameters['channelAgentsPut'] == null) {
+            throw new runtime.RequiredError(
+                'channelAgentsPut',
+                'Required parameter "channelAgentsPut" was null or undefined when calling putChannelsAgent().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/channels/agent`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: ChannelAgentsPutToJSON(requestParameters['channelAgentsPut']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ChannelAgentsFromJSON(jsonValue));
+    }
+
+    /**
+     * Binds agents to the caller org\'s channel and answers the bindings as GET would. It requires ORG ADMIN. The agent is named by its ref — the name an org gave it at POST /v1/agents, or a built-in such as dev, des or vi.
+     * Binds agents to the caller org\'s channel and answers the bindings as GET would.
+     */
+    async putChannelsAgent(requestParameters: ChannelsApiPutChannelsAgentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ChannelAgents> {
+        const response = await this.putChannelsAgentRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

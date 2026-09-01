@@ -21,7 +21,7 @@ import { mapValues } from '../runtime.js';
 export interface SearchIn {
     /**
      * DocTypes restricts retrieval to a subset of the indexed knowledge doctypes
-     * (kb-page, kb-memory, kb-source). An empty or foreign list reads all of them.
+     * (kb.page, kb.memory, kb.source). An empty or foreign list reads all of them.
      * @type {Array<string>}
      * @memberof SearchIn
      */

@@ -49,7 +49,7 @@ export interface TeamRoom {
     direct?: boolean;
     /**
      * ID is the room document's own id, and the value the bind op addresses.
-     * It is unique within a workspace, not across the org.
+     * It is unique within a space, not across the org.
      * @type {string}
      * @memberof TeamRoom
      */
@@ -64,7 +64,7 @@ export interface TeamRoom {
     life?: string;
     /**
      * Members are the account uuids in the room, agents included: an agent
-     * projects as a workspace member under a uuid derived from its id, so a
+     * projects as a space member under a uuid derived from its id, so a
      * caller comparing this against GET /v1/team/bots learns which rooms an
      * agent is in.
      * @type {Array<string>}
@@ -85,19 +85,19 @@ export interface TeamRoom {
      */
     _private?: boolean;
     /**
+     * Space is the space uuid holding this room. It is part of the
+     * room's address: two spaces of one org may each hold a room with
+     * the same name, and only the pair identifies one.
+     * @type {string}
+     * @memberof TeamRoom
+     */
+    space?: string;
+    /**
      * Topic is the room's own one-line subject, as the Team client sets it.
      * @type {string}
      * @memberof TeamRoom
      */
     topic?: string;
-    /**
-     * Workspace is the workspace uuid holding this room. It is part of the
-     * room's address: two workspaces of one org may each hold a room with
-     * the same name, and only the pair identifies one.
-     * @type {string}
-     * @memberof TeamRoom
-     */
-    workspace?: string;
 }
 
 /**
@@ -125,8 +125,8 @@ export function TeamRoomFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         'members': json['members'] == null ? undefined : json['members'],
         'name': json['name'] == null ? undefined : json['name'],
         '_private': json['private'] == null ? undefined : json['private'],
+        'space': json['space'] == null ? undefined : json['space'],
         'topic': json['topic'] == null ? undefined : json['topic'],
-        'workspace': json['workspace'] == null ? undefined : json['workspace'],
     };
 }
 
@@ -149,8 +149,8 @@ export function TeamRoomToJSONTyped(value?: TeamRoom | null, ignoreDiscriminator
         'members': value['members'],
         'name': value['name'],
         'private': value['_private'],
+        'space': value['space'],
         'topic': value['topic'],
-        'workspace': value['workspace'],
     };
 }
 

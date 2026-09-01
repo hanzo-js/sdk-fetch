@@ -20,6 +20,16 @@ import { mapValues } from '../runtime.js';
  */
 export interface CreateAgentIn {
     /**
+     * Avatar and Emoji are how the agent APPEARS. An image wins when both are
+     * given — it is the thing somebody made — and both empty leaves the agent
+     * drawn as its initial. Validated by iam/pkg/schema, the same rule a person's
+     * avatar passes, so the 96 KiB bound and the accepted URL forms are stated
+     * once for every subject that has a face.
+     * @type {string}
+     * @memberof CreateAgentIn
+     */
+    avatar?: string;
+    /**
      * ComputeRef optionally binds this bot to a visor machine. Opaque here, bounded
      * at 256 characters, and not resolved — this package stores the reference and
      * the binding's lifecycle belongs elsewhere.
@@ -35,6 +45,14 @@ export interface CreateAgentIn {
      * @memberof CreateAgentIn
      */
     description?: string;
+    /**
+     * Emoji is the single glyph shown when there is no image. An image WINS when
+     * both are given — it is the thing somebody made — and both empty leaves the
+     * agent drawn as its initial.
+     * @type {string}
+     * @memberof CreateAgentIn
+     */
+    emoji?: string;
     /**
      * ExecutionMode is one-shot or long-running. Empty takes one-shot, which runs
      * only when something POSTs to it. long-running additionally requires Schedule,
@@ -111,8 +129,10 @@ export function CreateAgentInFromJSONTyped(json: any, ignoreDiscriminator: boole
     }
     return {
         
+        'avatar': json['avatar'] == null ? undefined : json['avatar'],
         'computeRef': json['computeRef'] == null ? undefined : json['computeRef'],
         'description': json['description'] == null ? undefined : json['description'],
+        'emoji': json['emoji'] == null ? undefined : json['emoji'],
         'executionMode': json['executionMode'] == null ? undefined : json['executionMode'],
         'instructions': json['instructions'] == null ? undefined : json['instructions'],
         'model': json['model'] == null ? undefined : json['model'],
@@ -134,8 +154,10 @@ export function CreateAgentInToJSONTyped(value?: CreateAgentIn | null, ignoreDis
 
     return {
         
+        'avatar': value['avatar'],
         'computeRef': value['computeRef'],
         'description': value['description'],
+        'emoji': value['emoji'],
         'executionMode': value['executionMode'],
         'instructions': value['instructions'],
         'model': value['model'],
