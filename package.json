@@ -1,7 +1,7 @@
 {
   "name": "hanzoai-fetch",
   "version": "8.5.156",
-  "description": "The Hanzo API client for fetch runtimes — Workers, Deno, Bun, browsers. No dependencies.",
+  "description": "The Hanzo API client for fetch runtimes \u2014 Workers, Deno, Bun, browsers. No dependencies.",
   "author": "Hanzo <dev@hanzo.ai>",
   "license": "Apache-2.0",
   "repository": "github:hanzo-js/sdk-fetch",
@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
-    "typescript": "^5.5.0"
+    "typescript": "^7.0.2"
   },
   "exports": {
     ".": {
