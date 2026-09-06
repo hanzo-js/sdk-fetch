@@ -27,7 +27,7 @@ export interface ApprovePairingIn {
      */
     channel?: string;
     /**
-     * Code is the pairing code from GET /v1/channels/pairing. It is a capability:
+     * Code is the pairing code from GET /v1/channel/pairing. It is a capability:
      * holding it is what authorises the approval, alongside org admin.
      * @type {string}
      * @memberof ApprovePairingIn

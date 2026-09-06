@@ -29,6 +29,15 @@ export interface Sandbox {
      */
     _class?: string;
     /**
+     * Cluster is the attached cluster this sandbox runs on — the fleet-local
+     * name the lease named — or empty for the home cluster. Immutable for the
+     * life of the lease, like the pod it locates: every later call into the
+     * sandbox reads it to reach the right apiserver.
+     * @type {string}
+     * @memberof Sandbox
+     */
+    cluster?: string;
+    /**
      * ConnectedAt is when somebody was last known to have this sandbox's project
      * OPEN, Unix seconds. It is a fact with an EXPIRY rather than a flag: a
      * watcher restamps it every beat of its stream, and it goes stale on its own
@@ -164,6 +173,7 @@ export function SandboxFromJSONTyped(json: any, ignoreDiscriminator: boolean): S
     return {
         
         '_class': json['class'] == null ? undefined : json['class'],
+        'cluster': json['cluster'] == null ? undefined : json['cluster'],
         'connectedAt': json['connectedAt'] == null ? undefined : json['connectedAt'],
         'createdAt': json['createdAt'] == null ? undefined : json['createdAt'],
         'error': json['error'] == null ? undefined : json['error'],
@@ -192,6 +202,7 @@ export function SandboxToJSONTyped(value?: Sandbox | null, ignoreDiscriminator: 
     return {
         
         'class': value['_class'],
+        'cluster': value['cluster'],
         'connectedAt': value['connectedAt'],
         'createdAt': value['createdAt'],
         'error': value['error'],

@@ -15,14 +15,20 @@
 
 import * as runtime from '../runtime.js';
 import type {
+  BotRoster,
   BotRuns,
   BotStopped,
+  BotSync,
 } from '../models/index.js';
 import {
+    BotRosterFromJSON,
+    BotRosterToJSON,
     BotRunsFromJSON,
     BotRunsToJSON,
     BotStoppedFromJSON,
     BotStoppedToJSON,
+    BotSyncFromJSON,
+    BotSyncToJSON,
 } from '../models/index.js';
 
 export interface BotApiPostBotRunsByRunidStopRequest {
@@ -33,6 +39,45 @@ export interface BotApiPostBotRunsByRunidStopRequest {
  * 
  */
 export class BotApi extends runtime.BaseAPI {
+
+    /**
+     * Returns the caller org\'s bots as space members — each with the member account uuid and the Person reference the roster addresses it by.  A deployment that runs no team subsystem has no spaces and therefore no roster, which is an empty list rather than an error: ErrNoPeer is the ONE error that means \"this deployment does not run that app\", and every other failure is an outage and says so.
+     * Returns the caller org\'s bots as space members — each with the member account uuid and the Person reference the roster addresses it by.
+     */
+    async getBotMembersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BotRoster>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/bot/members`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => BotRosterFromJSON(jsonValue));
+    }
+
+    /**
+     * Returns the caller org\'s bots as space members — each with the member account uuid and the Person reference the roster addresses it by.  A deployment that runs no team subsystem has no spaces and therefore no roster, which is an empty list rather than an error: ErrNoPeer is the ONE error that means \"this deployment does not run that app\", and every other failure is an outage and says so.
+     * Returns the caller org\'s bots as space members — each with the member account uuid and the Person reference the roster addresses it by.
+     */
+    async getBotMembers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BotRoster> {
+        const response = await this.getBotMembersRaw(initOverrides);
+        return await response.value();
+    }
 
     /**
      * List returns the caller org\'s live bot runs, read from the bot runtime and projected into the console contract with each run\'s live session URL derived here.  The org is ALWAYS the validated principal\'s org, NEVER a request field, and it is what scopes the runtime\'s answer — so one tenant can never enumerate another\'s runs. A runtime that cannot answer is an error, not an empty list: [] would tell the caller \"your org has no runs\", which is a different claim from \"we could not ask\", and the difference is the whole reason this endpoint exists.
@@ -70,6 +115,45 @@ export class BotApi extends runtime.BaseAPI {
      */
     async getBotRuns(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BotRuns> {
         const response = await this.getBotRunsRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Re-projects the caller org\'s bots as members into every space of the org and removes the ones whose agent is gone. Idempotent, and admin only — the admin bit rides the caller to team, which is what decides it.
+     * Re-projects the caller org\'s bots as members into every space of the org and removes the ones whose agent is gone.
+     */
+    async postBotMembersSyncRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BotSync>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/bot/members/sync`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => BotSyncFromJSON(jsonValue));
+    }
+
+    /**
+     * Re-projects the caller org\'s bots as members into every space of the org and removes the ones whose agent is gone. Idempotent, and admin only — the admin bit rides the caller to team, which is what decides it.
+     * Re-projects the caller org\'s bots as members into every space of the org and removes the ones whose agent is gone.
+     */
+    async postBotMembersSync(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BotSync> {
+        const response = await this.postBotMembersSyncRaw(initOverrides);
         return await response.value();
     }
 

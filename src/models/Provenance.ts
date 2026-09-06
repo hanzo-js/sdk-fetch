@@ -21,8 +21,9 @@ import { mapValues } from '../runtime.js';
 export interface Provenance {
     /**
      * Backend is the leg that contributed this match: "index" (lexical), "vector"
-     * (semantic) or "code" (the org's repositories). It is the same name that leg
-     * reports itself under in Fusion.Backends, so a hit can be traced to a
+     * (semantic), "code" (the org's repositories) or "rerank" (the cross-encoder
+     * pass, whose Score is the relevance it assigned). It is the same name that
+     * leg reports itself under in Fusion.Backends, so a hit can be traced to a
      * status.
      * @type {string}
      * @memberof Provenance

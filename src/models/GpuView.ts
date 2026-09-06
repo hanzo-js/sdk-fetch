@@ -36,7 +36,7 @@ export interface GpuView {
     location?: string;
     /**
      * Machine is the id of the machine holding this card, addressable as-is on
-     * /v1/visor/machines/:id.
+     * /v1/compute/machines/:id.
      * @type {string}
      * @memberof GpuView
      */

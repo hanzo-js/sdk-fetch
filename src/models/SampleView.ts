@@ -82,17 +82,17 @@ export interface SampleView {
      */
     load1?: number;
     /**
-     * Load5 is the 5-minute load average, the same units as Load1.
-     * @type {number}
-     * @memberof SampleView
-     */
-    load5?: number;
-    /**
      * Load15 is the 15-minute load average, the same units as Load1.
      * @type {number}
      * @memberof SampleView
      */
     load15?: number;
+    /**
+     * Load5 is the 5-minute load average, the same units as Load1.
+     * @type {number}
+     * @memberof SampleView
+     */
+    load5?: number;
     /**
      * MemFree is host memory available, in BYTES, as reported rather than derived.
      * @type {number}
@@ -153,8 +153,8 @@ export function SampleViewFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         'host': json['host'] == null ? undefined : json['host'],
         'kind': json['kind'] == null ? undefined : json['kind'],
         'load1': json['load1'] == null ? undefined : json['load1'],
-        'load5': json['load5'] == null ? undefined : json['load5'],
         'load15': json['load15'] == null ? undefined : json['load15'],
+        'load5': json['load5'] == null ? undefined : json['load5'],
         'memFree': json['memFree'] == null ? undefined : json['memFree'],
         'memUsed': json['memUsed'] == null ? undefined : json['memUsed'],
         'memory': json['memory'] == null ? undefined : json['memory'],
@@ -183,8 +183,8 @@ export function SampleViewToJSONTyped(value?: SampleView | null, ignoreDiscrimin
         'host': value['host'],
         'kind': value['kind'],
         'load1': value['load1'],
-        'load5': value['load5'],
         'load15': value['load15'],
+        'load5': value['load5'],
         'memFree': value['memFree'],
         'memUsed': value['memUsed'],
         'memory': value['memory'],

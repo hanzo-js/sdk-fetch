@@ -20,7 +20,7 @@ import { mapValues } from '../runtime.js';
  */
 export interface AgentBinding {
     /**
-     * AgentName is the cloud Agent (/v1/agents) this machine runs — the agent a
+     * AgentName is the cloud Agent (/v1/agent) this machine runs — the agent a
      * message to the bot is actually run against. It is the one field that decides
      * what the bot DOES.
      * @type {string}

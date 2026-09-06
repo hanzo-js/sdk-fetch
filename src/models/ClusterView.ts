@@ -51,7 +51,7 @@ export interface ClusterView {
     doClusterId?: string;
     /**
      * DoksClusterID is the provider's own id for the cluster, and the value the
-     * /v1/visor/k8s/clusters/:id routes take. Empty for a BYO cluster: an attached
+     * /v1/compute/k8s/clusters/:id routes take. Empty for a BYO cluster: an attached
      * kubeconfig was never provisioned, so there is no provider id to state.
      * @type {string}
      * @memberof ClusterView
@@ -84,7 +84,7 @@ export interface ClusterView {
     /**
      * NodePools is the authoritative node inventory — every pool, each with its own
      * size and count. It is empty in two cases that are not "no pools": a row from
-     * the /v1/visor/k8s/clusters LIST, which is deliberately lightweight and whose
+     * the /v1/compute/k8s/clusters LIST, which is deliberately lightweight and whose
      * :id detail carries them, and a BYO cluster, whose pools were never read.
      * @type {Array<NodePoolView>}
      * @memberof ClusterView

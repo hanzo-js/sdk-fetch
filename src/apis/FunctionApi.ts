@@ -52,32 +52,32 @@ import {
     UsageToJSON,
 } from '../models/index.js';
 
-export interface FunctionsApiDeleteFunctionsByNameRequest {
+export interface FunctionApiDeleteFunctionByNameRequest {
     name: string;
 }
 
-export interface FunctionsApiGetFunctionsByNameRequest {
+export interface FunctionApiGetFunctionByNameRequest {
     name: string;
 }
 
-export interface FunctionsApiGetFunctionsByNameInvocationsRequest {
+export interface FunctionApiGetFunctionByNameInvocationsRequest {
     name: string;
     limit?: number;
 }
 
-export interface FunctionsApiGetFunctionsByNameLogsRequest {
+export interface FunctionApiGetFunctionByNameLogsRequest {
     name: string;
 }
 
-export interface FunctionsApiGetFunctionsMetricsRequest {
+export interface FunctionApiGetFunctionMetricsRequest {
     range?: string;
 }
 
-export interface FunctionsApiPostFunctionsRequest {
+export interface FunctionApiPostFunctionRequest {
     definition: Definition;
 }
 
-export interface FunctionsApiPostFunctionsByNameInvokeRequest {
+export interface FunctionApiPostFunctionByNameInvokeRequest {
     name: string;
     invokeReq: InvokeReq;
 }
@@ -85,17 +85,17 @@ export interface FunctionsApiPostFunctionsByNameInvokeRequest {
 /**
  * 
  */
-export class FunctionsApi extends runtime.BaseAPI {
+export class FunctionApi extends runtime.BaseAPI {
 
     /**
      * Removes one of the caller org\'s functions and answers 204.  A name this org does not hold is 404 — never a silent success — and a name belonging to another tenant is the same 404, because the delete is predicated on the validated org.
      * Removes one of the caller org\'s functions and answers 204.
      */
-    async deleteFunctionsByNameRaw(requestParameters: FunctionsApiDeleteFunctionsByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
+    async deleteFunctionByNameRaw(requestParameters: FunctionApiDeleteFunctionByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['name'] == null) {
             throw new runtime.RequiredError(
                 'name',
-                'Required parameter "name" was null or undefined when calling deleteFunctionsByName().'
+                'Required parameter "name" was null or undefined when calling deleteFunctionByName().'
             );
         }
 
@@ -112,7 +112,7 @@ export class FunctionsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/functions/{name}`;
+        let urlPath = `/v1/function/{name}`;
         urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
 
         const response = await this.request({
@@ -122,23 +122,22 @@ export class FunctionsApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse<any>(response);
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Removes one of the caller org\'s functions and answers 204.  A name this org does not hold is 404 — never a silent success — and a name belonging to another tenant is the same 404, because the delete is predicated on the validated org.
      * Removes one of the caller org\'s functions and answers 204.
      */
-    async deleteFunctionsByName(requestParameters: FunctionsApiDeleteFunctionsByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
-        const response = await this.deleteFunctionsByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async deleteFunctionByName(requestParameters: FunctionApiDeleteFunctionByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteFunctionByNameRaw(requestParameters, initOverrides);
     }
 
     /**
      * Is every serverless function the caller\'s org has published, each with its real 7-day rollup.  A row carries the function\'s runtime, resource limits, deployment target and its invoke endpoint, plus envCount — how many secrets it mounts. The rollup fields are ABSENT rather than zero when the function has not run in the window, so a console renders \"—\" instead of a fabricated 0.  Requires a validated principal; the listing is scoped to its org.
      * Is every serverless function the caller\'s org has published, each with its real 7-day rollup.
      */
-    async getFunctionsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<FnList>> {
+    async getFunctionRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<FnList>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -152,7 +151,7 @@ export class FunctionsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/functions`;
+        let urlPath = `/v1/function`;
 
         const response = await this.request({
             path: urlPath,
@@ -168,8 +167,8 @@ export class FunctionsApi extends runtime.BaseAPI {
      * Is every serverless function the caller\'s org has published, each with its real 7-day rollup.  A row carries the function\'s runtime, resource limits, deployment target and its invoke endpoint, plus envCount — how many secrets it mounts. The rollup fields are ABSENT rather than zero when the function has not run in the window, so a console renders \"—\" instead of a fabricated 0.  Requires a validated principal; the listing is scoped to its org.
      * Is every serverless function the caller\'s org has published, each with its real 7-day rollup.
      */
-    async getFunctions(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<FnList> {
-        const response = await this.getFunctionsRaw(initOverrides);
+    async getFunction(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<FnList> {
+        const response = await this.getFunctionRaw(initOverrides);
         return await response.value();
     }
 
@@ -177,11 +176,11 @@ export class FunctionsApi extends runtime.BaseAPI {
      * Is one function with everything a detail page needs in one round-trip: its definition, its 7-day rollup, its trigger, its twenty most recent invocations and the NAMES of the secrets it mounts.  Secret values are never read or returned. A name the caller\'s org does not hold is 404, which is also what another tenant\'s function looks like from here.
      * Is one function with everything a detail page needs in one round-trip: its definition, its 7-day rollup, its trigger, its twenty most recent invocations and the NAMES of the secrets it mounts.
      */
-    async getFunctionsByNameRaw(requestParameters: FunctionsApiGetFunctionsByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<FunctionDetail>> {
+    async getFunctionByNameRaw(requestParameters: FunctionApiGetFunctionByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<FunctionDetail>> {
         if (requestParameters['name'] == null) {
             throw new runtime.RequiredError(
                 'name',
-                'Required parameter "name" was null or undefined when calling getFunctionsByName().'
+                'Required parameter "name" was null or undefined when calling getFunctionByName().'
             );
         }
 
@@ -198,7 +197,7 @@ export class FunctionsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/functions/{name}`;
+        let urlPath = `/v1/function/{name}`;
         urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
 
         const response = await this.request({
@@ -215,8 +214,8 @@ export class FunctionsApi extends runtime.BaseAPI {
      * Is one function with everything a detail page needs in one round-trip: its definition, its 7-day rollup, its trigger, its twenty most recent invocations and the NAMES of the secrets it mounts.  Secret values are never read or returned. A name the caller\'s org does not hold is 404, which is also what another tenant\'s function looks like from here.
      * Is one function with everything a detail page needs in one round-trip: its definition, its 7-day rollup, its trigger, its twenty most recent invocations and the NAMES of the secrets it mounts.
      */
-    async getFunctionsByName(requestParameters: FunctionsApiGetFunctionsByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<FunctionDetail> {
-        const response = await this.getFunctionsByNameRaw(requestParameters, initOverrides);
+    async getFunctionByName(requestParameters: FunctionApiGetFunctionByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<FunctionDetail> {
+        const response = await this.getFunctionByNameRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -224,11 +223,11 @@ export class FunctionsApi extends runtime.BaseAPI {
      * Is one function\'s past runs, newest first — each with its status, HTTP code, method, time and duration.  These are real recorded rows, not a projection: an invocation appears here only once it actually ran. Requires a validated principal; the read is scoped to its org.
      * Is one function\'s past runs, newest first — each with its status, HTTP code, method, time and duration.
      */
-    async getFunctionsByNameInvocationsRaw(requestParameters: FunctionsApiGetFunctionsByNameInvocationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<InvocationList>> {
+    async getFunctionByNameInvocationsRaw(requestParameters: FunctionApiGetFunctionByNameInvocationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<InvocationList>> {
         if (requestParameters['name'] == null) {
             throw new runtime.RequiredError(
                 'name',
-                'Required parameter "name" was null or undefined when calling getFunctionsByNameInvocations().'
+                'Required parameter "name" was null or undefined when calling getFunctionByNameInvocations().'
             );
         }
 
@@ -249,7 +248,7 @@ export class FunctionsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/functions/{name}/invocations`;
+        let urlPath = `/v1/function/{name}/invocations`;
         urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
 
         const response = await this.request({
@@ -266,8 +265,8 @@ export class FunctionsApi extends runtime.BaseAPI {
      * Is one function\'s past runs, newest first — each with its status, HTTP code, method, time and duration.  These are real recorded rows, not a projection: an invocation appears here only once it actually ran. Requires a validated principal; the read is scoped to its org.
      * Is one function\'s past runs, newest first — each with its status, HTTP code, method, time and duration.
      */
-    async getFunctionsByNameInvocations(requestParameters: FunctionsApiGetFunctionsByNameInvocationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<InvocationList> {
-        const response = await this.getFunctionsByNameInvocationsRaw(requestParameters, initOverrides);
+    async getFunctionByNameInvocations(requestParameters: FunctionApiGetFunctionByNameInvocationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<InvocationList> {
+        const response = await this.getFunctionByNameInvocationsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -275,11 +274,11 @@ export class FunctionsApi extends runtime.BaseAPI {
      * Is the output of a function\'s most recent run — its error text when that run failed, else what it printed.  It is the LAST run only, and it is empty when the function has never run. There is no log retention behind this beyond the recorded invocation itself.
      * Is the output of a function\'s most recent run — its error text when that run failed, else what it printed.
      */
-    async getFunctionsByNameLogsRaw(requestParameters: FunctionsApiGetFunctionsByNameLogsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LogLines>> {
+    async getFunctionByNameLogsRaw(requestParameters: FunctionApiGetFunctionByNameLogsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LogLines>> {
         if (requestParameters['name'] == null) {
             throw new runtime.RequiredError(
                 'name',
-                'Required parameter "name" was null or undefined when calling getFunctionsByNameLogs().'
+                'Required parameter "name" was null or undefined when calling getFunctionByNameLogs().'
             );
         }
 
@@ -296,7 +295,7 @@ export class FunctionsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/functions/{name}/logs`;
+        let urlPath = `/v1/function/{name}/logs`;
         urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
 
         const response = await this.request({
@@ -313,8 +312,8 @@ export class FunctionsApi extends runtime.BaseAPI {
      * Is the output of a function\'s most recent run — its error text when that run failed, else what it printed.  It is the LAST run only, and it is empty when the function has never run. There is no log retention behind this beyond the recorded invocation itself.
      * Is the output of a function\'s most recent run — its error text when that run failed, else what it printed.
      */
-    async getFunctionsByNameLogs(requestParameters: FunctionsApiGetFunctionsByNameLogsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LogLines> {
-        const response = await this.getFunctionsByNameLogsRaw(requestParameters, initOverrides);
+    async getFunctionByNameLogs(requestParameters: FunctionApiGetFunctionByNameLogsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LogLines> {
+        const response = await this.getFunctionByNameLogsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -322,7 +321,7 @@ export class FunctionsApi extends runtime.BaseAPI {
      * Is what is live right now — each function\'s current record IS its live deployment, so this is the deployment inventory.  There is no deployment history behind it: a function has one record, and publishing replaces it. The 7-day rollup is deliberately absent here, because this read is about what is deployed rather than about how it has performed.
      * Is what is live right now — each function\'s current record IS its live deployment, so this is the deployment inventory.
      */
-    async getFunctionsDeploymentsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<FnList>> {
+    async getFunctionDeploymentsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<FnList>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -336,7 +335,7 @@ export class FunctionsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/functions/deployments`;
+        let urlPath = `/v1/function/deployments`;
 
         const response = await this.request({
             path: urlPath,
@@ -352,8 +351,8 @@ export class FunctionsApi extends runtime.BaseAPI {
      * Is what is live right now — each function\'s current record IS its live deployment, so this is the deployment inventory.  There is no deployment history behind it: a function has one record, and publishing replaces it. The 7-day rollup is deliberately absent here, because this read is about what is deployed rather than about how it has performed.
      * Is what is live right now — each function\'s current record IS its live deployment, so this is the deployment inventory.
      */
-    async getFunctionsDeployments(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<FnList> {
-        const response = await this.getFunctionsDeploymentsRaw(initOverrides);
+    async getFunctionDeployments(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<FnList> {
+        const response = await this.getFunctionDeploymentsRaw(initOverrides);
         return await response.value();
     }
 
@@ -361,7 +360,7 @@ export class FunctionsApi extends runtime.BaseAPI {
      * Is the org\'s serverless dashboard over a window: a per-function invocation costLine and how those invocations ended.  Every point is a REAL count of rows that fell in that bucket — nothing is interpolated or invented, so an empty window draws a flat line rather than a fabricated one.  costCents is null and stays null: there is no per-invocation cost source to read, and reporting a number computed some other way would be a guess presented as a measurement. Requires a validated principal; the read is scoped to its org.
      * Is the org\'s serverless dashboard over a window: a per-function invocation costLine and how those invocations ended.
      */
-    async getFunctionsMetricsRaw(requestParameters: FunctionsApiGetFunctionsMetricsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Usage>> {
+    async getFunctionMetricsRaw(requestParameters: FunctionApiGetFunctionMetricsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Usage>> {
         const queryParameters: any = {};
 
         if (requestParameters['range'] != null) {
@@ -379,7 +378,7 @@ export class FunctionsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/functions/metrics`;
+        let urlPath = `/v1/function/metrics`;
 
         const response = await this.request({
             path: urlPath,
@@ -395,8 +394,8 @@ export class FunctionsApi extends runtime.BaseAPI {
      * Is the org\'s serverless dashboard over a window: a per-function invocation costLine and how those invocations ended.  Every point is a REAL count of rows that fell in that bucket — nothing is interpolated or invented, so an empty window draws a flat line rather than a fabricated one.  costCents is null and stays null: there is no per-invocation cost source to read, and reporting a number computed some other way would be a guess presented as a measurement. Requires a validated principal; the read is scoped to its org.
      * Is the org\'s serverless dashboard over a window: a per-function invocation costLine and how those invocations ended.
      */
-    async getFunctionsMetrics(requestParameters: FunctionsApiGetFunctionsMetricsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Usage> {
-        const response = await this.getFunctionsMetricsRaw(requestParameters, initOverrides);
+    async getFunctionMetrics(requestParameters: FunctionApiGetFunctionMetricsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Usage> {
+        const response = await this.getFunctionMetricsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -404,7 +403,7 @@ export class FunctionsApi extends runtime.BaseAPI {
      * Is the NAMES of the secrets the caller org\'s functions mount.  Values are NEVER read or returned — this surface knows which names a function asks for and nothing about what is behind them, which is what makes it safe to list at all. One row per distinct (namespace, name).
      * Is the NAMES of the secrets the caller org\'s functions mount.
      */
-    async getFunctionsSecretsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SecretList>> {
+    async getFunctionSecretsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SecretList>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -418,7 +417,7 @@ export class FunctionsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/functions/secrets`;
+        let urlPath = `/v1/function/secrets`;
 
         const response = await this.request({
             path: urlPath,
@@ -434,8 +433,8 @@ export class FunctionsApi extends runtime.BaseAPI {
      * Is the NAMES of the secrets the caller org\'s functions mount.  Values are NEVER read or returned — this surface knows which names a function asks for and nothing about what is behind them, which is what makes it safe to list at all. One row per distinct (namespace, name).
      * Is the NAMES of the secrets the caller org\'s functions mount.
      */
-    async getFunctionsSecrets(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SecretList> {
-        const response = await this.getFunctionsSecretsRaw(initOverrides);
+    async getFunctionSecrets(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SecretList> {
+        const response = await this.getFunctionSecretsRaw(initOverrides);
         return await response.value();
     }
 
@@ -443,7 +442,7 @@ export class FunctionsApi extends runtime.BaseAPI {
      * Is what calls the caller org\'s functions — one row per function.  Every function has exactly one trigger today, its HTTP invoke endpoint, so this is the function list read as \"how is each of these reached\".
      * Is what calls the caller org\'s functions — one row per function.
      */
-    async getFunctionsTriggersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TriggerList>> {
+    async getFunctionTriggersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TriggerList>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -457,7 +456,7 @@ export class FunctionsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/functions/triggers`;
+        let urlPath = `/v1/function/triggers`;
 
         const response = await this.request({
             path: urlPath,
@@ -473,8 +472,8 @@ export class FunctionsApi extends runtime.BaseAPI {
      * Is what calls the caller org\'s functions — one row per function.  Every function has exactly one trigger today, its HTTP invoke endpoint, so this is the function list read as \"how is each of these reached\".
      * Is what calls the caller org\'s functions — one row per function.
      */
-    async getFunctionsTriggers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TriggerList> {
-        const response = await this.getFunctionsTriggersRaw(initOverrides);
+    async getFunctionTriggers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TriggerList> {
+        const response = await this.getFunctionTriggersRaw(initOverrides);
         return await response.value();
     }
 
@@ -482,11 +481,11 @@ export class FunctionsApi extends runtime.BaseAPI {
      * Publishes a serverless function under the caller\'s org and answers 201 with it.  The name is the key and is claimed once; the names that would shadow a collection route are reserved. runtime and environment are the same field — either spelling is accepted — and default to node.  Bounds are clamped rather than refused where a clamp is honest: a timeout above the 900-second ceiling becomes the ceiling instead of silently reverting to the 30-second default, and an omitted memory limit becomes 256Mi. target=fleet runs on the org\'s own GPU fleet and supports runtime=python only.  Requires a validated principal; the function is owned by that principal\'s org.
      * Publishes a serverless function under the caller\'s org and answers 201 with it.
      */
-    async postFunctionsRaw(requestParameters: FunctionsApiPostFunctionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<FunctionView>> {
+    async postFunctionRaw(requestParameters: FunctionApiPostFunctionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<FunctionView>> {
         if (requestParameters['definition'] == null) {
             throw new runtime.RequiredError(
                 'definition',
-                'Required parameter "definition" was null or undefined when calling postFunctions().'
+                'Required parameter "definition" was null or undefined when calling postFunction().'
             );
         }
 
@@ -505,7 +504,7 @@ export class FunctionsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/functions`;
+        let urlPath = `/v1/function`;
 
         const response = await this.request({
             path: urlPath,
@@ -522,8 +521,8 @@ export class FunctionsApi extends runtime.BaseAPI {
      * Publishes a serverless function under the caller\'s org and answers 201 with it.  The name is the key and is claimed once; the names that would shadow a collection route are reserved. runtime and environment are the same field — either spelling is accepted — and default to node.  Bounds are clamped rather than refused where a clamp is honest: a timeout above the 900-second ceiling becomes the ceiling instead of silently reverting to the 30-second default, and an omitted memory limit becomes 256Mi. target=fleet runs on the org\'s own GPU fleet and supports runtime=python only.  Requires a validated principal; the function is owned by that principal\'s org.
      * Publishes a serverless function under the caller\'s org and answers 201 with it.
      */
-    async postFunctions(requestParameters: FunctionsApiPostFunctionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<FunctionView> {
-        const response = await this.postFunctionsRaw(requestParameters, initOverrides);
+    async postFunction(requestParameters: FunctionApiPostFunctionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<FunctionView> {
+        const response = await this.postFunctionRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -531,18 +530,18 @@ export class FunctionsApi extends runtime.BaseAPI {
      * Runs a function and records a REAL invocation.  The answer is the invocation record whatever happened to it: 200 when the org\'s code ran clean, 502 when it ran and failed, 503 when this deployment has no sandbox to run code in. The record IS the evidence, so it rides the failure rather than being replaced by an error envelope.  Billing is two-part and both parts are prepaid-then-metered on the one shared meter: a flat per-invocation request fee, gated BEFORE any sandbox compute runs so an unfunded org gets 402 and nothing executes, and a usage-native GB-seconds compute debit taken after the run. Either is independently free when its fee is zero, so an operator can bill by request alone, by compute alone, or by both — and a zero request fee removes the balance gate with it.  A TRANSPORT failure is not charged: the sandbox being unreachable ran no billable compute. Code that ran and exited non-zero IS charged — that is a successful invocation of a failing program, not a billing failure.  When the sandbox is not configured on this deployment, a non-fleet function fails closed before anything is recorded — no execution and no fabricated output. Scoped to the caller\'s org; requires a validated principal.
      * Runs a function and records a REAL invocation.
      */
-    async postFunctionsByNameInvokeRaw(requestParameters: FunctionsApiPostFunctionsByNameInvokeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<InvocationView>> {
+    async postFunctionByNameInvokeRaw(requestParameters: FunctionApiPostFunctionByNameInvokeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<InvocationView>> {
         if (requestParameters['name'] == null) {
             throw new runtime.RequiredError(
                 'name',
-                'Required parameter "name" was null or undefined when calling postFunctionsByNameInvoke().'
+                'Required parameter "name" was null or undefined when calling postFunctionByNameInvoke().'
             );
         }
 
         if (requestParameters['invokeReq'] == null) {
             throw new runtime.RequiredError(
                 'invokeReq',
-                'Required parameter "invokeReq" was null or undefined when calling postFunctionsByNameInvoke().'
+                'Required parameter "invokeReq" was null or undefined when calling postFunctionByNameInvoke().'
             );
         }
 
@@ -561,7 +560,7 @@ export class FunctionsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/functions/{name}/invoke`;
+        let urlPath = `/v1/function/{name}/invoke`;
         urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
 
         const response = await this.request({
@@ -579,8 +578,8 @@ export class FunctionsApi extends runtime.BaseAPI {
      * Runs a function and records a REAL invocation.  The answer is the invocation record whatever happened to it: 200 when the org\'s code ran clean, 502 when it ran and failed, 503 when this deployment has no sandbox to run code in. The record IS the evidence, so it rides the failure rather than being replaced by an error envelope.  Billing is two-part and both parts are prepaid-then-metered on the one shared meter: a flat per-invocation request fee, gated BEFORE any sandbox compute runs so an unfunded org gets 402 and nothing executes, and a usage-native GB-seconds compute debit taken after the run. Either is independently free when its fee is zero, so an operator can bill by request alone, by compute alone, or by both — and a zero request fee removes the balance gate with it.  A TRANSPORT failure is not charged: the sandbox being unreachable ran no billable compute. Code that ran and exited non-zero IS charged — that is a successful invocation of a failing program, not a billing failure.  When the sandbox is not configured on this deployment, a non-fleet function fails closed before anything is recorded — no execution and no fabricated output. Scoped to the caller\'s org; requires a validated principal.
      * Runs a function and records a REAL invocation.
      */
-    async postFunctionsByNameInvoke(requestParameters: FunctionsApiPostFunctionsByNameInvokeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<InvocationView> {
-        const response = await this.postFunctionsByNameInvokeRaw(requestParameters, initOverrides);
+    async postFunctionByNameInvoke(requestParameters: FunctionApiPostFunctionByNameInvokeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<InvocationView> {
+        const response = await this.postFunctionByNameInvokeRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

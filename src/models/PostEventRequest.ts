@@ -19,13 +19,13 @@ import {
     CaptureBatchFromJSONTyped,
     CaptureBatchToJSON,
 } from './CaptureBatch.js';
-import type { Event } from './Event.js';
+import type { CaptureEvent } from './CaptureEvent.js';
 import {
-    instanceOfEvent,
-    EventFromJSON,
-    EventFromJSONTyped,
-    EventToJSON,
-} from './Event.js';
+    instanceOfCaptureEvent,
+    CaptureEventFromJSON,
+    CaptureEventFromJSONTyped,
+    CaptureEventToJSON,
+} from './CaptureEvent.js';
 import type { InsightsBody } from './InsightsBody.js';
 import {
     instanceOfInsightsBody,
@@ -39,7 +39,7 @@ import {
  * 
  * @export
  */
-export type PostEventRequest = Array<Event> | CaptureBatch | Event | InsightsBody;
+export type PostEventRequest = Array<CaptureEvent> | CaptureBatch | CaptureEvent | InsightsBody;
 
 export function PostEventRequestFromJSON(json: any): PostEventRequest {
     return PostEventRequestFromJSONTyped(json, false);
@@ -55,16 +55,16 @@ export function PostEventRequestFromJSONTyped(json: any, ignoreDiscriminator: bo
     if (instanceOfCaptureBatch(json)) {
         return CaptureBatchFromJSONTyped(json, true);
     }
-    if (instanceOfEvent(json)) {
-        return EventFromJSONTyped(json, true);
+    if (instanceOfCaptureEvent(json)) {
+        return CaptureEventFromJSONTyped(json, true);
     }
     if (instanceOfInsightsBody(json)) {
         return InsightsBodyFromJSONTyped(json, true);
     }
     if (Array.isArray(json)) {
         if (json.every(item => typeof item === 'object')) {
-            if (json.every(item => instanceOfEvent(item))) {
-                return json.map(value => EventFromJSONTyped(value, true));
+            if (json.every(item => instanceOfCaptureEvent(item))) {
+                return json.map(value => CaptureEventFromJSONTyped(value, true));
             }
         }
         return json;
@@ -87,16 +87,16 @@ export function PostEventRequestToJSONTyped(value?: PostEventRequest | null, ign
     if (instanceOfCaptureBatch(value)) {
         return CaptureBatchToJSON(value as CaptureBatch);
     }
-    if (instanceOfEvent(value)) {
-        return EventToJSON(value as Event);
+    if (instanceOfCaptureEvent(value)) {
+        return CaptureEventToJSON(value as CaptureEvent);
     }
     if (instanceOfInsightsBody(value)) {
         return InsightsBodyToJSON(value as InsightsBody);
     }
     if (Array.isArray(value)) {
         if (value.every(item => typeof item === 'object')) {
-            if (value.every(item => instanceOfEvent(item))) {
-                return value.map(value => EventToJSON(value as Event));
+            if (value.every(item => instanceOfCaptureEvent(item))) {
+                return value.map(value => CaptureEventToJSON(value as CaptureEvent));
             }
         }
         return value;

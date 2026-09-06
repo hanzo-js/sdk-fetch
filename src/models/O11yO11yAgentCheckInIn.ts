@@ -27,16 +27,16 @@ export interface O11yO11yAgentCheckInIn {
     accountId?: string;
     /**
      * 
-     * @type {string}
-     * @memberof O11yO11yAgentCheckInIn
-     */
-    cloudAccountId?: string;
-    /**
-     * 
      * @type {any}
      * @memberof O11yO11yAgentCheckInIn
      */
     cloudIntegrationId?: any | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof O11yO11yAgentCheckInIn
+     */
+    cloudAccountId?: string;
     /**
      * 
      * @type {{ [key: string]: object; }}
@@ -69,8 +69,8 @@ export function O11yO11yAgentCheckInInFromJSONTyped(json: any, ignoreDiscriminat
     return {
         
         'accountId': json['account_id'] == null ? undefined : json['account_id'],
-        'cloudAccountId': json['cloud_account_id'] == null ? undefined : json['cloud_account_id'],
         'cloudIntegrationId': json['cloudIntegrationId'] == null ? undefined : json['cloudIntegrationId'],
+        'cloudAccountId': json['cloud_account_id'] == null ? undefined : json['cloud_account_id'],
         'data': json['data'] == null ? undefined : json['data'],
         'providerAccountId': json['providerAccountId'] == null ? undefined : json['providerAccountId'],
     };
@@ -88,8 +88,8 @@ export function O11yO11yAgentCheckInInToJSONTyped(value?: O11yO11yAgentCheckInIn
     return {
         
         'account_id': value['accountId'],
-        'cloud_account_id': value['cloudAccountId'],
         'cloudIntegrationId': value['cloudIntegrationId'],
+        'cloud_account_id': value['cloudAccountId'],
         'data': value['data'],
         'providerAccountId': value['providerAccountId'],
     };

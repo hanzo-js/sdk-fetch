@@ -32,7 +32,7 @@ export interface PairingView {
      * Code is the CAPABILITY that authorises the approval: eight characters from a
      * 32-symbol uppercase alphabet (A-Z0-9 minus the confusables 0, O, 1 and I),
      * minted with crypto/rand and also sent to the requester in chat. An org admin
-     * passes it with the channel to POST /v1/channels/pairing/approve, which
+     * passes it with the channel to POST /v1/channel/pairing/approve, which
      * CONSUMES it — the request row is deleted, so a code approves once — and which
      * takes org admin as well as the code. It lives ONE HOUR from CreatedAt;
      * expired requests are not listed here, and approving one is a 404. It is shown

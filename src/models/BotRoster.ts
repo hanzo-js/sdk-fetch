@@ -28,7 +28,9 @@ import {
  */
 export interface BotRoster {
     /**
-     * Bots is every agent of the caller's org, projected as a space member.
+     * Bots is one entry per bot, each carrying the member account uuid and the
+     * Person reference the space roster addresses it by. Empty means the org has
+     * no bots — not that the roster could not be read, which is an error.
      * @type {Array<BotMember>}
      * @memberof BotRoster
      */

@@ -37,8 +37,8 @@ export interface BackendStatus {
     hits?: number;
     /**
      * Name is which leg this reports: "index", the lexical store, "vector", the
-     * semantic one, or "code", the org's own repositories. Match.Backend uses the
-     * same three names.
+     * semantic one, "code", the org's own repositories, or "rerank", the
+     * relevance pass over the fused window. Match.Backend uses the same names.
      * @type {string}
      * @memberof BackendStatus
      */

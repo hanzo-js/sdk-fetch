@@ -18,8 +18,6 @@ import type {
   AgentBinding,
   BindAgentReq,
   BindingList,
-  BotList,
-  BotView,
   ClusterAttach,
   ClusterDetached,
   ClusterDetailView,
@@ -50,10 +48,6 @@ import {
     BindAgentReqToJSON,
     BindingListFromJSON,
     BindingListToJSON,
-    BotListFromJSON,
-    BotListToJSON,
-    BotViewFromJSON,
-    BotViewToJSON,
     ClusterAttachFromJSON,
     ClusterAttachToJSON,
     ClusterDetachedFromJSON,
@@ -100,107 +94,103 @@ import {
     WorkerListToJSON,
 } from '../models/index.js';
 
-export interface VisorApiAttachClusterRequest {
+export interface ComputeApiAttachClusterRequest {
     clusterAttach: ClusterAttach;
 }
 
-export interface VisorApiBindMachineAgentRequest {
+export interface ComputeApiBindMachineAgentRequest {
     id: string;
     bindAgentReq: BindAgentReq;
 }
 
-export interface VisorApiCancelFleetJobRequest {
+export interface ComputeApiCancelFleetJobRequest {
     id: string;
     jobCancel: JobCancel;
 }
 
-export interface VisorApiCreateKubernetesClusterRequest {
+export interface ComputeApiCreateKubernetesClusterRequest {
     createClusterReq: CreateClusterReq;
 }
 
-export interface VisorApiCreateNodePoolRequest {
+export interface ComputeApiCreateNodePoolRequest {
     clusterId: string;
     poolCreate: PoolCreate;
 }
 
-export interface VisorApiDeleteBotRequest {
+export interface ComputeApiDeleteKubernetesClusterRequest {
     id: string;
 }
 
-export interface VisorApiDeleteKubernetesClusterRequest {
+export interface ComputeApiDeleteMachineRequest {
     id: string;
 }
 
-export interface VisorApiDeleteMachineRequest {
-    id: string;
-}
-
-export interface VisorApiDeleteNodePoolRequest {
+export interface ComputeApiDeleteNodePoolRequest {
     clusterId: string;
     poolId: string;
     provider?: string;
 }
 
-export interface VisorApiDetachClusterRequest {
+export interface ComputeApiDetachClusterRequest {
     id: string;
 }
 
-export interface VisorApiGetBotRequest {
+export interface ComputeApiGetKubernetesClusterRequest {
     id: string;
 }
 
-export interface VisorApiGetKubernetesClusterRequest {
+export interface ComputeApiGetMachineRequest {
     id: string;
 }
 
-export interface VisorApiGetMachineRequest {
+export interface ComputeApiGetMachineAgentRequest {
     id: string;
 }
 
-export interface VisorApiGetMachineAgentRequest {
-    id: string;
-}
-
-export interface VisorApiListFleetJobsRequest {
+export interface ComputeApiListFleetJobsRequest {
     gpu?: string;
     status?: string;
 }
 
-export interface VisorApiListFleetSamplesRequest {
+export interface ComputeApiListFleetSamplesRequest {
     unit?: string;
     source?: string;
     range?: string;
 }
 
-export interface VisorApiPostVisorComputeBotsByIdByActionRequest {
+export interface ComputeApiListMachinesRequest {
+    kind?: string;
+}
+
+export interface ComputeApiPostComputeMachinesByIdByActionRequest {
     id: string;
     action: string;
 }
 
-export interface VisorApiRecordFleetSampleRequest {
+export interface ComputeApiRecordFleetSampleRequest {
     sampleIngest: SampleIngest;
 }
 
-export interface VisorApiScaleNodePoolRequest {
+export interface ComputeApiScaleNodePoolRequest {
     clusterId: string;
     poolId: string;
     poolScale: PoolScale;
 }
 
-export interface VisorApiUnbindMachineAgentRequest {
+export interface ComputeApiUnbindMachineAgentRequest {
     id: string;
 }
 
 /**
  * 
  */
-export class VisorApi extends runtime.BaseAPI {
+export class ComputeApi extends runtime.BaseAPI {
 
     /**
-     * Attaches a BYO cluster to the caller\'s org — the kubeconfig is validated, KMS-sealed and added to the fleet — and answers 201 with the cluster as it now appears on GET /v1/visor/clusters. Billed the nominal management fee: the customer brings the compute, Hanzo meters the management plane.
-     * Attaches a BYO cluster to the caller\'s org — the kubeconfig is validated, KMS-sealed and added to the fleet — and answers 201 with the cluster as it now appears on GET /v1/visor/clusters.
+     * Attaches a BYO cluster to the caller\'s org — the kubeconfig is validated, KMS-sealed and added to the fleet — and answers 201 with the cluster as it now appears on GET /v1/compute/clusters. Billed the nominal management fee: the customer brings the compute, Hanzo meters the management plane.
+     * Attaches a BYO cluster to the caller\'s org — the kubeconfig is validated, KMS-sealed and added to the fleet — and answers 201 with the cluster as it now appears on GET /v1/compute/clusters.
      */
-    async attachClusterRaw(requestParameters: VisorApiAttachClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ClusterView>> {
+    async attachClusterRaw(requestParameters: ComputeApiAttachClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ClusterView>> {
         if (requestParameters['clusterAttach'] == null) {
             throw new runtime.RequiredError(
                 'clusterAttach',
@@ -223,7 +213,7 @@ export class VisorApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/visor/clusters`;
+        let urlPath = `/v1/compute/clusters`;
 
         const response = await this.request({
             path: urlPath,
@@ -237,10 +227,10 @@ export class VisorApi extends runtime.BaseAPI {
     }
 
     /**
-     * Attaches a BYO cluster to the caller\'s org — the kubeconfig is validated, KMS-sealed and added to the fleet — and answers 201 with the cluster as it now appears on GET /v1/visor/clusters. Billed the nominal management fee: the customer brings the compute, Hanzo meters the management plane.
-     * Attaches a BYO cluster to the caller\'s org — the kubeconfig is validated, KMS-sealed and added to the fleet — and answers 201 with the cluster as it now appears on GET /v1/visor/clusters.
+     * Attaches a BYO cluster to the caller\'s org — the kubeconfig is validated, KMS-sealed and added to the fleet — and answers 201 with the cluster as it now appears on GET /v1/compute/clusters. Billed the nominal management fee: the customer brings the compute, Hanzo meters the management plane.
+     * Attaches a BYO cluster to the caller\'s org — the kubeconfig is validated, KMS-sealed and added to the fleet — and answers 201 with the cluster as it now appears on GET /v1/compute/clusters.
      */
-    async attachCluster(requestParameters: VisorApiAttachClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ClusterView> {
+    async attachCluster(requestParameters: ComputeApiAttachClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ClusterView> {
         const response = await this.attachClusterRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -249,7 +239,7 @@ export class VisorApi extends runtime.BaseAPI {
      * Binds a cloud Agent to one of the caller org\'s machines: the machine is recorded as running that Agent\'s @hanzo/bot runtime. The owning org is the validated tenant, never a client field.
      * Binds a cloud Agent to one of the caller org\'s machines: the machine is recorded as running that Agent\'s @hanzo/bot runtime.
      */
-    async bindMachineAgentRaw(requestParameters: VisorApiBindMachineAgentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AgentBinding>> {
+    async bindMachineAgentRaw(requestParameters: ComputeApiBindMachineAgentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AgentBinding>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -279,7 +269,7 @@ export class VisorApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/visor/machines/{id}/agent`;
+        let urlPath = `/v1/compute/machines/{id}/agent`;
         urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
         const response = await this.request({
@@ -297,7 +287,7 @@ export class VisorApi extends runtime.BaseAPI {
      * Binds a cloud Agent to one of the caller org\'s machines: the machine is recorded as running that Agent\'s @hanzo/bot runtime. The owning org is the validated tenant, never a client field.
      * Binds a cloud Agent to one of the caller org\'s machines: the machine is recorded as running that Agent\'s @hanzo/bot runtime.
      */
-    async bindMachineAgent(requestParameters: VisorApiBindMachineAgentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AgentBinding> {
+    async bindMachineAgent(requestParameters: ComputeApiBindMachineAgentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AgentBinding> {
         const response = await this.bindMachineAgentRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -306,7 +296,7 @@ export class VisorApi extends runtime.BaseAPI {
      * Cancels a queued or running render in the caller\'s org. The engine cancel is org-scoped, so a tenant can only ever cancel its OWN job: a job in another tenant\'s shard is 404, exactly like one that never existed. An already-finished job is 409.
      * Cancels a queued or running render in the caller\'s org.
      */
-    async cancelFleetJobRaw(requestParameters: VisorApiCancelFleetJobRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<JobCanceled>> {
+    async cancelFleetJobRaw(requestParameters: ComputeApiCancelFleetJobRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<JobCanceled>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -336,7 +326,7 @@ export class VisorApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/visor/fleet/jobs/{id}/cancel`;
+        let urlPath = `/v1/compute/fleet/jobs/{id}/cancel`;
         urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
         const response = await this.request({
@@ -354,7 +344,7 @@ export class VisorApi extends runtime.BaseAPI {
      * Cancels a queued or running render in the caller\'s org. The engine cancel is org-scoped, so a tenant can only ever cancel its OWN job: a job in another tenant\'s shard is 404, exactly like one that never existed. An already-finished job is 409.
      * Cancels a queued or running render in the caller\'s org.
      */
-    async cancelFleetJob(requestParameters: VisorApiCancelFleetJobRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<JobCanceled> {
+    async cancelFleetJob(requestParameters: ComputeApiCancelFleetJobRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<JobCanceled> {
         const response = await this.cancelFleetJobRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -363,7 +353,7 @@ export class VisorApi extends runtime.BaseAPI {
      * Provisions a DOKS cluster for the caller\'s org and answers 201. ADMIN-GATED — a SuperAdmin, or an OrgAdmin of the caller\'s own org — because provisioning spends real infrastructure on the house account. The request is validated at this boundary, then Visor owns provisioning and the hanzo-org ownership tag.
      * Provisions a DOKS cluster for the caller\'s org and answers 201.
      */
-    async createKubernetesClusterRaw(requestParameters: VisorApiCreateKubernetesClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ClusterView>> {
+    async createKubernetesClusterRaw(requestParameters: ComputeApiCreateKubernetesClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ClusterView>> {
         if (requestParameters['createClusterReq'] == null) {
             throw new runtime.RequiredError(
                 'createClusterReq',
@@ -386,7 +376,7 @@ export class VisorApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/visor/k8s/clusters`;
+        let urlPath = `/v1/compute/k8s/clusters`;
 
         const response = await this.request({
             path: urlPath,
@@ -403,7 +393,7 @@ export class VisorApi extends runtime.BaseAPI {
      * Provisions a DOKS cluster for the caller\'s org and answers 201. ADMIN-GATED — a SuperAdmin, or an OrgAdmin of the caller\'s own org — because provisioning spends real infrastructure on the house account. The request is validated at this boundary, then Visor owns provisioning and the hanzo-org ownership tag.
      * Provisions a DOKS cluster for the caller\'s org and answers 201.
      */
-    async createKubernetesCluster(requestParameters: VisorApiCreateKubernetesClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ClusterView> {
+    async createKubernetesCluster(requestParameters: ComputeApiCreateKubernetesClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ClusterView> {
         const response = await this.createKubernetesClusterRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -412,7 +402,7 @@ export class VisorApi extends runtime.BaseAPI {
      * Adds a node pool to one of the caller org\'s clusters and answers 201 with the created pool. Only the CreateNodePoolSpec fields are forwarded; owner/provider/clusterId ride in the query exactly as Visor expects them.
      * Adds a node pool to one of the caller org\'s clusters and answers 201 with the created pool.
      */
-    async createNodePoolRaw(requestParameters: VisorApiCreateNodePoolRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<NodePoolView>> {
+    async createNodePoolRaw(requestParameters: ComputeApiCreateNodePoolRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<NodePoolView>> {
         if (requestParameters['clusterId'] == null) {
             throw new runtime.RequiredError(
                 'clusterId',
@@ -442,7 +432,7 @@ export class VisorApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/visor/clusters/{clusterId}/pools`;
+        let urlPath = `/v1/compute/clusters/{clusterId}/pools`;
         urlPath = urlPath.replace(`{${"clusterId"}}`, encodeURIComponent(String(requestParameters['clusterId'])));
 
         const response = await this.request({
@@ -460,62 +450,16 @@ export class VisorApi extends runtime.BaseAPI {
      * Adds a node pool to one of the caller org\'s clusters and answers 201 with the created pool. Only the CreateNodePoolSpec fields are forwarded; owner/provider/clusterId ride in the query exactly as Visor expects them.
      * Adds a node pool to one of the caller org\'s clusters and answers 201 with the created pool.
      */
-    async createNodePool(requestParameters: VisorApiCreateNodePoolRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<NodePoolView> {
+    async createNodePool(requestParameters: ComputeApiCreateNodePoolRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<NodePoolView> {
         const response = await this.createNodePoolRaw(requestParameters, initOverrides);
         return await response.value();
-    }
-
-    /**
-     * Tears down both halves of a bot: it unbinds the agent (best-effort — a bot with no binding still deletes), then terminates the machine. Answers 204.
-     * Tears down both halves of a bot: it unbinds the agent (best-effort — a bot with no binding still deletes), then terminates the machine.
-     */
-    async deleteBotRaw(requestParameters: VisorApiDeleteBotRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling deleteBot().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/visor/compute/bots/{id}`;
-        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'DELETE',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Tears down both halves of a bot: it unbinds the agent (best-effort — a bot with no binding still deletes), then terminates the machine. Answers 204.
-     * Tears down both halves of a bot: it unbinds the agent (best-effort — a bot with no binding still deletes), then terminates the machine.
-     */
-    async deleteBot(requestParameters: VisorApiDeleteBotRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.deleteBotRaw(requestParameters, initOverrides);
     }
 
     /**
      * Destroys a DOKS cluster by id and answers 204. ADMIN-GATED, like create. Visor scopes the delete to the org (refuses a foreign id), so this can only ever remove the caller org\'s own cluster.
      * Destroys a DOKS cluster by id and answers 204.
      */
-    async deleteKubernetesClusterRaw(requestParameters: VisorApiDeleteKubernetesClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async deleteKubernetesClusterRaw(requestParameters: ComputeApiDeleteKubernetesClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -536,7 +480,7 @@ export class VisorApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/visor/k8s/clusters/{id}`;
+        let urlPath = `/v1/compute/k8s/clusters/{id}`;
         urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
         const response = await this.request({
@@ -553,7 +497,7 @@ export class VisorApi extends runtime.BaseAPI {
      * Destroys a DOKS cluster by id and answers 204. ADMIN-GATED, like create. Visor scopes the delete to the org (refuses a foreign id), so this can only ever remove the caller org\'s own cluster.
      * Destroys a DOKS cluster by id and answers 204.
      */
-    async deleteKubernetesCluster(requestParameters: VisorApiDeleteKubernetesClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+    async deleteKubernetesCluster(requestParameters: ComputeApiDeleteKubernetesClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.deleteKubernetesClusterRaw(requestParameters, initOverrides);
     }
 
@@ -561,7 +505,7 @@ export class VisorApi extends runtime.BaseAPI {
      * Terminates one of the caller org\'s machines. Visor takes the machine identity as owner+name, and the owner is the validated principal, so a caller can only ever terminate its own tenant\'s machine. Answers 204.
      * Terminates one of the caller org\'s machines.
      */
-    async deleteMachineRaw(requestParameters: VisorApiDeleteMachineRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async deleteMachineRaw(requestParameters: ComputeApiDeleteMachineRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -582,7 +526,7 @@ export class VisorApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/visor/machines/{id}`;
+        let urlPath = `/v1/compute/machines/{id}`;
         urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
         const response = await this.request({
@@ -599,7 +543,7 @@ export class VisorApi extends runtime.BaseAPI {
      * Terminates one of the caller org\'s machines. Visor takes the machine identity as owner+name, and the owner is the validated principal, so a caller can only ever terminate its own tenant\'s machine. Answers 204.
      * Terminates one of the caller org\'s machines.
      */
-    async deleteMachine(requestParameters: VisorApiDeleteMachineRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+    async deleteMachine(requestParameters: ComputeApiDeleteMachineRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.deleteMachineRaw(requestParameters, initOverrides);
     }
 
@@ -607,7 +551,7 @@ export class VisorApi extends runtime.BaseAPI {
      * Removes a node pool from one of the caller org\'s clusters. The owner scopes the delete to the caller\'s tenant; provider+clusterId drive the provider-side removal. Answers 204.
      * Removes a node pool from one of the caller org\'s clusters.
      */
-    async deleteNodePoolRaw(requestParameters: VisorApiDeleteNodePoolRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async deleteNodePoolRaw(requestParameters: ComputeApiDeleteNodePoolRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['clusterId'] == null) {
             throw new runtime.RequiredError(
                 'clusterId',
@@ -639,7 +583,7 @@ export class VisorApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/visor/clusters/{clusterId}/pools/{poolId}`;
+        let urlPath = `/v1/compute/clusters/{clusterId}/pools/{poolId}`;
         urlPath = urlPath.replace(`{${"clusterId"}}`, encodeURIComponent(String(requestParameters['clusterId'])));
         urlPath = urlPath.replace(`{${"poolId"}}`, encodeURIComponent(String(requestParameters['poolId'])));
 
@@ -657,7 +601,7 @@ export class VisorApi extends runtime.BaseAPI {
      * Removes a node pool from one of the caller org\'s clusters. The owner scopes the delete to the caller\'s tenant; provider+clusterId drive the provider-side removal. Answers 204.
      * Removes a node pool from one of the caller org\'s clusters.
      */
-    async deleteNodePool(requestParameters: VisorApiDeleteNodePoolRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+    async deleteNodePool(requestParameters: ComputeApiDeleteNodePoolRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.deleteNodePoolRaw(requestParameters, initOverrides);
     }
 
@@ -665,7 +609,7 @@ export class VisorApi extends runtime.BaseAPI {
      * Removes a BYO cluster from the caller org\'s fleet. It only ever touches BYO clusters — a managed cluster\'s nodes are removed through the node-pool routes — and answers 404 when the name is not in this org\'s fleet.
      * Removes a BYO cluster from the caller org\'s fleet.
      */
-    async detachClusterRaw(requestParameters: VisorApiDetachClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ClusterDetached>> {
+    async detachClusterRaw(requestParameters: ComputeApiDetachClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ClusterDetached>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -686,7 +630,7 @@ export class VisorApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/visor/clusters/{id}`;
+        let urlPath = `/v1/compute/clusters/{id}`;
         urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
         const response = await this.request({
@@ -703,23 +647,16 @@ export class VisorApi extends runtime.BaseAPI {
      * Removes a BYO cluster from the caller org\'s fleet. It only ever touches BYO clusters — a managed cluster\'s nodes are removed through the node-pool routes — and answers 404 when the name is not in this org\'s fleet.
      * Removes a BYO cluster from the caller org\'s fleet.
      */
-    async detachCluster(requestParameters: VisorApiDetachClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ClusterDetached> {
+    async detachCluster(requestParameters: ComputeApiDetachClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ClusterDetached> {
         const response = await this.detachClusterRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Returns one of the caller org\'s bot machines with its agent binding.  A machine counts as a Bot if it carries the hanzo-kind:bot tag OR has an agent binding — either signal is authoritative, so a bot resolves even before its cloud-init has stamped every tag. A machine that is neither is 404: this route answers for bots, not for machines.
-     * Returns one of the caller org\'s bot machines with its agent binding.
+     * Regions lists the regions a machine can be launched in.  The catalog is GLOBAL — identical for every tenant — so no owner is forwarded upstream. It is still org-gated, because a catalog is a map of what this deployment can spend money in and an anonymous caller has no business reading it.
+     * Regions lists the regions a machine can be launched in.
      */
-    async getBotRaw(requestParameters: VisorApiGetBotRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BotView>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling getBot().'
-            );
-        }
-
+    async getComputeRegionsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -733,8 +670,7 @@ export class VisorApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/visor/compute/bots/{id}`;
-        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+        let urlPath = `/v1/compute/regions`;
 
         const response = await this.request({
             path: urlPath,
@@ -743,15 +679,62 @@ export class VisorApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => BotViewFromJSON(jsonValue));
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return new runtime.JSONApiResponse<any>(response);
+        } else {
+            return new runtime.TextApiResponse(response) as any;
+        }
     }
 
     /**
-     * Returns one of the caller org\'s bot machines with its agent binding.  A machine counts as a Bot if it carries the hanzo-kind:bot tag OR has an agent binding — either signal is authoritative, so a bot resolves even before its cloud-init has stamped every tag. A machine that is neither is 404: this route answers for bots, not for machines.
-     * Returns one of the caller org\'s bot machines with its agent binding.
+     * Regions lists the regions a machine can be launched in.  The catalog is GLOBAL — identical for every tenant — so no owner is forwarded upstream. It is still org-gated, because a catalog is a map of what this deployment can spend money in and an anonymous caller has no business reading it.
+     * Regions lists the regions a machine can be launched in.
      */
-    async getBot(requestParameters: VisorApiGetBotRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BotView> {
-        const response = await this.getBotRaw(requestParameters, initOverrides);
+    async getComputeRegions(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
+        const response = await this.getComputeRegionsRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Sizes lists the machine sizes available to launch, with their specifications.  Global and org-gated, exactly as the region catalog is, and for the same reasons.
+     * Sizes lists the machine sizes available to launch, with their specifications.
+     */
+    async getComputeSizesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/compute/sizes`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return new runtime.JSONApiResponse<any>(response);
+        } else {
+            return new runtime.TextApiResponse(response) as any;
+        }
+    }
+
+    /**
+     * Sizes lists the machine sizes available to launch, with their specifications.  Global and org-gated, exactly as the region catalog is, and for the same reasons.
+     * Sizes lists the machine sizes available to launch, with their specifications.
+     */
+    async getComputeSizes(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
+        const response = await this.getComputeSizesRaw(initOverrides);
         return await response.value();
     }
 
@@ -759,7 +742,7 @@ export class VisorApi extends runtime.BaseAPI {
      * Returns one cluster\'s detail: node pools + worker nodes. Visor scopes the lookup to the org (a foreign or missing id resolves to not-found), so a tenant can never read another tenant\'s cluster by guessing an id.
      * Returns one cluster\'s detail: node pools + worker nodes.
      */
-    async getKubernetesClusterRaw(requestParameters: VisorApiGetKubernetesClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ClusterDetailView>> {
+    async getKubernetesClusterRaw(requestParameters: ComputeApiGetKubernetesClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ClusterDetailView>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -780,7 +763,7 @@ export class VisorApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/visor/k8s/clusters/{id}`;
+        let urlPath = `/v1/compute/k8s/clusters/{id}`;
         urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
         const response = await this.request({
@@ -797,7 +780,7 @@ export class VisorApi extends runtime.BaseAPI {
      * Returns one cluster\'s detail: node pools + worker nodes. Visor scopes the lookup to the org (a foreign or missing id resolves to not-found), so a tenant can never read another tenant\'s cluster by guessing an id.
      * Returns one cluster\'s detail: node pools + worker nodes.
      */
-    async getKubernetesCluster(requestParameters: VisorApiGetKubernetesClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ClusterDetailView> {
+    async getKubernetesCluster(requestParameters: ComputeApiGetKubernetesClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ClusterDetailView> {
         const response = await this.getKubernetesClusterRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -806,7 +789,7 @@ export class VisorApi extends runtime.BaseAPI {
      * Returns one of the caller org\'s machines by its org-scoped name. Visor keys the lookup by owner/name, so an id belonging to another tenant resolves to not-found rather than another org\'s machine.
      * Returns one of the caller org\'s machines by its org-scoped name.
      */
-    async getMachineRaw(requestParameters: VisorApiGetMachineRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MachineView>> {
+    async getMachineRaw(requestParameters: ComputeApiGetMachineRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MachineView>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -827,7 +810,7 @@ export class VisorApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/visor/machines/{id}`;
+        let urlPath = `/v1/compute/machines/{id}`;
         urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
         const response = await this.request({
@@ -844,7 +827,7 @@ export class VisorApi extends runtime.BaseAPI {
      * Returns one of the caller org\'s machines by its org-scoped name. Visor keys the lookup by owner/name, so an id belonging to another tenant resolves to not-found rather than another org\'s machine.
      * Returns one of the caller org\'s machines by its org-scoped name.
      */
-    async getMachine(requestParameters: VisorApiGetMachineRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MachineView> {
+    async getMachine(requestParameters: ComputeApiGetMachineRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MachineView> {
         const response = await this.getMachineRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -853,7 +836,7 @@ export class VisorApi extends runtime.BaseAPI {
      * Returns the agent binding of one of the caller org\'s machines, or 404 when the machine runs no bot runtime.
      * Returns the agent binding of one of the caller org\'s machines, or 404 when the machine runs no bot runtime.
      */
-    async getMachineAgentRaw(requestParameters: VisorApiGetMachineAgentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AgentBinding>> {
+    async getMachineAgentRaw(requestParameters: ComputeApiGetMachineAgentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AgentBinding>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -874,7 +857,7 @@ export class VisorApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/visor/machines/{id}/agent`;
+        let urlPath = `/v1/compute/machines/{id}/agent`;
         urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
         const response = await this.request({
@@ -891,133 +874,8 @@ export class VisorApi extends runtime.BaseAPI {
      * Returns the agent binding of one of the caller org\'s machines, or 404 when the machine runs no bot runtime.
      * Returns the agent binding of one of the caller org\'s machines, or 404 when the machine runs no bot runtime.
      */
-    async getMachineAgent(requestParameters: VisorApiGetMachineAgentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AgentBinding> {
+    async getMachineAgent(requestParameters: ComputeApiGetMachineAgentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AgentBinding> {
         const response = await this.getMachineAgentRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Regions lists the regions a machine can be launched in.  The catalog is GLOBAL — identical for every tenant — so no owner is forwarded upstream. It is still org-gated, because a catalog is a map of what this deployment can spend money in and an anonymous caller has no business reading it.
-     * Regions lists the regions a machine can be launched in.
-     */
-    async getVisorComputeRegionsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/visor/compute/regions`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return new runtime.JSONApiResponse<any>(response);
-        } else {
-            return new runtime.TextApiResponse(response) as any;
-        }
-    }
-
-    /**
-     * Regions lists the regions a machine can be launched in.  The catalog is GLOBAL — identical for every tenant — so no owner is forwarded upstream. It is still org-gated, because a catalog is a map of what this deployment can spend money in and an anonymous caller has no business reading it.
-     * Regions lists the regions a machine can be launched in.
-     */
-    async getVisorComputeRegions(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
-        const response = await this.getVisorComputeRegionsRaw(initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Sizes lists the machine sizes available to launch, with their specifications.  Global and org-gated, exactly as the region catalog is, and for the same reasons.
-     * Sizes lists the machine sizes available to launch, with their specifications.
-     */
-    async getVisorComputeSizesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/visor/compute/sizes`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return new runtime.JSONApiResponse<any>(response);
-        } else {
-            return new runtime.TextApiResponse(response) as any;
-        }
-    }
-
-    /**
-     * Sizes lists the machine sizes available to launch, with their specifications.  Global and org-gated, exactly as the region catalog is, and for the same reasons.
-     * Sizes lists the machine sizes available to launch, with their specifications.
-     */
-    async getVisorComputeSizes(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
-        const response = await this.getVisorComputeSizesRaw(initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Returns the caller org\'s bot machines — the kind=bot machines — each joined with the agent binding that says which cloud Agent it runs.  The bindings are read ONCE and joined by machine id, so the list is O(1) upstream calls, not N+1. A bindings read that fails only costs the reconciled status: a bot still lists without it.
-     * Returns the caller org\'s bot machines — the kind=bot machines — each joined with the agent binding that says which cloud Agent it runs.
-     */
-    async listBotsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BotList>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/visor/compute/bots`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => BotListFromJSON(jsonValue));
-    }
-
-    /**
-     * Returns the caller org\'s bot machines — the kind=bot machines — each joined with the agent binding that says which cloud Agent it runs.  The bindings are read ONCE and joined by machine id, so the list is O(1) upstream calls, not N+1. A bindings read that fails only costs the reconciled status: a bot still lists without it.
-     * Returns the caller org\'s bot machines — the kind=bot machines — each joined with the agent binding that says which cloud Agent it runs.
-     */
-    async listBots(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BotList> {
-        const response = await this.listBotsRaw(initOverrides);
         return await response.value();
     }
 
@@ -1039,7 +897,7 @@ export class VisorApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/visor/clusters`;
+        let urlPath = `/v1/compute/clusters`;
 
         const response = await this.request({
             path: urlPath,
@@ -1078,7 +936,7 @@ export class VisorApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/visor/fleet`;
+        let urlPath = `/v1/compute/fleet`;
 
         const response = await this.request({
             path: urlPath,
@@ -1103,7 +961,7 @@ export class VisorApi extends runtime.BaseAPI {
      * Returns the caller org\'s gpu-jobs render queue, each row tagged with the GPU it targets (empty = the shared any-GPU lane) and the node claiming it, optionally narrowed to one GPU\'s queue and/or one status.  A job whose worker died — STARTED with an elapsed lease and not yet reclaimed — reads \"stalled\", not \"running\". Fail-soft: an unavailable tasks engine yields an empty queue rather than an error.
      * Returns the caller org\'s gpu-jobs render queue, each row tagged with the GPU it targets (empty = the shared any-GPU lane) and the node claiming it, optionally narrowed to one GPU\'s queue and/or one status.
      */
-    async listFleetJobsRaw(requestParameters: VisorApiListFleetJobsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<JobList>> {
+    async listFleetJobsRaw(requestParameters: ComputeApiListFleetJobsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<JobList>> {
         const queryParameters: any = {};
 
         if (requestParameters['gpu'] != null) {
@@ -1125,7 +983,7 @@ export class VisorApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/visor/fleet/jobs`;
+        let urlPath = `/v1/compute/fleet/jobs`;
 
         const response = await this.request({
             path: urlPath,
@@ -1141,7 +999,7 @@ export class VisorApi extends runtime.BaseAPI {
      * Returns the caller org\'s gpu-jobs render queue, each row tagged with the GPU it targets (empty = the shared any-GPU lane) and the node claiming it, optionally narrowed to one GPU\'s queue and/or one status.  A job whose worker died — STARTED with an elapsed lease and not yet reclaimed — reads \"stalled\", not \"running\". Fail-soft: an unavailable tasks engine yields an empty queue rather than an error.
      * Returns the caller org\'s gpu-jobs render queue, each row tagged with the GPU it targets (empty = the shared any-GPU lane) and the node claiming it, optionally narrowed to one GPU\'s queue and/or one status.
      */
-    async listFleetJobs(requestParameters: VisorApiListFleetJobsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<JobList> {
+    async listFleetJobs(requestParameters: ComputeApiListFleetJobsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<JobList> {
         const response = await this.listFleetJobsRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -1150,7 +1008,7 @@ export class VisorApi extends runtime.BaseAPI {
      * Returns the caller org\'s utilization series, oldest first.  A rejected narrower is a 400 carrying its own reason (the vocabulary is ours and safe to echo); a warehouse failure is logged and answered 503 \"unavailable\", because a chart that silently reads \"no load\" when the truth is \"we cannot tell\" is worse than one that says so. An ABSENT warehouse is different again: it returns an empty series, which renders honestly as \"no samples yet\".
      * Returns the caller org\'s utilization series, oldest first.
      */
-    async listFleetSamplesRaw(requestParameters: VisorApiListFleetSamplesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SampleList>> {
+    async listFleetSamplesRaw(requestParameters: ComputeApiListFleetSamplesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SampleList>> {
         const queryParameters: any = {};
 
         if (requestParameters['unit'] != null) {
@@ -1176,7 +1034,7 @@ export class VisorApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/visor/fleet/samples`;
+        let urlPath = `/v1/compute/fleet/samples`;
 
         const response = await this.request({
             path: urlPath,
@@ -1192,7 +1050,7 @@ export class VisorApi extends runtime.BaseAPI {
      * Returns the caller org\'s utilization series, oldest first.  A rejected narrower is a 400 carrying its own reason (the vocabulary is ours and safe to echo); a warehouse failure is logged and answered 503 \"unavailable\", because a chart that silently reads \"no load\" when the truth is \"we cannot tell\" is worse than one that says so. An ABSENT warehouse is different again: it returns an empty series, which renders honestly as \"no samples yet\".
      * Returns the caller org\'s utilization series, oldest first.
      */
-    async listFleetSamples(requestParameters: VisorApiListFleetSamplesRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SampleList> {
+    async listFleetSamples(requestParameters: ComputeApiListFleetSamplesRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SampleList> {
         const response = await this.listFleetSamplesRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -1215,7 +1073,7 @@ export class VisorApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/visor/fleet/workers`;
+        let urlPath = `/v1/compute/fleet/workers`;
 
         const response = await this.request({
             path: urlPath,
@@ -1254,7 +1112,7 @@ export class VisorApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/visor/gpus/alerts`;
+        let urlPath = `/v1/compute/gpus/alerts`;
 
         const response = await this.request({
             path: urlPath,
@@ -1293,7 +1151,7 @@ export class VisorApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/visor/gpus`;
+        let urlPath = `/v1/compute/gpus`;
 
         const response = await this.request({
             path: urlPath,
@@ -1332,7 +1190,7 @@ export class VisorApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/visor/k8s/clusters`;
+        let urlPath = `/v1/compute/k8s/clusters`;
 
         const response = await this.request({
             path: urlPath,
@@ -1371,7 +1229,7 @@ export class VisorApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/visor/k8s/nodes`;
+        let urlPath = `/v1/compute/k8s/nodes`;
 
         const response = await this.request({
             path: urlPath,
@@ -1410,7 +1268,7 @@ export class VisorApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/visor/machines/agents`;
+        let urlPath = `/v1/compute/machines/agents`;
 
         const response = await this.request({
             path: urlPath,
@@ -1435,8 +1293,12 @@ export class VisorApi extends runtime.BaseAPI {
      * Returns every machine the caller\'s org has — Visor\'s registry, the live DigitalOcean droplets and the DOKS worker nodes (deduped into one union), plus the BYO machines that dialed in via `hanzo link` (provider \"byo\").  A source Visor cannot answer for is logged and skipped, never an error: one wedged upstream must not hide the machines the other sources can see.
      * Returns every machine the caller\'s org has — Visor\'s registry, the live DigitalOcean droplets and the DOKS worker nodes (deduped into one union), plus the BYO machines that dialed in via `hanzo link` (provider \"byo\").
      */
-    async listMachinesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MachineList>> {
+    async listMachinesRaw(requestParameters: ComputeApiListMachinesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MachineList>> {
         const queryParameters: any = {};
+
+        if (requestParameters['kind'] != null) {
+            queryParameters['kind'] = requestParameters['kind'];
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -1449,7 +1311,7 @@ export class VisorApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/visor/machines`;
+        let urlPath = `/v1/compute/machines`;
 
         const response = await this.request({
             path: urlPath,
@@ -1465,27 +1327,65 @@ export class VisorApi extends runtime.BaseAPI {
      * Returns every machine the caller\'s org has — Visor\'s registry, the live DigitalOcean droplets and the DOKS worker nodes (deduped into one union), plus the BYO machines that dialed in via `hanzo link` (provider \"byo\").  A source Visor cannot answer for is logged and skipped, never an error: one wedged upstream must not hide the machines the other sources can see.
      * Returns every machine the caller\'s org has — Visor\'s registry, the live DigitalOcean droplets and the DOKS worker nodes (deduped into one union), plus the BYO machines that dialed in via `hanzo link` (provider \"byo\").
      */
-    async listMachines(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MachineList> {
-        const response = await this.listMachinesRaw(initOverrides);
+    async listMachines(requestParameters: ComputeApiListMachinesRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MachineList> {
+        const response = await this.listMachinesRaw(requestParameters, initOverrides);
         return await response.value();
+    }
+
+    /**
+     * Provisions a machine owned by the caller\'s org and answers 201 with the machine. Send `dryRun: true` to get a PRICE QUOTE instead: 200 with the upstream quote passed through verbatim, nothing launched and nothing spent. Two response shapes on one address is the rule to know, and it is why this is not a typed op.  Metering is not this plane\'s: the launch fronts the compute provider\'s resell endpoint, which owns the balance gate and the per-hour meter, and cloud only forwards the tenant. Ownership is the validated principal\'s org and is never read from the body, so a launch always lands in the caller\'s OWN tenant and the machine it creates is only ever visible to that tenant. Fails closed: a validated principal is required (403 without one) and `size` (or its `instanceType` alias) is required (400).
+     * Launch a metered machine for your org, or price one first with dryRun
+     */
+    async postComputeMachinesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/compute/machines`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Provisions a machine owned by the caller\'s org and answers 201 with the machine. Send `dryRun: true` to get a PRICE QUOTE instead: 200 with the upstream quote passed through verbatim, nothing launched and nothing spent. Two response shapes on one address is the rule to know, and it is why this is not a typed op.  Metering is not this plane\'s: the launch fronts the compute provider\'s resell endpoint, which owns the balance gate and the per-hour meter, and cloud only forwards the tenant. Ownership is the validated principal\'s org and is never read from the body, so a launch always lands in the caller\'s OWN tenant and the machine it creates is only ever visible to that tenant. Fails closed: a validated principal is required (403 without one) and `size` (or its `instanceType` alias) is required (400).
+     * Launch a metered machine for your org, or price one first with dryRun
+     */
+    async postComputeMachines(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postComputeMachinesRaw(initOverrides);
     }
 
     /**
      * Dispatches one verb against a bot the caller\'s org owns. `message` runs the bot\'s bound agent with the request body as the message and streams the agent\'s answer back VERBATIM — the upstream body, its content type and its status — so a message is a real agent run, recorded, billed and traced exactly like any other, under the caller\'s own identity rather than a fabricated one. `stop` and `pause` are the same single honest capability: they halt the runtime by unbinding the agent while LEAVING THE MACHINE UP, so the bot stops answering but keeps costing — rebind to resume, or delete the bot to tear it down. Stopping is idempotent; a bot with no binding still reports stopped.  Org-scoped and fails closed: a validated principal is required (403 without one) and the bot is addressed under the caller\'s OWN org, so another tenant\'s id is not reachable. An unknown action is a clean 400 naming the three it accepts, never a silent no-op, and messaging a bot with no bound agent is a 400.
      * Message a bot, or stop it, by naming the action in the path
      */
-    async postVisorComputeBotsByIdByActionRaw(requestParameters: VisorApiPostVisorComputeBotsByIdByActionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postComputeMachinesByIdByActionRaw(requestParameters: ComputeApiPostComputeMachinesByIdByActionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling postVisorComputeBotsByIdByAction().'
+                'Required parameter "id" was null or undefined when calling postComputeMachinesByIdByAction().'
             );
         }
 
         if (requestParameters['action'] == null) {
             throw new runtime.RequiredError(
                 'action',
-                'Required parameter "action" was null or undefined when calling postVisorComputeBotsByIdByAction().'
+                'Required parameter "action" was null or undefined when calling postComputeMachinesByIdByAction().'
             );
         }
 
@@ -1502,7 +1402,7 @@ export class VisorApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/visor/compute/bots/{id}/{action}`;
+        let urlPath = `/v1/compute/machines/{id}/{action}`;
         urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
         urlPath = urlPath.replace(`{${"action"}}`, encodeURIComponent(String(requestParameters['action'])));
 
@@ -1520,91 +1420,15 @@ export class VisorApi extends runtime.BaseAPI {
      * Dispatches one verb against a bot the caller\'s org owns. `message` runs the bot\'s bound agent with the request body as the message and streams the agent\'s answer back VERBATIM — the upstream body, its content type and its status — so a message is a real agent run, recorded, billed and traced exactly like any other, under the caller\'s own identity rather than a fabricated one. `stop` and `pause` are the same single honest capability: they halt the runtime by unbinding the agent while LEAVING THE MACHINE UP, so the bot stops answering but keeps costing — rebind to resume, or delete the bot to tear it down. Stopping is idempotent; a bot with no binding still reports stopped.  Org-scoped and fails closed: a validated principal is required (403 without one) and the bot is addressed under the caller\'s OWN org, so another tenant\'s id is not reachable. An unknown action is a clean 400 naming the three it accepts, never a silent no-op, and messaging a bot with no bound agent is a 400.
      * Message a bot, or stop it, by naming the action in the path
      */
-    async postVisorComputeBotsByIdByAction(requestParameters: VisorApiPostVisorComputeBotsByIdByActionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postVisorComputeBotsByIdByActionRaw(requestParameters, initOverrides);
-    }
-
-    /**
-     * Creates BOTH halves of a bot in one call and answers 201 with the bot: the cloud agent it runs, then a bot-kind machine bootstrapped with the bot runtime, then the binding between them, so a launched bot is immediately messageable. Send `dryRun: true` for a price quote instead — 200 with the upstream quote verbatim, no agent created, no machine launched, nothing spent.  The agent is created FIRST and on purpose: it is create-if-absent (an agent that already exists is reused, so a relaunch is fine and several bots may share one explicit `agent`), and doing it before the machine means a bad request — a model that is not in the catalog, say — fails with the real reason BEFORE any metered machine is provisioned. `agent` defaults to the bot\'s name and an empty `model` takes the deployment default.  Org-scoped and fails closed: a validated principal is required (403 without one), the owning org is that principal\'s and never a body field, `size` is required (400), and `name` is required for a real launch though not for a quote.
-     * Launch a bot machine — an agent plus the machine that runs it — or price one
-     */
-    async postVisorComputeBotsLaunchRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/visor/compute/bots/launch`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Creates BOTH halves of a bot in one call and answers 201 with the bot: the cloud agent it runs, then a bot-kind machine bootstrapped with the bot runtime, then the binding between them, so a launched bot is immediately messageable. Send `dryRun: true` for a price quote instead — 200 with the upstream quote verbatim, no agent created, no machine launched, nothing spent.  The agent is created FIRST and on purpose: it is create-if-absent (an agent that already exists is reused, so a relaunch is fine and several bots may share one explicit `agent`), and doing it before the machine means a bad request — a model that is not in the catalog, say — fails with the real reason BEFORE any metered machine is provisioned. `agent` defaults to the bot\'s name and an empty `model` takes the deployment default.  Org-scoped and fails closed: a validated principal is required (403 without one), the owning org is that principal\'s and never a body field, `size` is required (400), and `name` is required for a real launch though not for a quote.
-     * Launch a bot machine — an agent plus the machine that runs it — or price one
-     */
-    async postVisorComputeBotsLaunch(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postVisorComputeBotsLaunchRaw(initOverrides);
-    }
-
-    /**
-     * Provisions a machine owned by the caller\'s org and answers 201 with the machine. Send `dryRun: true` to get a PRICE QUOTE instead: 200 with the upstream quote passed through verbatim, nothing launched and nothing spent. Two response shapes on one address is the rule to know, and it is why this is not a typed op.  Metering is not this plane\'s: the launch fronts the compute provider\'s resell endpoint, which owns the balance gate and the per-hour meter, and cloud only forwards the tenant. Ownership is the validated principal\'s org and is never read from the body, so a launch always lands in the caller\'s OWN tenant and the machine it creates is only ever visible to that tenant. Fails closed: a validated principal is required (403 without one) and `size` (or its `instanceType` alias) is required (400).
-     * Launch a metered machine for your org, or price one first with dryRun
-     */
-    async postVisorMachinesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/visor/machines`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Provisions a machine owned by the caller\'s org and answers 201 with the machine. Send `dryRun: true` to get a PRICE QUOTE instead: 200 with the upstream quote passed through verbatim, nothing launched and nothing spent. Two response shapes on one address is the rule to know, and it is why this is not a typed op.  Metering is not this plane\'s: the launch fronts the compute provider\'s resell endpoint, which owns the balance gate and the per-hour meter, and cloud only forwards the tenant. Ownership is the validated principal\'s org and is never read from the body, so a launch always lands in the caller\'s OWN tenant and the machine it creates is only ever visible to that tenant. Fails closed: a validated principal is required (403 without one) and `size` (or its `instanceType` alias) is required (400).
-     * Launch a metered machine for your org, or price one first with dryRun
-     */
-    async postVisorMachines(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postVisorMachinesRaw(initOverrides);
+    async postComputeMachinesByIdByAction(requestParameters: ComputeApiPostComputeMachinesByIdByActionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postComputeMachinesByIdByActionRaw(requestParameters, initOverrides);
     }
 
     /**
      * Records a BYO worker\'s live GPU utilization into the SAME series the fleet board overlays. The org is the validated principal and source/kind are fixed server-side, so a worker names only its own metrics — never another tenant or another source. Answers 202: the warehouse write is DETACHED (its own bounded context, never in the response path), so a slow or absent warehouse cannot stall a heartbeat.
      * Records a BYO worker\'s live GPU utilization into the SAME series the fleet board overlays.
      */
-    async recordFleetSampleRaw(requestParameters: VisorApiRecordFleetSampleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SampleAccepted>> {
+    async recordFleetSampleRaw(requestParameters: ComputeApiRecordFleetSampleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SampleAccepted>> {
         if (requestParameters['sampleIngest'] == null) {
             throw new runtime.RequiredError(
                 'sampleIngest',
@@ -1627,7 +1451,7 @@ export class VisorApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/visor/fleet/samples`;
+        let urlPath = `/v1/compute/fleet/samples`;
 
         const response = await this.request({
             path: urlPath,
@@ -1644,7 +1468,7 @@ export class VisorApi extends runtime.BaseAPI {
      * Records a BYO worker\'s live GPU utilization into the SAME series the fleet board overlays. The org is the validated principal and source/kind are fixed server-side, so a worker names only its own metrics — never another tenant or another source. Answers 202: the warehouse write is DETACHED (its own bounded context, never in the response path), so a slow or absent warehouse cannot stall a heartbeat.
      * Records a BYO worker\'s live GPU utilization into the SAME series the fleet board overlays.
      */
-    async recordFleetSample(requestParameters: VisorApiRecordFleetSampleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SampleAccepted> {
+    async recordFleetSample(requestParameters: ComputeApiRecordFleetSampleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SampleAccepted> {
         const response = await this.recordFleetSampleRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -1653,7 +1477,7 @@ export class VisorApi extends runtime.BaseAPI {
      * Resizes a node pool to an absolute node count and returns the pool as Visor reports it after the change.
      * Resizes a node pool to an absolute node count and returns the pool as Visor reports it after the change.
      */
-    async scaleNodePoolRaw(requestParameters: VisorApiScaleNodePoolRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<NodePoolView>> {
+    async scaleNodePoolRaw(requestParameters: ComputeApiScaleNodePoolRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<NodePoolView>> {
         if (requestParameters['clusterId'] == null) {
             throw new runtime.RequiredError(
                 'clusterId',
@@ -1690,7 +1514,7 @@ export class VisorApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/visor/clusters/{clusterId}/pools/{poolId}/scale`;
+        let urlPath = `/v1/compute/clusters/{clusterId}/pools/{poolId}/scale`;
         urlPath = urlPath.replace(`{${"clusterId"}}`, encodeURIComponent(String(requestParameters['clusterId'])));
         urlPath = urlPath.replace(`{${"poolId"}}`, encodeURIComponent(String(requestParameters['poolId'])));
 
@@ -1709,7 +1533,7 @@ export class VisorApi extends runtime.BaseAPI {
      * Resizes a node pool to an absolute node count and returns the pool as Visor reports it after the change.
      * Resizes a node pool to an absolute node count and returns the pool as Visor reports it after the change.
      */
-    async scaleNodePool(requestParameters: VisorApiScaleNodePoolRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<NodePoolView> {
+    async scaleNodePool(requestParameters: ComputeApiScaleNodePoolRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<NodePoolView> {
         const response = await this.scaleNodePoolRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -1718,7 +1542,7 @@ export class VisorApi extends runtime.BaseAPI {
      * Detaches the agent runtime from one of the caller org\'s machines. The machine stays — this halts the bot, it does not terminate the compute. Answers 204.
      * Detaches the agent runtime from one of the caller org\'s machines.
      */
-    async unbindMachineAgentRaw(requestParameters: VisorApiUnbindMachineAgentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async unbindMachineAgentRaw(requestParameters: ComputeApiUnbindMachineAgentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -1739,7 +1563,7 @@ export class VisorApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/visor/machines/{id}/agent`;
+        let urlPath = `/v1/compute/machines/{id}/agent`;
         urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
         const response = await this.request({
@@ -1756,7 +1580,7 @@ export class VisorApi extends runtime.BaseAPI {
      * Detaches the agent runtime from one of the caller org\'s machines. The machine stays — this halts the bot, it does not terminate the compute. Answers 204.
      * Detaches the agent runtime from one of the caller org\'s machines.
      */
-    async unbindMachineAgent(requestParameters: VisorApiUnbindMachineAgentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+    async unbindMachineAgent(requestParameters: ComputeApiUnbindMachineAgentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.unbindMachineAgentRaw(requestParameters, initOverrides);
     }
 

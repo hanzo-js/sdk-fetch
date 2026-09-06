@@ -299,6 +299,12 @@ export interface IamUser {
      * @type {string}
      * @memberof IamUser
      */
+    custom10?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof IamUser
+     */
     custom2?: string;
     /**
      * 
@@ -342,12 +348,6 @@ export interface IamUser {
      * @memberof IamUser
      */
     custom9?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof IamUser
-     */
-    custom10?: string;
     /**
      * 
      * @type {string}
@@ -1279,6 +1279,7 @@ export function IamUserFromJSONTyped(json: any, ignoreDiscriminator: boolean): I
         'createdTime': json['createdTime'] == null ? undefined : json['createdTime'],
         'currency': json['currency'] == null ? undefined : json['currency'],
         'custom': json['custom'] == null ? undefined : json['custom'],
+        'custom10': json['custom10'] == null ? undefined : json['custom10'],
         'custom2': json['custom2'] == null ? undefined : json['custom2'],
         'custom3': json['custom3'] == null ? undefined : json['custom3'],
         'custom4': json['custom4'] == null ? undefined : json['custom4'],
@@ -1287,7 +1288,6 @@ export function IamUserFromJSONTyped(json: any, ignoreDiscriminator: boolean): I
         'custom7': json['custom7'] == null ? undefined : json['custom7'],
         'custom8': json['custom8'] == null ? undefined : json['custom8'],
         'custom9': json['custom9'] == null ? undefined : json['custom9'],
-        'custom10': json['custom10'] == null ? undefined : json['custom10'],
         'dailymotion': json['dailymotion'] == null ? undefined : json['dailymotion'],
         'deezer': json['deezer'] == null ? undefined : json['deezer'],
         'deleted': json['deleted'] == null ? undefined : json['deleted'],
@@ -1477,6 +1477,7 @@ export function IamUserToJSONTyped(value?: IamUser | null, ignoreDiscriminator: 
         'createdTime': value['createdTime'],
         'currency': value['currency'],
         'custom': value['custom'],
+        'custom10': value['custom10'],
         'custom2': value['custom2'],
         'custom3': value['custom3'],
         'custom4': value['custom4'],
@@ -1485,7 +1486,6 @@ export function IamUserToJSONTyped(value?: IamUser | null, ignoreDiscriminator: 
         'custom7': value['custom7'],
         'custom8': value['custom8'],
         'custom9': value['custom9'],
-        'custom10': value['custom10'],
         'dailymotion': value['dailymotion'],
         'deezer': value['deezer'],
         'deleted': value['deleted'],

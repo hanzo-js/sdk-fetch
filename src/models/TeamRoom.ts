@@ -65,7 +65,7 @@ export interface TeamRoom {
     /**
      * Members are the account uuids in the room, agents included: an agent
      * projects as a space member under a uuid derived from its id, so a
-     * caller comparing this against GET /v1/team/bots learns which rooms an
+     * caller comparing this against GET /v1/bot/members learns which rooms an
      * agent is in.
      * @type {Array<string>}
      * @memberof TeamRoom

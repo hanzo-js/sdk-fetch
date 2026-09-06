@@ -45,25 +45,25 @@ export interface O11yGettableAgentCheckIn {
      * @type {string}
      * @memberof O11yGettableAgentCheckIn
      */
-    cloudAccountId?: string;
+    cloudIntegrationId?: string;
     /**
      * 
      * @type {string}
      * @memberof O11yGettableAgentCheckIn
      */
-    cloudIntegrationId?: string;
-    /**
-     * 
-     * @type {O11yIntegrationConfig}
-     * @memberof O11yGettableAgentCheckIn
-     */
-    integrationConfigLegacy?: O11yIntegrationConfig;
+    cloudAccountId?: string;
     /**
      * 
      * @type {O11yProviderIntegrationConfig}
      * @memberof O11yGettableAgentCheckIn
      */
     integrationConfig?: O11yProviderIntegrationConfig;
+    /**
+     * 
+     * @type {O11yIntegrationConfig}
+     * @memberof O11yGettableAgentCheckIn
+     */
+    integrationConfigLegacy?: O11yIntegrationConfig;
     /**
      * 
      * @type {string}
@@ -75,13 +75,13 @@ export interface O11yGettableAgentCheckIn {
      * @type {Date}
      * @memberof O11yGettableAgentCheckIn
      */
-    removedAtLegacy?: Date;
+    removedAt?: Date;
     /**
      * 
      * @type {Date}
      * @memberof O11yGettableAgentCheckIn
      */
-    removedAt?: Date;
+    removedAtLegacy?: Date;
 }
 
 /**
@@ -102,13 +102,13 @@ export function O11yGettableAgentCheckInFromJSONTyped(json: any, ignoreDiscrimin
     return {
         
         'accountId': json['account_id'] == null ? undefined : json['account_id'],
-        'cloudAccountId': json['cloud_account_id'] == null ? undefined : json['cloud_account_id'],
         'cloudIntegrationId': json['cloudIntegrationId'] == null ? undefined : json['cloudIntegrationId'],
-        'integrationConfigLegacy': json['integration_config'] == null ? undefined : O11yIntegrationConfigFromJSON(json['integration_config']),
+        'cloudAccountId': json['cloud_account_id'] == null ? undefined : json['cloud_account_id'],
         'integrationConfig': json['integrationConfig'] == null ? undefined : O11yProviderIntegrationConfigFromJSON(json['integrationConfig']),
+        'integrationConfigLegacy': json['integration_config'] == null ? undefined : O11yIntegrationConfigFromJSON(json['integration_config']),
         'providerAccountId': json['providerAccountId'] == null ? undefined : json['providerAccountId'],
-        'removedAtLegacy': json['removed_at'] == null ? undefined : (new Date(json['removed_at'])),
         'removedAt': json['removedAt'] == null ? undefined : (new Date(json['removedAt'])),
+        'removedAtLegacy': json['removed_at'] == null ? undefined : (new Date(json['removed_at'])),
     };
 }
 
@@ -124,13 +124,13 @@ export function O11yGettableAgentCheckInToJSONTyped(value?: O11yGettableAgentChe
     return {
         
         'account_id': value['accountId'],
-        'cloud_account_id': value['cloudAccountId'],
         'cloudIntegrationId': value['cloudIntegrationId'],
-        'integration_config': O11yIntegrationConfigToJSON(value['integrationConfigLegacy']),
+        'cloud_account_id': value['cloudAccountId'],
         'integrationConfig': O11yProviderIntegrationConfigToJSON(value['integrationConfig']),
+        'integration_config': O11yIntegrationConfigToJSON(value['integrationConfigLegacy']),
         'providerAccountId': value['providerAccountId'],
-        'removed_at': value['removedAtLegacy'] == null ? undefined : ((value['removedAtLegacy']).toISOString()),
         'removedAt': value['removedAt'] == null ? undefined : ((value['removedAt']).toISOString()),
+        'removed_at': value['removedAtLegacy'] == null ? undefined : ((value['removedAtLegacy']).toISOString()),
     };
 }
 

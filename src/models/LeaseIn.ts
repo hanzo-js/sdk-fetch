@@ -28,6 +28,15 @@ export interface LeaseIn {
      */
     _class?: string;
     /**
+     * Cluster names one of the org's attached clusters to run the sandbox on —
+     * the fleet-local name it was registered under. Empty runs on the home
+     * cluster. The named cluster must carry the sandbox namespace and the
+     * gvisor runtime class; a name the org has not attached is 404.
+     * @type {string}
+     * @memberof LeaseIn
+     */
+    cluster?: string;
+    /**
      * Image overrides the image the class would pick. Honoured only for a caller
      * the policy admits, and the sandbox that comes back names the image it GOT.
      * @type {string}
@@ -77,6 +86,7 @@ export function LeaseInFromJSONTyped(json: any, ignoreDiscriminator: boolean): L
     return {
         
         '_class': json['class'] == null ? undefined : json['class'],
+        'cluster': json['cluster'] == null ? undefined : json['cluster'],
         'image': json['image'] == null ? undefined : json['image'],
         'project': json['project'] == null ? undefined : json['project'],
         'runtime': json['runtime'] == null ? undefined : json['runtime'],
@@ -96,6 +106,7 @@ export function LeaseInToJSONTyped(value?: LeaseIn | null, ignoreDiscriminator: 
     return {
         
         'class': value['_class'],
+        'cluster': value['cluster'],
         'image': value['image'],
         'project': value['project'],
         'runtime': value['runtime'],

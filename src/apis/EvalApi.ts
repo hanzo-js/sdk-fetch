@@ -163,7 +163,7 @@ export class EvalApi extends runtime.BaseAPI {
      * Removes the named dataset of the caller\'s org AND all of its examples, in one transaction.  This is not a detach: the examples are gone with the set, so a dataset cannot be resurrected by re-creating the name. A name this org does not have is 404 — never a silent success — and a name belonging to another tenant is the same 404, because the delete is predicated on the validated org. Requires a validated principal; 403 without one. Runs and scores already recorded against the dataset are telemetry events and are NOT deleted with it.
      * Removes the named dataset of the caller\'s org AND all of its examples, in one transaction.
      */
-    async deleteEvalDatasetsByNameRaw(requestParameters: EvalApiDeleteEvalDatasetsByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
+    async deleteEvalDatasetsByNameRaw(requestParameters: EvalApiDeleteEvalDatasetsByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['name'] == null) {
             throw new runtime.RequiredError(
                 'name',
@@ -194,16 +194,15 @@ export class EvalApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse<any>(response);
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Removes the named dataset of the caller\'s org AND all of its examples, in one transaction.  This is not a detach: the examples are gone with the set, so a dataset cannot be resurrected by re-creating the name. A name this org does not have is 404 — never a silent success — and a name belonging to another tenant is the same 404, because the delete is predicated on the validated org. Requires a validated principal; 403 without one. Runs and scores already recorded against the dataset are telemetry events and are NOT deleted with it.
      * Removes the named dataset of the caller\'s org AND all of its examples, in one transaction.
      */
-    async deleteEvalDatasetsByName(requestParameters: EvalApiDeleteEvalDatasetsByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
-        const response = await this.deleteEvalDatasetsByNameRaw(requestParameters, initOverrides);
-        return await response.value();
+    async deleteEvalDatasetsByName(requestParameters: EvalApiDeleteEvalDatasetsByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteEvalDatasetsByNameRaw(requestParameters, initOverrides);
     }
 
     /**

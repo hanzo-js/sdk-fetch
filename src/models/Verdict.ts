@@ -13,6 +13,14 @@
  */
 
 import { mapValues } from '../runtime.js';
+import type { DriftFlag } from './DriftFlag.js';
+import {
+    DriftFlagFromJSON,
+    DriftFlagFromJSONTyped,
+    DriftFlagToJSON,
+    DriftFlagToJSONTyped,
+} from './DriftFlag.js';
+
 /**
  * 
  * @export
@@ -20,47 +28,22 @@ import { mapValues } from '../runtime.js';
  */
 export interface Verdict {
     /**
-     * 
-     * @type {number}
+     * Flags are the findings behind the severity, in detection order:
+     * floating-declared, floating-running, stale, un-rolled, then the
+     * release-artifact ones. Always present — `[]` for a row that runs what it
+     * declares, never null.
+     * @type {Array<DriftFlag>}
      * @memberof Verdict
      */
-    builds?: number;
+    flags?: Array<DriftFlag>;
     /**
-     * 
+     * Severity is the roll-up over Flags — red if any flag is red, else yellow if
+     * any is yellow, else ok. It is the column a board sorts and filters on, and
+     * "ok" is exactly what no flags means.
      * @type {string}
      * @memberof Verdict
      */
-    commit?: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof Verdict
-     */
-    fired?: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof Verdict
-     */
-    org?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Verdict
-     */
-    reason?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Verdict
-     */
-    ref?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Verdict
-     */
-    repo?: string;
+    severity?: string;
 }
 
 /**
@@ -80,13 +63,8 @@ export function VerdictFromJSONTyped(json: any, ignoreDiscriminator: boolean): V
     }
     return {
         
-        'builds': json['builds'] == null ? undefined : json['builds'],
-        'commit': json['commit'] == null ? undefined : json['commit'],
-        'fired': json['fired'] == null ? undefined : json['fired'],
-        'org': json['org'] == null ? undefined : json['org'],
-        'reason': json['reason'] == null ? undefined : json['reason'],
-        'ref': json['ref'] == null ? undefined : json['ref'],
-        'repo': json['repo'] == null ? undefined : json['repo'],
+        'flags': json['flags'] == null ? undefined : ((json['flags'] as Array<any>).map(DriftFlagFromJSON)),
+        'severity': json['severity'] == null ? undefined : json['severity'],
     };
 }
 
@@ -101,13 +79,8 @@ export function VerdictToJSONTyped(value?: Verdict | null, ignoreDiscriminator: 
 
     return {
         
-        'builds': value['builds'],
-        'commit': value['commit'],
-        'fired': value['fired'],
-        'org': value['org'],
-        'reason': value['reason'],
-        'ref': value['ref'],
-        'repo': value['repo'],
+        'flags': value['flags'] == null ? undefined : ((value['flags'] as Array<any>).map(DriftFlagToJSON)),
+        'severity': value['severity'],
     };
 }
 

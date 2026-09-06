@@ -13,12 +13,37 @@
  */
 
 import { mapValues } from '../runtime.js';
+import type { AgentBinding } from './AgentBinding.js';
+import {
+    AgentBindingFromJSON,
+    AgentBindingFromJSONTyped,
+    AgentBindingToJSON,
+    AgentBindingToJSONTyped,
+} from './AgentBinding.js';
+
 /**
  * 
  * @export
  * @interface MachineView
  */
 export interface MachineView {
+    /**
+     * Agent is the cloud Agent this machine runs, lifted out of the binding so a
+     * list reads without following one. Empty means nothing is bound — for a
+     * kind=bot machine that means it costs money and answers nothing.
+     * @type {string}
+     * @memberof MachineView
+     */
+    agent?: string;
+    /**
+     * Binding is the record joining this machine to that agent, carrying vm's own
+     * reconciled status and its reason. Absent means no runtime is bound, which is
+     * also what a stopped bot looks like: stopping unbinds and leaves the machine
+     * running.
+     * @type {AgentBinding}
+     * @memberof MachineView
+     */
+    binding?: AgentBinding;
     /**
      * CreatedTime is when the machine came into being: the provider's own creation
      * timestamp for a Visor machine, passed through in whatever form it states it,
@@ -37,7 +62,7 @@ export interface MachineView {
      */
     gpu?: string;
     /**
-     * ID addresses this machine on the /v1/visor/machines/:id routes: the
+     * ID addresses this machine on the /v1/compute/machines/:id routes: the
      * org-scoped NAME Visor keys a machine by, falling back to the provider id for
      * a machine that has no name. A BYO machine's is the id it dialed in under.
      * @type {string}
@@ -54,7 +79,7 @@ export interface MachineView {
      * Mem is system RAM rendered for a human ("8 GB"), not a number to compute
      * with. Empty when the provider's figure is ambiguous, or when the only figure
      * available is a GPU slug's gb — that is VRAM, and reporting it as system RAM
-     * would be a fabrication. A BYO machine's RAM is on /v1/visor/fleet/workers.
+     * would be a fabrication. A BYO machine's RAM is on /v1/compute/fleet/workers.
      * @type {string}
      * @memberof MachineView
      */
@@ -125,7 +150,7 @@ export interface MachineView {
      * Vcpu is logical cores — the provider's own cpuSize when that is a clean
      * integer, else the count read out of the size slug (4 from "s-4vcpu-8gb").
      * ABSENT, never 0, when neither says. A BYO machine leaves it absent here; its
-     * real core count is on GET /v1/visor/fleet/workers.
+     * real core count is on GET /v1/compute/fleet/workers.
      * @type {number}
      * @memberof MachineView
      */
@@ -149,6 +174,8 @@ export function MachineViewFromJSONTyped(json: any, ignoreDiscriminator: boolean
     }
     return {
         
+        'agent': json['agent'] == null ? undefined : json['agent'],
+        'binding': json['binding'] == null ? undefined : AgentBindingFromJSON(json['binding']),
         'createdTime': json['createdTime'] == null ? undefined : json['createdTime'],
         'gpu': json['gpu'] == null ? undefined : json['gpu'],
         'id': json['id'] == null ? undefined : json['id'],
@@ -177,6 +204,8 @@ export function MachineViewToJSONTyped(value?: MachineView | null, ignoreDiscrim
 
     return {
         
+        'agent': value['agent'],
+        'binding': AgentBindingToJSON(value['binding']),
         'createdTime': value['createdTime'],
         'gpu': value['gpu'],
         'id': value['id'],

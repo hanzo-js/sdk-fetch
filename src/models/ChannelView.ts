@@ -75,7 +75,7 @@ export interface ChannelView {
      * GroupPolicy is how this org admits group and thread rooms here: "open",
      * "allowlist" or "disabled", defaulting to "open". Both policy fields come
      * back EMPTY — rather than the listing failing — when the policy cannot be
-     * read; GET /v1/channels/allowlist carries the same two with the entries they
+     * read; GET /v1/channel/allowlist carries the same two with the entries they
      * consult.
      * @type {string}
      * @memberof ChannelView
@@ -91,7 +91,7 @@ export interface ChannelView {
     id?: string;
     /**
      * PendingPairing counts the org's UNEXPIRED pairing requests on this channel:
-     * exactly the rows GET /v1/channels/pairing returns for it, one per person
+     * exactly the rows GET /v1/channel/pairing returns for it, one per person
      * waiting on an admin. It never exceeds three — the pending cap per
      * (org, channel) — and expired requests are not counted.
      * @type {number}

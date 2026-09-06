@@ -57,6 +57,14 @@ export interface Skill {
      * @memberof Skill
      */
     org?: string;
+    /**
+     * Source is the repository the skill was read from, "<project>/<name>" or
+     * "<name>"; empty for a skill written through the API. A push replaces every
+     * skill of its source at once, so a skill leaves when its file does.
+     * @type {string}
+     * @memberof Skill
+     */
+    source?: string;
 }
 
 /**
@@ -82,6 +90,7 @@ export function SkillFromJSONTyped(json: any, ignoreDiscriminator: boolean): Ski
         'id': json['id'] == null ? undefined : json['id'],
         'name': json['name'] == null ? undefined : json['name'],
         'org': json['org'] == null ? undefined : json['org'],
+        'source': json['source'] == null ? undefined : json['source'],
     };
 }
 
@@ -102,6 +111,7 @@ export function SkillToJSONTyped(value?: Skill | null, ignoreDiscriminator: bool
         'id': value['id'],
         'name': value['name'],
         'org': value['org'],
+        'source': value['source'],
     };
 }
 

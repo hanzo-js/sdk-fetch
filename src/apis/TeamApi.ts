@@ -15,13 +15,12 @@
 
 import * as runtime from '../runtime.js';
 import type {
-  BotRoster,
-  BotSync,
   CollabRequest,
   CollabResult,
   CookieAck,
   PlanInfo,
   ProviderInfo,
+  PublicRooms,
   StatsOut,
   TeamMessage,
   TeamMessageWrite,
@@ -32,10 +31,6 @@ import type {
   TeamRooms,
 } from '../models/index.js';
 import {
-    BotRosterFromJSON,
-    BotRosterToJSON,
-    BotSyncFromJSON,
-    BotSyncToJSON,
     CollabRequestFromJSON,
     CollabRequestToJSON,
     CollabResultFromJSON,
@@ -46,6 +41,8 @@ import {
     PlanInfoToJSON,
     ProviderInfoFromJSON,
     ProviderInfoToJSON,
+    PublicRoomsFromJSON,
+    PublicRoomsToJSON,
     StatsOutFromJSON,
     StatsOutToJSON,
     TeamMessageFromJSON,
@@ -81,6 +78,12 @@ export interface TeamApiGetTeamAccountAuthByProviderCallbackRequest {
 export interface TeamApiGetTeamFilesBySpaceByFilenameRequest {
     space: string;
     filename: string;
+}
+
+export interface TeamApiGetTeamPublicRequest {
+    q?: string;
+    org?: string;
+    limit?: number;
 }
 
 export interface TeamApiGetTeamRoomsByIdMessagesRequest {
@@ -432,45 +435,6 @@ export class TeamApi extends runtime.BaseAPI {
     }
 
     /**
-     * Returns the caller org\'s bot members — the org\'s agents projected as the space Employees they become, each with the member account uuid and Person reference the roster addresses it by. An agents subsystem that is not mounted answers an empty list, never an error.
-     * Returns the caller org\'s bot members — the org\'s agents projected as the space Employees they become, each with the member account uuid and Person reference the roster addresses it by.
-     */
-    async getTeamBotsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BotRoster>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/team/bots`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => BotRosterFromJSON(jsonValue));
-    }
-
-    /**
-     * Returns the caller org\'s bot members — the org\'s agents projected as the space Employees they become, each with the member account uuid and Person reference the roster addresses it by. An agents subsystem that is not mounted answers an empty list, never an error.
-     * Returns the caller org\'s bot members — the org\'s agents projected as the space Employees they become, each with the member account uuid and Person reference the roster addresses it by.
-     */
-    async getTeamBots(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BotRoster> {
-        const response = await this.getTeamBotsRaw(initOverrides);
-        return await response.value();
-    }
-
-    /**
      * Upgrades to the hocuspocus WebSocket the Team editor syncs its Y.js documents over: binary frames of document name, message type and payload, with ONE socket multiplexing every document a tab has open. The server is a relay and an ordered update log, not a CRDT engine — it replays the log to each joining peer and broadcasts every update to the rest, which converges because Y.js updates are commutative and idempotent. There is no body; the response is a protocol upgrade.  BOTH LANES SHARE ONE ROOT. The client derives them from one configured URL — this socket at its root, the markup-snapshot RPC one segment in — so pointing the editor at this service is one value, and the two lanes cannot drift apart.  AUTH IS IN-BAND, PER DOCUMENT, NOT ON THE UPGRADE. The handshake gates only on browser Origin (403 outside the team surfaces; no Origin at all is admitted, which is what a non-browser sends), and then the first frame for a document must be an Auth message carrying the same session or space token every other team route verifies — a browser WebSocket cannot set an Authorization header, which is why the token rides inside the protocol. Anything else on an unauthenticated document is answered with one permission denial and nothing further.  Every document is authorized on its own: the document\'s space must be the token\'s space when the token pins one, and the caller must be a member of it. A mismatch, an unknown space and a non-member deny alike with \"document not found\". Rooms are keyed by org and space and the persisted log\'s key embeds both, so a foreign document id can neither join a room nor read a blob.  The server pings every twenty seconds and drops a socket silent for sixty, so a backgrounded tab — whose JS timers are throttled but whose network stack still auto-pongs — stays connected instead of dying into a reconnect loop.
      * Open the live collaborative-editing socket
      */
@@ -560,6 +524,57 @@ export class TeamApi extends runtime.BaseAPI {
      */
     async getTeamFilesBySpaceByFilename(requestParameters: TeamApiGetTeamFilesBySpaceByFilenameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Blob> {
         const response = await this.getTeamFilesBySpaceByFilenameRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Lists the rooms orgs have published, across every org.  It is NOT part of GET /rooms, and the separation is the point: that address answers the CALLER\'S rooms, so folding these in would put strangers\' channels in somebody\'s own sidebar.  It reads the directory and never a tenant\'s store. Every field it can answer with is one an org published by making a room public, so there is nothing here to scope by org — a directory only its own org can read is not a directory. An authenticated principal is still required, because an anonymous crawler is not who this is for.
+     * Lists the rooms orgs have published, across every org.
+     */
+    async getTeamPublicRaw(requestParameters: TeamApiGetTeamPublicRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PublicRooms>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['q'] != null) {
+            queryParameters['q'] = requestParameters['q'];
+        }
+
+        if (requestParameters['org'] != null) {
+            queryParameters['org'] = requestParameters['org'];
+        }
+
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/team/public`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => PublicRoomsFromJSON(jsonValue));
+    }
+
+    /**
+     * Lists the rooms orgs have published, across every org.  It is NOT part of GET /rooms, and the separation is the point: that address answers the CALLER\'S rooms, so folding these in would put strangers\' channels in somebody\'s own sidebar.  It reads the directory and never a tenant\'s store. Every field it can answer with is one an org published by making a room public, so there is nothing here to scope by org — a directory only its own org can read is not a directory. An authenticated principal is still required, because an anonymous crawler is not who this is for.
+     * Lists the rooms orgs have published, across every org.
+     */
+    async getTeamPublic(requestParameters: TeamApiGetTeamPublicRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PublicRooms> {
+        const response = await this.getTeamPublicRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -778,45 +793,6 @@ export class TeamApi extends runtime.BaseAPI {
      */
     async postTeamAccount(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.postTeamAccountRaw(initOverrides);
-    }
-
-    /**
-     * SyncBots re-projects the caller org\'s agents as space members into EVERY space of the org, and removes the ones whose agent is gone. It is idempotent, and admin only: mutating a space\'s roster requires the gateway-minted admin flag, which a client can never forge. It answers how many roster entries the reconcile touched.
-     * SyncBots re-projects the caller org\'s agents as space members into EVERY space of the org, and removes the ones whose agent is gone.
-     */
-    async postTeamBotsSyncRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BotSync>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/team/bots/sync`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => BotSyncFromJSON(jsonValue));
-    }
-
-    /**
-     * SyncBots re-projects the caller org\'s agents as space members into EVERY space of the org, and removes the ones whose agent is gone. It is idempotent, and admin only: mutating a space\'s roster requires the gateway-minted admin flag, which a client can never forge. It answers how many roster entries the reconcile touched.
-     * SyncBots re-projects the caller org\'s agents as space members into EVERY space of the org, and removes the ones whose agent is gone.
-     */
-    async postTeamBotsSync(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BotSync> {
-        const response = await this.postTeamBotsSyncRaw(initOverrides);
-        return await response.value();
     }
 
     /**

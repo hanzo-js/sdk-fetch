@@ -118,46 +118,46 @@ import {
     UpdateAgentInToJSON,
 } from '../models/index.js';
 
-export interface AgentsApiDeleteAgentsByRefRequest {
+export interface AgentApiDeleteAgentByRefRequest {
     ref: string;
 }
 
-export interface AgentsApiDeleteAgentsTargetsByIdRequest {
+export interface AgentApiDeleteAgentTargetsByIdRequest {
     id: string;
 }
 
-export interface AgentsApiGetAgentsBuildsRequest {
+export interface AgentApiGetAgentBuildsRequest {
     limit?: number;
 }
 
-export interface AgentsApiGetAgentsBuildsByOrgByProjectRequest {
+export interface AgentApiGetAgentBuildsByOrgByProjectRequest {
     org: string;
     project: string;
 }
 
-export interface AgentsApiGetAgentsByRefRequest {
+export interface AgentApiGetAgentByRefRequest {
     ref: string;
 }
 
-export interface AgentsApiGetAgentsByRefRunsRequest {
+export interface AgentApiGetAgentByRefRunsRequest {
     ref: string;
     limit?: number;
 }
 
-export interface AgentsApiGetAgentsChatConversationsByIdRequest {
+export interface AgentApiGetAgentChatConversationsByIdRequest {
     id: string;
 }
 
-export interface AgentsApiGetAgentsMetricsRequest {
+export interface AgentApiGetAgentMetricsRequest {
     range?: string;
 }
 
-export interface AgentsApiGetAgentsRunsRequest {
+export interface AgentApiGetAgentRunsRequest {
     limit?: number;
     status?: string;
 }
 
-export interface AgentsApiGetAgentsSessionsRequest {
+export interface AgentApiGetAgentSessionsRequest {
     root?: string;
     parent?: string;
     status?: string;
@@ -166,96 +166,96 @@ export interface AgentsApiGetAgentsSessionsRequest {
     limit?: number;
 }
 
-export interface AgentsApiGetAgentsSessionsByIdRequest {
+export interface AgentApiGetAgentSessionsByIdRequest {
     id: string;
 }
 
-export interface AgentsApiGetAgentsSessionsByIdControlRequest {
+export interface AgentApiGetAgentSessionsByIdControlRequest {
     id: string;
     after?: number;
 }
 
-export interface AgentsApiGetAgentsSessionsByIdProgressRequest {
+export interface AgentApiGetAgentSessionsByIdProgressRequest {
     id: string;
 }
 
-export interface AgentsApiGetAgentsSessionsByIdTreeRequest {
+export interface AgentApiGetAgentSessionsByIdTreeRequest {
     id: string;
 }
 
-export interface AgentsApiGetAgentsTargetsByIdRequest {
+export interface AgentApiGetAgentTargetsByIdRequest {
     id: string;
 }
 
-export interface AgentsApiPatchAgentsByRefRequest {
+export interface AgentApiPatchAgentByRefRequest {
     ref: string;
     updateAgentIn: UpdateAgentIn;
 }
 
-export interface AgentsApiPatchAgentsSessionsByIdRequest {
+export interface AgentApiPatchAgentSessionsByIdRequest {
     id: string;
     patchSessionIn: PatchSessionIn;
 }
 
-export interface AgentsApiPatchAgentsTargetsByIdRequest {
+export interface AgentApiPatchAgentTargetsByIdRequest {
     id: string;
     patchTargetIn: PatchTargetIn;
 }
 
-export interface AgentsApiPostAgentsRequest {
+export interface AgentApiPostAgentRequest {
     createAgentIn: CreateAgentIn;
 }
 
-export interface AgentsApiPostAgentsByRefRunRequest {
+export interface AgentApiPostAgentByRefRunRequest {
     ref: string;
 }
 
-export interface AgentsApiPostAgentsCodingRequest {
+export interface AgentApiPostAgentCodingRequest {
     codingStartIn: CodingStartIn;
 }
 
-export interface AgentsApiPostAgentsSessionsRequest {
+export interface AgentApiPostAgentSessionsRequest {
     registerReq: RegisterReq;
 }
 
-export interface AgentsApiPostAgentsSessionsByIdEventsRequest {
+export interface AgentApiPostAgentSessionsByIdEventsRequest {
     id: string;
     eventIn: EventIn;
 }
 
-export interface AgentsApiPostAgentsSessionsByIdMessageRequest {
+export interface AgentApiPostAgentSessionsByIdMessageRequest {
     id: string;
     controlIn: ControlIn;
 }
 
-export interface AgentsApiPostAgentsSessionsByIdPauseRequest {
+export interface AgentApiPostAgentSessionsByIdPauseRequest {
     id: string;
     controlIn: ControlIn;
 }
 
-export interface AgentsApiPostAgentsSessionsByIdResumeRequest {
+export interface AgentApiPostAgentSessionsByIdResumeRequest {
     id: string;
     controlIn: ControlIn;
 }
 
-export interface AgentsApiPostAgentsSessionsByIdStopRequest {
+export interface AgentApiPostAgentSessionsByIdStopRequest {
     id: string;
     controlIn: ControlIn;
 }
 
-export interface AgentsApiPostAgentsTargetsRequest {
+export interface AgentApiPostAgentTargetsRequest {
     targetReq: TargetReq;
 }
 
-export interface AgentsApiPostAgentsTargetsByIdClaimRequest {
+export interface AgentApiPostAgentTargetsByIdClaimRequest {
     id: string;
 }
 
-export interface AgentsApiPostAgentsTargetsByIdKeyRequest {
+export interface AgentApiPostAgentTargetsByIdKeyRequest {
     id: string;
 }
 
-export interface AgentsApiPostAgentsTargetsByIdRunsByRunidReportRequest {
+export interface AgentApiPostAgentTargetsByIdRunsByRunidReportRequest {
     id: string;
     runId: string;
     reportRunIn: ReportRunIn;
@@ -264,17 +264,17 @@ export interface AgentsApiPostAgentsTargetsByIdRunsByRunidReportRequest {
 /**
  * 
  */
-export class AgentsApi extends runtime.BaseAPI {
+export class AgentApi extends runtime.BaseAPI {
 
     /**
      * Removes an agent and every run recorded against it. Answers 204.
      * Removes an agent and every run recorded against it.
      */
-    async deleteAgentsByRefRaw(requestParameters: AgentsApiDeleteAgentsByRefRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async deleteAgentByRefRaw(requestParameters: AgentApiDeleteAgentByRefRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['ref'] == null) {
             throw new runtime.RequiredError(
                 'ref',
-                'Required parameter "ref" was null or undefined when calling deleteAgentsByRef().'
+                'Required parameter "ref" was null or undefined when calling deleteAgentByRef().'
             );
         }
 
@@ -291,7 +291,7 @@ export class AgentsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/agents/{ref}`;
+        let urlPath = `/v1/agent/{ref}`;
         urlPath = urlPath.replace(`{${"ref"}}`, encodeURIComponent(String(requestParameters['ref'])));
 
         const response = await this.request({
@@ -308,19 +308,19 @@ export class AgentsApi extends runtime.BaseAPI {
      * Removes an agent and every run recorded against it. Answers 204.
      * Removes an agent and every run recorded against it.
      */
-    async deleteAgentsByRef(requestParameters: AgentsApiDeleteAgentsByRefRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.deleteAgentsByRefRaw(requestParameters, initOverrides);
+    async deleteAgentByRef(requestParameters: AgentApiDeleteAgentByRefRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteAgentByRefRaw(requestParameters, initOverrides);
     }
 
     /**
      * Deregisters one machine. Only its owner, or an org admin, may remove it; an unknown id, a cross-org id and a machine owned by someone else all answer the same not-found, so a probe learns nothing about what exists.
      * Deregisters one machine.
      */
-    async deleteAgentsTargetsByIdRaw(requestParameters: AgentsApiDeleteAgentsTargetsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TargetDeleted>> {
+    async deleteAgentTargetsByIdRaw(requestParameters: AgentApiDeleteAgentTargetsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TargetDeleted>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling deleteAgentsTargetsById().'
+                'Required parameter "id" was null or undefined when calling deleteAgentTargetsById().'
             );
         }
 
@@ -337,7 +337,7 @@ export class AgentsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/agents/targets/{id}`;
+        let urlPath = `/v1/agent/targets/{id}`;
         urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
         const response = await this.request({
@@ -354,8 +354,8 @@ export class AgentsApi extends runtime.BaseAPI {
      * Deregisters one machine. Only its owner, or an org admin, may remove it; an unknown id, a cross-org id and a machine owned by someone else all answer the same not-found, so a probe learns nothing about what exists.
      * Deregisters one machine.
      */
-    async deleteAgentsTargetsById(requestParameters: AgentsApiDeleteAgentsTargetsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TargetDeleted> {
-        const response = await this.deleteAgentsTargetsByIdRaw(requestParameters, initOverrides);
+    async deleteAgentTargetsById(requestParameters: AgentApiDeleteAgentTargetsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TargetDeleted> {
+        const response = await this.deleteAgentTargetsByIdRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -363,7 +363,7 @@ export class AgentsApi extends runtime.BaseAPI {
      * Returns every agent defined in the caller\'s org, each with the number of runs recorded against it.
      * Returns every agent defined in the caller\'s org, each with the number of runs recorded against it.
      */
-    async getAgentsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AgentList>> {
+    async getAgentRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AgentList>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -377,7 +377,7 @@ export class AgentsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/agents`;
+        let urlPath = `/v1/agent`;
 
         const response = await this.request({
             path: urlPath,
@@ -393,8 +393,8 @@ export class AgentsApi extends runtime.BaseAPI {
      * Returns every agent defined in the caller\'s org, each with the number of runs recorded against it.
      * Returns every agent defined in the caller\'s org, each with the number of runs recorded against it.
      */
-    async getAgents(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AgentList> {
-        const response = await this.getAgentsRaw(initOverrides);
+    async getAgent(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AgentList> {
+        const response = await this.getAgentRaw(initOverrides);
         return await response.value();
     }
 
@@ -402,7 +402,7 @@ export class AgentsApi extends runtime.BaseAPI {
      * Serves the org-wide recent-activity feed. Events are REAL: each recorded run is an invoked (ok) or failed (error) event; each agent\'s own create/update timestamps are created/updated events. Merged, newest first, capped. Nothing is invented — an org with no agents and no runs gets [].
      * Serves the org-wide recent-activity feed.
      */
-    async getAgentsActivityRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ActivityFeed>> {
+    async getAgentActivityRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ActivityFeed>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -416,7 +416,7 @@ export class AgentsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/agents/activity`;
+        let urlPath = `/v1/agent/activity`;
 
         const response = await this.request({
             path: urlPath,
@@ -432,8 +432,8 @@ export class AgentsApi extends runtime.BaseAPI {
      * Serves the org-wide recent-activity feed. Events are REAL: each recorded run is an invoked (ok) or failed (error) event; each agent\'s own create/update timestamps are created/updated events. Merged, newest first, capped. Nothing is invented — an org with no agents and no runs gets [].
      * Serves the org-wide recent-activity feed.
      */
-    async getAgentsActivity(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ActivityFeed> {
-        const response = await this.getAgentsActivityRaw(initOverrides);
+    async getAgentActivity(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ActivityFeed> {
+        const response = await this.getAgentActivityRaw(initOverrides);
         return await response.value();
     }
 
@@ -441,7 +441,7 @@ export class AgentsApi extends runtime.BaseAPI {
      * Returns the public index of every published build, most recently updated first, so a gallery can link straight to the story behind each product. PUBLIC, no tenancy: publishing is the author\'s act, and only published root sessions appear here.
      * Returns the public index of every published build, most recently updated first, so a gallery can link straight to the story behind each product.
      */
-    async getAgentsBuildsRaw(requestParameters: AgentsApiGetAgentsBuildsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BuildList>> {
+    async getAgentBuildsRaw(requestParameters: AgentApiGetAgentBuildsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BuildList>> {
         const queryParameters: any = {};
 
         if (requestParameters['limit'] != null) {
@@ -459,7 +459,7 @@ export class AgentsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/agents/builds`;
+        let urlPath = `/v1/agent/builds`;
 
         const response = await this.request({
             path: urlPath,
@@ -475,27 +475,27 @@ export class AgentsApi extends runtime.BaseAPI {
      * Returns the public index of every published build, most recently updated first, so a gallery can link straight to the story behind each product. PUBLIC, no tenancy: publishing is the author\'s act, and only published root sessions appear here.
      * Returns the public index of every published build, most recently updated first, so a gallery can link straight to the story behind each product.
      */
-    async getAgentsBuilds(requestParameters: AgentsApiGetAgentsBuildsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BuildList> {
-        const response = await this.getAgentsBuildsRaw(requestParameters, initOverrides);
+    async getAgentBuilds(requestParameters: AgentApiGetAgentBuildsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BuildList> {
+        const response = await this.getAgentBuildsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Returns the readable build of one product: the agent session that produced it, turn by turn — the prompts, the reasoning, the commits each turn produced — plus the exact `git log` that re-derives every commit binding from git itself, so nothing here has to be taken on trust.  PUBLIC, no tenancy: it answers only for a session its author explicitly published, which is what makes it safe to be anonymous. An unpublished session is invisible here no matter who asks; its owner reads it through the org-scoped /v1/agents/sessions routes, which need a validated principal.
+     * Returns the readable build of one product: the agent session that produced it, turn by turn — the prompts, the reasoning, the commits each turn produced — plus the exact `git log` that re-derives every commit binding from git itself, so nothing here has to be taken on trust.  PUBLIC, no tenancy: it answers only for a session its author explicitly published, which is what makes it safe to be anonymous. An unpublished session is invisible here no matter who asks; its owner reads it through the org-scoped /v1/agent/sessions routes, which need a validated principal.
      * Returns the readable build of one product: the agent session that produced it, turn by turn — the prompts, the reasoning, the commits each turn produced — plus the exact `git log` that re-derives every commit binding from git itself, so nothing here has to be taken on trust.
      */
-    async getAgentsBuildsByOrgByProjectRaw(requestParameters: AgentsApiGetAgentsBuildsByOrgByProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BuildView>> {
+    async getAgentBuildsByOrgByProjectRaw(requestParameters: AgentApiGetAgentBuildsByOrgByProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BuildView>> {
         if (requestParameters['org'] == null) {
             throw new runtime.RequiredError(
                 'org',
-                'Required parameter "org" was null or undefined when calling getAgentsBuildsByOrgByProject().'
+                'Required parameter "org" was null or undefined when calling getAgentBuildsByOrgByProject().'
             );
         }
 
         if (requestParameters['project'] == null) {
             throw new runtime.RequiredError(
                 'project',
-                'Required parameter "project" was null or undefined when calling getAgentsBuildsByOrgByProject().'
+                'Required parameter "project" was null or undefined when calling getAgentBuildsByOrgByProject().'
             );
         }
 
@@ -512,7 +512,7 @@ export class AgentsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/agents/builds/{org}/{project}`;
+        let urlPath = `/v1/agent/builds/{org}/{project}`;
         urlPath = urlPath.replace(`{${"org"}}`, encodeURIComponent(String(requestParameters['org'])));
         urlPath = urlPath.replace(`{${"project"}}`, encodeURIComponent(String(requestParameters['project'])));
 
@@ -527,11 +527,11 @@ export class AgentsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Returns the readable build of one product: the agent session that produced it, turn by turn — the prompts, the reasoning, the commits each turn produced — plus the exact `git log` that re-derives every commit binding from git itself, so nothing here has to be taken on trust.  PUBLIC, no tenancy: it answers only for a session its author explicitly published, which is what makes it safe to be anonymous. An unpublished session is invisible here no matter who asks; its owner reads it through the org-scoped /v1/agents/sessions routes, which need a validated principal.
+     * Returns the readable build of one product: the agent session that produced it, turn by turn — the prompts, the reasoning, the commits each turn produced — plus the exact `git log` that re-derives every commit binding from git itself, so nothing here has to be taken on trust.  PUBLIC, no tenancy: it answers only for a session its author explicitly published, which is what makes it safe to be anonymous. An unpublished session is invisible here no matter who asks; its owner reads it through the org-scoped /v1/agent/sessions routes, which need a validated principal.
      * Returns the readable build of one product: the agent session that produced it, turn by turn — the prompts, the reasoning, the commits each turn produced — plus the exact `git log` that re-derives every commit binding from git itself, so nothing here has to be taken on trust.
      */
-    async getAgentsBuildsByOrgByProject(requestParameters: AgentsApiGetAgentsBuildsByOrgByProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BuildView> {
-        const response = await this.getAgentsBuildsByOrgByProjectRaw(requestParameters, initOverrides);
+    async getAgentBuildsByOrgByProject(requestParameters: AgentApiGetAgentBuildsByOrgByProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BuildView> {
+        const response = await this.getAgentBuildsByOrgByProjectRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -539,11 +539,11 @@ export class AgentsApi extends runtime.BaseAPI {
      * Returns one agent with its system prompt and its 20 most recent runs. The ref is the agent\'s public id or its org-unique name — a created agent is immediately gettable by whatever create handed back.
      * Returns one agent with its system prompt and its 20 most recent runs.
      */
-    async getAgentsByRefRaw(requestParameters: AgentsApiGetAgentsByRefRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AgentDetail>> {
+    async getAgentByRefRaw(requestParameters: AgentApiGetAgentByRefRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AgentDetail>> {
         if (requestParameters['ref'] == null) {
             throw new runtime.RequiredError(
                 'ref',
-                'Required parameter "ref" was null or undefined when calling getAgentsByRef().'
+                'Required parameter "ref" was null or undefined when calling getAgentByRef().'
             );
         }
 
@@ -560,7 +560,7 @@ export class AgentsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/agents/{ref}`;
+        let urlPath = `/v1/agent/{ref}`;
         urlPath = urlPath.replace(`{${"ref"}}`, encodeURIComponent(String(requestParameters['ref'])));
 
         const response = await this.request({
@@ -577,8 +577,8 @@ export class AgentsApi extends runtime.BaseAPI {
      * Returns one agent with its system prompt and its 20 most recent runs. The ref is the agent\'s public id or its org-unique name — a created agent is immediately gettable by whatever create handed back.
      * Returns one agent with its system prompt and its 20 most recent runs.
      */
-    async getAgentsByRef(requestParameters: AgentsApiGetAgentsByRefRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AgentDetail> {
-        const response = await this.getAgentsByRefRaw(requestParameters, initOverrides);
+    async getAgentByRef(requestParameters: AgentApiGetAgentByRefRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AgentDetail> {
+        const response = await this.getAgentByRefRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -586,11 +586,11 @@ export class AgentsApi extends runtime.BaseAPI {
      * Returns one agent\'s execution history, newest first — each run\'s input, its output or its error, and how long it took. Every row is a run that actually happened.
      * Returns one agent\'s execution history, newest first — each run\'s input, its output or its error, and how long it took.
      */
-    async getAgentsByRefRunsRaw(requestParameters: AgentsApiGetAgentsByRefRunsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RunList>> {
+    async getAgentByRefRunsRaw(requestParameters: AgentApiGetAgentByRefRunsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RunList>> {
         if (requestParameters['ref'] == null) {
             throw new runtime.RequiredError(
                 'ref',
-                'Required parameter "ref" was null or undefined when calling getAgentsByRefRuns().'
+                'Required parameter "ref" was null or undefined when calling getAgentByRefRuns().'
             );
         }
 
@@ -611,7 +611,7 @@ export class AgentsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/agents/{ref}/runs`;
+        let urlPath = `/v1/agent/{ref}/runs`;
         urlPath = urlPath.replace(`{${"ref"}}`, encodeURIComponent(String(requestParameters['ref'])));
 
         const response = await this.request({
@@ -628,8 +628,8 @@ export class AgentsApi extends runtime.BaseAPI {
      * Returns one agent\'s execution history, newest first — each run\'s input, its output or its error, and how long it took. Every row is a run that actually happened.
      * Returns one agent\'s execution history, newest first — each run\'s input, its output or its error, and how long it took.
      */
-    async getAgentsByRefRuns(requestParameters: AgentsApiGetAgentsByRefRunsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RunList> {
-        const response = await this.getAgentsByRefRunsRaw(requestParameters, initOverrides);
+    async getAgentByRefRuns(requestParameters: AgentApiGetAgentByRefRunsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RunList> {
+        const response = await this.getAgentByRefRunsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -637,7 +637,7 @@ export class AgentsApi extends runtime.BaseAPI {
      * Returns a summary of every agent conversation in the caller\'s org — id, derived title, and when it was last appended to — for populating a thread list.  Scoped to the caller\'s org and nothing else, and that isolation is structural rather than a filter: conversations are persisted in a store opened PER ORG, so there is no query in which another tenant\'s threads could appear. A validated principal with a non-empty org is required; 403 without one.
      * List the agent threads in your org
      */
-    async getAgentsChatConversationsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getAgentChatConversationsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -651,7 +651,7 @@ export class AgentsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/agents/chat/conversations`;
+        let urlPath = `/v1/agent/chat/conversations`;
 
         const response = await this.request({
             path: urlPath,
@@ -667,19 +667,19 @@ export class AgentsApi extends runtime.BaseAPI {
      * Returns a summary of every agent conversation in the caller\'s org — id, derived title, and when it was last appended to — for populating a thread list.  Scoped to the caller\'s org and nothing else, and that isolation is structural rather than a filter: conversations are persisted in a store opened PER ORG, so there is no query in which another tenant\'s threads could appear. A validated principal with a non-empty org is required; 403 without one.
      * List the agent threads in your org
      */
-    async getAgentsChatConversations(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getAgentsChatConversationsRaw(initOverrides);
+    async getAgentChatConversations(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAgentChatConversationsRaw(initOverrides);
     }
 
     /**
      * Returns every message of one conversation in order — role, content, the assistant\'s tool calls where it made any, and each message\'s creation time — which is the transcript a client replays to resume a thread.  The lookup happens inside the caller\'s OWN per-org store, so an id belonging to another tenant is not refused, it is simply absent: the answer is 200 with an empty message list. Read it as \"no such conversation for you\" rather than as an empty thread. A validated principal with a non-empty org is required; 403 without one.
      * Read one agent thread in full
      */
-    async getAgentsChatConversationsByIdRaw(requestParameters: AgentsApiGetAgentsChatConversationsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getAgentChatConversationsByIdRaw(requestParameters: AgentApiGetAgentChatConversationsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling getAgentsChatConversationsById().'
+                'Required parameter "id" was null or undefined when calling getAgentChatConversationsById().'
             );
         }
 
@@ -696,7 +696,7 @@ export class AgentsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/agents/chat/conversations/{id}`;
+        let urlPath = `/v1/agent/chat/conversations/{id}`;
         urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
         const response = await this.request({
@@ -713,15 +713,15 @@ export class AgentsApi extends runtime.BaseAPI {
      * Returns every message of one conversation in order — role, content, the assistant\'s tool calls where it made any, and each message\'s creation time — which is the transcript a client replays to resume a thread.  The lookup happens inside the caller\'s OWN per-org store, so an id belonging to another tenant is not refused, it is simply absent: the answer is 200 with an empty message list. Read it as \"no such conversation for you\" rather than as an empty thread. A validated principal with a non-empty org is required; 403 without one.
      * Read one agent thread in full
      */
-    async getAgentsChatConversationsById(requestParameters: AgentsApiGetAgentsChatConversationsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getAgentsChatConversationsByIdRaw(requestParameters, initOverrides);
+    async getAgentChatConversationsById(requestParameters: AgentApiGetAgentChatConversationsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAgentChatConversationsByIdRaw(requestParameters, initOverrides);
     }
 
     /**
      * Returns the preset catalog: each entry\'s id, its description and whether it is server-executing — the flag that decides if a preset\'s tool calls run here or come back for the client to apply. The ids are what the round accepts in `preset`.  The catalog is compiled into the build, identical for every caller, and this is the one read in the group that needs no principal.
      * List the agent presets available to a caller
      */
-    async getAgentsChatPresetsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getAgentChatPresetsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -735,7 +735,7 @@ export class AgentsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/agents/chat/presets`;
+        let urlPath = `/v1/agent/chat/presets`;
 
         const response = await this.request({
             path: urlPath,
@@ -751,15 +751,15 @@ export class AgentsApi extends runtime.BaseAPI {
      * Returns the preset catalog: each entry\'s id, its description and whether it is server-executing — the flag that decides if a preset\'s tool calls run here or come back for the client to apply. The ids are what the round accepts in `preset`.  The catalog is compiled into the build, identical for every caller, and this is the one read in the group that needs no principal.
      * List the agent presets available to a caller
      */
-    async getAgentsChatPresets(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getAgentsChatPresetsRaw(initOverrides);
+    async getAgentChatPresets(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAgentChatPresetsRaw(initOverrides);
     }
 
     /**
      * Serves the invocations-over-time histogram for the org\'s Agents dashboard. Every point is a REAL count of recorded runs in that time bucket — one series line per agent that ran in the window. The Resource Usage rollup is all-null because this store meters no CPU/memory/storage/cost; the console renders those as \"—\" rather than a fabricated figure. No runs => empty series (an honest \"not connected / no activity yet\"), never a synthesized trend.
      * Serves the invocations-over-time histogram for the org\'s Agents dashboard.
      */
-    async getAgentsMetricsRaw(requestParameters: AgentsApiGetAgentsMetricsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MetricsView>> {
+    async getAgentMetricsRaw(requestParameters: AgentApiGetAgentMetricsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MetricsView>> {
         const queryParameters: any = {};
 
         if (requestParameters['range'] != null) {
@@ -777,7 +777,7 @@ export class AgentsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/agents/metrics`;
+        let urlPath = `/v1/agent/metrics`;
 
         const response = await this.request({
             path: urlPath,
@@ -793,8 +793,8 @@ export class AgentsApi extends runtime.BaseAPI {
      * Serves the invocations-over-time histogram for the org\'s Agents dashboard. Every point is a REAL count of recorded runs in that time bucket — one series line per agent that ran in the window. The Resource Usage rollup is all-null because this store meters no CPU/memory/storage/cost; the console renders those as \"—\" rather than a fabricated figure. No runs => empty series (an honest \"not connected / no activity yet\"), never a synthesized trend.
      * Serves the invocations-over-time histogram for the org\'s Agents dashboard.
      */
-    async getAgentsMetrics(requestParameters: AgentsApiGetAgentsMetricsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MetricsView> {
-        const response = await this.getAgentsMetricsRaw(requestParameters, initOverrides);
+    async getAgentMetrics(requestParameters: AgentApiGetAgentMetricsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MetricsView> {
+        const response = await this.getAgentMetricsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -802,7 +802,7 @@ export class AgentsApi extends runtime.BaseAPI {
      * Returns the org\'s agent runs across EVERY agent, newest first — what ran here, for whom, on which model, how long it took, and why it failed.  It is the feed the per-agent history could not be: an operator asking \"what is this tenant\'s agent plane doing\" does not start out knowing an agent ref, and answering by listing the agents and then paging each one\'s history is N+1 round trips to reconstruct one ordering the database already has (RunsSince, ordered by created_at over the org index).  The org is the CALLER\'s, resolved from identity by tenantStore — never a parameter. There is deliberately no org field on orgRunsQuery to forge: run history is the tenant\'s own record, and the only tenant this can answer for is the one asking.
      * Returns the org\'s agent runs across EVERY agent, newest first — what ran here, for whom, on which model, how long it took, and why it failed.
      */
-    async getAgentsRunsRaw(requestParameters: AgentsApiGetAgentsRunsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RunList>> {
+    async getAgentRunsRaw(requestParameters: AgentApiGetAgentRunsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RunList>> {
         const queryParameters: any = {};
 
         if (requestParameters['limit'] != null) {
@@ -824,7 +824,7 @@ export class AgentsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/agents/runs`;
+        let urlPath = `/v1/agent/runs`;
 
         const response = await this.request({
             path: urlPath,
@@ -840,8 +840,8 @@ export class AgentsApi extends runtime.BaseAPI {
      * Returns the org\'s agent runs across EVERY agent, newest first — what ran here, for whom, on which model, how long it took, and why it failed.  It is the feed the per-agent history could not be: an operator asking \"what is this tenant\'s agent plane doing\" does not start out knowing an agent ref, and answering by listing the agents and then paging each one\'s history is N+1 round trips to reconstruct one ordering the database already has (RunsSince, ordered by created_at over the org index).  The org is the CALLER\'s, resolved from identity by tenantStore — never a parameter. There is deliberately no org field on orgRunsQuery to forge: run history is the tenant\'s own record, and the only tenant this can answer for is the one asking.
      * Returns the org\'s agent runs across EVERY agent, newest first — what ran here, for whom, on which model, how long it took, and why it failed.
      */
-    async getAgentsRuns(requestParameters: AgentsApiGetAgentsRunsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RunList> {
-        const response = await this.getAgentsRunsRaw(requestParameters, initOverrides);
+    async getAgentRuns(requestParameters: AgentApiGetAgentRunsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RunList> {
+        const response = await this.getAgentRunsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -849,7 +849,7 @@ export class AgentsApi extends runtime.BaseAPI {
      * Returns the caller org\'s live sessions, newest first — each with its event count, its direct-child count and a one-line preview of its latest event. With no filter it returns ROOT sessions only, so a dashboard shows one row per flow rather than one per subagent; ?root= or ?parent= descends.
      * Returns the caller org\'s live sessions, newest first — each with its event count, its direct-child count and a one-line preview of its latest event.
      */
-    async getAgentsSessionsRaw(requestParameters: AgentsApiGetAgentsSessionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SessionList>> {
+    async getAgentSessionsRaw(requestParameters: AgentApiGetAgentSessionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SessionList>> {
         const queryParameters: any = {};
 
         if (requestParameters['root'] != null) {
@@ -887,7 +887,7 @@ export class AgentsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/agents/sessions`;
+        let urlPath = `/v1/agent/sessions`;
 
         const response = await this.request({
             path: urlPath,
@@ -903,8 +903,8 @@ export class AgentsApi extends runtime.BaseAPI {
      * Returns the caller org\'s live sessions, newest first — each with its event count, its direct-child count and a one-line preview of its latest event. With no filter it returns ROOT sessions only, so a dashboard shows one row per flow rather than one per subagent; ?root= or ?parent= descends.
      * Returns the caller org\'s live sessions, newest first — each with its event count, its direct-child count and a one-line preview of its latest event.
      */
-    async getAgentsSessions(requestParameters: AgentsApiGetAgentsSessionsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SessionList> {
-        const response = await this.getAgentsSessionsRaw(requestParameters, initOverrides);
+    async getAgentSessions(requestParameters: AgentApiGetAgentSessionsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SessionList> {
+        const response = await this.getAgentSessionsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -912,11 +912,11 @@ export class AgentsApi extends runtime.BaseAPI {
      * Returns one session with its direct child sessions and its 50 most recent events, oldest of those first.
      * Returns one session with its direct child sessions and its 50 most recent events, oldest of those first.
      */
-    async getAgentsSessionsByIdRaw(requestParameters: AgentsApiGetAgentsSessionsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SessionDetail>> {
+    async getAgentSessionsByIdRaw(requestParameters: AgentApiGetAgentSessionsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SessionDetail>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling getAgentsSessionsById().'
+                'Required parameter "id" was null or undefined when calling getAgentSessionsById().'
             );
         }
 
@@ -933,7 +933,7 @@ export class AgentsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/agents/sessions/{id}`;
+        let urlPath = `/v1/agent/sessions/{id}`;
         urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
         const response = await this.request({
@@ -950,8 +950,8 @@ export class AgentsApi extends runtime.BaseAPI {
      * Returns one session with its direct child sessions and its 50 most recent events, oldest of those first.
      * Returns one session with its direct child sessions and its 50 most recent events, oldest of those first.
      */
-    async getAgentsSessionsById(requestParameters: AgentsApiGetAgentsSessionsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SessionDetail> {
-        const response = await this.getAgentsSessionsByIdRaw(requestParameters, initOverrides);
+    async getAgentSessionsById(requestParameters: AgentApiGetAgentSessionsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SessionDetail> {
+        const response = await this.getAgentSessionsByIdRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -959,11 +959,11 @@ export class AgentsApi extends runtime.BaseAPI {
      * Returns the steering commands (pause/resume/stop/message) recorded against the caller\'s own session that are newer than the cursor, oldest first, with the cursor to poll from next. It is how a locally started `hanzo code` session — which is not task-backed, so nothing forwards its commands to an execution engine — consumes what the dashboard posted. Read-only and bounded at 200 per poll, so a steady poll is cheap and an applied command is never redelivered.
      * Returns the steering commands (pause/resume/stop/message) recorded against the caller\'s own session that are newer than the cursor, oldest first, with the cursor to poll from next.
      */
-    async getAgentsSessionsByIdControlRaw(requestParameters: AgentsApiGetAgentsSessionsByIdControlRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ControlDrain>> {
+    async getAgentSessionsByIdControlRaw(requestParameters: AgentApiGetAgentSessionsByIdControlRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ControlDrain>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling getAgentsSessionsByIdControl().'
+                'Required parameter "id" was null or undefined when calling getAgentSessionsByIdControl().'
             );
         }
 
@@ -984,7 +984,7 @@ export class AgentsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/agents/sessions/{id}/control`;
+        let urlPath = `/v1/agent/sessions/{id}/control`;
         urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
         const response = await this.request({
@@ -1001,8 +1001,8 @@ export class AgentsApi extends runtime.BaseAPI {
      * Returns the steering commands (pause/resume/stop/message) recorded against the caller\'s own session that are newer than the cursor, oldest first, with the cursor to poll from next. It is how a locally started `hanzo code` session — which is not task-backed, so nothing forwards its commands to an execution engine — consumes what the dashboard posted. Read-only and bounded at 200 per poll, so a steady poll is cheap and an applied command is never redelivered.
      * Returns the steering commands (pause/resume/stop/message) recorded against the caller\'s own session that are newer than the cursor, oldest first, with the cursor to poll from next.
      */
-    async getAgentsSessionsByIdControl(requestParameters: AgentsApiGetAgentsSessionsByIdControlRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ControlDrain> {
-        const response = await this.getAgentsSessionsByIdControlRaw(requestParameters, initOverrides);
+    async getAgentSessionsByIdControl(requestParameters: AgentApiGetAgentSessionsByIdControlRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ControlDrain> {
+        const response = await this.getAgentSessionsByIdControlRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1010,11 +1010,11 @@ export class AgentsApi extends runtime.BaseAPI {
      * Returns how far along one run is: the share of its goal that is done, whether it is running, blocked or finished, and a line saying what it is doing right now.  It is a MODEL ESTIMATE read off the run\'s own transcript, not a measurement — `estimated` says so on every answer, and a run whose progress cannot be told reports phase \"unknown\" with no percentage rather than a zero it does not mean. A session that has already finished answers from its own status instead, and is marked not estimated.  The list and detail reads carry the same value; this address is the one that WAITS. Where the stored estimate has gone stale it is remade before answering, so a human deciding whether to step into a run gets a current reading rather than the last poll\'s — which costs one small completion, charged to the same wallet the session already names, at most once every thirty seconds per run.
      * Returns how far along one run is: the share of its goal that is done, whether it is running, blocked or finished, and a line saying what it is doing right now.
      */
-    async getAgentsSessionsByIdProgressRaw(requestParameters: AgentsApiGetAgentsSessionsByIdProgressRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SessionProgress>> {
+    async getAgentSessionsByIdProgressRaw(requestParameters: AgentApiGetAgentSessionsByIdProgressRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SessionProgress>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling getAgentsSessionsByIdProgress().'
+                'Required parameter "id" was null or undefined when calling getAgentSessionsByIdProgress().'
             );
         }
 
@@ -1031,7 +1031,7 @@ export class AgentsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/agents/sessions/{id}/progress`;
+        let urlPath = `/v1/agent/sessions/{id}/progress`;
         urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
         const response = await this.request({
@@ -1048,8 +1048,8 @@ export class AgentsApi extends runtime.BaseAPI {
      * Returns how far along one run is: the share of its goal that is done, whether it is running, blocked or finished, and a line saying what it is doing right now.  It is a MODEL ESTIMATE read off the run\'s own transcript, not a measurement — `estimated` says so on every answer, and a run whose progress cannot be told reports phase \"unknown\" with no percentage rather than a zero it does not mean. A session that has already finished answers from its own status instead, and is marked not estimated.  The list and detail reads carry the same value; this address is the one that WAITS. Where the stored estimate has gone stale it is remade before answering, so a human deciding whether to step into a run gets a current reading rather than the last poll\'s — which costs one small completion, charged to the same wallet the session already names, at most once every thirty seconds per run.
      * Returns how far along one run is: the share of its goal that is done, whether it is running, blocked or finished, and a line saying what it is doing right now.
      */
-    async getAgentsSessionsByIdProgress(requestParameters: AgentsApiGetAgentsSessionsByIdProgressRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SessionProgress> {
-        const response = await this.getAgentsSessionsByIdProgressRaw(requestParameters, initOverrides);
+    async getAgentSessionsByIdProgress(requestParameters: AgentApiGetAgentSessionsByIdProgressRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SessionProgress> {
+        const response = await this.getAgentSessionsByIdProgressRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1057,11 +1057,11 @@ export class AgentsApi extends runtime.BaseAPI {
      * Returns the subagent-flow graph rooted at this session: the session, its children, their children, each node carrying its own event count. One indexed read pulls the whole flow (every node of a flow shares a root id), so the shape is assembled in memory rather than by walking the store per node.
      * Returns the subagent-flow graph rooted at this session: the session, its children, their children, each node carrying its own event count.
      */
-    async getAgentsSessionsByIdTreeRaw(requestParameters: AgentsApiGetAgentsSessionsByIdTreeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TreeNode>> {
+    async getAgentSessionsByIdTreeRaw(requestParameters: AgentApiGetAgentSessionsByIdTreeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TreeNode>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling getAgentsSessionsByIdTree().'
+                'Required parameter "id" was null or undefined when calling getAgentSessionsByIdTree().'
             );
         }
 
@@ -1078,7 +1078,7 @@ export class AgentsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/agents/sessions/{id}/tree`;
+        let urlPath = `/v1/agent/sessions/{id}/tree`;
         urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
         const response = await this.request({
@@ -1095,8 +1095,8 @@ export class AgentsApi extends runtime.BaseAPI {
      * Returns the subagent-flow graph rooted at this session: the session, its children, their children, each node carrying its own event count. One indexed read pulls the whole flow (every node of a flow shares a root id), so the shape is assembled in memory rather than by walking the store per node.
      * Returns the subagent-flow graph rooted at this session: the session, its children, their children, each node carrying its own event count.
      */
-    async getAgentsSessionsByIdTree(requestParameters: AgentsApiGetAgentsSessionsByIdTreeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TreeNode> {
-        const response = await this.getAgentsSessionsByIdTreeRaw(requestParameters, initOverrides);
+    async getAgentSessionsByIdTree(requestParameters: AgentApiGetAgentSessionsByIdTreeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TreeNode> {
+        const response = await this.getAgentSessionsByIdTreeRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1104,7 +1104,7 @@ export class AgentsApi extends runtime.BaseAPI {
      * Holds the connection open as text/event-stream and pushes a frame each time the org\'s registry moves: an `event: session` frame carrying the same session shape the list and detail reads answer with (a registration, an update, or a login-manager revoke tearing a session down), and an `event: event` frame carrying one appended turn. Optional ?root=<session id> narrows the feed to a single subagent tree.  Requires a validated principal carrying an org; 403 without one. Org-scoped fail-closed: the bus filters on tenant before it fans out, so a subscriber only ever receives its own org\'s updates, and ?root= narrows that further but can never widen it.  Delivery is best-effort and the GET reads remain the source of truth. A subscriber that falls more than 256 frames behind is DROPPED — its channel is closed and the stream ends — so one stuck dashboard can never back-pressure a session write; the client reconnects and re-reads the session endpoints to resynchronise. A `: ping` comment every 25 seconds holds the connection open through proxies and is how a departed client is noticed.
      * Live session and event updates for the caller\'s org, as Server-Sent Events.
      */
-    async getAgentsSessionsStreamRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getAgentSessionsStreamRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -1118,7 +1118,7 @@ export class AgentsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/agents/sessions/stream`;
+        let urlPath = `/v1/agent/sessions/stream`;
 
         const response = await this.request({
             path: urlPath,
@@ -1134,15 +1134,15 @@ export class AgentsApi extends runtime.BaseAPI {
      * Holds the connection open as text/event-stream and pushes a frame each time the org\'s registry moves: an `event: session` frame carrying the same session shape the list and detail reads answer with (a registration, an update, or a login-manager revoke tearing a session down), and an `event: event` frame carrying one appended turn. Optional ?root=<session id> narrows the feed to a single subagent tree.  Requires a validated principal carrying an org; 403 without one. Org-scoped fail-closed: the bus filters on tenant before it fans out, so a subscriber only ever receives its own org\'s updates, and ?root= narrows that further but can never widen it.  Delivery is best-effort and the GET reads remain the source of truth. A subscriber that falls more than 256 frames behind is DROPPED — its channel is closed and the stream ends — so one stuck dashboard can never back-pressure a session write; the client reconnects and re-reads the session endpoints to resynchronise. A `: ping` comment every 25 seconds holds the connection open through proxies and is how a departed client is noticed.
      * Live session and event updates for the caller\'s org, as Server-Sent Events.
      */
-    async getAgentsSessionsStream(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getAgentsSessionsStreamRaw(initOverrides);
+    async getAgentSessionsStream(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getAgentSessionsStreamRaw(initOverrides);
     }
 
     /**
      * Returns every machine registered to the caller\'s org, newest first, each with its live session load.
      * Returns every machine registered to the caller\'s org, newest first, each with its live session load.
      */
-    async getAgentsTargetsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TargetList>> {
+    async getAgentTargetsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TargetList>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -1156,7 +1156,7 @@ export class AgentsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/agents/targets`;
+        let urlPath = `/v1/agent/targets`;
 
         const response = await this.request({
             path: urlPath,
@@ -1172,8 +1172,8 @@ export class AgentsApi extends runtime.BaseAPI {
      * Returns every machine registered to the caller\'s org, newest first, each with its live session load.
      * Returns every machine registered to the caller\'s org, newest first, each with its live session load.
      */
-    async getAgentsTargets(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TargetList> {
-        const response = await this.getAgentsTargetsRaw(initOverrides);
+    async getAgentTargets(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TargetList> {
+        const response = await this.getAgentTargetsRaw(initOverrides);
         return await response.value();
     }
 
@@ -1181,11 +1181,11 @@ export class AgentsApi extends runtime.BaseAPI {
      * Returns one registered machine, with its live session load.
      * Returns one registered machine, with its live session load.
      */
-    async getAgentsTargetsByIdRaw(requestParameters: AgentsApiGetAgentsTargetsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TargetView>> {
+    async getAgentTargetsByIdRaw(requestParameters: AgentApiGetAgentTargetsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TargetView>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling getAgentsTargetsById().'
+                'Required parameter "id" was null or undefined when calling getAgentTargetsById().'
             );
         }
 
@@ -1202,7 +1202,7 @@ export class AgentsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/agents/targets/{id}`;
+        let urlPath = `/v1/agent/targets/{id}`;
         urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
         const response = await this.request({
@@ -1219,8 +1219,8 @@ export class AgentsApi extends runtime.BaseAPI {
      * Returns one registered machine, with its live session load.
      * Returns one registered machine, with its live session load.
      */
-    async getAgentsTargetsById(requestParameters: AgentsApiGetAgentsTargetsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TargetView> {
-        const response = await this.getAgentsTargetsByIdRaw(requestParameters, initOverrides);
+    async getAgentTargetsById(requestParameters: AgentApiGetAgentTargetsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TargetView> {
+        const response = await this.getAgentTargetsByIdRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1228,18 +1228,18 @@ export class AgentsApi extends runtime.BaseAPI {
      * Changes an agent in place. Every field is optional; a field the request omits keeps its stored value. The resulting mode+schedule are re-validated together, so a partial update can never leave a long-running agent without the cron the scheduler needs to fire it, and a transition INTO long-running counts against the per-org cap on scheduled agents.
      * Changes an agent in place.
      */
-    async patchAgentsByRefRaw(requestParameters: AgentsApiPatchAgentsByRefRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AgentView>> {
+    async patchAgentByRefRaw(requestParameters: AgentApiPatchAgentByRefRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AgentView>> {
         if (requestParameters['ref'] == null) {
             throw new runtime.RequiredError(
                 'ref',
-                'Required parameter "ref" was null or undefined when calling patchAgentsByRef().'
+                'Required parameter "ref" was null or undefined when calling patchAgentByRef().'
             );
         }
 
         if (requestParameters['updateAgentIn'] == null) {
             throw new runtime.RequiredError(
                 'updateAgentIn',
-                'Required parameter "updateAgentIn" was null or undefined when calling patchAgentsByRef().'
+                'Required parameter "updateAgentIn" was null or undefined when calling patchAgentByRef().'
             );
         }
 
@@ -1258,7 +1258,7 @@ export class AgentsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/agents/{ref}`;
+        let urlPath = `/v1/agent/{ref}`;
         urlPath = urlPath.replace(`{${"ref"}}`, encodeURIComponent(String(requestParameters['ref'])));
 
         const response = await this.request({
@@ -1276,8 +1276,8 @@ export class AgentsApi extends runtime.BaseAPI {
      * Changes an agent in place. Every field is optional; a field the request omits keeps its stored value. The resulting mode+schedule are re-validated together, so a partial update can never leave a long-running agent without the cron the scheduler needs to fire it, and a transition INTO long-running counts against the per-org cap on scheduled agents.
      * Changes an agent in place.
      */
-    async patchAgentsByRef(requestParameters: AgentsApiPatchAgentsByRefRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AgentView> {
-        const response = await this.patchAgentsByRefRaw(requestParameters, initOverrides);
+    async patchAgentByRef(requestParameters: AgentApiPatchAgentByRefRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AgentView> {
+        const response = await this.patchAgentByRefRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1285,18 +1285,18 @@ export class AgentsApi extends runtime.BaseAPI {
      * Updates a session\'s surface-owned truth: its status, its title, the run-target it is dispatched to, and the product it built plus whether that build\'s story is public. A FINISHED session stays finished — reopening a done/error run would fabricate liveness — and publishing is refused unless the session names the project it built, because the public build route is keyed on (org, project).
      * Updates a session\'s surface-owned truth: its status, its title, the run-target it is dispatched to, and the product it built plus whether that build\'s story is public.
      */
-    async patchAgentsSessionsByIdRaw(requestParameters: AgentsApiPatchAgentsSessionsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SessionView>> {
+    async patchAgentSessionsByIdRaw(requestParameters: AgentApiPatchAgentSessionsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SessionView>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling patchAgentsSessionsById().'
+                'Required parameter "id" was null or undefined when calling patchAgentSessionsById().'
             );
         }
 
         if (requestParameters['patchSessionIn'] == null) {
             throw new runtime.RequiredError(
                 'patchSessionIn',
-                'Required parameter "patchSessionIn" was null or undefined when calling patchAgentsSessionsById().'
+                'Required parameter "patchSessionIn" was null or undefined when calling patchAgentSessionsById().'
             );
         }
 
@@ -1315,7 +1315,7 @@ export class AgentsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/agents/sessions/{id}`;
+        let urlPath = `/v1/agent/sessions/{id}`;
         urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
         const response = await this.request({
@@ -1333,8 +1333,8 @@ export class AgentsApi extends runtime.BaseAPI {
      * Updates a session\'s surface-owned truth: its status, its title, the run-target it is dispatched to, and the product it built plus whether that build\'s story is public. A FINISHED session stays finished — reopening a done/error run would fabricate liveness — and publishing is refused unless the session names the project it built, because the public build route is keyed on (org, project).
      * Updates a session\'s surface-owned truth: its status, its title, the run-target it is dispatched to, and the product it built plus whether that build\'s story is public.
      */
-    async patchAgentsSessionsById(requestParameters: AgentsApiPatchAgentsSessionsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SessionView> {
-        const response = await this.patchAgentsSessionsByIdRaw(requestParameters, initOverrides);
+    async patchAgentSessionsById(requestParameters: AgentApiPatchAgentSessionsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SessionView> {
+        const response = await this.patchAgentSessionsByIdRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1342,18 +1342,18 @@ export class AgentsApi extends runtime.BaseAPI {
      * Updates one machine in place. Every field is optional; a field the request omits is left alone. A metrics patch IS a heartbeat — the server stamps its own clock, so a client can neither forge nor backdate staleness.
      * Updates one machine in place.
      */
-    async patchAgentsTargetsByIdRaw(requestParameters: AgentsApiPatchAgentsTargetsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TargetView>> {
+    async patchAgentTargetsByIdRaw(requestParameters: AgentApiPatchAgentTargetsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TargetView>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling patchAgentsTargetsById().'
+                'Required parameter "id" was null or undefined when calling patchAgentTargetsById().'
             );
         }
 
         if (requestParameters['patchTargetIn'] == null) {
             throw new runtime.RequiredError(
                 'patchTargetIn',
-                'Required parameter "patchTargetIn" was null or undefined when calling patchAgentsTargetsById().'
+                'Required parameter "patchTargetIn" was null or undefined when calling patchAgentTargetsById().'
             );
         }
 
@@ -1372,7 +1372,7 @@ export class AgentsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/agents/targets/{id}`;
+        let urlPath = `/v1/agent/targets/{id}`;
         urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
         const response = await this.request({
@@ -1390,8 +1390,8 @@ export class AgentsApi extends runtime.BaseAPI {
      * Updates one machine in place. Every field is optional; a field the request omits is left alone. A metrics patch IS a heartbeat — the server stamps its own clock, so a client can neither forge nor backdate staleness.
      * Updates one machine in place.
      */
-    async patchAgentsTargetsById(requestParameters: AgentsApiPatchAgentsTargetsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TargetView> {
-        const response = await this.patchAgentsTargetsByIdRaw(requestParameters, initOverrides);
+    async patchAgentTargetsById(requestParameters: AgentApiPatchAgentTargetsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TargetView> {
+        const response = await this.patchAgentTargetsByIdRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1399,11 +1399,11 @@ export class AgentsApi extends runtime.BaseAPI {
      * Defines an agent in the caller\'s org: a model, a system prompt (instructions) and a set of tool names. The name must be unique in the org and match ^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$. An omitted model takes the deployment\'s configured default; a named one is checked against the gateway\'s served catalog, so a model this deployment never serves is refused here rather than failing at run time. A long-running agent must carry a 5-field cron schedule (the scheduler would otherwise never fire it) and counts against a per-org cap on scheduled agents.
      * Defines an agent in the caller\'s org: a model, a system prompt (instructions) and a set of tool names.
      */
-    async postAgentsRaw(requestParameters: AgentsApiPostAgentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AgentView>> {
+    async postAgentRaw(requestParameters: AgentApiPostAgentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AgentView>> {
         if (requestParameters['createAgentIn'] == null) {
             throw new runtime.RequiredError(
                 'createAgentIn',
-                'Required parameter "createAgentIn" was null or undefined when calling postAgents().'
+                'Required parameter "createAgentIn" was null or undefined when calling postAgent().'
             );
         }
 
@@ -1422,7 +1422,7 @@ export class AgentsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/agents`;
+        let urlPath = `/v1/agent`;
 
         const response = await this.request({
             path: urlPath,
@@ -1439,8 +1439,8 @@ export class AgentsApi extends runtime.BaseAPI {
      * Defines an agent in the caller\'s org: a model, a system prompt (instructions) and a set of tool names. The name must be unique in the org and match ^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$. An omitted model takes the deployment\'s configured default; a named one is checked against the gateway\'s served catalog, so a model this deployment never serves is refused here rather than failing at run time. A long-running agent must carry a 5-field cron schedule (the scheduler would otherwise never fire it) and counts against a per-org cap on scheduled agents.
      * Defines an agent in the caller\'s org: a model, a system prompt (instructions) and a set of tool names.
      */
-    async postAgents(requestParameters: AgentsApiPostAgentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AgentView> {
-        const response = await this.postAgentsRaw(requestParameters, initOverrides);
+    async postAgent(requestParameters: AgentApiPostAgentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AgentView> {
+        const response = await this.postAgentRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1448,11 +1448,11 @@ export class AgentsApi extends runtime.BaseAPI {
      * Composes the agent\'s stored instructions with the caller\'s `input`, executes one real chat completion through the same in-process AI client the rest of the console uses, and answers with the run that was recorded: its id, status, model, output, duration and error. Every run this returns reflects an execution that actually happened — a model failure is recorded and reported, never hidden and never fabricated. A transient upstream failure (429, 5xx, empty choices) is retried up to three times with jittered backoff, and a configured failover model is tried before the run is called an error.  `ref` is the agent\'s public `agent_…` id or its org-unique name; either resolves the same agent, and it must belong to the caller\'s org, so an agent in another tenant is a 404 exactly like one that does not exist. A validated principal is required and the check is made twice on purpose: this route MOVES MONEY, so the debit\'s principal requirement is asserted where the money moves rather than inherited from the tenant lookup.  The org\'s balance is authorized BEFORE any inference, so an unfunded tenant gets 402 and no free compute, and a billing plane that cannot answer gets 503 rather than a free run. The flat per-run fee is an operator knob; setting it to zero makes runs free and removes the balance gate with them. Only a SUCCESSFUL run is billed, attributed to the model actually used — a failover run bills the model it fell over to, not the one it started on. A deployment with no inference wired answers 503 before any of this.  THE RULE A READER GETS WRONG: a failed run is a 502 whose body is the RUN, not an error envelope. The execution happened, the run was persisted to this agent\'s history, and its `error` field is the product — so a client that treats every non-2xx as an opaque failure throws away the only account of what went wrong. Each run also opens a root session in the live session registry, best-effort: a bookkeeping failure there never fails the run, because the run and its billing already happened.
      * Run one of your org\'s agents and get the recorded run back.
      */
-    async postAgentsByRefRunRaw(requestParameters: AgentsApiPostAgentsByRefRunRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postAgentByRefRunRaw(requestParameters: AgentApiPostAgentByRefRunRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['ref'] == null) {
             throw new runtime.RequiredError(
                 'ref',
-                'Required parameter "ref" was null or undefined when calling postAgentsByRefRun().'
+                'Required parameter "ref" was null or undefined when calling postAgentByRefRun().'
             );
         }
 
@@ -1469,7 +1469,7 @@ export class AgentsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/agents/{ref}/run`;
+        let urlPath = `/v1/agent/{ref}/run`;
         urlPath = urlPath.replace(`{${"ref"}}`, encodeURIComponent(String(requestParameters['ref'])));
 
         const response = await this.request({
@@ -1486,15 +1486,15 @@ export class AgentsApi extends runtime.BaseAPI {
      * Composes the agent\'s stored instructions with the caller\'s `input`, executes one real chat completion through the same in-process AI client the rest of the console uses, and answers with the run that was recorded: its id, status, model, output, duration and error. Every run this returns reflects an execution that actually happened — a model failure is recorded and reported, never hidden and never fabricated. A transient upstream failure (429, 5xx, empty choices) is retried up to three times with jittered backoff, and a configured failover model is tried before the run is called an error.  `ref` is the agent\'s public `agent_…` id or its org-unique name; either resolves the same agent, and it must belong to the caller\'s org, so an agent in another tenant is a 404 exactly like one that does not exist. A validated principal is required and the check is made twice on purpose: this route MOVES MONEY, so the debit\'s principal requirement is asserted where the money moves rather than inherited from the tenant lookup.  The org\'s balance is authorized BEFORE any inference, so an unfunded tenant gets 402 and no free compute, and a billing plane that cannot answer gets 503 rather than a free run. The flat per-run fee is an operator knob; setting it to zero makes runs free and removes the balance gate with them. Only a SUCCESSFUL run is billed, attributed to the model actually used — a failover run bills the model it fell over to, not the one it started on. A deployment with no inference wired answers 503 before any of this.  THE RULE A READER GETS WRONG: a failed run is a 502 whose body is the RUN, not an error envelope. The execution happened, the run was persisted to this agent\'s history, and its `error` field is the product — so a client that treats every non-2xx as an opaque failure throws away the only account of what went wrong. Each run also opens a root session in the live session registry, best-effort: a bookkeeping failure there never fails the run, because the run and its billing already happened.
      * Run one of your org\'s agents and get the recorded run back.
      */
-    async postAgentsByRefRun(requestParameters: AgentsApiPostAgentsByRefRunRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postAgentsByRefRunRaw(requestParameters, initOverrides);
+    async postAgentByRefRun(requestParameters: AgentApiPostAgentByRefRunRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAgentByRefRunRaw(requestParameters, initOverrides);
     }
 
     /**
      * Answers one turn of a conversation with four things: the model\'s `reply`, the `actions` the server executed on the caller\'s behalf, the `ops` the client must apply itself, and the `conversationId` the turn was recorded under.  The split between actions and ops is the rule most easily got wrong. A tool call is executed HERE only when the chosen preset is server-executing AND the tool resolves in the caller\'s own scope; every other call is handed back as an op for the client to apply to its own graph or UI. A tool that fails still comes back as an action, carrying its error rather than failing the round.  `preset` selects the system prompt and the tool set (`capability` is a legacy alias for it); an unknown one is refused. `conversationId` continues an existing thread, and its absence starts one. A validated principal with a non-empty org is required — the org is the sole authority for both persistence and tool scope, and is NEVER read from the body.  A completion refused for the caller\'s own reason — 402 insufficient balance, 429, 403 — is relayed with its own status and body verbatim, so the real billing message reaches the client instead of an opaque gateway error. Only a genuine upstream fault becomes a 502.
      * Run one tool-calling round against your org\'s own tools
      */
-    async postAgentsChatRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postAgentChatRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -1508,7 +1508,7 @@ export class AgentsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/agents/chat`;
+        let urlPath = `/v1/agent/chat`;
 
         const response = await this.request({
             path: urlPath,
@@ -1524,15 +1524,15 @@ export class AgentsApi extends runtime.BaseAPI {
      * Answers one turn of a conversation with four things: the model\'s `reply`, the `actions` the server executed on the caller\'s behalf, the `ops` the client must apply itself, and the `conversationId` the turn was recorded under.  The split between actions and ops is the rule most easily got wrong. A tool call is executed HERE only when the chosen preset is server-executing AND the tool resolves in the caller\'s own scope; every other call is handed back as an op for the client to apply to its own graph or UI. A tool that fails still comes back as an action, carrying its error rather than failing the round.  `preset` selects the system prompt and the tool set (`capability` is a legacy alias for it); an unknown one is refused. `conversationId` continues an existing thread, and its absence starts one. A validated principal with a non-empty org is required — the org is the sole authority for both persistence and tool scope, and is NEVER read from the body.  A completion refused for the caller\'s own reason — 402 insufficient balance, 429, 403 — is relayed with its own status and body verbatim, so the real billing message reaches the client instead of an opaque gateway error. Only a genuine upstream fault becomes a 502.
      * Run one tool-calling round against your org\'s own tools
      */
-    async postAgentsChat(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postAgentsChatRaw(initOverrides);
+    async postAgentChat(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAgentChatRaw(initOverrides);
     }
 
     /**
      * Writes turns to the caller\'s thread store without running a completion, and answers the `conversationId` they were written under. An absent `conversationId` opens a new thread; supplying one appends to it.  This is for a client that streams its own turn through /v1/chat/completions and still wants the conversation in its history — the round records what IT answers, and is otherwise the only writer. It takes the same store, the same per-org isolation and the same notion of a thread: what is recorded here reads back through the two GETs beside it and the round can continue it by id. A validated principal with a non-empty org is required; 403 without one.
      * Record turns in a conversation
      */
-    async postAgentsChatConversationsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postAgentChatConversationsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -1546,7 +1546,7 @@ export class AgentsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/agents/chat/conversations`;
+        let urlPath = `/v1/agent/chat/conversations`;
 
         const response = await this.request({
             path: urlPath,
@@ -1562,19 +1562,18 @@ export class AgentsApi extends runtime.BaseAPI {
      * Writes turns to the caller\'s thread store without running a completion, and answers the `conversationId` they were written under. An absent `conversationId` opens a new thread; supplying one appends to it.  This is for a client that streams its own turn through /v1/chat/completions and still wants the conversation in its history — the round records what IT answers, and is otherwise the only writer. It takes the same store, the same per-org isolation and the same notion of a thread: what is recorded here reads back through the two GETs beside it and the round can continue it by id. A validated principal with a non-empty org is required; 403 without one.
      * Record turns in a conversation
      */
-    async postAgentsChatConversations(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postAgentsChatConversationsRaw(initOverrides);
+    async postAgentChatConversations(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postAgentChatConversationsRaw(initOverrides);
     }
 
     /**
-     * Runs a coding task on a repository: clones it into a sandbox, lets a model read and edit the code, run the tests, and push the work to a branch. Say the thing you want done — \"fix the failing auth test in hanzoai/cloud\" — and the run infers the repo, the branch and the plan. No prefix, no ceremony.  It answers 202 with the run\'s handle the moment the run is ADMITTED — not when it finishes. A coding run takes minutes; holding a request open for one would tie a connection to a model loop and give the caller nothing it cannot get better from the session stream.  The handle is a session id, and that is deliberate: the session is already the run\'s durable record and its live stream (/v1/agents/sessions/{id}/stream), so this op does not grow a progress endpoint, a status endpoint or a cancel endpoint of its own. One way to watch a run, whoever started it.  It is also how work CONTINUES. Pass an earlier run\'s session as `after` and this one starts from where that one stopped, so \"now add tests for it\" builds on the branch already pushed instead of a fresh clone. The follow-up still gets its own branch and its own session — one run, one branch, always reviewable on its own.
      * Start one autonomous coding run against a repo in the caller\'s org
      */
-    async postAgentsCodingRaw(requestParameters: AgentsApiPostAgentsCodingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CodingStarted>> {
+    async postAgentCodingRaw(requestParameters: AgentApiPostAgentCodingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CodingStarted>> {
         if (requestParameters['codingStartIn'] == null) {
             throw new runtime.RequiredError(
                 'codingStartIn',
-                'Required parameter "codingStartIn" was null or undefined when calling postAgentsCoding().'
+                'Required parameter "codingStartIn" was null or undefined when calling postAgentCoding().'
             );
         }
 
@@ -1593,7 +1592,7 @@ export class AgentsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/agents/coding`;
+        let urlPath = `/v1/agent/coding`;
 
         const response = await this.request({
             path: urlPath,
@@ -1607,11 +1606,10 @@ export class AgentsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Runs a coding task on a repository: clones it into a sandbox, lets a model read and edit the code, run the tests, and push the work to a branch. Say the thing you want done — \"fix the failing auth test in hanzoai/cloud\" — and the run infers the repo, the branch and the plan. No prefix, no ceremony.  It answers 202 with the run\'s handle the moment the run is ADMITTED — not when it finishes. A coding run takes minutes; holding a request open for one would tie a connection to a model loop and give the caller nothing it cannot get better from the session stream.  The handle is a session id, and that is deliberate: the session is already the run\'s durable record and its live stream (/v1/agents/sessions/{id}/stream), so this op does not grow a progress endpoint, a status endpoint or a cancel endpoint of its own. One way to watch a run, whoever started it.  It is also how work CONTINUES. Pass an earlier run\'s session as `after` and this one starts from where that one stopped, so \"now add tests for it\" builds on the branch already pushed instead of a fresh clone. The follow-up still gets its own branch and its own session — one run, one branch, always reviewable on its own.
      * Start one autonomous coding run against a repo in the caller\'s org
      */
-    async postAgentsCoding(requestParameters: AgentsApiPostAgentsCodingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CodingStarted> {
-        const response = await this.postAgentsCodingRaw(requestParameters, initOverrides);
+    async postAgentCoding(requestParameters: AgentApiPostAgentCodingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CodingStarted> {
+        const response = await this.postAgentCodingRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1619,11 +1617,11 @@ export class AgentsApi extends runtime.BaseAPI {
      * Opens a live agent session in the caller\'s org — the row every surface (the CLI\'s outer agent, hanzo.bot, the console, chat) hangs its activity off. A session with a parentSessionId becomes a subagent of that session and inherits its root, so one flow is one tree; without one it is itself a root. Registering with a terminal status records a session that has already finished.
      * Opens a live agent session in the caller\'s org — the row every surface (the CLI\'s outer agent, hanzo.bot, the console, chat) hangs its activity off.
      */
-    async postAgentsSessionsRaw(requestParameters: AgentsApiPostAgentsSessionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SessionView>> {
+    async postAgentSessionsRaw(requestParameters: AgentApiPostAgentSessionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SessionView>> {
         if (requestParameters['registerReq'] == null) {
             throw new runtime.RequiredError(
                 'registerReq',
-                'Required parameter "registerReq" was null or undefined when calling postAgentsSessions().'
+                'Required parameter "registerReq" was null or undefined when calling postAgentSessions().'
             );
         }
 
@@ -1642,7 +1640,7 @@ export class AgentsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/agents/sessions`;
+        let urlPath = `/v1/agent/sessions`;
 
         const response = await this.request({
             path: urlPath,
@@ -1659,8 +1657,8 @@ export class AgentsApi extends runtime.BaseAPI {
      * Opens a live agent session in the caller\'s org — the row every surface (the CLI\'s outer agent, hanzo.bot, the console, chat) hangs its activity off. A session with a parentSessionId becomes a subagent of that session and inherits its root, so one flow is one tree; without one it is itself a root. Registering with a terminal status records a session that has already finished.
      * Opens a live agent session in the caller\'s org — the row every surface (the CLI\'s outer agent, hanzo.bot, the console, chat) hangs its activity off.
      */
-    async postAgentsSessions(requestParameters: AgentsApiPostAgentsSessionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SessionView> {
-        const response = await this.postAgentsSessionsRaw(requestParameters, initOverrides);
+    async postAgentSessions(requestParameters: AgentApiPostAgentSessionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SessionView> {
+        const response = await this.postAgentSessionsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1668,18 +1666,18 @@ export class AgentsApi extends runtime.BaseAPI {
      * Records one turn of a session\'s transcript and answers 201 with it.  A `progress` turn additionally MOVES THE SESSION\'S PROGRESS, marked as the run\'s own word rather than an estimate, and pushes the updated session onto the live stream — so a board\'s bar follows the run without polling and without a second write path. See progress.go.  THE TURN IS SCANNED BEFORE IT IS STORED. The same engine the code-security surface runs reads the payload at this boundary, and a credential in it refuses the append with 422 rather than redacting it — a redacted transcript is one that still had the secret in it once, and this way the author learns which value to rotate. The refusal carries every finding: the rule, the severity, the line, a MASKED preview and the fingerprint. The secret is never in the answer.
      * Records one turn of a session\'s transcript and answers 201 with it.
      */
-    async postAgentsSessionsByIdEventsRaw(requestParameters: AgentsApiPostAgentsSessionsByIdEventsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<EventView>> {
+    async postAgentSessionsByIdEventsRaw(requestParameters: AgentApiPostAgentSessionsByIdEventsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<EventView>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling postAgentsSessionsByIdEvents().'
+                'Required parameter "id" was null or undefined when calling postAgentSessionsByIdEvents().'
             );
         }
 
         if (requestParameters['eventIn'] == null) {
             throw new runtime.RequiredError(
                 'eventIn',
-                'Required parameter "eventIn" was null or undefined when calling postAgentsSessionsByIdEvents().'
+                'Required parameter "eventIn" was null or undefined when calling postAgentSessionsByIdEvents().'
             );
         }
 
@@ -1698,7 +1696,7 @@ export class AgentsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/agents/sessions/{id}/events`;
+        let urlPath = `/v1/agent/sessions/{id}/events`;
         urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
         const response = await this.request({
@@ -1716,8 +1714,8 @@ export class AgentsApi extends runtime.BaseAPI {
      * Records one turn of a session\'s transcript and answers 201 with it.  A `progress` turn additionally MOVES THE SESSION\'S PROGRESS, marked as the run\'s own word rather than an estimate, and pushes the updated session onto the live stream — so a board\'s bar follows the run without polling and without a second write path. See progress.go.  THE TURN IS SCANNED BEFORE IT IS STORED. The same engine the code-security surface runs reads the payload at this boundary, and a credential in it refuses the append with 422 rather than redacting it — a redacted transcript is one that still had the secret in it once, and this way the author learns which value to rotate. The refusal carries every finding: the rule, the severity, the line, a MASKED preview and the fingerprint. The secret is never in the answer.
      * Records one turn of a session\'s transcript and answers 201 with it.
      */
-    async postAgentsSessionsByIdEvents(requestParameters: AgentsApiPostAgentsSessionsByIdEventsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<EventView> {
-        const response = await this.postAgentsSessionsByIdEventsRaw(requestParameters, initOverrides);
+    async postAgentSessionsByIdEvents(requestParameters: AgentApiPostAgentSessionsByIdEventsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<EventView> {
+        const response = await this.postAgentSessionsByIdEventsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1725,18 +1723,18 @@ export class AgentsApi extends runtime.BaseAPI {
      * Sends a steering message to a running session — the endpoint a human or another agent interrupts through. It requires a `message` or a `payload`; the other three commands do not.
      * Sends a steering message to a running session — the endpoint a human or another agent interrupts through.
      */
-    async postAgentsSessionsByIdMessageRaw(requestParameters: AgentsApiPostAgentsSessionsByIdMessageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ControlResult>> {
+    async postAgentSessionsByIdMessageRaw(requestParameters: AgentApiPostAgentSessionsByIdMessageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ControlResult>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling postAgentsSessionsByIdMessage().'
+                'Required parameter "id" was null or undefined when calling postAgentSessionsByIdMessage().'
             );
         }
 
         if (requestParameters['controlIn'] == null) {
             throw new runtime.RequiredError(
                 'controlIn',
-                'Required parameter "controlIn" was null or undefined when calling postAgentsSessionsByIdMessage().'
+                'Required parameter "controlIn" was null or undefined when calling postAgentSessionsByIdMessage().'
             );
         }
 
@@ -1755,7 +1753,7 @@ export class AgentsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/agents/sessions/{id}/message`;
+        let urlPath = `/v1/agent/sessions/{id}/message`;
         urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
         const response = await this.request({
@@ -1773,8 +1771,8 @@ export class AgentsApi extends runtime.BaseAPI {
      * Sends a steering message to a running session — the endpoint a human or another agent interrupts through. It requires a `message` or a `payload`; the other three commands do not.
      * Sends a steering message to a running session — the endpoint a human or another agent interrupts through.
      */
-    async postAgentsSessionsByIdMessage(requestParameters: AgentsApiPostAgentsSessionsByIdMessageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ControlResult> {
-        const response = await this.postAgentsSessionsByIdMessageRaw(requestParameters, initOverrides);
+    async postAgentSessionsByIdMessage(requestParameters: AgentApiPostAgentSessionsByIdMessageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ControlResult> {
+        const response = await this.postAgentSessionsByIdMessageRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1782,18 +1780,18 @@ export class AgentsApi extends runtime.BaseAPI {
      * Asks a running session to pause. Recorded durably, and forwarded to the durable-execution engine when the session is task-backed.
      * Asks a running session to pause.
      */
-    async postAgentsSessionsByIdPauseRaw(requestParameters: AgentsApiPostAgentsSessionsByIdPauseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ControlResult>> {
+    async postAgentSessionsByIdPauseRaw(requestParameters: AgentApiPostAgentSessionsByIdPauseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ControlResult>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling postAgentsSessionsByIdPause().'
+                'Required parameter "id" was null or undefined when calling postAgentSessionsByIdPause().'
             );
         }
 
         if (requestParameters['controlIn'] == null) {
             throw new runtime.RequiredError(
                 'controlIn',
-                'Required parameter "controlIn" was null or undefined when calling postAgentsSessionsByIdPause().'
+                'Required parameter "controlIn" was null or undefined when calling postAgentSessionsByIdPause().'
             );
         }
 
@@ -1812,7 +1810,7 @@ export class AgentsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/agents/sessions/{id}/pause`;
+        let urlPath = `/v1/agent/sessions/{id}/pause`;
         urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
         const response = await this.request({
@@ -1830,8 +1828,8 @@ export class AgentsApi extends runtime.BaseAPI {
      * Asks a running session to pause. Recorded durably, and forwarded to the durable-execution engine when the session is task-backed.
      * Asks a running session to pause.
      */
-    async postAgentsSessionsByIdPause(requestParameters: AgentsApiPostAgentsSessionsByIdPauseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ControlResult> {
-        const response = await this.postAgentsSessionsByIdPauseRaw(requestParameters, initOverrides);
+    async postAgentSessionsByIdPause(requestParameters: AgentApiPostAgentSessionsByIdPauseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ControlResult> {
+        const response = await this.postAgentSessionsByIdPauseRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1839,18 +1837,18 @@ export class AgentsApi extends runtime.BaseAPI {
      * Asks a paused session to continue, on the same terms as a pause.
      * Asks a paused session to continue, on the same terms as a pause.
      */
-    async postAgentsSessionsByIdResumeRaw(requestParameters: AgentsApiPostAgentsSessionsByIdResumeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ControlResult>> {
+    async postAgentSessionsByIdResumeRaw(requestParameters: AgentApiPostAgentSessionsByIdResumeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ControlResult>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling postAgentsSessionsByIdResume().'
+                'Required parameter "id" was null or undefined when calling postAgentSessionsByIdResume().'
             );
         }
 
         if (requestParameters['controlIn'] == null) {
             throw new runtime.RequiredError(
                 'controlIn',
-                'Required parameter "controlIn" was null or undefined when calling postAgentsSessionsByIdResume().'
+                'Required parameter "controlIn" was null or undefined when calling postAgentSessionsByIdResume().'
             );
         }
 
@@ -1869,7 +1867,7 @@ export class AgentsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/agents/sessions/{id}/resume`;
+        let urlPath = `/v1/agent/sessions/{id}/resume`;
         urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
         const response = await this.request({
@@ -1887,8 +1885,8 @@ export class AgentsApi extends runtime.BaseAPI {
      * Asks a paused session to continue, on the same terms as a pause.
      * Asks a paused session to continue, on the same terms as a pause.
      */
-    async postAgentsSessionsByIdResume(requestParameters: AgentsApiPostAgentsSessionsByIdResumeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ControlResult> {
-        const response = await this.postAgentsSessionsByIdResumeRaw(requestParameters, initOverrides);
+    async postAgentSessionsByIdResume(requestParameters: AgentApiPostAgentSessionsByIdResumeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ControlResult> {
+        const response = await this.postAgentSessionsByIdResumeRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1896,18 +1894,18 @@ export class AgentsApi extends runtime.BaseAPI {
      * Ends a running session. `message` is recorded as the cancellation reason, which is what a later reader of the transcript sees.  STOPPING IS NOT DELETING: the session, its transcript and anything it produced stay readable. A session that has already finished is 409 rather than a second stop.
      * Ends a running session.
      */
-    async postAgentsSessionsByIdStopRaw(requestParameters: AgentsApiPostAgentsSessionsByIdStopRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ControlResult>> {
+    async postAgentSessionsByIdStopRaw(requestParameters: AgentApiPostAgentSessionsByIdStopRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ControlResult>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling postAgentsSessionsByIdStop().'
+                'Required parameter "id" was null or undefined when calling postAgentSessionsByIdStop().'
             );
         }
 
         if (requestParameters['controlIn'] == null) {
             throw new runtime.RequiredError(
                 'controlIn',
-                'Required parameter "controlIn" was null or undefined when calling postAgentsSessionsByIdStop().'
+                'Required parameter "controlIn" was null or undefined when calling postAgentSessionsByIdStop().'
             );
         }
 
@@ -1926,7 +1924,7 @@ export class AgentsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/agents/sessions/{id}/stop`;
+        let urlPath = `/v1/agent/sessions/{id}/stop`;
         urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
         const response = await this.request({
@@ -1944,8 +1942,8 @@ export class AgentsApi extends runtime.BaseAPI {
      * Ends a running session. `message` is recorded as the cancellation reason, which is what a later reader of the transcript sees.  STOPPING IS NOT DELETING: the session, its transcript and anything it produced stay readable. A session that has already finished is 409 rather than a second stop.
      * Ends a running session.
      */
-    async postAgentsSessionsByIdStop(requestParameters: AgentsApiPostAgentsSessionsByIdStopRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ControlResult> {
-        const response = await this.postAgentsSessionsByIdStopRaw(requestParameters, initOverrides);
+    async postAgentSessionsByIdStop(requestParameters: AgentApiPostAgentSessionsByIdStopRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ControlResult> {
+        const response = await this.postAgentSessionsByIdStopRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1953,11 +1951,11 @@ export class AgentsApi extends runtime.BaseAPI {
      * Registers a machine as an agent target, or re-links one that is already registered. Re-linking is idempotent and keyed on org+host+owner, so a machine that reconnects refreshes its own row rather than piling up duplicates; it answers 200, while a first registration answers 201.
      * Registers a machine as an agent target, or re-links one that is already registered.
      */
-    async postAgentsTargetsRaw(requestParameters: AgentsApiPostAgentsTargetsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TargetView>> {
+    async postAgentTargetsRaw(requestParameters: AgentApiPostAgentTargetsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TargetView>> {
         if (requestParameters['targetReq'] == null) {
             throw new runtime.RequiredError(
                 'targetReq',
-                'Required parameter "targetReq" was null or undefined when calling postAgentsTargets().'
+                'Required parameter "targetReq" was null or undefined when calling postAgentTargets().'
             );
         }
 
@@ -1976,7 +1974,7 @@ export class AgentsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/agents/targets`;
+        let urlPath = `/v1/agent/targets`;
 
         const response = await this.request({
             path: urlPath,
@@ -1993,8 +1991,8 @@ export class AgentsApi extends runtime.BaseAPI {
      * Registers a machine as an agent target, or re-links one that is already registered. Re-linking is idempotent and keyed on org+host+owner, so a machine that reconnects refreshes its own row rather than piling up duplicates; it answers 200, while a first registration answers 201.
      * Registers a machine as an agent target, or re-links one that is already registered.
      */
-    async postAgentsTargets(requestParameters: AgentsApiPostAgentsTargetsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TargetView> {
-        const response = await this.postAgentsTargetsRaw(requestParameters, initOverrides);
+    async postAgentTargets(requestParameters: AgentApiPostAgentTargetsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TargetView> {
+        const response = await this.postAgentTargetsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -2002,11 +2000,11 @@ export class AgentsApi extends runtime.BaseAPI {
      * ClaimRoutedRun is the machine\'s long poll for work: it authenticates the daemon, stamps the liveness the dispatch gate reads (the poll IS the proof a runner is listening), and waits up to 25 seconds for the next run addressed to THIS machine. It answers the run when one arrives and 204 with no body when the window elapses, on which the daemon re-polls immediately.  TWO independent proofs are required and both fail closed to the same 403: the caller must own this machine (or be an org admin) AND present its claim key in X-Target-Key. A run offered to one machine is unreachable from another\'s claim.
      * ClaimRoutedRun is the machine\'s long poll for work: it authenticates the daemon, stamps the liveness the dispatch gate reads (the poll IS the proof a runner is listening), and waits up to 25 seconds for the next run addressed to THIS machine.
      */
-    async postAgentsTargetsByIdClaimRaw(requestParameters: AgentsApiPostAgentsTargetsByIdClaimRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RoutedRunOut>> {
+    async postAgentTargetsByIdClaimRaw(requestParameters: AgentApiPostAgentTargetsByIdClaimRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RoutedRunOut>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling postAgentsTargetsByIdClaim().'
+                'Required parameter "id" was null or undefined when calling postAgentTargetsByIdClaim().'
             );
         }
 
@@ -2023,7 +2021,7 @@ export class AgentsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/agents/targets/{id}/claim`;
+        let urlPath = `/v1/agent/targets/{id}/claim`;
         urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
         const response = await this.request({
@@ -2040,8 +2038,8 @@ export class AgentsApi extends runtime.BaseAPI {
      * ClaimRoutedRun is the machine\'s long poll for work: it authenticates the daemon, stamps the liveness the dispatch gate reads (the poll IS the proof a runner is listening), and waits up to 25 seconds for the next run addressed to THIS machine. It answers the run when one arrives and 204 with no body when the window elapses, on which the daemon re-polls immediately.  TWO independent proofs are required and both fail closed to the same 403: the caller must own this machine (or be an org admin) AND present its claim key in X-Target-Key. A run offered to one machine is unreachable from another\'s claim.
      * ClaimRoutedRun is the machine\'s long poll for work: it authenticates the daemon, stamps the liveness the dispatch gate reads (the poll IS the proof a runner is listening), and waits up to 25 seconds for the next run addressed to THIS machine.
      */
-    async postAgentsTargetsByIdClaim(requestParameters: AgentsApiPostAgentsTargetsByIdClaimRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RoutedRunOut> {
-        const response = await this.postAgentsTargetsByIdClaimRaw(requestParameters, initOverrides);
+    async postAgentTargetsByIdClaim(requestParameters: AgentApiPostAgentTargetsByIdClaimRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RoutedRunOut> {
+        const response = await this.postAgentTargetsByIdClaimRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -2049,11 +2047,11 @@ export class AgentsApi extends runtime.BaseAPI {
      * Mints (or rotates) the claim key a `hanzo code --serve` daemon presents to claim work for this machine, and returns it ONCE: only its SHA-256 hash is stored. Rotating supersedes any prior daemon, so only the machine\'s owner — or an org admin — may call it; every other caller gets the same not-found an unknown id gets, and learns nothing about what exists.
      * Mints (or rotates) the claim key a `hanzo code --serve` daemon presents to claim work for this machine, and returns it ONCE: only its SHA-256 hash is stored.
      */
-    async postAgentsTargetsByIdKeyRaw(requestParameters: AgentsApiPostAgentsTargetsByIdKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ClaimKeyOut>> {
+    async postAgentTargetsByIdKeyRaw(requestParameters: AgentApiPostAgentTargetsByIdKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ClaimKeyOut>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling postAgentsTargetsByIdKey().'
+                'Required parameter "id" was null or undefined when calling postAgentTargetsByIdKey().'
             );
         }
 
@@ -2070,7 +2068,7 @@ export class AgentsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/agents/targets/{id}/key`;
+        let urlPath = `/v1/agent/targets/{id}/key`;
         urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
         const response = await this.request({
@@ -2087,8 +2085,8 @@ export class AgentsApi extends runtime.BaseAPI {
      * Mints (or rotates) the claim key a `hanzo code --serve` daemon presents to claim work for this machine, and returns it ONCE: only its SHA-256 hash is stored. Rotating supersedes any prior daemon, so only the machine\'s owner — or an org admin — may call it; every other caller gets the same not-found an unknown id gets, and learns nothing about what exists.
      * Mints (or rotates) the claim key a `hanzo code --serve` daemon presents to claim work for this machine, and returns it ONCE: only its SHA-256 hash is stored.
      */
-    async postAgentsTargetsByIdKey(requestParameters: AgentsApiPostAgentsTargetsByIdKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ClaimKeyOut> {
-        const response = await this.postAgentsTargetsByIdKeyRaw(requestParameters, initOverrides);
+    async postAgentTargetsByIdKey(requestParameters: AgentApiPostAgentTargetsByIdKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ClaimKeyOut> {
+        const response = await this.postAgentTargetsByIdKeyRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -2096,25 +2094,25 @@ export class AgentsApi extends runtime.BaseAPI {
      * Completes a claimed run: it delivers the terminal result to the run\'s durable owner, which is what lets that workflow finish. Scoped to (org, target, run) and claim-key authenticated, so a machine can only ever report a run it legitimately holds. Idempotent — a report for an unknown or already-finished run answers delivered:false rather than failing, because the session\'s terminal state was already set by the machine\'s own stream.
      * Completes a claimed run: it delivers the terminal result to the run\'s durable owner, which is what lets that workflow finish.
      */
-    async postAgentsTargetsByIdRunsByRunidReportRaw(requestParameters: AgentsApiPostAgentsTargetsByIdRunsByRunidReportRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ReportOut>> {
+    async postAgentTargetsByIdRunsByRunidReportRaw(requestParameters: AgentApiPostAgentTargetsByIdRunsByRunidReportRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ReportOut>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling postAgentsTargetsByIdRunsByRunidReport().'
+                'Required parameter "id" was null or undefined when calling postAgentTargetsByIdRunsByRunidReport().'
             );
         }
 
         if (requestParameters['runId'] == null) {
             throw new runtime.RequiredError(
                 'runId',
-                'Required parameter "runId" was null or undefined when calling postAgentsTargetsByIdRunsByRunidReport().'
+                'Required parameter "runId" was null or undefined when calling postAgentTargetsByIdRunsByRunidReport().'
             );
         }
 
         if (requestParameters['reportRunIn'] == null) {
             throw new runtime.RequiredError(
                 'reportRunIn',
-                'Required parameter "reportRunIn" was null or undefined when calling postAgentsTargetsByIdRunsByRunidReport().'
+                'Required parameter "reportRunIn" was null or undefined when calling postAgentTargetsByIdRunsByRunidReport().'
             );
         }
 
@@ -2133,7 +2131,7 @@ export class AgentsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/agents/targets/{id}/runs/{runId}/report`;
+        let urlPath = `/v1/agent/targets/{id}/runs/{runId}/report`;
         urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
         urlPath = urlPath.replace(`{${"runId"}}`, encodeURIComponent(String(requestParameters['runId'])));
 
@@ -2152,8 +2150,8 @@ export class AgentsApi extends runtime.BaseAPI {
      * Completes a claimed run: it delivers the terminal result to the run\'s durable owner, which is what lets that workflow finish. Scoped to (org, target, run) and claim-key authenticated, so a machine can only ever report a run it legitimately holds. Idempotent — a report for an unknown or already-finished run answers delivered:false rather than failing, because the session\'s terminal state was already set by the machine\'s own stream.
      * Completes a claimed run: it delivers the terminal result to the run\'s durable owner, which is what lets that workflow finish.
      */
-    async postAgentsTargetsByIdRunsByRunidReport(requestParameters: AgentsApiPostAgentsTargetsByIdRunsByRunidReportRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ReportOut> {
-        const response = await this.postAgentsTargetsByIdRunsByRunidReportRaw(requestParameters, initOverrides);
+    async postAgentTargetsByIdRunsByRunidReport(requestParameters: AgentApiPostAgentTargetsByIdRunsByRunidReportRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ReportOut> {
+        const response = await this.postAgentTargetsByIdRunsByRunidReportRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

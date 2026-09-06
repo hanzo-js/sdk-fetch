@@ -85,24 +85,24 @@ import {
     ToolResultToJSON,
 } from '../models/index.js';
 
-export interface ToolsApiDeleteToolsMcpServersByIdRequest {
+export interface ToolApiDeleteToolMcpServersByIdRequest {
     id: string;
 }
 
-export interface ToolsApiDeleteToolsPluginsAuthoredByIdRequest {
+export interface ToolApiDeleteToolPluginsAuthoredByIdRequest {
     id: string;
 }
 
-export interface ToolsApiDeleteToolsSkillsByIdRequest {
+export interface ToolApiDeleteToolSkillsByIdRequest {
     id: string;
 }
 
-export interface ToolsApiGetToolsRequest {
+export interface ToolApiGetToolRequest {
     source?: string;
     activated?: string;
 }
 
-export interface ToolsApiGetToolsCatalogRequest {
+export interface ToolApiGetToolCatalogRequest {
     q?: string;
     featured?: string;
     official?: string;
@@ -110,57 +110,57 @@ export interface ToolsApiGetToolsCatalogRequest {
     offset?: number;
 }
 
-export interface ToolsApiGetToolsCatalogByIdRequest {
+export interface ToolApiGetToolCatalogByIdRequest {
     id: string;
 }
 
-export interface ToolsApiGetToolsPluginsRequest {
+export interface ToolApiGetToolPluginsRequest {
     all?: string;
 }
 
-export interface ToolsApiGetToolsSkillsRequest {
+export interface ToolApiGetToolSkillsRequest {
     activated?: string;
 }
 
-export interface ToolsApiPatchToolsCatalogByIdRequest {
+export interface ToolApiPatchToolCatalogByIdRequest {
     id: string;
     curateReq: CurateReq;
 }
 
-export interface ToolsApiPostToolsCallRequest {
+export interface ToolApiPostToolCallRequest {
     toolCall: ToolCall;
 }
 
-export interface ToolsApiPostToolsMcpServersRequest {
+export interface ToolApiPostToolMcpServersRequest {
     createServerReq: CreateServerReq;
 }
 
-export interface ToolsApiPostToolsPluginsBuildRequest {
+export interface ToolApiPostToolPluginsBuildRequest {
     buildRequest: BuildRequest;
 }
 
-export interface ToolsApiPostToolsSkillsRequest {
+export interface ToolApiPostToolSkillsRequest {
     skillIn: SkillIn;
 }
 
-export interface ToolsApiPutToolsActivationRequest {
+export interface ToolApiPutToolActivationRequest {
     activationReq: ActivationReq;
 }
 
 /**
  * 
  */
-export class ToolsApi extends runtime.BaseAPI {
+export class ToolApi extends runtime.BaseAPI {
 
     /**
      * Deregisters one of the caller org\'s external MCP servers, so its tools leave the registry. Scoped to the caller\'s org, so an id belonging to another tenant is a 404 and not a delete. Answers 204 with no body; a server this org does not have is 404.
      * Deregisters one of the caller org\'s external MCP servers, so its tools leave the registry.
      */
-    async deleteToolsMcpServersByIdRaw(requestParameters: ToolsApiDeleteToolsMcpServersByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async deleteToolMcpServersByIdRaw(requestParameters: ToolApiDeleteToolMcpServersByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling deleteToolsMcpServersById().'
+                'Required parameter "id" was null or undefined when calling deleteToolMcpServersById().'
             );
         }
 
@@ -177,7 +177,7 @@ export class ToolsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/tools/mcp/servers/{id}`;
+        let urlPath = `/v1/tool/mcp/servers/{id}`;
         urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
         const response = await this.request({
@@ -194,19 +194,19 @@ export class ToolsApi extends runtime.BaseAPI {
      * Deregisters one of the caller org\'s external MCP servers, so its tools leave the registry. Scoped to the caller\'s org, so an id belonging to another tenant is a 404 and not a delete. Answers 204 with no body; a server this org does not have is 404.
      * Deregisters one of the caller org\'s external MCP servers, so its tools leave the registry.
      */
-    async deleteToolsMcpServersById(requestParameters: ToolsApiDeleteToolsMcpServersByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.deleteToolsMcpServersByIdRaw(requestParameters, initOverrides);
+    async deleteToolMcpServersById(requestParameters: ToolApiDeleteToolMcpServersByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteToolMcpServersByIdRaw(requestParameters, initOverrides);
     }
 
     /**
      * Removes one of the caller org\'s built plugins, so the runtime can no longer load it. Scoped to the caller\'s org, so an id belonging to another tenant answers 404 and is not deleted.
      * Removes one of the caller org\'s built plugins, so the runtime can no longer load it.
      */
-    async deleteToolsPluginsAuthoredByIdRaw(requestParameters: ToolsApiDeleteToolsPluginsAuthoredByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PluginDeleted>> {
+    async deleteToolPluginsAuthoredByIdRaw(requestParameters: ToolApiDeleteToolPluginsAuthoredByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PluginDeleted>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling deleteToolsPluginsAuthoredById().'
+                'Required parameter "id" was null or undefined when calling deleteToolPluginsAuthoredById().'
             );
         }
 
@@ -223,7 +223,7 @@ export class ToolsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/tools/plugins/authored/{id}`;
+        let urlPath = `/v1/tool/plugins/authored/{id}`;
         urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
         const response = await this.request({
@@ -240,8 +240,8 @@ export class ToolsApi extends runtime.BaseAPI {
      * Removes one of the caller org\'s built plugins, so the runtime can no longer load it. Scoped to the caller\'s org, so an id belonging to another tenant answers 404 and is not deleted.
      * Removes one of the caller org\'s built plugins, so the runtime can no longer load it.
      */
-    async deleteToolsPluginsAuthoredById(requestParameters: ToolsApiDeleteToolsPluginsAuthoredByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PluginDeleted> {
-        const response = await this.deleteToolsPluginsAuthoredByIdRaw(requestParameters, initOverrides);
+    async deleteToolPluginsAuthoredById(requestParameters: ToolApiDeleteToolPluginsAuthoredByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PluginDeleted> {
+        const response = await this.deleteToolPluginsAuthoredByIdRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -249,11 +249,11 @@ export class ToolsApi extends runtime.BaseAPI {
      * Removes one of the caller org\'s authored skills. Scoped to the caller\'s org, so an id belonging to another tenant is never reached. Removing what is not there is not an error — the caller\'s intent is \"gone\", and it is.
      * Removes one of the caller org\'s authored skills.
      */
-    async deleteToolsSkillsByIdRaw(requestParameters: ToolsApiDeleteToolsSkillsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SkillDeleted>> {
+    async deleteToolSkillsByIdRaw(requestParameters: ToolApiDeleteToolSkillsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SkillDeleted>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling deleteToolsSkillsById().'
+                'Required parameter "id" was null or undefined when calling deleteToolSkillsById().'
             );
         }
 
@@ -270,7 +270,7 @@ export class ToolsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/tools/skills/{id}`;
+        let urlPath = `/v1/tool/skills/{id}`;
         urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
         const response = await this.request({
@@ -287,16 +287,16 @@ export class ToolsApi extends runtime.BaseAPI {
      * Removes one of the caller org\'s authored skills. Scoped to the caller\'s org, so an id belonging to another tenant is never reached. Removing what is not there is not an error — the caller\'s intent is \"gone\", and it is.
      * Removes one of the caller org\'s authored skills.
      */
-    async deleteToolsSkillsById(requestParameters: ToolsApiDeleteToolsSkillsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SkillDeleted> {
-        const response = await this.deleteToolsSkillsByIdRaw(requestParameters, initOverrides);
+    async deleteToolSkillsById(requestParameters: ToolApiDeleteToolSkillsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SkillDeleted> {
+        const response = await this.deleteToolSkillsByIdRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Lists every tool the caller\'s org and project can reach, from every source, each flagged with whether it is activated. This is the discovery surface: one flat set of names spanning connector actions, user functions, zap-service routes, agents, skills and the org\'s own external MCP servers, deduplicated by name so the highest-precedence source wins a collision. It lists; it does not call — dispatch is POST /v1/tools/call.
+     * Lists every tool the caller\'s org and project can reach, from every source, each flagged with whether it is activated. This is the discovery surface: one flat set of names spanning connector actions, user functions, zap-service routes, agents, skills and the org\'s own external MCP servers, deduplicated by name so the highest-precedence source wins a collision. It lists; it does not call — dispatch is POST /v1/tool/call.
      * Lists every tool the caller\'s org and project can reach, from every source, each flagged with whether it is activated.
      */
-    async getToolsRaw(requestParameters: ToolsApiGetToolsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ToolList>> {
+    async getToolRaw(requestParameters: ToolApiGetToolRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ToolList>> {
         const queryParameters: any = {};
 
         if (requestParameters['source'] != null) {
@@ -318,7 +318,7 @@ export class ToolsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/tools`;
+        let urlPath = `/v1/tool`;
 
         const response = await this.request({
             path: urlPath,
@@ -331,11 +331,11 @@ export class ToolsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Lists every tool the caller\'s org and project can reach, from every source, each flagged with whether it is activated. This is the discovery surface: one flat set of names spanning connector actions, user functions, zap-service routes, agents, skills and the org\'s own external MCP servers, deduplicated by name so the highest-precedence source wins a collision. It lists; it does not call — dispatch is POST /v1/tools/call.
+     * Lists every tool the caller\'s org and project can reach, from every source, each flagged with whether it is activated. This is the discovery surface: one flat set of names spanning connector actions, user functions, zap-service routes, agents, skills and the org\'s own external MCP servers, deduplicated by name so the highest-precedence source wins a collision. It lists; it does not call — dispatch is POST /v1/tool/call.
      * Lists every tool the caller\'s org and project can reach, from every source, each flagged with whether it is activated.
      */
-    async getTools(requestParameters: ToolsApiGetToolsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ToolList> {
-        const response = await this.getToolsRaw(requestParameters, initOverrides);
+    async getTool(requestParameters: ToolApiGetToolRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ToolList> {
+        const response = await this.getToolRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -343,7 +343,7 @@ export class ToolsApi extends runtime.BaseAPI {
      * Reports which tools are switched on for the caller\'s org and project. Activation is what makes a tool dispatchable and what makes it visible to an agent, so this is the set the MCP tool list is drawn from — every other tool in the registry is discoverable but refused at call time.
      * Reports which tools are switched on for the caller\'s org and project.
      */
-    async getToolsActivationRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ActivationSet>> {
+    async getToolActivationRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ActivationSet>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -357,7 +357,7 @@ export class ToolsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/tools/activation`;
+        let urlPath = `/v1/tool/activation`;
 
         const response = await this.request({
             path: urlPath,
@@ -373,16 +373,16 @@ export class ToolsApi extends runtime.BaseAPI {
      * Reports which tools are switched on for the caller\'s org and project. Activation is what makes a tool dispatchable and what makes it visible to an agent, so this is the set the MCP tool list is drawn from — every other tool in the registry is discoverable but refused at call time.
      * Reports which tools are switched on for the caller\'s org and project.
      */
-    async getToolsActivation(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ActivationSet> {
-        const response = await this.getToolsActivationRaw(initOverrides);
+    async getToolActivation(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ActivationSet> {
+        const response = await this.getToolActivationRaw(initOverrides);
         return await response.value();
     }
 
     /**
-     * Lists the MCP servers the public registries publish, as we hold them: our canonical copy of registry.modelcontextprotocol.io, plus what we decided about each entry.  This is the SHELF an org picks from. A listing with a streamable-http endpoint can be enabled as-is — POST /v1/tools/mcp/servers with its id — and its tools then join the org\'s tool plane and the fleet\'s MCP server. A listing that only ships a stdio package needs a process to run it, which is why the transports are on every entry rather than implied.  Hidden entries are absent: they are the ones we took off the shelf. A platform SuperAdmin sees them, because the same query answers \"what is on the shelf\" and \"what is in the catalog\" and two queries would drift apart.  It is PAGED — 50 by default, 200 at most. The public registry publishes tens of thousands of servers, so an unbounded answer is a twenty-megabyte response and a storefront that renders in a minute. total is the whole match, not the page.
+     * Lists the MCP servers the public registries publish, as we hold them: our canonical copy of registry.modelcontextprotocol.io, plus what we decided about each entry.  This is the SHELF an org picks from. A listing with a streamable-http endpoint can be enabled as-is — POST /v1/tool/mcp/servers with its id — and its tools then join the org\'s tool plane and the fleet\'s MCP server. A listing that only ships a stdio package needs a process to run it, which is why the transports are on every entry rather than implied.  Hidden entries are absent: they are the ones we took off the shelf. A platform SuperAdmin sees them, because the same query answers \"what is on the shelf\" and \"what is in the catalog\" and two queries would drift apart.  It is PAGED — 50 by default, 200 at most. The public registry publishes tens of thousands of servers, so an unbounded answer is a twenty-megabyte response and a storefront that renders in a minute. total is the whole match, not the page.
      * Lists the MCP servers the public registries publish, as we hold them: our canonical copy of registry.modelcontextprotocol.io, plus what we decided about each entry.
      */
-    async getToolsCatalogRaw(requestParameters: ToolsApiGetToolsCatalogRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<McpCatalog>> {
+    async getToolCatalogRaw(requestParameters: ToolApiGetToolCatalogRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<McpCatalog>> {
         const queryParameters: any = {};
 
         if (requestParameters['q'] != null) {
@@ -416,7 +416,7 @@ export class ToolsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/tools/catalog`;
+        let urlPath = `/v1/tool/catalog`;
 
         const response = await this.request({
             path: urlPath,
@@ -429,11 +429,11 @@ export class ToolsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Lists the MCP servers the public registries publish, as we hold them: our canonical copy of registry.modelcontextprotocol.io, plus what we decided about each entry.  This is the SHELF an org picks from. A listing with a streamable-http endpoint can be enabled as-is — POST /v1/tools/mcp/servers with its id — and its tools then join the org\'s tool plane and the fleet\'s MCP server. A listing that only ships a stdio package needs a process to run it, which is why the transports are on every entry rather than implied.  Hidden entries are absent: they are the ones we took off the shelf. A platform SuperAdmin sees them, because the same query answers \"what is on the shelf\" and \"what is in the catalog\" and two queries would drift apart.  It is PAGED — 50 by default, 200 at most. The public registry publishes tens of thousands of servers, so an unbounded answer is a twenty-megabyte response and a storefront that renders in a minute. total is the whole match, not the page.
+     * Lists the MCP servers the public registries publish, as we hold them: our canonical copy of registry.modelcontextprotocol.io, plus what we decided about each entry.  This is the SHELF an org picks from. A listing with a streamable-http endpoint can be enabled as-is — POST /v1/tool/mcp/servers with its id — and its tools then join the org\'s tool plane and the fleet\'s MCP server. A listing that only ships a stdio package needs a process to run it, which is why the transports are on every entry rather than implied.  Hidden entries are absent: they are the ones we took off the shelf. A platform SuperAdmin sees them, because the same query answers \"what is on the shelf\" and \"what is in the catalog\" and two queries would drift apart.  It is PAGED — 50 by default, 200 at most. The public registry publishes tens of thousands of servers, so an unbounded answer is a twenty-megabyte response and a storefront that renders in a minute. total is the whole match, not the page.
      * Lists the MCP servers the public registries publish, as we hold them: our canonical copy of registry.modelcontextprotocol.io, plus what we decided about each entry.
      */
-    async getToolsCatalog(requestParameters: ToolsApiGetToolsCatalogRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<McpCatalog> {
-        const response = await this.getToolsCatalogRaw(requestParameters, initOverrides);
+    async getToolCatalog(requestParameters: ToolApiGetToolCatalogRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<McpCatalog> {
+        const response = await this.getToolCatalogRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -441,11 +441,11 @@ export class ToolsApi extends runtime.BaseAPI {
      * Returns one catalog entry in full: the publisher\'s description, its repository and site, every package form with the runtime that launches it, and every hosted endpoint. It is what a branding page renders, and what tells a caller whether the listing can be enabled here and now (a streamable-http remote) or needs somewhere to run first (a stdio package).  A HIDDEN listing is not served to an org — a shelf that renders what it does not list would be a way around the shelf — but is served to a SuperAdmin, who is the one deciding whether to put it back.
      * Returns one catalog entry in full: the publisher\'s description, its repository and site, every package form with the runtime that launches it, and every hosted endpoint.
      */
-    async getToolsCatalogByIdRaw(requestParameters: ToolsApiGetToolsCatalogByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MCPListing>> {
+    async getToolCatalogByIdRaw(requestParameters: ToolApiGetToolCatalogByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MCPListing>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling getToolsCatalogById().'
+                'Required parameter "id" was null or undefined when calling getToolCatalogById().'
             );
         }
 
@@ -462,7 +462,7 @@ export class ToolsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/tools/catalog/{id}`;
+        let urlPath = `/v1/tool/catalog/{id}`;
         urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
         const response = await this.request({
@@ -479,8 +479,8 @@ export class ToolsApi extends runtime.BaseAPI {
      * Returns one catalog entry in full: the publisher\'s description, its repository and site, every package form with the runtime that launches it, and every hosted endpoint. It is what a branding page renders, and what tells a caller whether the listing can be enabled here and now (a streamable-http remote) or needs somewhere to run first (a stdio package).  A HIDDEN listing is not served to an org — a shelf that renders what it does not list would be a way around the shelf — but is served to a SuperAdmin, who is the one deciding whether to put it back.
      * Returns one catalog entry in full: the publisher\'s description, its repository and site, every package form with the runtime that launches it, and every hosted endpoint.
      */
-    async getToolsCatalogById(requestParameters: ToolsApiGetToolsCatalogByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MCPListing> {
-        const response = await this.getToolsCatalogByIdRaw(requestParameters, initOverrides);
+    async getToolCatalogById(requestParameters: ToolApiGetToolCatalogByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MCPListing> {
+        const response = await this.getToolCatalogByIdRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -488,7 +488,7 @@ export class ToolsApi extends runtime.BaseAPI {
      * Lists the external MCP servers the caller\'s org has registered. Each record carries the URL and the name of the header its credential is injected into; the credential VALUE lives only in KMS and is never returned, so hasSecret is the whole of what this surface says about it.
      * Lists the external MCP servers the caller\'s org has registered.
      */
-    async getToolsMcpServersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<McpServerList>> {
+    async getToolMcpServersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<McpServerList>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -502,7 +502,7 @@ export class ToolsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/tools/mcp/servers`;
+        let urlPath = `/v1/tool/mcp/servers`;
 
         const response = await this.request({
             path: urlPath,
@@ -518,8 +518,8 @@ export class ToolsApi extends runtime.BaseAPI {
      * Lists the external MCP servers the caller\'s org has registered. Each record carries the URL and the name of the header its credential is injected into; the credential VALUE lives only in KMS and is never returned, so hasSecret is the whole of what this surface says about it.
      * Lists the external MCP servers the caller\'s org has registered.
      */
-    async getToolsMcpServers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<McpServerList> {
-        const response = await this.getToolsMcpServersRaw(initOverrides);
+    async getToolMcpServers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<McpServerList> {
+        const response = await this.getToolMcpServersRaw(initOverrides);
         return await response.value();
     }
 
@@ -527,7 +527,7 @@ export class ToolsApi extends runtime.BaseAPI {
      * Reports what this deployment actually mounted: every subsystem the composition root declared and whether it is switched on. A plugin here is MOUNTED CODE that extends the deployment\'s own surface — not a tool an agent calls — so this is an inventory and not a tool source. It is read off the same boot snapshot every traced request resolves its subsystem label against, so it cannot drift from what is serving. Enabled-only by default, because a caller asking what this deployment can do wants what is running; ?all=true adds the configured-but-off ones.
      * Reports what this deployment actually mounted: every subsystem the composition root declared and whether it is switched on.
      */
-    async getToolsPluginsRaw(requestParameters: ToolsApiGetToolsPluginsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PluginMountList>> {
+    async getToolPluginsRaw(requestParameters: ToolApiGetToolPluginsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PluginMountList>> {
         const queryParameters: any = {};
 
         if (requestParameters['all'] != null) {
@@ -545,7 +545,7 @@ export class ToolsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/tools/plugins`;
+        let urlPath = `/v1/tool/plugins`;
 
         const response = await this.request({
             path: urlPath,
@@ -561,16 +561,16 @@ export class ToolsApi extends runtime.BaseAPI {
      * Reports what this deployment actually mounted: every subsystem the composition root declared and whether it is switched on. A plugin here is MOUNTED CODE that extends the deployment\'s own surface — not a tool an agent calls — so this is an inventory and not a tool source. It is read off the same boot snapshot every traced request resolves its subsystem label against, so it cannot drift from what is serving. Enabled-only by default, because a caller asking what this deployment can do wants what is running; ?all=true adds the configured-but-off ones.
      * Reports what this deployment actually mounted: every subsystem the composition root declared and whether it is switched on.
      */
-    async getToolsPlugins(requestParameters: ToolsApiGetToolsPluginsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PluginMountList> {
-        const response = await this.getToolsPluginsRaw(requestParameters, initOverrides);
+    async getToolPlugins(requestParameters: ToolApiGetToolPluginsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PluginMountList> {
+        const response = await this.getToolPluginsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Lists the plugins the caller\'s org BUILT, newest first, each with the TypeScript as authored. That is a different set with a different lifecycle from GET /v1/tools/plugins, which reports the subsystems this deployment mounted. The bundled CommonJS the runtime executes is never included, and neither is any credential — a plugin names the connectors provider it needs and reads the credential from ctx.auth at run time.
+     * Lists the plugins the caller\'s org BUILT, newest first, each with the TypeScript as authored. That is a different set with a different lifecycle from GET /v1/tool/plugins, which reports the subsystems this deployment mounted. The bundled CommonJS the runtime executes is never included, and neither is any credential — a plugin names the connectors provider it needs and reads the credential from ctx.auth at run time.
      * Lists the plugins the caller\'s org BUILT, newest first, each with the TypeScript as authored.
      */
-    async getToolsPluginsAuthoredRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AuthoredPluginList>> {
+    async getToolPluginsAuthoredRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AuthoredPluginList>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -584,7 +584,7 @@ export class ToolsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/tools/plugins/authored`;
+        let urlPath = `/v1/tool/plugins/authored`;
 
         const response = await this.request({
             path: urlPath,
@@ -597,19 +597,19 @@ export class ToolsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Lists the plugins the caller\'s org BUILT, newest first, each with the TypeScript as authored. That is a different set with a different lifecycle from GET /v1/tools/plugins, which reports the subsystems this deployment mounted. The bundled CommonJS the runtime executes is never included, and neither is any credential — a plugin names the connectors provider it needs and reads the credential from ctx.auth at run time.
+     * Lists the plugins the caller\'s org BUILT, newest first, each with the TypeScript as authored. That is a different set with a different lifecycle from GET /v1/tool/plugins, which reports the subsystems this deployment mounted. The bundled CommonJS the runtime executes is never included, and neither is any credential — a plugin names the connectors provider it needs and reads the credential from ctx.auth at run time.
      * Lists the plugins the caller\'s org BUILT, newest first, each with the TypeScript as authored.
      */
-    async getToolsPluginsAuthored(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AuthoredPluginList> {
-        const response = await this.getToolsPluginsAuthoredRaw(initOverrides);
+    async getToolPluginsAuthored(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AuthoredPluginList> {
+        const response = await this.getToolPluginsAuthoredRaw(initOverrides);
         return await response.value();
     }
 
     /**
-     * Lists the skills the caller\'s org can reach — the brand\'s embedded catalogue plus the org\'s own authored ones — with each one\'s activation flag. A skill is discovery and activation metadata attached to an agent, never called directly, so every entry here is non-dispatchable. It is GET /v1/tools narrowed to one source, not a second store: a name a caller sees here is the same entry, with the same activation state, that discovery reports.
+     * Lists the skills the caller\'s org can reach — the brand\'s embedded catalogue plus the org\'s own authored ones — with each one\'s activation flag. A skill is discovery and activation metadata attached to an agent, never called directly, so every entry here is non-dispatchable. It is GET /v1/tool narrowed to one source, not a second store: a name a caller sees here is the same entry, with the same activation state, that discovery reports.
      * Lists the skills the caller\'s org can reach — the brand\'s embedded catalogue plus the org\'s own authored ones — with each one\'s activation flag.
      */
-    async getToolsSkillsRaw(requestParameters: ToolsApiGetToolsSkillsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SourceToolList>> {
+    async getToolSkillsRaw(requestParameters: ToolApiGetToolSkillsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SourceToolList>> {
         const queryParameters: any = {};
 
         if (requestParameters['activated'] != null) {
@@ -627,7 +627,7 @@ export class ToolsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/tools/skills`;
+        let urlPath = `/v1/tool/skills`;
 
         const response = await this.request({
             path: urlPath,
@@ -640,19 +640,19 @@ export class ToolsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Lists the skills the caller\'s org can reach — the brand\'s embedded catalogue plus the org\'s own authored ones — with each one\'s activation flag. A skill is discovery and activation metadata attached to an agent, never called directly, so every entry here is non-dispatchable. It is GET /v1/tools narrowed to one source, not a second store: a name a caller sees here is the same entry, with the same activation state, that discovery reports.
+     * Lists the skills the caller\'s org can reach — the brand\'s embedded catalogue plus the org\'s own authored ones — with each one\'s activation flag. A skill is discovery and activation metadata attached to an agent, never called directly, so every entry here is non-dispatchable. It is GET /v1/tool narrowed to one source, not a second store: a name a caller sees here is the same entry, with the same activation state, that discovery reports.
      * Lists the skills the caller\'s org can reach — the brand\'s embedded catalogue plus the org\'s own authored ones — with each one\'s activation flag.
      */
-    async getToolsSkills(requestParameters: ToolsApiGetToolsSkillsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SourceToolList> {
-        const response = await this.getToolsSkillsRaw(requestParameters, initOverrides);
+    async getToolSkills(requestParameters: ToolApiGetToolSkillsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SourceToolList> {
+        const response = await this.getToolSkillsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Lists the caller org\'s OWN skills with their SKILL.md bodies. GET /v1/tools/skills is the registry view — the brand\'s catalogue plus this org\'s, with activation flags and no bodies; this is the EDITABLE set, so it carries the content that view omits and nothing the org did not write.
+     * Lists the caller org\'s OWN skills with their SKILL.md bodies. GET /v1/tool/skills is the registry view — the brand\'s catalogue plus this org\'s, with activation flags and no bodies; this is the EDITABLE set, so it carries the content that view omits and nothing the org did not write.
      * Lists the caller org\'s OWN skills with their SKILL.md bodies.
      */
-    async getToolsSkillsAuthoredRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AuthoredSkillList>> {
+    async getToolSkillsAuthoredRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AuthoredSkillList>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -666,7 +666,7 @@ export class ToolsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/tools/skills/authored`;
+        let urlPath = `/v1/tool/skills/authored`;
 
         const response = await this.request({
             path: urlPath,
@@ -679,11 +679,11 @@ export class ToolsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Lists the caller org\'s OWN skills with their SKILL.md bodies. GET /v1/tools/skills is the registry view — the brand\'s catalogue plus this org\'s, with activation flags and no bodies; this is the EDITABLE set, so it carries the content that view omits and nothing the org did not write.
+     * Lists the caller org\'s OWN skills with their SKILL.md bodies. GET /v1/tool/skills is the registry view — the brand\'s catalogue plus this org\'s, with activation flags and no bodies; this is the EDITABLE set, so it carries the content that view omits and nothing the org did not write.
      * Lists the caller org\'s OWN skills with their SKILL.md bodies.
      */
-    async getToolsSkillsAuthored(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AuthoredSkillList> {
-        const response = await this.getToolsSkillsAuthoredRaw(initOverrides);
+    async getToolSkillsAuthored(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AuthoredSkillList> {
+        const response = await this.getToolSkillsAuthoredRaw(initOverrides);
         return await response.value();
     }
 
@@ -691,18 +691,18 @@ export class ToolsApi extends runtime.BaseAPI {
      * Sets what WE say about one catalog entry — hidden, featured, official, logo — and answers with the stored listing. SuperAdmin only; every other caller is refused.  Curation is the half of a catalog row a sync cannot write, and this is the only thing that writes it. The upstream half is never editable here: a description that disagreed with the publisher\'s would be a fork of their listing, and the next sync would silently undo it.
      * Sets what WE say about one catalog entry — hidden, featured, official, logo — and answers with the stored listing.
      */
-    async patchToolsCatalogByIdRaw(requestParameters: ToolsApiPatchToolsCatalogByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MCPListing>> {
+    async patchToolCatalogByIdRaw(requestParameters: ToolApiPatchToolCatalogByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MCPListing>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling patchToolsCatalogById().'
+                'Required parameter "id" was null or undefined when calling patchToolCatalogById().'
             );
         }
 
         if (requestParameters['curateReq'] == null) {
             throw new runtime.RequiredError(
                 'curateReq',
-                'Required parameter "curateReq" was null or undefined when calling patchToolsCatalogById().'
+                'Required parameter "curateReq" was null or undefined when calling patchToolCatalogById().'
             );
         }
 
@@ -721,7 +721,7 @@ export class ToolsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/tools/catalog/{id}`;
+        let urlPath = `/v1/tool/catalog/{id}`;
         urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
         const response = await this.request({
@@ -739,20 +739,20 @@ export class ToolsApi extends runtime.BaseAPI {
      * Sets what WE say about one catalog entry — hidden, featured, official, logo — and answers with the stored listing. SuperAdmin only; every other caller is refused.  Curation is the half of a catalog row a sync cannot write, and this is the only thing that writes it. The upstream half is never editable here: a description that disagreed with the publisher\'s would be a fork of their listing, and the next sync would silently undo it.
      * Sets what WE say about one catalog entry — hidden, featured, official, logo — and answers with the stored listing.
      */
-    async patchToolsCatalogById(requestParameters: ToolsApiPatchToolsCatalogByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MCPListing> {
-        const response = await this.patchToolsCatalogByIdRaw(requestParameters, initOverrides);
+    async patchToolCatalogById(requestParameters: ToolApiPatchToolCatalogByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MCPListing> {
+        const response = await this.patchToolCatalogByIdRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Runs one of the caller\'s activated tools and answers with its output.  This is the endpoint onto the tool plane\'s DYNAMIC half — the half no build-time catalogue can hold, because it is per-tenant: an org\'s connected connector actions, its authored skills, its agents and functions, and the tools of every external MCP server it registered. A tool\'s existence, its price and its activation are all rows, not code, so they cannot be known until the caller is.  One policy, the registry\'s: resolve by precedence, refuse an unactivated tool 403, settle a priced one through the x402 client or fail closed 402, then dispatch to the winning source bound to the caller\'s own (org, project). One metered unit, one audit record. A caller can only ever dispatch its own tools.  Discovery is GET /v1/tools — ?activated=true for the callable set.
+     * Runs one of the caller\'s activated tools and answers with its output.  This is the endpoint onto the tool plane\'s DYNAMIC half — the half no build-time catalogue can hold, because it is per-tenant: an org\'s connected connector actions, its authored skills, its agents and functions, and the tools of every external MCP server it registered. A tool\'s existence, its price and its activation are all rows, not code, so they cannot be known until the caller is.  One policy, the registry\'s: resolve by precedence, refuse an unactivated tool 403, settle a priced one through the x402 client or fail closed 402, then dispatch to the winning source bound to the caller\'s own (org, project). One metered unit, one audit record. A caller can only ever dispatch its own tools.  Discovery is GET /v1/tool — ?activated=true for the callable set.
      * Runs one of the caller\'s activated tools and answers with its output.
      */
-    async postToolsCallRaw(requestParameters: ToolsApiPostToolsCallRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ToolResult>> {
+    async postToolCallRaw(requestParameters: ToolApiPostToolCallRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ToolResult>> {
         if (requestParameters['toolCall'] == null) {
             throw new runtime.RequiredError(
                 'toolCall',
-                'Required parameter "toolCall" was null or undefined when calling postToolsCall().'
+                'Required parameter "toolCall" was null or undefined when calling postToolCall().'
             );
         }
 
@@ -771,7 +771,7 @@ export class ToolsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/tools/call`;
+        let urlPath = `/v1/tool/call`;
 
         const response = await this.request({
             path: urlPath,
@@ -785,11 +785,11 @@ export class ToolsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Runs one of the caller\'s activated tools and answers with its output.  This is the endpoint onto the tool plane\'s DYNAMIC half — the half no build-time catalogue can hold, because it is per-tenant: an org\'s connected connector actions, its authored skills, its agents and functions, and the tools of every external MCP server it registered. A tool\'s existence, its price and its activation are all rows, not code, so they cannot be known until the caller is.  One policy, the registry\'s: resolve by precedence, refuse an unactivated tool 403, settle a priced one through the x402 client or fail closed 402, then dispatch to the winning source bound to the caller\'s own (org, project). One metered unit, one audit record. A caller can only ever dispatch its own tools.  Discovery is GET /v1/tools — ?activated=true for the callable set.
+     * Runs one of the caller\'s activated tools and answers with its output.  This is the endpoint onto the tool plane\'s DYNAMIC half — the half no build-time catalogue can hold, because it is per-tenant: an org\'s connected connector actions, its authored skills, its agents and functions, and the tools of every external MCP server it registered. A tool\'s existence, its price and its activation are all rows, not code, so they cannot be known until the caller is.  One policy, the registry\'s: resolve by precedence, refuse an unactivated tool 403, settle a priced one through the x402 client or fail closed 402, then dispatch to the winning source bound to the caller\'s own (org, project). One metered unit, one audit record. A caller can only ever dispatch its own tools.  Discovery is GET /v1/tool — ?activated=true for the callable set.
      * Runs one of the caller\'s activated tools and answers with its output.
      */
-    async postToolsCall(requestParameters: ToolsApiPostToolsCallRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ToolResult> {
-        const response = await this.postToolsCallRaw(requestParameters, initOverrides);
+    async postToolCall(requestParameters: ToolApiPostToolCallRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ToolResult> {
+        const response = await this.postToolCallRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -797,7 +797,7 @@ export class ToolsApi extends runtime.BaseAPI {
      * Pulls the public MCP registry into our canonical copy and reports what changed. SuperAdmin only; every other caller is refused.  It is IDEMPOTENT: a listing is keyed by the publisher\'s own reverse-DNS name, so a second pass over an unchanged registry rewrites the same rows and reports added=0, updated=0. It never deletes — a listing that vanishes upstream may be one an org has already enabled, and dropping its description would not drop its server. And it never touches CURATION: hidden, featured, an admin-set official and a logo survive every sync, because the write does not name those columns.
      * Pulls the public MCP registry into our canonical copy and reports what changed.
      */
-    async postToolsCatalogSyncRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<McpCatalogSync>> {
+    async postToolCatalogSyncRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<McpCatalogSync>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -811,7 +811,7 @@ export class ToolsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/tools/catalog/sync`;
+        let urlPath = `/v1/tool/catalog/sync`;
 
         const response = await this.request({
             path: urlPath,
@@ -827,8 +827,8 @@ export class ToolsApi extends runtime.BaseAPI {
      * Pulls the public MCP registry into our canonical copy and reports what changed. SuperAdmin only; every other caller is refused.  It is IDEMPOTENT: a listing is keyed by the publisher\'s own reverse-DNS name, so a second pass over an unchanged registry rewrites the same rows and reports added=0, updated=0. It never deletes — a listing that vanishes upstream may be one an org has already enabled, and dropping its description would not drop its server. And it never touches CURATION: hidden, featured, an admin-set official and a logo survive every sync, because the write does not name those columns.
      * Pulls the public MCP registry into our canonical copy and reports what changed.
      */
-    async postToolsCatalogSync(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<McpCatalogSync> {
-        const response = await this.postToolsCatalogSyncRaw(initOverrides);
+    async postToolCatalogSync(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<McpCatalogSync> {
+        const response = await this.postToolCatalogSyncRaw(initOverrides);
         return await response.value();
     }
 
@@ -836,11 +836,11 @@ export class ToolsApi extends runtime.BaseAPI {
      * Gives the caller\'s org one more external MCP server, so its tools join the org\'s tool plane and the fleet\'s MCP server. It is the ONE way an org gains a server, whether it typed the URL in or enabled a catalog listing: both write the SAME record, and `source` says which it was. A second registration path would be a second place for a server to exist, and then a second place to forget to check the credential.  The credential VALUE is sealed in KMS under a per-org ref; the row keeps only the URL, the header name to inject it into, and a has-secret flag — so a secret with no KMS configured is refused 503 rather than stored in the clear. The URL is SSRF-validated here and re-checked by the dialer at connect time, which is the DNS-rebinding defense.  Enabling a listing the org already enabled REVISES that server rather than adding a near-duplicate beside it, so a retried enable is the same one server. Answers 201 with the stored record.
      * Gives the caller\'s org one more external MCP server, so its tools join the org\'s tool plane and the fleet\'s MCP server.
      */
-    async postToolsMcpServersRaw(requestParameters: ToolsApiPostToolsMcpServersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MCPServer>> {
+    async postToolMcpServersRaw(requestParameters: ToolApiPostToolMcpServersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MCPServer>> {
         if (requestParameters['createServerReq'] == null) {
             throw new runtime.RequiredError(
                 'createServerReq',
-                'Required parameter "createServerReq" was null or undefined when calling postToolsMcpServers().'
+                'Required parameter "createServerReq" was null or undefined when calling postToolMcpServers().'
             );
         }
 
@@ -859,7 +859,7 @@ export class ToolsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/tools/mcp/servers`;
+        let urlPath = `/v1/tool/mcp/servers`;
 
         const response = await this.request({
             path: urlPath,
@@ -876,8 +876,8 @@ export class ToolsApi extends runtime.BaseAPI {
      * Gives the caller\'s org one more external MCP server, so its tools join the org\'s tool plane and the fleet\'s MCP server. It is the ONE way an org gains a server, whether it typed the URL in or enabled a catalog listing: both write the SAME record, and `source` says which it was. A second registration path would be a second place for a server to exist, and then a second place to forget to check the credential.  The credential VALUE is sealed in KMS under a per-org ref; the row keeps only the URL, the header name to inject it into, and a has-secret flag — so a secret with no KMS configured is refused 503 rather than stored in the clear. The URL is SSRF-validated here and re-checked by the dialer at connect time, which is the DNS-rebinding defense.  Enabling a listing the org already enabled REVISES that server rather than adding a near-duplicate beside it, so a retried enable is the same one server. Answers 201 with the stored record.
      * Gives the caller\'s org one more external MCP server, so its tools join the org\'s tool plane and the fleet\'s MCP server.
      */
-    async postToolsMcpServers(requestParameters: ToolsApiPostToolsMcpServersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MCPServer> {
-        const response = await this.postToolsMcpServersRaw(requestParameters, initOverrides);
+    async postToolMcpServers(requestParameters: ToolApiPostToolMcpServersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MCPServer> {
+        const response = await this.postToolMcpServersRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -885,11 +885,11 @@ export class ToolsApi extends runtime.BaseAPI {
      * Builds and stores one plugin for the caller\'s org. The 201 carries the bundle\'s size, whether a model wrote the source, and the plugin as stored.  Post `source` to build TypeScript as-is, or `spec` — an OpenAPI document or plain prose describing the endpoints — to have one generated; the generated source comes back in the answer, so a caller reads what will run before it runs. Exactly one of the two, and `name` must be one lowercase path segment; both or neither is 400.  COMPILING IS THE GATE. The source goes through the same pipeline the committed connectors do — esbuild to one CommonJS program, then compiled in the goja runtime that will actually execute it — and anything that fails is rejected and NEVER stored. So a plugin in the store is one this deployment has already loaded once, not one a model claimed was fine. A failed build answers 422 carrying the diagnostics a caller needs to fix it: the bundler\'s error (`detail`), the source that failed, and whether the model wrote it.  CREDENTIALS ARE NOT PART OF A PLUGIN. A plugin names the connectors `provider` it needs and reads that credential from `ctx.auth` at run time, under KMS custody. Source that carries something key-shaped is REFUSED rather than silently persisted — a scrubbed key looks like it worked.
      * Builds and stores one plugin for the caller\'s org.
      */
-    async postToolsPluginsBuildRaw(requestParameters: ToolsApiPostToolsPluginsBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BuildOut>> {
+    async postToolPluginsBuildRaw(requestParameters: ToolApiPostToolPluginsBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BuildOut>> {
         if (requestParameters['buildRequest'] == null) {
             throw new runtime.RequiredError(
                 'buildRequest',
-                'Required parameter "buildRequest" was null or undefined when calling postToolsPluginsBuild().'
+                'Required parameter "buildRequest" was null or undefined when calling postToolPluginsBuild().'
             );
         }
 
@@ -908,7 +908,7 @@ export class ToolsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/tools/plugins/build`;
+        let urlPath = `/v1/tool/plugins/build`;
 
         const response = await this.request({
             path: urlPath,
@@ -925,8 +925,8 @@ export class ToolsApi extends runtime.BaseAPI {
      * Builds and stores one plugin for the caller\'s org. The 201 carries the bundle\'s size, whether a model wrote the source, and the plugin as stored.  Post `source` to build TypeScript as-is, or `spec` — an OpenAPI document or plain prose describing the endpoints — to have one generated; the generated source comes back in the answer, so a caller reads what will run before it runs. Exactly one of the two, and `name` must be one lowercase path segment; both or neither is 400.  COMPILING IS THE GATE. The source goes through the same pipeline the committed connectors do — esbuild to one CommonJS program, then compiled in the goja runtime that will actually execute it — and anything that fails is rejected and NEVER stored. So a plugin in the store is one this deployment has already loaded once, not one a model claimed was fine. A failed build answers 422 carrying the diagnostics a caller needs to fix it: the bundler\'s error (`detail`), the source that failed, and whether the model wrote it.  CREDENTIALS ARE NOT PART OF A PLUGIN. A plugin names the connectors `provider` it needs and reads that credential from `ctx.auth` at run time, under KMS custody. Source that carries something key-shaped is REFUSED rather than silently persisted — a scrubbed key looks like it worked.
      * Builds and stores one plugin for the caller\'s org.
      */
-    async postToolsPluginsBuild(requestParameters: ToolsApiPostToolsPluginsBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BuildOut> {
-        const response = await this.postToolsPluginsBuildRaw(requestParameters, initOverrides);
+    async postToolPluginsBuild(requestParameters: ToolApiPostToolPluginsBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BuildOut> {
+        const response = await this.postToolPluginsBuildRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -934,11 +934,11 @@ export class ToolsApi extends runtime.BaseAPI {
      * Adds or revises one of the caller org\'s own skills, and answers 201 with the stored record. The id is derived from the name, so writing the same name again REVISES that skill rather than accumulating near-duplicates that would then collide in the registry. An org\'s skills are private to it by construction — they live in a different store from the brand\'s embedded catalogue and have no path into the public gallery — and a brand skill always wins a name collision against an org\'s.
      * Adds or revises one of the caller org\'s own skills, and answers 201 with the stored record.
      */
-    async postToolsSkillsRaw(requestParameters: ToolsApiPostToolsSkillsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SkillWritten>> {
+    async postToolSkillsRaw(requestParameters: ToolApiPostToolSkillsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SkillWritten>> {
         if (requestParameters['skillIn'] == null) {
             throw new runtime.RequiredError(
                 'skillIn',
-                'Required parameter "skillIn" was null or undefined when calling postToolsSkills().'
+                'Required parameter "skillIn" was null or undefined when calling postToolSkills().'
             );
         }
 
@@ -957,7 +957,7 @@ export class ToolsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/tools/skills`;
+        let urlPath = `/v1/tool/skills`;
 
         const response = await this.request({
             path: urlPath,
@@ -974,8 +974,8 @@ export class ToolsApi extends runtime.BaseAPI {
      * Adds or revises one of the caller org\'s own skills, and answers 201 with the stored record. The id is derived from the name, so writing the same name again REVISES that skill rather than accumulating near-duplicates that would then collide in the registry. An org\'s skills are private to it by construction — they live in a different store from the brand\'s embedded catalogue and have no path into the public gallery — and a brand skill always wins a name collision against an org\'s.
      * Adds or revises one of the caller org\'s own skills, and answers 201 with the stored record.
      */
-    async postToolsSkills(requestParameters: ToolsApiPostToolsSkillsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SkillWritten> {
-        const response = await this.postToolsSkillsRaw(requestParameters, initOverrides);
+    async postToolSkills(requestParameters: ToolApiPostToolSkillsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SkillWritten> {
+        const response = await this.postToolSkillsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -983,11 +983,11 @@ export class ToolsApi extends runtime.BaseAPI {
      * Switches tools on and off for the caller\'s org and project, and answers with the resulting activated set. It is the ONE write path that turns skills, plugins and connectors into callable tools — an unactivated tool is listed by discovery but refused 403 at dispatch. Activate is applied before Deactivate, so a name in both lists ends up off. More than 256 toggles in one request is refused 413.
      * Switches tools on and off for the caller\'s org and project, and answers with the resulting activated set.
      */
-    async putToolsActivationRaw(requestParameters: ToolsApiPutToolsActivationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ActivationSet>> {
+    async putToolActivationRaw(requestParameters: ToolApiPutToolActivationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ActivationSet>> {
         if (requestParameters['activationReq'] == null) {
             throw new runtime.RequiredError(
                 'activationReq',
-                'Required parameter "activationReq" was null or undefined when calling putToolsActivation().'
+                'Required parameter "activationReq" was null or undefined when calling putToolActivation().'
             );
         }
 
@@ -1006,7 +1006,7 @@ export class ToolsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/tools/activation`;
+        let urlPath = `/v1/tool/activation`;
 
         const response = await this.request({
             path: urlPath,
@@ -1023,8 +1023,8 @@ export class ToolsApi extends runtime.BaseAPI {
      * Switches tools on and off for the caller\'s org and project, and answers with the resulting activated set. It is the ONE write path that turns skills, plugins and connectors into callable tools — an unactivated tool is listed by discovery but refused 403 at dispatch. Activate is applied before Deactivate, so a name in both lists ends up off. More than 256 toggles in one request is refused 413.
      * Switches tools on and off for the caller\'s org and project, and answers with the resulting activated set.
      */
-    async putToolsActivation(requestParameters: ToolsApiPutToolsActivationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ActivationSet> {
-        const response = await this.putToolsActivationRaw(requestParameters, initOverrides);
+    async putToolActivation(requestParameters: ToolApiPutToolActivationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ActivationSet> {
+        const response = await this.putToolActivationRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

@@ -21,6 +21,7 @@ import type {
   KbAuthorizeOut,
   KbConnectorsOut,
   KbSyncOut,
+  ReindexOut,
   SearchIn,
   SearchOut,
 } from '../models/index.js';
@@ -37,6 +38,8 @@ import {
     KbConnectorsOutToJSON,
     KbSyncOutFromJSON,
     KbSyncOutToJSON,
+    ReindexOutFromJSON,
+    ReindexOutToJSON,
     SearchInFromJSON,
     SearchInToJSON,
     SearchOutFromJSON,
@@ -432,6 +435,45 @@ export class KnowledgeApi extends runtime.BaseAPI {
      */
     async postKnowledgeImport(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.postKnowledgeImportRaw(initOverrides);
+    }
+
+    /**
+     * Rebuilds the caller org\'s retrieval from its documents: the vector collection is dropped and created again at the configured embedding size and every page, memory and source is embedded into it; the lexical index is reconciled to the same set. It is what an operator runs after the embedding model or its dimension changes, and what puts an org\'s retrieval right after a vector outage. It requires ORG ADMIN and runs inline: an org\'s knowledge is a few thousand documents, and the answer is the count.  The request has no body. Response: {\"vectors\": 412, \"lexical\": 412, \"removed\": 3, \"failed\": 0}
+     * Rebuilds the caller org\'s retrieval from its documents: the vector collection is dropped and created again at the configured embedding size and every page, memory and source is embedded into it; the lexical index is reconciled to the same set.
+     */
+    async postKnowledgeReindexRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ReindexOut>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/knowledge/reindex`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ReindexOutFromJSON(jsonValue));
+    }
+
+    /**
+     * Rebuilds the caller org\'s retrieval from its documents: the vector collection is dropped and created again at the configured embedding size and every page, memory and source is embedded into it; the lexical index is reconciled to the same set. It is what an operator runs after the embedding model or its dimension changes, and what puts an org\'s retrieval right after a vector outage. It requires ORG ADMIN and runs inline: an org\'s knowledge is a few thousand documents, and the answer is the count.  The request has no body. Response: {\"vectors\": 412, \"lexical\": 412, \"removed\": 3, \"failed\": 0}
+     * Rebuilds the caller org\'s retrieval from its documents: the vector collection is dropped and created again at the configured embedding size and every page, memory and source is embedded into it; the lexical index is reconciled to the same set.
+     */
+    async postKnowledgeReindex(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ReindexOut> {
+        const response = await this.postKnowledgeReindexRaw(initOverrides);
+        return await response.value();
     }
 
     /**

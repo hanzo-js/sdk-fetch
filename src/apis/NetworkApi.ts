@@ -15,30 +15,103 @@
 
 import * as runtime from '../runtime.js';
 import type {
+  IdentityIn,
+  IdentityList,
+  IdentityView,
   MeshServiceList,
   NetworkList,
   NetworkView,
+  PublishedView,
   RouterList,
+  ServiceIn,
 } from '../models/index.js';
 import {
+    IdentityInFromJSON,
+    IdentityInToJSON,
+    IdentityListFromJSON,
+    IdentityListToJSON,
+    IdentityViewFromJSON,
+    IdentityViewToJSON,
     MeshServiceListFromJSON,
     MeshServiceListToJSON,
     NetworkListFromJSON,
     NetworkListToJSON,
     NetworkViewFromJSON,
     NetworkViewToJSON,
+    PublishedViewFromJSON,
+    PublishedViewToJSON,
     RouterListFromJSON,
     RouterListToJSON,
+    ServiceInFromJSON,
+    ServiceInToJSON,
 } from '../models/index.js';
+
+export interface NetworkApiDeleteNetworkIdentitiesByIdRequest {
+    id: string;
+}
 
 export interface NetworkApiGetNetworkByIdRequest {
     id: string;
+}
+
+export interface NetworkApiPostNetworkIdentitiesRequest {
+    identityIn: IdentityIn;
+}
+
+export interface NetworkApiPostNetworkServicesRequest {
+    serviceIn: ServiceIn;
 }
 
 /**
  * 
  */
 export class NetworkApi extends runtime.BaseAPI {
+
+    /**
+     * Removes one of the org\'s fabric identities. The device\'s credential stops authenticating and its enrollment, if unspent, stops enrolling.  An id belonging to another org — or to nothing — is 404 before any write reaches the controller: whether an identity exists is itself a cross-tenant fact, and a delete may only ever act on what the caller could list.
+     * Removes one of the org\'s fabric identities.
+     */
+    async deleteNetworkIdentitiesByIdRaw(requestParameters: NetworkApiDeleteNetworkIdentitiesByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteNetworkIdentitiesById().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/network/identities/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Removes one of the org\'s fabric identities. The device\'s credential stops authenticating and its enrollment, if unspent, stops enrolling.  An id belonging to another org — or to nothing — is 404 before any write reaches the controller: whether an identity exists is itself a cross-tenant fact, and a delete may only ever act on what the caller could list.
+     * Removes one of the org\'s fabric identities.
+     */
+    async deleteNetworkIdentitiesById(requestParameters: NetworkApiDeleteNetworkIdentitiesByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteNetworkIdentitiesByIdRaw(requestParameters, initOverrides);
+    }
 
     /**
      * Returns the caller\'s org overlay network on the Zero Trust fabric.  The org has at most ONE overlay, projected from the edge-routers tagged with its \"org-<org>\" role attribute: nodes is the real router count and status is \"connected\" once at least one router has dialed home, \"provisioning\" while none has. An org with no routers gets an empty list, never a fabricated network.  The read degrades rather than erroring: a deployment with no ZT credential, and a controller that cannot be reached, both answer 200 with an empty list so the console\'s Networks page renders a clean empty state instead of an error.
@@ -127,6 +200,45 @@ export class NetworkApi extends runtime.BaseAPI {
     }
 
     /**
+     * Returns the fabric identities the caller\'s org owns.  One row per identity tagged with the org\'s \"org-<org>\" role attribute — a device minted here, enrolled or not. An identity that has not yet enrolled still carries its one-time enrollment, so a mislaid JWT is read again here rather than re-minted.  A tenancy read over the full inventory, so like the mesh list it does NOT degrade: an unconfigured deployment answers 503.
+     * Returns the fabric identities the caller\'s org owns.
+     */
+    async getNetworkIdentitiesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IdentityList>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/network/identities`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IdentityListFromJSON(jsonValue));
+    }
+
+    /**
+     * Returns the fabric identities the caller\'s org owns.  One row per identity tagged with the org\'s \"org-<org>\" role attribute — a device minted here, enrolled or not. An identity that has not yet enrolled still carries its one-time enrollment, so a mislaid JWT is read again here rather than re-minted.  A tenancy read over the full inventory, so like the mesh list it does NOT degrade: an unconfigured deployment answers 503.
+     * Returns the fabric identities the caller\'s org owns.
+     */
+    async getNetworkIdentities(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IdentityList> {
+        const response = await this.getNetworkIdentitiesRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Returns the Zero Trust routers the caller\'s org owns.  One row per real ZT edge-router tagged with the org\'s \"org-<org>\" role attribute, carrying the controller\'s own health signal: \"online\" when connected, \"disabled\" when administratively disabled, \"offline\" otherwise. region is filled only from a \"region-<slug>\" role attribute and omitted when the router carries none, so the column renders \"—\" rather than a guess.  The read degrades rather than erroring: a deployment with no ZT credential, and a controller that cannot be reached, both answer 200 with an empty list.
      * Returns the Zero Trust routers the caller\'s org owns.
      */
@@ -201,6 +313,104 @@ export class NetworkApi extends runtime.BaseAPI {
      */
     async getNetworkServices(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MeshServiceList> {
         const response = await this.getNetworkServicesRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Mints a fabric identity for a device the caller\'s org brings.  The identity is created of type Device, tagged with the org\'s \"org-<org>\" role attribute plus any supplied roles — each scoped to the org, and a \"<service>-host\" role refused unless the org has published that service. The answer carries the controller\'s one-time enrollment JWT: the device presents it once to join the fabric, and until it does the same token can be read back off GET /v1/network/identities.  A write, so it does not degrade: an unconfigured deployment answers 503.
+     * Mints a fabric identity for a device the caller\'s org brings.
+     */
+    async postNetworkIdentitiesRaw(requestParameters: NetworkApiPostNetworkIdentitiesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IdentityView>> {
+        if (requestParameters['identityIn'] == null) {
+            throw new runtime.RequiredError(
+                'identityIn',
+                'Required parameter "identityIn" was null or undefined when calling postNetworkIdentities().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/network/identities`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: IdentityInToJSON(requestParameters['identityIn']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IdentityViewFromJSON(jsonValue));
+    }
+
+    /**
+     * Mints a fabric identity for a device the caller\'s org brings.  The identity is created of type Device, tagged with the org\'s \"org-<org>\" role attribute plus any supplied roles — each scoped to the org, and a \"<service>-host\" role refused unless the org has published that service. The answer carries the controller\'s one-time enrollment JWT: the device presents it once to join the fabric, and until it does the same token can be read back off GET /v1/network/identities.  A write, so it does not degrade: an unconfigured deployment answers 503.
+     * Mints a fabric identity for a device the caller\'s org brings.
+     */
+    async postNetworkIdentities(requestParameters: NetworkApiPostNetworkIdentitiesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IdentityView> {
+        const response = await this.postNetworkIdentitiesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Puts a name on the org\'s overlay: a fabric service forwarding to host:port on whichever of the org\'s devices carries the \"<name>-host\" role, dialable at \"<name>.<org>.zt\" by any of the org\'s identities — and by the cloud\'s own, which is what lets a BYO cluster\'s apiserver be attached to the fleet with a \".zt\" kubeconfig.  Answers 201 with the service and its DNS name. The objects behind it are created in dependency order and unwound on failure, so a half-published service never lingers on the fabric.  A write, so it does not degrade: an unconfigured deployment answers 503.
+     * Puts a name on the org\'s overlay: a fabric service forwarding to host:port on whichever of the org\'s devices carries the \"<name>-host\" role, dialable at \"<name>.<org>.zt\" by any of the org\'s identities — and by the cloud\'s own, which is what lets a BYO cluster\'s apiserver be attached to the fleet with a \".zt\" kubeconfig.
+     */
+    async postNetworkServicesRaw(requestParameters: NetworkApiPostNetworkServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PublishedView>> {
+        if (requestParameters['serviceIn'] == null) {
+            throw new runtime.RequiredError(
+                'serviceIn',
+                'Required parameter "serviceIn" was null or undefined when calling postNetworkServices().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/network/services`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: ServiceInToJSON(requestParameters['serviceIn']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => PublishedViewFromJSON(jsonValue));
+    }
+
+    /**
+     * Puts a name on the org\'s overlay: a fabric service forwarding to host:port on whichever of the org\'s devices carries the \"<name>-host\" role, dialable at \"<name>.<org>.zt\" by any of the org\'s identities — and by the cloud\'s own, which is what lets a BYO cluster\'s apiserver be attached to the fleet with a \".zt\" kubeconfig.  Answers 201 with the service and its DNS name. The objects behind it are created in dependency order and unwound on failure, so a half-published service never lingers on the fabric.  A write, so it does not degrade: an unconfigured deployment answers 503.
+     * Puts a name on the org\'s overlay: a fabric service forwarding to host:port on whichever of the org\'s devices carries the \"<name>-host\" role, dialable at \"<name>.<org>.zt\" by any of the org\'s identities — and by the cloud\'s own, which is what lets a BYO cluster\'s apiserver be attached to the fleet with a \".zt\" kubeconfig.
+     */
+    async postNetworkServices(requestParameters: NetworkApiPostNetworkServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PublishedView> {
+        const response = await this.postNetworkServicesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

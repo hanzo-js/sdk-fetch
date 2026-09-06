@@ -42,7 +42,6 @@ import type {
   SubscriptionView,
   TreeJSON,
   UsageView,
-  ZapProcReq,
 } from '../models/index.js';
 import {
     BlobJSONFromJSON,
@@ -99,8 +98,6 @@ import {
     TreeJSONToJSON,
     UsageViewFromJSON,
     UsageViewToJSON,
-    ZapProcReqFromJSON,
-    ZapProcReqToJSON,
 } from '../models/index.js';
 
 export interface GitApiDeleteGitKeysByIdRequest {
@@ -111,12 +108,12 @@ export interface GitApiDeleteGitReposByNameRequest {
     name: string;
 }
 
-export interface GitApiDeleteGitReposByNameMirrorsByIdRequest {
+export interface GitApiDeleteGitReposByNameSubscriptionsByIdRequest {
     name: string;
     id: string;
 }
 
-export interface GitApiDeleteGitReposByNameSubscriptionsByIdRequest {
+export interface GitApiDeleteGitReposByNameTargetsByIdRequest {
     name: string;
     id: string;
 }
@@ -165,10 +162,6 @@ export interface GitApiGetGitReposByNameFilesRequest {
     glob?: string;
 }
 
-export interface GitApiGetGitReposByNameMirrorsRequest {
-    name: string;
-}
-
 export interface GitApiGetGitReposByNamePullsRequest {
     name: string;
     state?: string;
@@ -189,6 +182,10 @@ export interface GitApiGetGitReposByNameRefsRequest {
 }
 
 export interface GitApiGetGitReposByNameSubscriptionsRequest {
+    name: string;
+}
+
+export interface GitApiGetGitReposByNameTargetsRequest {
     name: string;
 }
 
@@ -246,11 +243,6 @@ export interface GitApiPostGitReposByNameMirrorRequest {
     mirrorReq: MirrorReq;
 }
 
-export interface GitApiPostGitReposByNameMirrorsRequest {
-    name: string;
-    mirrorTargetReq: MirrorTargetReq;
-}
-
 export interface GitApiPostGitReposByNamePullsRequest {
     name: string;
     openReq: OpenReq;
@@ -271,16 +263,9 @@ export interface GitApiPostGitReposByNameSubscriptionsRequest {
     subscribeReq: SubscribeReq;
 }
 
-export interface GitApiPostGitZapCreaterepoRequest {
-    zapProcReq?: ZapProcReq;
-}
-
-export interface GitApiPostGitZapDeleterepoRequest {
-    zapProcReq?: ZapProcReq;
-}
-
-export interface GitApiPostGitZapGetrepoRequest {
-    zapProcReq?: ZapProcReq;
+export interface GitApiPostGitReposByNameTargetsRequest {
+    name: string;
+    mirrorTargetReq: MirrorTargetReq;
 }
 
 /**
@@ -381,60 +366,6 @@ export class GitApi extends runtime.BaseAPI {
     }
 
     /**
-     * Removes one outbound mirror target; later pushes stop being forwarded to it. Answers 204 with no body. Nothing is done to the downstream remote itself — only this repo\'s intent to push there is dropped.
-     * Removes one outbound mirror target; later pushes stop being forwarded to it.
-     */
-    async deleteGitReposByNameMirrorsByIdRaw(requestParameters: GitApiDeleteGitReposByNameMirrorsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters['name'] == null) {
-            throw new runtime.RequiredError(
-                'name',
-                'Required parameter "name" was null or undefined when calling deleteGitReposByNameMirrorsById().'
-            );
-        }
-
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling deleteGitReposByNameMirrorsById().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/git/repos/{name}/mirrors/{id}`;
-        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
-        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'DELETE',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Removes one outbound mirror target; later pushes stop being forwarded to it. Answers 204 with no body. Nothing is done to the downstream remote itself — only this repo\'s intent to push there is dropped.
-     * Removes one outbound mirror target; later pushes stop being forwarded to it.
-     */
-    async deleteGitReposByNameMirrorsById(requestParameters: GitApiDeleteGitReposByNameMirrorsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.deleteGitReposByNameMirrorsByIdRaw(requestParameters, initOverrides);
-    }
-
-    /**
      * Removes one Slack subscription from a repo; the notifier stops posting that repo\'s events to that channel. Answers 204 with no body. An id that is not this repo\'s subscription is not found.
      * Removes one Slack subscription from a repo; the notifier stops posting that repo\'s events to that channel.
      */
@@ -486,6 +417,60 @@ export class GitApi extends runtime.BaseAPI {
      */
     async deleteGitReposByNameSubscriptionsById(requestParameters: GitApiDeleteGitReposByNameSubscriptionsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.deleteGitReposByNameSubscriptionsByIdRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Removes one outbound mirror target; later pushes stop being forwarded to it. Answers 204 with no body. Nothing is done to the downstream remote itself — only this repo\'s intent to push there is dropped.
+     * Removes one outbound mirror target; later pushes stop being forwarded to it.
+     */
+    async deleteGitReposByNameTargetsByIdRaw(requestParameters: GitApiDeleteGitReposByNameTargetsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling deleteGitReposByNameTargetsById().'
+            );
+        }
+
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteGitReposByNameTargetsById().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/git/repos/{name}/targets/{id}`;
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Removes one outbound mirror target; later pushes stop being forwarded to it. Answers 204 with no body. Nothing is done to the downstream remote itself — only this repo\'s intent to push there is dropped.
+     * Removes one outbound mirror target; later pushes stop being forwarded to it.
+     */
+    async deleteGitReposByNameTargetsById(requestParameters: GitApiDeleteGitReposByNameTargetsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteGitReposByNameTargetsByIdRaw(requestParameters, initOverrides);
     }
 
     /**
@@ -1083,53 +1068,6 @@ export class GitApi extends runtime.BaseAPI {
     }
 
     /**
-     * Returns a repo\'s outbound mirror targets — the downstream remotes the mirror reactor pushes to whenever a push lands here.
-     * Returns a repo\'s outbound mirror targets — the downstream remotes the mirror reactor pushes to whenever a push lands here.
-     */
-    async getGitReposByNameMirrorsRaw(requestParameters: GitApiGetGitReposByNameMirrorsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MirrorList>> {
-        if (requestParameters['name'] == null) {
-            throw new runtime.RequiredError(
-                'name',
-                'Required parameter "name" was null or undefined when calling getGitReposByNameMirrors().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/git/repos/{name}/mirrors`;
-        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => MirrorListFromJSON(jsonValue));
-    }
-
-    /**
-     * Returns a repo\'s outbound mirror targets — the downstream remotes the mirror reactor pushes to whenever a push lands here.
-     * Returns a repo\'s outbound mirror targets — the downstream remotes the mirror reactor pushes to whenever a push lands here.
-     */
-    async getGitReposByNameMirrors(requestParameters: GitApiGetGitReposByNameMirrorsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MirrorList> {
-        const response = await this.getGitReposByNameMirrorsRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
      * Returns a repo\'s pull requests, newest number first — what is waiting to be reviewed, and what has already landed. Narrow it with ?state=open or ?state=merged; omit state for every proposal.
      * Returns a repo\'s pull requests, newest number first — what is waiting to be reviewed, and what has already landed.
      */
@@ -1377,6 +1315,53 @@ export class GitApi extends runtime.BaseAPI {
      */
     async getGitReposByNameSubscriptions(requestParameters: GitApiGetGitReposByNameSubscriptionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SubscriptionList> {
         const response = await this.getGitReposByNameSubscriptionsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns a repo\'s outbound mirror targets — the downstream remotes the mirror reactor pushes to whenever a push lands here.
+     * Returns a repo\'s outbound mirror targets — the downstream remotes the mirror reactor pushes to whenever a push lands here.
+     */
+    async getGitReposByNameTargetsRaw(requestParameters: GitApiGetGitReposByNameTargetsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MirrorList>> {
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling getGitReposByNameTargets().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/git/repos/{name}/targets`;
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => MirrorListFromJSON(jsonValue));
+    }
+
+    /**
+     * Returns a repo\'s outbound mirror targets — the downstream remotes the mirror reactor pushes to whenever a push lands here.
+     * Returns a repo\'s outbound mirror targets — the downstream remotes the mirror reactor pushes to whenever a push lands here.
+     */
+    async getGitReposByNameTargets(requestParameters: GitApiGetGitReposByNameTargetsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MirrorList> {
+        const response = await this.getGitReposByNameTargetsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1978,63 +1963,6 @@ export class GitApi extends runtime.BaseAPI {
     }
 
     /**
-     * Registers a downstream remote the repo\'s advanced refs are pushed to whenever a push lands here. Answers 201. The URL must be https to a host on the mirror allowlist (github.com / gitlab.com): the same set the mirror credential may be sent to, so a target can never capture the shared token or point the push at an internal service. Any embedded userinfo is stripped — credentials ride env-only at push time and never enter the stored URL. One mirror per host per repo; a second is a 409.
-     * Registers a downstream remote the repo\'s advanced refs are pushed to whenever a push lands here.
-     */
-    async postGitReposByNameMirrorsRaw(requestParameters: GitApiPostGitReposByNameMirrorsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MirrorTargetView>> {
-        if (requestParameters['name'] == null) {
-            throw new runtime.RequiredError(
-                'name',
-                'Required parameter "name" was null or undefined when calling postGitReposByNameMirrors().'
-            );
-        }
-
-        if (requestParameters['mirrorTargetReq'] == null) {
-            throw new runtime.RequiredError(
-                'mirrorTargetReq',
-                'Required parameter "mirrorTargetReq" was null or undefined when calling postGitReposByNameMirrors().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/git/repos/{name}/mirrors`;
-        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: MirrorTargetReqToJSON(requestParameters['mirrorTargetReq']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => MirrorTargetViewFromJSON(jsonValue));
-    }
-
-    /**
-     * Registers a downstream remote the repo\'s advanced refs are pushed to whenever a push lands here. Answers 201. The URL must be https to a host on the mirror allowlist (github.com / gitlab.com): the same set the mirror credential may be sent to, so a target can never capture the shared token or point the push at an internal service. Any embedded userinfo is stripped — credentials ride env-only at push time and never enter the stored URL. One mirror per host per repo; a second is a 409.
-     * Registers a downstream remote the repo\'s advanced refs are pushed to whenever a push lands here.
-     */
-    async postGitReposByNameMirrors(requestParameters: GitApiPostGitReposByNameMirrorsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MirrorTargetView> {
-        const response = await this.postGitReposByNameMirrorsRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
      * Proposes a branch for merging and returns it with its number. Answers 201. Both branches must already exist — a proposal naming a branch nobody pushed is a typo, not a plan — and base defaults to the repo\'s default branch.  Proposing the same head into the same base twice is a 409 while the first proposal is still open, so a retried agent run leaves ONE thing to review rather than a pile of identical ones. A repo outside the caller\'s scope is a 404, exactly as reading it is.
      * Proposes a branch for merging and returns it with its number.
      */
@@ -2261,8 +2189,65 @@ export class GitApi extends runtime.BaseAPI {
     }
 
     /**
-     * GONE (410). Push-to-deploy belongs to POST https://platform.hanzo.ai/v1/git-webhook, which owns the build system-of-record and dispatches BuildKit Jobs. git.hanzo.ai delivers there through ONE forge-wide system webhook covering every repository; a repo opts in by committing hanzo.yml, not by owning a hook of its own.  Every delivery answers 410 whatever it carries — this endpoint reads no body and authenticates nothing.  410 rather than 404, because the address was real and its meaning moved, which is the distinction 410 carries. A 404 from this estate is ambiguous: Hanzo Git serves /v1, so /api/v1 404s too and reads as \"the API is switched off\". A retired endpoint says it is retired and names its replacement, so the answer carries its own fix.
-     * Retired — forge pushes build via platform.hanzo.ai
+     * Registers a downstream remote the repo\'s advanced refs are pushed to whenever a push lands here. Answers 201. The URL must be https to a host on the mirror allowlist (github.com / gitlab.com): the same set the mirror credential may be sent to, so a target can never capture the shared token or point the push at an internal service. Any embedded userinfo is stripped — credentials ride env-only at push time and never enter the stored URL. One mirror per host per repo; a second is a 409.
+     * Registers a downstream remote the repo\'s advanced refs are pushed to whenever a push lands here.
+     */
+    async postGitReposByNameTargetsRaw(requestParameters: GitApiPostGitReposByNameTargetsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MirrorTargetView>> {
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling postGitReposByNameTargets().'
+            );
+        }
+
+        if (requestParameters['mirrorTargetReq'] == null) {
+            throw new runtime.RequiredError(
+                'mirrorTargetReq',
+                'Required parameter "mirrorTargetReq" was null or undefined when calling postGitReposByNameTargets().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/git/repos/{name}/targets`;
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: MirrorTargetReqToJSON(requestParameters['mirrorTargetReq']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => MirrorTargetViewFromJSON(jsonValue));
+    }
+
+    /**
+     * Registers a downstream remote the repo\'s advanced refs are pushed to whenever a push lands here. Answers 201. The URL must be https to a host on the mirror allowlist (github.com / gitlab.com): the same set the mirror credential may be sent to, so a target can never capture the shared token or point the push at an internal service. Any embedded userinfo is stripped — credentials ride env-only at push time and never enter the stored URL. One mirror per host per repo; a second is a 409.
+     * Registers a downstream remote the repo\'s advanced refs are pushed to whenever a push lands here.
+     */
+    async postGitReposByNameTargets(requestParameters: GitApiPostGitReposByNameTargetsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MirrorTargetView> {
+        const response = await this.postGitReposByNameTargetsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * GONE (410). Push-to-deploy is not triggered by an inbound webhook. A push into this host\'s own git server fires the builder in-process, and a repository whose canonical home is GitHub is delivered by the Hanzo Platform GitHub App to POST /v1/integration/github/webhook. The forge does not report a push over HTTP.  Every delivery answers 410 whatever it carries — this endpoint reads no body and authenticates nothing.  410 rather than 404, because the address was real and its meaning moved, which is the distinction 410 carries. A 404 from this estate is ambiguous: Hanzo Git serves /v1, so /api/v1 404s too and reads as \"the API is switched off\". A retired endpoint says it is retired and names its replacement, so the answer carries its own fix.
+     * Retired — push-to-deploy has no inbound webhook
      */
     async postGitWebhookRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
@@ -2291,210 +2276,11 @@ export class GitApi extends runtime.BaseAPI {
     }
 
     /**
-     * GONE (410). Push-to-deploy belongs to POST https://platform.hanzo.ai/v1/git-webhook, which owns the build system-of-record and dispatches BuildKit Jobs. git.hanzo.ai delivers there through ONE forge-wide system webhook covering every repository; a repo opts in by committing hanzo.yml, not by owning a hook of its own.  Every delivery answers 410 whatever it carries — this endpoint reads no body and authenticates nothing.  410 rather than 404, because the address was real and its meaning moved, which is the distinction 410 carries. A 404 from this estate is ambiguous: Hanzo Git serves /v1, so /api/v1 404s too and reads as \"the API is switched off\". A retired endpoint says it is retired and names its replacement, so the answer carries its own fix.
-     * Retired — forge pushes build via platform.hanzo.ai
+     * GONE (410). Push-to-deploy is not triggered by an inbound webhook. A push into this host\'s own git server fires the builder in-process, and a repository whose canonical home is GitHub is delivered by the Hanzo Platform GitHub App to POST /v1/integration/github/webhook. The forge does not report a push over HTTP.  Every delivery answers 410 whatever it carries — this endpoint reads no body and authenticates nothing.  410 rather than 404, because the address was real and its meaning moved, which is the distinction 410 carries. A 404 from this estate is ambiguous: Hanzo Git serves /v1, so /api/v1 404s too and reads as \"the API is switched off\". A retired endpoint says it is retired and names its replacement, so the answer carries its own fix.
+     * Retired — push-to-deploy has no inbound webhook
      */
     async postGitWebhook(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.postGitWebhookRaw(initOverrides);
-    }
-
-    /**
-     * Creates a repository in the caller\'s org and project scope and answers with its record. `name` is required and `description` is optional; `project` narrows the scope within the org. A name already taken in that scope is a 409 envelope and an invalid name a 400.  A ZAP PROCEDURE, not a REST resource. It answers the bridge\'s {status, msg, data} envelope rather than the raw view the /v1 route returns, and it calls the SAME core function the REST route calls, so the two transports cannot diverge in behaviour. Org and project scope come from the request identity and NEVER from the body: the body cannot widen the caller\'s scope. Without a validated org the answer is a 403 envelope.
-     * Create a repository over the ZAP transport
-     */
-    async postGitZapCreaterepoRaw(requestParameters: GitApiPostGitZapCreaterepoRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/git/zap/createRepo`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: ZapProcReqToJSON(requestParameters['zapProcReq']),
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Creates a repository in the caller\'s org and project scope and answers with its record. `name` is required and `description` is optional; `project` narrows the scope within the org. A name already taken in that scope is a 409 envelope and an invalid name a 400.  A ZAP PROCEDURE, not a REST resource. It answers the bridge\'s {status, msg, data} envelope rather than the raw view the /v1 route returns, and it calls the SAME core function the REST route calls, so the two transports cannot diverge in behaviour. Org and project scope come from the request identity and NEVER from the body: the body cannot widen the caller\'s scope. Without a validated org the answer is a 403 envelope.
-     * Create a repository over the ZAP transport
-     */
-    async postGitZapCreaterepo(requestParameters: GitApiPostGitZapCreaterepoRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postGitZapCreaterepoRaw(requestParameters, initOverrides);
-    }
-
-    /**
-     * Deletes the repository named by `name` and answers with the deleted name. A repository outside the caller\'s org and project scope is a 404 envelope, so a delete can never reach another tenant\'s repository.  A ZAP PROCEDURE, not a REST resource. It answers the bridge\'s {status, msg, data} envelope rather than the raw view the /v1 route returns, and it calls the SAME core function the REST route calls, so the two transports cannot diverge in behaviour. Org and project scope come from the request identity and NEVER from the body: the body cannot widen the caller\'s scope. Without a validated org the answer is a 403 envelope.
-     * Delete a repository over the ZAP transport
-     */
-    async postGitZapDeleterepoRaw(requestParameters: GitApiPostGitZapDeleterepoRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/git/zap/deleteRepo`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: ZapProcReqToJSON(requestParameters['zapProcReq']),
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Deletes the repository named by `name` and answers with the deleted name. A repository outside the caller\'s org and project scope is a 404 envelope, so a delete can never reach another tenant\'s repository.  A ZAP PROCEDURE, not a REST resource. It answers the bridge\'s {status, msg, data} envelope rather than the raw view the /v1 route returns, and it calls the SAME core function the REST route calls, so the two transports cannot diverge in behaviour. Org and project scope come from the request identity and NEVER from the body: the body cannot widen the caller\'s scope. Without a validated org the answer is a 403 envelope.
-     * Delete a repository over the ZAP transport
-     */
-    async postGitZapDeleterepo(requestParameters: GitApiPostGitZapDeleterepoRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postGitZapDeleterepoRaw(requestParameters, initOverrides);
-    }
-
-    /**
-     * Answers a single repository\'s record, named by `name`. A repository outside the caller\'s org and project scope is a 404 envelope, the same answer one that does not exist gets.  A ZAP PROCEDURE, not a REST resource. It answers the bridge\'s {status, msg, data} envelope rather than the raw view the /v1 route returns, and it calls the SAME core function the REST route calls, so the two transports cannot diverge in behaviour. Org and project scope come from the request identity and NEVER from the body: the body cannot widen the caller\'s scope. Without a validated org the answer is a 403 envelope.
-     * Read one repository over the ZAP transport
-     */
-    async postGitZapGetrepoRaw(requestParameters: GitApiPostGitZapGetrepoRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/git/zap/getRepo`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: ZapProcReqToJSON(requestParameters['zapProcReq']),
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Answers a single repository\'s record, named by `name`. A repository outside the caller\'s org and project scope is a 404 envelope, the same answer one that does not exist gets.  A ZAP PROCEDURE, not a REST resource. It answers the bridge\'s {status, msg, data} envelope rather than the raw view the /v1 route returns, and it calls the SAME core function the REST route calls, so the two transports cannot diverge in behaviour. Org and project scope come from the request identity and NEVER from the body: the body cannot widen the caller\'s scope. Without a validated org the answer is a 403 envelope.
-     * Read one repository over the ZAP transport
-     */
-    async postGitZapGetrepo(requestParameters: GitApiPostGitZapGetrepoRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postGitZapGetrepoRaw(requestParameters, initOverrides);
-    }
-
-    /**
-     * Answers every repository in the caller\'s org and project scope. It reads NO body — the scope is entirely the caller\'s identity — so a request with an empty object is correct.  A ZAP PROCEDURE, not a REST resource. It answers the bridge\'s {status, msg, data} envelope rather than the raw view the /v1 route returns, and it calls the SAME core function the REST route calls, so the two transports cannot diverge in behaviour. Org and project scope come from the request identity and NEVER from the body: the body cannot widen the caller\'s scope. Without a validated org the answer is a 403 envelope.
-     * List your repositories over the ZAP transport
-     */
-    async postGitZapListreposRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/git/zap/listRepos`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Answers every repository in the caller\'s org and project scope. It reads NO body — the scope is entirely the caller\'s identity — so a request with an empty object is correct.  A ZAP PROCEDURE, not a REST resource. It answers the bridge\'s {status, msg, data} envelope rather than the raw view the /v1 route returns, and it calls the SAME core function the REST route calls, so the two transports cannot diverge in behaviour. Org and project scope come from the request identity and NEVER from the body: the body cannot widen the caller\'s scope. Without a validated org the answer is a 403 envelope.
-     * List your repositories over the ZAP transport
-     */
-    async postGitZapListrepos(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postGitZapListreposRaw(initOverrides);
-    }
-
-    /**
-     * Answers every repository in the caller\'s org with its size in bytes, plus the org\'s total — what git storage is actually being used, and by which repository. It reads NO body, and it is scoped to the caller\'s own org, so it is that org\'s footprint and never the fleet\'s.  A ZAP PROCEDURE, not a REST resource. It answers the bridge\'s {status, msg, data} envelope rather than the raw view the /v1 route returns, and it calls the SAME core function the REST route calls, so the two transports cannot diverge in behaviour. Org and project scope come from the request identity and NEVER from the body: the body cannot widen the caller\'s scope. Without a validated org the answer is a 403 envelope.
-     * Report your org\'s git storage footprint over the ZAP transport
-     */
-    async postGitZapUsageRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/git/zap/usage`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Answers every repository in the caller\'s org with its size in bytes, plus the org\'s total — what git storage is actually being used, and by which repository. It reads NO body, and it is scoped to the caller\'s own org, so it is that org\'s footprint and never the fleet\'s.  A ZAP PROCEDURE, not a REST resource. It answers the bridge\'s {status, msg, data} envelope rather than the raw view the /v1 route returns, and it calls the SAME core function the REST route calls, so the two transports cannot diverge in behaviour. Org and project scope come from the request identity and NEVER from the body: the body cannot widen the caller\'s scope. Without a validated org the answer is a 403 envelope.
-     * Report your org\'s git storage footprint over the ZAP transport
-     */
-    async postGitZapUsage(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postGitZapUsageRaw(initOverrides);
     }
 
 }

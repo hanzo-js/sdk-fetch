@@ -20,34 +20,34 @@ import { mapValues } from '../runtime.js';
  */
 export interface BotMember {
     /**
-     * Active is whether the agent projects as a LIVE space member, derived
-     * from its registry status: empty, "active" and "ready" are live, anything
-     * else (archived/retired) is not. An inactive bot drops out of the Team list
-     * while its past authorship survives.
+     * Active is whether the agent projects as a LIVE space member, derived from
+     * its registry status: empty, "active" and "ready" are live, anything else
+     * (archived/retired) is not. An inactive bot drops out of the roster while its
+     * past authorship survives.
      * @type {boolean}
      * @memberof BotMember
      */
     active?: boolean;
     /**
-     * the agent id
+     * ID is the agent id.
      * @type {string}
      * @memberof BotMember
      */
     id?: string;
     /**
-     * display name
+     * Name is the display name.
      * @type {string}
      * @memberof BotMember
      */
     name?: string;
     /**
-     * the projected Person _id
+     * PersonRef is the projected Person _id.
      * @type {string}
      * @memberof BotMember
      */
     personRef?: string;
     /**
-     * derived member account uuid (personUuid)
+     * UserID is the derived member account uuid (personUuid).
      * @type {string}
      * @memberof BotMember
      */

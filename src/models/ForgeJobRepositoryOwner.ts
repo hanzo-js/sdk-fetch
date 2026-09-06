@@ -16,35 +16,35 @@ import { mapValues } from '../runtime.js';
 /**
  * 
  * @export
- * @interface PushPusher
+ * @interface ForgeJobRepositoryOwner
  */
-export interface PushPusher {
+export interface ForgeJobRepositoryOwner {
     /**
      * 
      * @type {string}
-     * @memberof PushPusher
+     * @memberof ForgeJobRepositoryOwner
      */
     login?: string;
     /**
      * 
      * @type {string}
-     * @memberof PushPusher
+     * @memberof ForgeJobRepositoryOwner
      */
     username?: string;
 }
 
 /**
- * Check if a given object implements the PushPusher interface.
+ * Check if a given object implements the ForgeJobRepositoryOwner interface.
  */
-export function instanceOfPushPusher(value: object): value is PushPusher {
+export function instanceOfForgeJobRepositoryOwner(value: object): value is ForgeJobRepositoryOwner {
     return true;
 }
 
-export function PushPusherFromJSON(json: any): PushPusher {
-    return PushPusherFromJSONTyped(json, false);
+export function ForgeJobRepositoryOwnerFromJSON(json: any): ForgeJobRepositoryOwner {
+    return ForgeJobRepositoryOwnerFromJSONTyped(json, false);
 }
 
-export function PushPusherFromJSONTyped(json: any, ignoreDiscriminator: boolean): PushPusher {
+export function ForgeJobRepositoryOwnerFromJSONTyped(json: any, ignoreDiscriminator: boolean): ForgeJobRepositoryOwner {
     if (json == null) {
         return json;
     }
@@ -55,11 +55,11 @@ export function PushPusherFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     };
 }
 
-export function PushPusherToJSON(json: any): PushPusher {
-    return PushPusherToJSONTyped(json, false);
+export function ForgeJobRepositoryOwnerToJSON(json: any): ForgeJobRepositoryOwner {
+    return ForgeJobRepositoryOwnerToJSONTyped(json, false);
 }
 
-export function PushPusherToJSONTyped(value?: PushPusher | null, ignoreDiscriminator: boolean = false): any {
+export function ForgeJobRepositoryOwnerToJSONTyped(value?: ForgeJobRepositoryOwner | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

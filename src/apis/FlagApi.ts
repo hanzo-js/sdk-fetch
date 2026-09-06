@@ -37,27 +37,27 @@ import {
     HealthOutToJSON,
 } from '../models/index.js';
 
-export interface FlagsApiDeleteFlagsDefsByKeyRequest {
+export interface FlagApiDeleteFlagDefsByKeyRequest {
     key: string;
 }
 
-export interface FlagsApiGetFlagsActivityRequest {
+export interface FlagApiGetFlagActivityRequest {
     limit?: number;
 }
 
-export interface FlagsApiGetFlagsDefsByKeyRequest {
+export interface FlagApiGetFlagDefsByKeyRequest {
     key: string;
 }
 
-export interface FlagsApiPostFlagsRequest {
+export interface FlagApiPostFlagRequest {
     evaluateIn: EvaluateIn;
 }
 
-export interface FlagsApiPostFlagsDecideRequest {
+export interface FlagApiPostFlagDecideRequest {
     evaluateIn: EvaluateIn;
 }
 
-export interface FlagsApiPutFlagsDefsByKeyRequest {
+export interface FlagApiPutFlagDefsByKeyRequest {
     key: string;
     body: any | null;
 }
@@ -65,17 +65,17 @@ export interface FlagsApiPutFlagsDefsByKeyRequest {
 /**
  * 
  */
-export class FlagsApi extends runtime.BaseAPI {
+export class FlagApi extends runtime.BaseAPI {
 
     /**
      * Removes one flag definition by key and records the deletion in the change log. A key the caller\'s store does not hold is a 404.
      * Removes one flag definition by key and records the deletion in the change log.
      */
-    async deleteFlagsDefsByKeyRaw(requestParameters: FlagsApiDeleteFlagsDefsByKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DeletedOut>> {
+    async deleteFlagDefsByKeyRaw(requestParameters: FlagApiDeleteFlagDefsByKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DeletedOut>> {
         if (requestParameters['key'] == null) {
             throw new runtime.RequiredError(
                 'key',
-                'Required parameter "key" was null or undefined when calling deleteFlagsDefsByKey().'
+                'Required parameter "key" was null or undefined when calling deleteFlagDefsByKey().'
             );
         }
 
@@ -92,7 +92,7 @@ export class FlagsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/flags/defs/{key}`;
+        let urlPath = `/v1/flag/defs/{key}`;
         urlPath = urlPath.replace(`{${"key"}}`, encodeURIComponent(String(requestParameters['key'])));
 
         const response = await this.request({
@@ -109,8 +109,8 @@ export class FlagsApi extends runtime.BaseAPI {
      * Removes one flag definition by key and records the deletion in the change log. A key the caller\'s store does not hold is a 404.
      * Removes one flag definition by key and records the deletion in the change log.
      */
-    async deleteFlagsDefsByKey(requestParameters: FlagsApiDeleteFlagsDefsByKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DeletedOut> {
-        const response = await this.deleteFlagsDefsByKeyRaw(requestParameters, initOverrides);
+    async deleteFlagDefsByKey(requestParameters: FlagApiDeleteFlagDefsByKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DeletedOut> {
+        const response = await this.deleteFlagDefsByKeyRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -118,7 +118,7 @@ export class FlagsApi extends runtime.BaseAPI {
      * Returns the caller\'s flag change log newest-first: every create, update and delete, with the actor and the time.
      * Returns the caller\'s flag change log newest-first: every create, update and delete, with the actor and the time.
      */
-    async getFlagsActivityRaw(requestParameters: FlagsApiGetFlagsActivityRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ActivityOut>> {
+    async getFlagActivityRaw(requestParameters: FlagApiGetFlagActivityRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ActivityOut>> {
         const queryParameters: any = {};
 
         if (requestParameters['limit'] != null) {
@@ -136,7 +136,7 @@ export class FlagsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/flags/activity`;
+        let urlPath = `/v1/flag/activity`;
 
         const response = await this.request({
             path: urlPath,
@@ -152,8 +152,8 @@ export class FlagsApi extends runtime.BaseAPI {
      * Returns the caller\'s flag change log newest-first: every create, update and delete, with the actor and the time.
      * Returns the caller\'s flag change log newest-first: every create, update and delete, with the actor and the time.
      */
-    async getFlagsActivity(requestParameters: FlagsApiGetFlagsActivityRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ActivityOut> {
-        const response = await this.getFlagsActivityRaw(requestParameters, initOverrides);
+    async getFlagActivity(requestParameters: FlagApiGetFlagActivityRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ActivityOut> {
+        const response = await this.getFlagActivityRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -161,7 +161,7 @@ export class FlagsApi extends runtime.BaseAPI {
      * Returns every flag definition in the caller\'s (org, project) store, by key, with its version and who last changed it.
      * Returns every flag definition in the caller\'s (org, project) store, by key, with its version and who last changed it.
      */
-    async getFlagsDefsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DefsOut>> {
+    async getFlagDefsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DefsOut>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -175,7 +175,7 @@ export class FlagsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/flags/defs`;
+        let urlPath = `/v1/flag/defs`;
 
         const response = await this.request({
             path: urlPath,
@@ -191,8 +191,8 @@ export class FlagsApi extends runtime.BaseAPI {
      * Returns every flag definition in the caller\'s (org, project) store, by key, with its version and who last changed it.
      * Returns every flag definition in the caller\'s (org, project) store, by key, with its version and who last changed it.
      */
-    async getFlagsDefs(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DefsOut> {
-        const response = await this.getFlagsDefsRaw(initOverrides);
+    async getFlagDefs(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DefsOut> {
+        const response = await this.getFlagDefsRaw(initOverrides);
         return await response.value();
     }
 
@@ -200,11 +200,11 @@ export class FlagsApi extends runtime.BaseAPI {
      * Returns one flag definition by key, or 404 when the caller\'s store has none under that key.
      * Returns one flag definition by key, or 404 when the caller\'s store has none under that key.
      */
-    async getFlagsDefsByKeyRaw(requestParameters: FlagsApiGetFlagsDefsByKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DefRow>> {
+    async getFlagDefsByKeyRaw(requestParameters: FlagApiGetFlagDefsByKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DefRow>> {
         if (requestParameters['key'] == null) {
             throw new runtime.RequiredError(
                 'key',
-                'Required parameter "key" was null or undefined when calling getFlagsDefsByKey().'
+                'Required parameter "key" was null or undefined when calling getFlagDefsByKey().'
             );
         }
 
@@ -221,7 +221,7 @@ export class FlagsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/flags/defs/{key}`;
+        let urlPath = `/v1/flag/defs/{key}`;
         urlPath = urlPath.replace(`{${"key"}}`, encodeURIComponent(String(requestParameters['key'])));
 
         const response = await this.request({
@@ -238,8 +238,8 @@ export class FlagsApi extends runtime.BaseAPI {
      * Returns one flag definition by key, or 404 when the caller\'s store has none under that key.
      * Returns one flag definition by key, or 404 when the caller\'s store has none under that key.
      */
-    async getFlagsDefsByKey(requestParameters: FlagsApiGetFlagsDefsByKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DefRow> {
-        const response = await this.getFlagsDefsByKeyRaw(requestParameters, initOverrides);
+    async getFlagDefsByKey(requestParameters: FlagApiGetFlagDefsByKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DefRow> {
+        const response = await this.getFlagDefsByKeyRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -247,7 +247,7 @@ export class FlagsApi extends runtime.BaseAPI {
      * Health reports that the flag engine is serving. It is not gated: liveness must be probe-able without a token.
      * Health reports that the flag engine is serving.
      */
-    async getFlagsHealthRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<HealthOut>> {
+    async getFlagHealthRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<HealthOut>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -261,7 +261,7 @@ export class FlagsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/flags/health`;
+        let urlPath = `/v1/flag/health`;
 
         const response = await this.request({
             path: urlPath,
@@ -277,8 +277,8 @@ export class FlagsApi extends runtime.BaseAPI {
      * Health reports that the flag engine is serving. It is not gated: liveness must be probe-able without a token.
      * Health reports that the flag engine is serving.
      */
-    async getFlagsHealth(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<HealthOut> {
-        const response = await this.getFlagsHealthRaw(initOverrides);
+    async getFlagHealth(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<HealthOut> {
+        const response = await this.getFlagHealthRaw(initOverrides);
         return await response.value();
     }
 
@@ -286,11 +286,11 @@ export class FlagsApi extends runtime.BaseAPI {
      * Evaluate runs the caller\'s flag definitions for one identity and returns the flag verdict: which flags are on (or which variant), their payloads, and whether any definition failed to compute. Evaluation is in-process over the caller\'s own (org, project) definitions — no network hop, no shared KV — so a tenant can only ever evaluate its own flags.
      * Evaluate runs the caller\'s flag definitions for one identity and returns the flag verdict: which flags are on (or which variant), their payloads, and whether any definition failed to compute.
      */
-    async postFlagsRaw(requestParameters: FlagsApiPostFlagsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
+    async postFlagRaw(requestParameters: FlagApiPostFlagRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
         if (requestParameters['evaluateIn'] == null) {
             throw new runtime.RequiredError(
                 'evaluateIn',
-                'Required parameter "evaluateIn" was null or undefined when calling postFlags().'
+                'Required parameter "evaluateIn" was null or undefined when calling postFlag().'
             );
         }
 
@@ -309,7 +309,7 @@ export class FlagsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/flags`;
+        let urlPath = `/v1/flag`;
 
         const response = await this.request({
             path: urlPath,
@@ -330,8 +330,8 @@ export class FlagsApi extends runtime.BaseAPI {
      * Evaluate runs the caller\'s flag definitions for one identity and returns the flag verdict: which flags are on (or which variant), their payloads, and whether any definition failed to compute. Evaluation is in-process over the caller\'s own (org, project) definitions — no network hop, no shared KV — so a tenant can only ever evaluate its own flags.
      * Evaluate runs the caller\'s flag definitions for one identity and returns the flag verdict: which flags are on (or which variant), their payloads, and whether any definition failed to compute.
      */
-    async postFlags(requestParameters: FlagsApiPostFlagsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
-        const response = await this.postFlagsRaw(requestParameters, initOverrides);
+    async postFlag(requestParameters: FlagApiPostFlagRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
+        const response = await this.postFlagRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -339,11 +339,11 @@ export class FlagsApi extends runtime.BaseAPI {
      * Evaluate runs the caller\'s flag definitions for one identity and returns the flag verdict: which flags are on (or which variant), their payloads, and whether any definition failed to compute. Evaluation is in-process over the caller\'s own (org, project) definitions — no network hop, no shared KV — so a tenant can only ever evaluate its own flags.
      * Evaluate runs the caller\'s flag definitions for one identity and returns the flag verdict: which flags are on (or which variant), their payloads, and whether any definition failed to compute.
      */
-    async postFlagsDecideRaw(requestParameters: FlagsApiPostFlagsDecideRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
+    async postFlagDecideRaw(requestParameters: FlagApiPostFlagDecideRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
         if (requestParameters['evaluateIn'] == null) {
             throw new runtime.RequiredError(
                 'evaluateIn',
-                'Required parameter "evaluateIn" was null or undefined when calling postFlagsDecide().'
+                'Required parameter "evaluateIn" was null or undefined when calling postFlagDecide().'
             );
         }
 
@@ -362,7 +362,7 @@ export class FlagsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/flags/decide`;
+        let urlPath = `/v1/flag/decide`;
 
         const response = await this.request({
             path: urlPath,
@@ -383,8 +383,8 @@ export class FlagsApi extends runtime.BaseAPI {
      * Evaluate runs the caller\'s flag definitions for one identity and returns the flag verdict: which flags are on (or which variant), their payloads, and whether any definition failed to compute. Evaluation is in-process over the caller\'s own (org, project) definitions — no network hop, no shared KV — so a tenant can only ever evaluate its own flags.
      * Evaluate runs the caller\'s flag definitions for one identity and returns the flag verdict: which flags are on (or which variant), their payloads, and whether any definition failed to compute.
      */
-    async postFlagsDecide(requestParameters: FlagsApiPostFlagsDecideRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
-        const response = await this.postFlagsDecideRaw(requestParameters, initOverrides);
+    async postFlagDecide(requestParameters: FlagApiPostFlagDecideRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
+        const response = await this.postFlagDecideRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -392,18 +392,18 @@ export class FlagsApi extends runtime.BaseAPI {
      * Creates or replaces the flag definition at the path\'s key and returns the stored row. The BODY IS THE DEFINITION DOCUMENT — the flag-definition JSON object the evaluator consumes — and it is stored verbatim except that its \"key\" is forced to the key in the URL, so a document can never be filed under a name other than the one it was addressed by. Every write bumps the version and appends to the change log under the caller\'s identity.
      * Creates or replaces the flag definition at the path\'s key and returns the stored row.
      */
-    async putFlagsDefsByKeyRaw(requestParameters: FlagsApiPutFlagsDefsByKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DefRow>> {
+    async putFlagDefsByKeyRaw(requestParameters: FlagApiPutFlagDefsByKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DefRow>> {
         if (requestParameters['key'] == null) {
             throw new runtime.RequiredError(
                 'key',
-                'Required parameter "key" was null or undefined when calling putFlagsDefsByKey().'
+                'Required parameter "key" was null or undefined when calling putFlagDefsByKey().'
             );
         }
 
         if (requestParameters['body'] == null) {
             throw new runtime.RequiredError(
                 'body',
-                'Required parameter "body" was null or undefined when calling putFlagsDefsByKey().'
+                'Required parameter "body" was null or undefined when calling putFlagDefsByKey().'
             );
         }
 
@@ -422,7 +422,7 @@ export class FlagsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/flags/defs/{key}`;
+        let urlPath = `/v1/flag/defs/{key}`;
         urlPath = urlPath.replace(`{${"key"}}`, encodeURIComponent(String(requestParameters['key'])));
 
         const response = await this.request({
@@ -440,8 +440,8 @@ export class FlagsApi extends runtime.BaseAPI {
      * Creates or replaces the flag definition at the path\'s key and returns the stored row. The BODY IS THE DEFINITION DOCUMENT — the flag-definition JSON object the evaluator consumes — and it is stored verbatim except that its \"key\" is forced to the key in the URL, so a document can never be filed under a name other than the one it was addressed by. Every write bumps the version and appends to the change log under the caller\'s identity.
      * Creates or replaces the flag definition at the path\'s key and returns the stored row.
      */
-    async putFlagsDefsByKey(requestParameters: FlagsApiPutFlagsDefsByKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DefRow> {
-        const response = await this.putFlagsDefsByKeyRaw(requestParameters, initOverrides);
+    async putFlagDefsByKey(requestParameters: FlagApiPutFlagDefsByKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DefRow> {
+        const response = await this.putFlagDefsByKeyRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

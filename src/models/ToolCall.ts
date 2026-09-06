@@ -27,7 +27,7 @@ export interface ToolCall {
      */
     arguments?: { [key: string]: object; };
     /**
-     * Name is the tool to run, exactly as GET /v1/tools reports it.
+     * Name is the tool to run, exactly as GET /v1/tool reports it.
      * @type {string}
      * @memberof ToolCall
      */

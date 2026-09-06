@@ -34,7 +34,6 @@ import type {
   PreviewView,
   ProjectView,
   PromoteReq,
-  Push,
   Readiness,
   ReleaseBoard,
   RestartRef,
@@ -45,7 +44,6 @@ import type {
   RunnerBuildReq,
   RunnerBuildResp,
   SetEnvReq,
-  Verdict,
 } from '../models/index.js';
 import {
     AddDomainReqFromJSON,
@@ -86,8 +84,6 @@ import {
     ProjectViewToJSON,
     PromoteReqFromJSON,
     PromoteReqToJSON,
-    PushFromJSON,
-    PushToJSON,
     ReadinessFromJSON,
     ReadinessToJSON,
     ReleaseBoardFromJSON,
@@ -108,8 +104,6 @@ import {
     RunnerBuildRespToJSON,
     SetEnvReqFromJSON,
     SetEnvReqToJSON,
-    VerdictFromJSON,
-    VerdictToJSON,
 } from '../models/index.js';
 
 export interface PlatformApiDeletePlatformProjectsByProjectAppsByAppRequest {
@@ -187,10 +181,6 @@ export interface PlatformApiGetPlatformProjectsByProjectAppsByAppDomainsRequest 
 export interface PlatformApiPostPlatformFleetByAppDeployRequest {
     app: string;
     restartRef: RestartRef;
-}
-
-export interface PlatformApiPostPlatformHookRequest {
-    push?: Push;
 }
 
 export interface PlatformApiPostPlatformProjectsByProjectAppsRequest {
@@ -1418,48 +1408,6 @@ export class PlatformApi extends runtime.BaseAPI {
      */
     async postPlatformFleetByAppDeploy(requestParameters: PlatformApiPostPlatformFleetByAppDeployRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Restarted> {
         const response = await this.postPlatformFleetByAppDeployRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * The forge\'s push-to-deploy endpoint. git.hanzo.ai runs as a separate server, so its pushes never reach this fleet\'s own receive-pack; without this a push to the host we call canonical builds nothing. A verified push is handed to the SAME two clients a native push travels — the single-registrant deploy trigger, and the many-subscriber lifecycle stream that notifies and indexes — and the build decision itself stays downstream in the one place that knows what a push means.  PUBLIC at the JWT layer, because the forge carries no Hanzo session: AUTHENTICATION IS THE SIGNATURE. The HMAC covers the raw bytes and is verified BEFORE the payload is parsed, so an unauthenticated body is never decoded. The secret is read from KMS; a deployment that cannot read it answers 503 and processes nothing, rather than trusting a delivery it could not check. The body is read UNCOMPRESSED — a request declaring a Content-Encoding is refused 415 before it is touched, because decoding one is unbounded work bought with a few bytes and no credential. A bad signature is 401, a payload over 8 MiB is 413, and a malformed one 400.  A verified push that reaches both clients answers 200 with fired true and the NUMBER OF BUILDS it launched — zero is ordinary, since most pushes track no application, and it is the answer \'fired\' cannot give. A push that could not be dispatched answers 500: the delivery page shows it red, and the Replay that prompts reaches a fresh attempt rather than being declined as already landed.  The deliveries deliberately ignored answer 200 with a reason and nothing else: a payload that is not a push, a ref DELETE (a zero `after` has no commit to build), a BOT-authored push (release automation pushes as the forge\'s own Actions user, and a release must never rebuild itself), a push from a forge namespace that maps to no org, and a redelivery of a push already fired. Branches and tags both reach the build trigger, because releases are cut by tag and filtering here would silently stop publishing.
-     * Receive a push from the forge and trigger its build
-     */
-    async postPlatformHookRaw(requestParameters: PlatformApiPostPlatformHookRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Verdict>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/v1/platform/hook`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: PushToJSON(requestParameters['push']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => VerdictFromJSON(jsonValue));
-    }
-
-    /**
-     * The forge\'s push-to-deploy endpoint. git.hanzo.ai runs as a separate server, so its pushes never reach this fleet\'s own receive-pack; without this a push to the host we call canonical builds nothing. A verified push is handed to the SAME two clients a native push travels — the single-registrant deploy trigger, and the many-subscriber lifecycle stream that notifies and indexes — and the build decision itself stays downstream in the one place that knows what a push means.  PUBLIC at the JWT layer, because the forge carries no Hanzo session: AUTHENTICATION IS THE SIGNATURE. The HMAC covers the raw bytes and is verified BEFORE the payload is parsed, so an unauthenticated body is never decoded. The secret is read from KMS; a deployment that cannot read it answers 503 and processes nothing, rather than trusting a delivery it could not check. The body is read UNCOMPRESSED — a request declaring a Content-Encoding is refused 415 before it is touched, because decoding one is unbounded work bought with a few bytes and no credential. A bad signature is 401, a payload over 8 MiB is 413, and a malformed one 400.  A verified push that reaches both clients answers 200 with fired true and the NUMBER OF BUILDS it launched — zero is ordinary, since most pushes track no application, and it is the answer \'fired\' cannot give. A push that could not be dispatched answers 500: the delivery page shows it red, and the Replay that prompts reaches a fresh attempt rather than being declined as already landed.  The deliveries deliberately ignored answer 200 with a reason and nothing else: a payload that is not a push, a ref DELETE (a zero `after` has no commit to build), a BOT-authored push (release automation pushes as the forge\'s own Actions user, and a release must never rebuild itself), a push from a forge namespace that maps to no org, and a redelivery of a push already fired. Branches and tags both reach the build trigger, because releases are cut by tag and filtering here would silently stop publishing.
-     * Receive a push from the forge and trigger its build
-     */
-    async postPlatformHook(requestParameters: PlatformApiPostPlatformHookRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Verdict> {
-        const response = await this.postPlatformHookRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

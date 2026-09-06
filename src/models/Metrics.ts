@@ -42,12 +42,6 @@ export interface Metrics {
      */
     load1?: number;
     /**
-     * Load5 is the same figure averaged over five minutes.
-     * @type {number}
-     * @memberof Metrics
-     */
-    load5?: number;
-    /**
      * Load15 is the same figure over fifteen. The three together are what separate
      * a machine that is busy right now from one that has been busy all along —
      * which is the question a dispatcher is really asking.
@@ -55,6 +49,12 @@ export interface Metrics {
      * @memberof Metrics
      */
     load15?: number;
+    /**
+     * Load5 is the same figure averaged over five minutes.
+     * @type {number}
+     * @memberof Metrics
+     */
+    load5?: number;
     /**
      * bytes
      * @type {number}
@@ -89,8 +89,8 @@ export function MetricsFromJSONTyped(json: any, ignoreDiscriminator: boolean): M
         'at': json['at'] == null ? undefined : json['at'],
         'gpuUtil': json['gpuUtil'] == null ? undefined : json['gpuUtil'],
         'load1': json['load1'] == null ? undefined : json['load1'],
-        'load5': json['load5'] == null ? undefined : json['load5'],
         'load15': json['load15'] == null ? undefined : json['load15'],
+        'load5': json['load5'] == null ? undefined : json['load5'],
         'memFree': json['memFree'] == null ? undefined : json['memFree'],
         'memUsed': json['memUsed'] == null ? undefined : json['memUsed'],
     };
@@ -110,8 +110,8 @@ export function MetricsToJSONTyped(value?: Metrics | null, ignoreDiscriminator: 
         'at': value['at'],
         'gpuUtil': value['gpuUtil'],
         'load1': value['load1'],
-        'load5': value['load5'],
         'load15': value['load15'],
+        'load5': value['load5'],
         'memFree': value['memFree'],
         'memUsed': value['memUsed'],
     };

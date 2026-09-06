@@ -85,7 +85,7 @@ export class TelApi extends runtime.BaseAPI {
      * Ends a call this org placed. The holding is read for THIS org before the carrier is asked, for the reason releaseNumber gives one surface up: an id belonging to another tenant would otherwise be hung up by whoever guessed it.
      * Ends a call this org placed.
      */
-    async deleteTelCallsByIdRaw(requestParameters: TelApiDeleteTelCallsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
+    async deleteTelCallsByIdRaw(requestParameters: TelApiDeleteTelCallsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -116,23 +116,22 @@ export class TelApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse<any>(response);
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Ends a call this org placed. The holding is read for THIS org before the carrier is asked, for the reason releaseNumber gives one surface up: an id belonging to another tenant would otherwise be hung up by whoever guessed it.
      * Ends a call this org placed.
      */
-    async deleteTelCallsById(requestParameters: TelApiDeleteTelCallsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
-        const response = await this.deleteTelCallsByIdRaw(requestParameters, initOverrides);
-        return await response.value();
+    async deleteTelCallsById(requestParameters: TelApiDeleteTelCallsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteTelCallsByIdRaw(requestParameters, initOverrides);
     }
 
     /**
      * Checks the holding is THIS org\'s before it reaches the carrier. Without that read, an id belonging to another tenant would be released by whoever guessed it.
      * Checks the holding is THIS org\'s before it reaches the carrier.
      */
-    async deleteTelNumbersByIdRaw(requestParameters: TelApiDeleteTelNumbersByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
+    async deleteTelNumbersByIdRaw(requestParameters: TelApiDeleteTelNumbersByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -163,16 +162,15 @@ export class TelApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse<any>(response);
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Checks the holding is THIS org\'s before it reaches the carrier. Without that read, an id belonging to another tenant would be released by whoever guessed it.
      * Checks the holding is THIS org\'s before it reaches the carrier.
      */
-    async deleteTelNumbersById(requestParameters: TelApiDeleteTelNumbersByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
-        const response = await this.deleteTelNumbersByIdRaw(requestParameters, initOverrides);
-        return await response.value();
+    async deleteTelNumbersById(requestParameters: TelApiDeleteTelNumbersByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteTelNumbersByIdRaw(requestParameters, initOverrides);
     }
 
     /**

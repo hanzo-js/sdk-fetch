@@ -27,7 +27,7 @@ export interface CreateServerReq {
      */
     authHeader?: string;
     /**
-     * Listing enables a CATALOG entry instead — the id from GET /v1/tools/catalog.
+     * Listing enables a CATALOG entry instead — the id from GET /v1/tool/catalog.
      * The endpoint is the listing's own streamable-http remote, so a listing that
      * only ships a stdio package is refused: there is nothing to reach yet.
      * @type {string}

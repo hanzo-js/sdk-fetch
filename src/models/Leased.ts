@@ -29,6 +29,13 @@ export interface Leased {
      */
     _class?: string;
     /**
+     * Cluster is the attached cluster this sandbox runs on, when one was named.
+     * Empty is the home cluster.
+     * @type {string}
+     * @memberof Leased
+     */
+    cluster?: string;
+    /**
      * ID names this computer for every later call — run, read, write, stop and end
      * all take it, and a LeaseIn carrying it resumes THIS sandbox instead of leasing
      * a second one. Minted here; a caller cannot choose it, and a resumed lease that
@@ -86,6 +93,7 @@ export function LeasedFromJSONTyped(json: any, ignoreDiscriminator: boolean): Le
     return {
         
         '_class': json['class'] == null ? undefined : json['class'],
+        'cluster': json['cluster'] == null ? undefined : json['cluster'],
         'id': json['id'] == null ? undefined : json['id'],
         'runtime': json['runtime'] == null ? undefined : json['runtime'],
         'status': json['status'] == null ? undefined : json['status'],
@@ -105,6 +113,7 @@ export function LeasedToJSONTyped(value?: Leased | null, ignoreDiscriminator: bo
     return {
         
         'class': value['_class'],
+        'cluster': value['cluster'],
         'id': value['id'],
         'runtime': value['runtime'],
         'status': value['status'],

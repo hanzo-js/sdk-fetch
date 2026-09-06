@@ -79,132 +79,132 @@ import {
     TagConfigToJSON,
 } from '../models/index.js';
 
-export interface ProjectsApiDeleteProjectsBySlugRequest {
+export interface ProjectApiDeleteProjectBySlugRequest {
     slug: string;
 }
 
-export interface ProjectsApiDeleteProjectsBySlugDomainsByHostRequest {
+export interface ProjectApiDeleteProjectBySlugDomainsByHostRequest {
     slug: string;
     host: string;
 }
 
-export interface ProjectsApiDeleteProjectsBySlugStarRequest {
+export interface ProjectApiDeleteProjectBySlugStarRequest {
     slug: string;
 }
 
-export interface ProjectsApiGetProjectsBySlugRequest {
+export interface ProjectApiGetProjectBySlugRequest {
     slug: string;
 }
 
-export interface ProjectsApiGetProjectsBySlugDeploymentsRequest {
+export interface ProjectApiGetProjectBySlugDeploymentsRequest {
     slug: string;
 }
 
-export interface ProjectsApiGetProjectsBySlugDeploymentsByIdRequest {
+export interface ProjectApiGetProjectBySlugDeploymentsByIdRequest {
     slug: string;
     id: string;
 }
 
-export interface ProjectsApiGetProjectsBySlugDomainsRequest {
+export interface ProjectApiGetProjectBySlugDomainsRequest {
     slug: string;
 }
 
-export interface ProjectsApiGetProjectsBySlugReleasesRequest {
+export interface ProjectApiGetProjectBySlugReleasesRequest {
     slug: string;
 }
 
-export interface ProjectsApiGetProjectsBySlugShotRequest {
+export interface ProjectApiGetProjectBySlugShotRequest {
     slug: string;
 }
 
-export interface ProjectsApiGetProjectsSitesBySlugRequest {
+export interface ProjectApiGetProjectSitesBySlugRequest {
     slug: string;
 }
 
-export interface ProjectsApiPatchProjectsBySlugRequest {
+export interface ProjectApiPatchProjectBySlugRequest {
     slug: string;
     projectsUpdate: ProjectsUpdate;
 }
 
-export interface ProjectsApiPostProjectsRequest {
+export interface ProjectApiPostProjectRequest {
     projectsCreate: ProjectsCreate;
 }
 
-export interface ProjectsApiPostProjectsBySlugDeployRequest {
+export interface ProjectApiPostProjectBySlugDeployRequest {
     slug: string;
     body?: Blob;
 }
 
-export interface ProjectsApiPostProjectsBySlugDeploymentsRequest {
+export interface ProjectApiPostProjectBySlugDeploymentsRequest {
     slug: string;
     projectsDeployStart: ProjectsDeployStart;
 }
 
-export interface ProjectsApiPostProjectsBySlugDeploymentsByIdCompleteRequest {
+export interface ProjectApiPostProjectBySlugDeploymentsByIdCompleteRequest {
     slug: string;
     id: string;
     projectsComplete: ProjectsComplete;
 }
 
-export interface ProjectsApiPostProjectsBySlugDomainsRequest {
+export interface ProjectApiPostProjectBySlugDomainsRequest {
     slug: string;
     projectsDomainsBind: ProjectsDomainsBind;
 }
 
-export interface ProjectsApiPostProjectsBySlugDomainsByHostVerifyRequest {
+export interface ProjectApiPostProjectBySlugDomainsByHostVerifyRequest {
     slug: string;
     host: string;
 }
 
-export interface ProjectsApiPostProjectsBySlugPublishRequest {
+export interface ProjectApiPostProjectBySlugPublishRequest {
     slug: string;
     projectsPublish: ProjectsPublish;
 }
 
-export interface ProjectsApiPostProjectsBySlugPurgeRequest {
+export interface ProjectApiPostProjectBySlugPurgeRequest {
     slug: string;
 }
 
-export interface ProjectsApiPostProjectsBySlugReleasesRequest {
+export interface ProjectApiPostProjectBySlugReleasesRequest {
     slug: string;
     projectsPublish: ProjectsPublish;
 }
 
-export interface ProjectsApiPostProjectsBySlugReleasesByReleaseActivateRequest {
+export interface ProjectApiPostProjectBySlugReleasesByReleaseActivateRequest {
     slug: string;
     release: string;
 }
 
-export interface ProjectsApiPostProjectsForkRequest {
+export interface ProjectApiPostProjectForkRequest {
     projectsFork: ProjectsFork;
 }
 
-export interface ProjectsApiPostProjectsSitesRequest {
+export interface ProjectApiPostProjectSitesRequest {
     projectsBuildSite: ProjectsBuildSite;
 }
 
-export interface ProjectsApiPostProjectsSitesDeployRequest {
+export interface ProjectApiPostProjectSitesDeployRequest {
     projectsDeploySite: ProjectsDeploySite;
 }
 
-export interface ProjectsApiPutProjectsBySlugStarRequest {
+export interface ProjectApiPutProjectBySlugStarRequest {
     slug: string;
 }
 
 /**
  * 
  */
-export class ProjectsApi extends runtime.BaseAPI {
+export class ProjectApi extends runtime.BaseAPI {
 
     /**
      * Deletes a project and takes its site off the internet.  The metadata delete is authoritative and everything after it is best-effort, in this order: the public `<slug>` subdomain binding is released so the slug is free to reclaim, the release rows are dropped so a reclaimed slug never inherits the previous owner\'s rollback menu, the git source is retired on every copy it has so a reclaimed slug never adopts a repository left behind (visibility.go), the S3 origin is purged under BOTH `<org>/<slug>/` and the site\'s sibling release space, and the edge cache-tag is flushed. A failure in any of those is logged and the delete still answers 204 — resurrecting a project because a purge missed would be worse than a leaked prefix.  Scope: a validated principal is required (403 without one) and the project is resolved within that principal\'s org, so another tenant\'s slug is a 404 and nothing of theirs is touched.
      * Deletes a project and takes its site off the internet.
      */
-    async deleteProjectsBySlugRaw(requestParameters: ProjectsApiDeleteProjectsBySlugRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async deleteProjectBySlugRaw(requestParameters: ProjectApiDeleteProjectBySlugRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['slug'] == null) {
             throw new runtime.RequiredError(
                 'slug',
-                'Required parameter "slug" was null or undefined when calling deleteProjectsBySlug().'
+                'Required parameter "slug" was null or undefined when calling deleteProjectBySlug().'
             );
         }
 
@@ -221,7 +221,7 @@ export class ProjectsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/projects/{slug}`;
+        let urlPath = `/v1/project/{slug}`;
         urlPath = urlPath.replace(`{${"slug"}}`, encodeURIComponent(String(requestParameters['slug'])));
 
         const response = await this.request({
@@ -238,26 +238,26 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Deletes a project and takes its site off the internet.  The metadata delete is authoritative and everything after it is best-effort, in this order: the public `<slug>` subdomain binding is released so the slug is free to reclaim, the release rows are dropped so a reclaimed slug never inherits the previous owner\'s rollback menu, the git source is retired on every copy it has so a reclaimed slug never adopts a repository left behind (visibility.go), the S3 origin is purged under BOTH `<org>/<slug>/` and the site\'s sibling release space, and the edge cache-tag is flushed. A failure in any of those is logged and the delete still answers 204 — resurrecting a project because a purge missed would be worse than a leaked prefix.  Scope: a validated principal is required (403 without one) and the project is resolved within that principal\'s org, so another tenant\'s slug is a 404 and nothing of theirs is touched.
      * Deletes a project and takes its site off the internet.
      */
-    async deleteProjectsBySlug(requestParameters: ProjectsApiDeleteProjectsBySlugRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.deleteProjectsBySlugRaw(requestParameters, initOverrides);
+    async deleteProjectBySlug(requestParameters: ProjectApiDeleteProjectBySlugRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteProjectBySlugRaw(requestParameters, initOverrides);
     }
 
     /**
      * Gives a custom hostname back, so the name is free to reuse.  A claim is FIRST-COME and global, so an add-only surface was not ownership but a leak: a customer who mistyped a domain, or claimed one they later moved elsewhere, could neither reuse it nor let anyone else. This is the third writer that closes it. The release is scoped to (host, org, slug), so it can only ever drop THIS tenant\'s own claim, and it is IDEMPOTENT: releasing a host we do not hold is a clean 204, never a 404 that would let a caller probe which hosts other tenants hold. The edge cache-tag is flushed, since the host stops routing here.  Scope: a validated principal is required (403 without one) and the site is resolved within that principal\'s org, so another tenant\'s slug is a 404.
      * Gives a custom hostname back, so the name is free to reuse.
      */
-    async deleteProjectsBySlugDomainsByHostRaw(requestParameters: ProjectsApiDeleteProjectsBySlugDomainsByHostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async deleteProjectBySlugDomainsByHostRaw(requestParameters: ProjectApiDeleteProjectBySlugDomainsByHostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['slug'] == null) {
             throw new runtime.RequiredError(
                 'slug',
-                'Required parameter "slug" was null or undefined when calling deleteProjectsBySlugDomainsByHost().'
+                'Required parameter "slug" was null or undefined when calling deleteProjectBySlugDomainsByHost().'
             );
         }
 
         if (requestParameters['host'] == null) {
             throw new runtime.RequiredError(
                 'host',
-                'Required parameter "host" was null or undefined when calling deleteProjectsBySlugDomainsByHost().'
+                'Required parameter "host" was null or undefined when calling deleteProjectBySlugDomainsByHost().'
             );
         }
 
@@ -274,7 +274,7 @@ export class ProjectsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/projects/{slug}/domains/{host}`;
+        let urlPath = `/v1/project/{slug}/domains/{host}`;
         urlPath = urlPath.replace(`{${"slug"}}`, encodeURIComponent(String(requestParameters['slug'])));
         urlPath = urlPath.replace(`{${"host"}}`, encodeURIComponent(String(requestParameters['host'])));
 
@@ -292,19 +292,19 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Gives a custom hostname back, so the name is free to reuse.  A claim is FIRST-COME and global, so an add-only surface was not ownership but a leak: a customer who mistyped a domain, or claimed one they later moved elsewhere, could neither reuse it nor let anyone else. This is the third writer that closes it. The release is scoped to (host, org, slug), so it can only ever drop THIS tenant\'s own claim, and it is IDEMPOTENT: releasing a host we do not hold is a clean 204, never a 404 that would let a caller probe which hosts other tenants hold. The edge cache-tag is flushed, since the host stops routing here.  Scope: a validated principal is required (403 without one) and the site is resolved within that principal\'s org, so another tenant\'s slug is a 404.
      * Gives a custom hostname back, so the name is free to reuse.
      */
-    async deleteProjectsBySlugDomainsByHost(requestParameters: ProjectsApiDeleteProjectsBySlugDomainsByHostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.deleteProjectsBySlugDomainsByHostRaw(requestParameters, initOverrides);
+    async deleteProjectBySlugDomainsByHost(requestParameters: ProjectApiDeleteProjectBySlugDomainsByHostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteProjectBySlugDomainsByHostRaw(requestParameters, initOverrides);
     }
 
     /**
      * Removes the caller\'s own bookmark from a project, and answers whether it is starred afterwards.  It removes only YOUR star — the same one star wrote — so a project other people have starred stays on their lists. Unstarring one you had not starred is not an error; it leaves it unstarred.
      * Removes the caller\'s own bookmark from a project, and answers whether it is starred afterwards.
      */
-    async deleteProjectsBySlugStarRaw(requestParameters: ProjectsApiDeleteProjectsBySlugStarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsStar>> {
+    async deleteProjectBySlugStarRaw(requestParameters: ProjectApiDeleteProjectBySlugStarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsStar>> {
         if (requestParameters['slug'] == null) {
             throw new runtime.RequiredError(
                 'slug',
-                'Required parameter "slug" was null or undefined when calling deleteProjectsBySlugStar().'
+                'Required parameter "slug" was null or undefined when calling deleteProjectBySlugStar().'
             );
         }
 
@@ -321,7 +321,7 @@ export class ProjectsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/projects/{slug}/star`;
+        let urlPath = `/v1/project/{slug}/star`;
         urlPath = urlPath.replace(`{${"slug"}}`, encodeURIComponent(String(requestParameters['slug'])));
 
         const response = await this.request({
@@ -338,8 +338,8 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Removes the caller\'s own bookmark from a project, and answers whether it is starred afterwards.  It removes only YOUR star — the same one star wrote — so a project other people have starred stays on their lists. Unstarring one you had not starred is not an error; it leaves it unstarred.
      * Removes the caller\'s own bookmark from a project, and answers whether it is starred afterwards.
      */
-    async deleteProjectsBySlugStar(requestParameters: ProjectsApiDeleteProjectsBySlugStarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsStar> {
-        const response = await this.deleteProjectsBySlugStarRaw(requestParameters, initOverrides);
+    async deleteProjectBySlugStar(requestParameters: ProjectApiDeleteProjectBySlugStarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsStar> {
+        const response = await this.deleteProjectBySlugStarRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -347,7 +347,7 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Returns every project your org owns.  Each row carries the slug, name, framework, visibility, status and live URL — the same rows console and the builder render, because there is only one store behind both. It requires a validated principal (403 without one) and is keyed by that principal\'s org, so it never contains another tenant\'s project.
      * Returns every project your org owns.
      */
-    async getProjectsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ProjectsProject>>> {
+    async getProjectRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ProjectsProject>>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -361,7 +361,7 @@ export class ProjectsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/projects`;
+        let urlPath = `/v1/project`;
 
         const response = await this.request({
             path: urlPath,
@@ -377,8 +377,8 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Returns every project your org owns.  Each row carries the slug, name, framework, visibility, status and live URL — the same rows console and the builder render, because there is only one store behind both. It requires a validated principal (403 without one) and is keyed by that principal\'s org, so it never contains another tenant\'s project.
      * Returns every project your org owns.
      */
-    async getProjects(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ProjectsProject>> {
-        const response = await this.getProjectsRaw(initOverrides);
+    async getProject(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ProjectsProject>> {
+        const response = await this.getProjectRaw(initOverrides);
         return await response.value();
     }
 
@@ -386,11 +386,11 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Returns one project of yours by slug — its settings, its live URL and the deployment currently serving it.  Scope: a validated principal is required (403 without one) and the lookup is keyed by (org, slug), so another tenant\'s slug is a 404 exactly like a nonexistent one.
      * Returns one project of yours by slug — its settings, its live URL and the deployment currently serving it.
      */
-    async getProjectsBySlugRaw(requestParameters: ProjectsApiGetProjectsBySlugRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsProject>> {
+    async getProjectBySlugRaw(requestParameters: ProjectApiGetProjectBySlugRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsProject>> {
         if (requestParameters['slug'] == null) {
             throw new runtime.RequiredError(
                 'slug',
-                'Required parameter "slug" was null or undefined when calling getProjectsBySlug().'
+                'Required parameter "slug" was null or undefined when calling getProjectBySlug().'
             );
         }
 
@@ -407,7 +407,7 @@ export class ProjectsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/projects/{slug}`;
+        let urlPath = `/v1/project/{slug}`;
         urlPath = urlPath.replace(`{${"slug"}}`, encodeURIComponent(String(requestParameters['slug'])));
 
         const response = await this.request({
@@ -424,8 +424,8 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Returns one project of yours by slug — its settings, its live URL and the deployment currently serving it.  Scope: a validated principal is required (403 without one) and the lookup is keyed by (org, slug), so another tenant\'s slug is a 404 exactly like a nonexistent one.
      * Returns one project of yours by slug — its settings, its live URL and the deployment currently serving it.
      */
-    async getProjectsBySlug(requestParameters: ProjectsApiGetProjectsBySlugRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsProject> {
-        const response = await this.getProjectsBySlugRaw(requestParameters, initOverrides);
+    async getProjectBySlug(requestParameters: ProjectApiGetProjectBySlugRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsProject> {
+        const response = await this.getProjectBySlugRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -433,11 +433,11 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Returns a project\'s deploy history, newest version first.  Every deploy of the project is a row — uploads, generated sites, and git/CI builds alike — carrying its version, status, source, commit, live URL, file count and byte count. The short-lived upload grant a queued git deployment was handed is NOT replayed here: it exists only on the 202 that minted it, so a grant cannot outlive its build by being fetched again.  Scope: a validated principal is required (403 without one) and the project is resolved within that principal\'s org, so another tenant\'s slug is a 404.
      * Returns a project\'s deploy history, newest version first.
      */
-    async getProjectsBySlugDeploymentsRaw(requestParameters: ProjectsApiGetProjectsBySlugDeploymentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ProjectsDeployment>>> {
+    async getProjectBySlugDeploymentsRaw(requestParameters: ProjectApiGetProjectBySlugDeploymentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ProjectsDeployment>>> {
         if (requestParameters['slug'] == null) {
             throw new runtime.RequiredError(
                 'slug',
-                'Required parameter "slug" was null or undefined when calling getProjectsBySlugDeployments().'
+                'Required parameter "slug" was null or undefined when calling getProjectBySlugDeployments().'
             );
         }
 
@@ -454,7 +454,7 @@ export class ProjectsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/projects/{slug}/deployments`;
+        let urlPath = `/v1/project/{slug}/deployments`;
         urlPath = urlPath.replace(`{${"slug"}}`, encodeURIComponent(String(requestParameters['slug'])));
 
         const response = await this.request({
@@ -471,8 +471,8 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Returns a project\'s deploy history, newest version first.  Every deploy of the project is a row — uploads, generated sites, and git/CI builds alike — carrying its version, status, source, commit, live URL, file count and byte count. The short-lived upload grant a queued git deployment was handed is NOT replayed here: it exists only on the 202 that minted it, so a grant cannot outlive its build by being fetched again.  Scope: a validated principal is required (403 without one) and the project is resolved within that principal\'s org, so another tenant\'s slug is a 404.
      * Returns a project\'s deploy history, newest version first.
      */
-    async getProjectsBySlugDeployments(requestParameters: ProjectsApiGetProjectsBySlugDeploymentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ProjectsDeployment>> {
-        const response = await this.getProjectsBySlugDeploymentsRaw(requestParameters, initOverrides);
+    async getProjectBySlugDeployments(requestParameters: ProjectApiGetProjectBySlugDeploymentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ProjectsDeployment>> {
+        const response = await this.getProjectBySlugDeploymentsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -480,18 +480,18 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Returns one deployment of a project by id.  It is how a console follows a build: the status (`queued`, `uploading`, `live`, `error`), the message a failure left, and the URL and prefix it went live at. Like the history, it never replays the upload grant.  Scope: a validated principal is required (403 without one). Both the project and the deployment are resolved within that principal\'s org, so a deployment of another project — or of another tenant — is a 404.
      * Returns one deployment of a project by id.
      */
-    async getProjectsBySlugDeploymentsByIdRaw(requestParameters: ProjectsApiGetProjectsBySlugDeploymentsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsDeployment>> {
+    async getProjectBySlugDeploymentsByIdRaw(requestParameters: ProjectApiGetProjectBySlugDeploymentsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsDeployment>> {
         if (requestParameters['slug'] == null) {
             throw new runtime.RequiredError(
                 'slug',
-                'Required parameter "slug" was null or undefined when calling getProjectsBySlugDeploymentsById().'
+                'Required parameter "slug" was null or undefined when calling getProjectBySlugDeploymentsById().'
             );
         }
 
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling getProjectsBySlugDeploymentsById().'
+                'Required parameter "id" was null or undefined when calling getProjectBySlugDeploymentsById().'
             );
         }
 
@@ -508,7 +508,7 @@ export class ProjectsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/projects/{slug}/deployments/{id}`;
+        let urlPath = `/v1/project/{slug}/deployments/{id}`;
         urlPath = urlPath.replace(`{${"slug"}}`, encodeURIComponent(String(requestParameters['slug'])));
         urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
@@ -526,8 +526,8 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Returns one deployment of a project by id.  It is how a console follows a build: the status (`queued`, `uploading`, `live`, `error`), the message a failure left, and the URL and prefix it went live at. Like the history, it never replays the upload grant.  Scope: a validated principal is required (403 without one). Both the project and the deployment are resolved within that principal\'s org, so a deployment of another project — or of another tenant — is a 404.
      * Returns one deployment of a project by id.
      */
-    async getProjectsBySlugDeploymentsById(requestParameters: ProjectsApiGetProjectsBySlugDeploymentsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsDeployment> {
-        const response = await this.getProjectsBySlugDeploymentsByIdRaw(requestParameters, initOverrides);
+    async getProjectBySlugDeploymentsById(requestParameters: ProjectApiGetProjectBySlugDeploymentsByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsDeployment> {
+        const response = await this.getProjectBySlugDeploymentsByIdRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -535,11 +535,11 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Returns every custom hostname this site holds: the live ones, plus any pending claim with the DNS records it still owes.  `domains` is the routing answer — the hosts that are verified right now — while `claims` is the full panel, one row per host, each saying whether it is live or pending and, if pending, exactly what to publish.  Scope: a validated principal is required (403 without one) and the site is resolved within that principal\'s org, so another tenant\'s slug is a 404.
      * Returns every custom hostname this site holds: the live ones, plus any pending claim with the DNS records it still owes.
      */
-    async getProjectsBySlugDomainsRaw(requestParameters: ProjectsApiGetProjectsBySlugDomainsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsDomains>> {
+    async getProjectBySlugDomainsRaw(requestParameters: ProjectApiGetProjectBySlugDomainsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsDomains>> {
         if (requestParameters['slug'] == null) {
             throw new runtime.RequiredError(
                 'slug',
-                'Required parameter "slug" was null or undefined when calling getProjectsBySlugDomains().'
+                'Required parameter "slug" was null or undefined when calling getProjectBySlugDomains().'
             );
         }
 
@@ -556,7 +556,7 @@ export class ProjectsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/projects/{slug}/domains`;
+        let urlPath = `/v1/project/{slug}/domains`;
         urlPath = urlPath.replace(`{${"slug"}}`, encodeURIComponent(String(requestParameters['slug'])));
 
         const response = await this.request({
@@ -573,8 +573,8 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Returns every custom hostname this site holds: the live ones, plus any pending claim with the DNS records it still owes.  `domains` is the routing answer — the hosts that are verified right now — while `claims` is the full panel, one row per host, each saying whether it is live or pending and, if pending, exactly what to publish.  Scope: a validated principal is required (403 without one) and the site is resolved within that principal\'s org, so another tenant\'s slug is a 404.
      * Returns every custom hostname this site holds: the live ones, plus any pending claim with the DNS records it still owes.
      */
-    async getProjectsBySlugDomains(requestParameters: ProjectsApiGetProjectsBySlugDomainsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsDomains> {
-        const response = await this.getProjectsBySlugDomainsRaw(requestParameters, initOverrides);
+    async getProjectBySlugDomains(requestParameters: ProjectApiGetProjectBySlugDomainsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsDomains> {
+        const response = await this.getProjectBySlugDomainsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -582,11 +582,11 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Returns a site\'s releases newest-first, marking the active one — the rollback menu.  Each row carries the release id to activate, the source it was promoted from, its object and byte counts, and the URL if it is the one serving. Retention bounds the list, so it is the set that can actually still be rolled back to, not a full history.  Scope: a validated principal is required (403 without one) and the site is resolved within that principal\'s org, so another tenant\'s slug is a 404.
      * Returns a site\'s releases newest-first, marking the active one — the rollback menu.
      */
-    async getProjectsBySlugReleasesRaw(requestParameters: ProjectsApiGetProjectsBySlugReleasesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ProjectsRelease>>> {
+    async getProjectBySlugReleasesRaw(requestParameters: ProjectApiGetProjectBySlugReleasesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ProjectsRelease>>> {
         if (requestParameters['slug'] == null) {
             throw new runtime.RequiredError(
                 'slug',
-                'Required parameter "slug" was null or undefined when calling getProjectsBySlugReleases().'
+                'Required parameter "slug" was null or undefined when calling getProjectBySlugReleases().'
             );
         }
 
@@ -603,7 +603,7 @@ export class ProjectsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/projects/{slug}/releases`;
+        let urlPath = `/v1/project/{slug}/releases`;
         urlPath = urlPath.replace(`{${"slug"}}`, encodeURIComponent(String(requestParameters['slug'])));
 
         const response = await this.request({
@@ -620,8 +620,8 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Returns a site\'s releases newest-first, marking the active one — the rollback menu.  Each row carries the release id to activate, the source it was promoted from, its object and byte counts, and the URL if it is the one serving. Retention bounds the list, so it is the set that can actually still be rolled back to, not a full history.  Scope: a validated principal is required (403 without one) and the site is resolved within that principal\'s org, so another tenant\'s slug is a 404.
      * Returns a site\'s releases newest-first, marking the active one — the rollback menu.
      */
-    async getProjectsBySlugReleases(requestParameters: ProjectsApiGetProjectsBySlugReleasesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ProjectsRelease>> {
-        const response = await this.getProjectsBySlugReleasesRaw(requestParameters, initOverrides);
+    async getProjectBySlugReleases(requestParameters: ProjectApiGetProjectBySlugReleasesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ProjectsRelease>> {
+        const response = await this.getProjectBySlugReleasesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -629,11 +629,11 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Returns a screenshot of what this project currently serves, as image/png. The capture is keyed by the deployment, so a redeploy invalidates it by construction rather than by anyone remembering to clear a cache. A project with nothing deployed answers 404 — that is a 404 about the PICTURE and not about the project, which is still right there in the list. Scoped to the caller\'s org: a validated principal is required, and a slug belonging to another org is not found rather than forbidden.
      * Get a PNG of the project\'s live site
      */
-    async getProjectsBySlugShotRaw(requestParameters: ProjectsApiGetProjectsBySlugShotRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getProjectBySlugShotRaw(requestParameters: ProjectApiGetProjectBySlugShotRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['slug'] == null) {
             throw new runtime.RequiredError(
                 'slug',
-                'Required parameter "slug" was null or undefined when calling getProjectsBySlugShot().'
+                'Required parameter "slug" was null or undefined when calling getProjectBySlugShot().'
             );
         }
 
@@ -650,7 +650,7 @@ export class ProjectsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/projects/{slug}/shot`;
+        let urlPath = `/v1/project/{slug}/shot`;
         urlPath = urlPath.replace(`{${"slug"}}`, encodeURIComponent(String(requestParameters['slug'])));
 
         const response = await this.request({
@@ -667,15 +667,15 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Returns a screenshot of what this project currently serves, as image/png. The capture is keyed by the deployment, so a redeploy invalidates it by construction rather than by anyone remembering to clear a cache. A project with nothing deployed answers 404 — that is a 404 about the PICTURE and not about the project, which is still right there in the list. Scoped to the caller\'s org: a validated principal is required, and a slug belonging to another org is not found rather than forbidden.
      * Get a PNG of the project\'s live site
      */
-    async getProjectsBySlugShot(requestParameters: ProjectsApiGetProjectsBySlugShotRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getProjectsBySlugShotRaw(requestParameters, initOverrides);
+    async getProjectBySlugShot(requestParameters: ProjectApiGetProjectBySlugShotRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getProjectBySlugShotRaw(requestParameters, initOverrides);
     }
 
     /**
      * health reports whether a publish reaches readers, rather than whether it was accepted. Those are different questions and only the second one was ever visible.  It asks the edge and nothing else. There is no live call to the provider here: Configured is a local fact, it is the fact that was missing, and a health check that spends a third-party API call is one an operator learns not to run.
      * health reports whether a publish reaches readers, rather than whether it was accepted.
      */
-    async getProjectsEdgeRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<EdgeState>> {
+    async getProjectEdgeRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<EdgeState>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -689,7 +689,7 @@ export class ProjectsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/projects/edge`;
+        let urlPath = `/v1/project/edge`;
 
         const response = await this.request({
             path: urlPath,
@@ -705,16 +705,16 @@ export class ProjectsApi extends runtime.BaseAPI {
      * health reports whether a publish reaches readers, rather than whether it was accepted. Those are different questions and only the second one was ever visible.  It asks the edge and nothing else. There is no live call to the provider here: Configured is a local fact, it is the fact that was missing, and a health check that spends a third-party API call is one an operator learns not to run.
      * health reports whether a publish reaches readers, rather than whether it was accepted.
      */
-    async getProjectsEdge(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<EdgeState> {
-        const response = await this.getProjectsEdgeRaw(initOverrides);
+    async getProjectEdge(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<EdgeState> {
+        const response = await this.getProjectEdgeRaw(initOverrides);
         return await response.value();
     }
 
     /**
-     * Returns the org\'s deployed sites at the pretty URLs they serve at.  It reads the SAME org-scoped store as /v1/projects and keeps only the projects that are actually `live`, so a draft or a failed build is not advertised as a site.  Scope: a validated principal is required (403 without one) and the list is keyed by that principal\'s org.
+     * Returns the org\'s deployed sites at the pretty URLs they serve at.  It reads the SAME org-scoped store as /v1/project and keeps only the projects that are actually `live`, so a draft or a failed build is not advertised as a site.  Scope: a validated principal is required (403 without one) and the list is keyed by that principal\'s org.
      * Returns the org\'s deployed sites at the pretty URLs they serve at.
      */
-    async getProjectsSitesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ProjectsSite>>> {
+    async getProjectSitesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ProjectsSite>>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -728,7 +728,7 @@ export class ProjectsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/projects/sites`;
+        let urlPath = `/v1/project/sites`;
 
         const response = await this.request({
             path: urlPath,
@@ -741,11 +741,11 @@ export class ProjectsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Returns the org\'s deployed sites at the pretty URLs they serve at.  It reads the SAME org-scoped store as /v1/projects and keeps only the projects that are actually `live`, so a draft or a failed build is not advertised as a site.  Scope: a validated principal is required (403 without one) and the list is keyed by that principal\'s org.
+     * Returns the org\'s deployed sites at the pretty URLs they serve at.  It reads the SAME org-scoped store as /v1/project and keeps only the projects that are actually `live`, so a draft or a failed build is not advertised as a site.  Scope: a validated principal is required (403 without one) and the list is keyed by that principal\'s org.
      * Returns the org\'s deployed sites at the pretty URLs they serve at.
      */
-    async getProjectsSites(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ProjectsSite>> {
-        const response = await this.getProjectsSitesRaw(initOverrides);
+    async getProjectSites(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ProjectsSite>> {
+        const response = await this.getProjectSitesRaw(initOverrides);
         return await response.value();
     }
 
@@ -753,11 +753,11 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Returns one site — the same row ListSites carries, for one slug.  Every sub-resource under a site already answered: deployments, releases, publish. The site itself did not, and a route that is never registered answers 404 for a LIVE site exactly as it does for one that was never created. So the one call a client makes to ask \"is it there yet?\" could only ever say no, and a CI lane watching for its own publish would wait forever on a success it had already achieved.  The org is the caller\'s, never a path segment. A slug is unique within an org and two orgs may both own `tel`; taking the org from the validated principal instead of the URL means a caller cannot read another org\'s site by editing a path, and it is the same scope ListProjects and ListSites already use.  A site that exists but is not live is NOT found here, matching ListSites, which keeps only `live` rows so a draft or a failed build is never advertised as a site. One definition of \"is a site\", used by both.
      * Returns one site — the same row ListSites carries, for one slug.
      */
-    async getProjectsSitesBySlugRaw(requestParameters: ProjectsApiGetProjectsSitesBySlugRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsSite>> {
+    async getProjectSitesBySlugRaw(requestParameters: ProjectApiGetProjectSitesBySlugRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsSite>> {
         if (requestParameters['slug'] == null) {
             throw new runtime.RequiredError(
                 'slug',
-                'Required parameter "slug" was null or undefined when calling getProjectsSitesBySlug().'
+                'Required parameter "slug" was null or undefined when calling getProjectSitesBySlug().'
             );
         }
 
@@ -774,7 +774,7 @@ export class ProjectsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/projects/sites/{slug}`;
+        let urlPath = `/v1/project/sites/{slug}`;
         urlPath = urlPath.replace(`{${"slug"}}`, encodeURIComponent(String(requestParameters['slug'])));
 
         const response = await this.request({
@@ -791,8 +791,8 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Returns one site — the same row ListSites carries, for one slug.  Every sub-resource under a site already answered: deployments, releases, publish. The site itself did not, and a route that is never registered answers 404 for a LIVE site exactly as it does for one that was never created. So the one call a client makes to ask \"is it there yet?\" could only ever say no, and a CI lane watching for its own publish would wait forever on a success it had already achieved.  The org is the caller\'s, never a path segment. A slug is unique within an org and two orgs may both own `tel`; taking the org from the validated principal instead of the URL means a caller cannot read another org\'s site by editing a path, and it is the same scope ListProjects and ListSites already use.  A site that exists but is not live is NOT found here, matching ListSites, which keeps only `live` rows so a draft or a failed build is never advertised as a site. One definition of \"is a site\", used by both.
      * Returns one site — the same row ListSites carries, for one slug.
      */
-    async getProjectsSitesBySlug(requestParameters: ProjectsApiGetProjectsSitesBySlugRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsSite> {
-        const response = await this.getProjectsSitesBySlugRaw(requestParameters, initOverrides);
+    async getProjectSitesBySlug(requestParameters: ProjectApiGetProjectSitesBySlugRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsSite> {
+        const response = await this.getProjectSitesBySlugRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -800,7 +800,7 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Returns the client-side pixels the SITE has connected (GA4, Google Ads, LinkedIn, Meta, Pinterest, Reddit, TikTok, X) with their NON-SECRET ids, so the hosted tag injects them first-party and stamps each browser event with the same event_id the server-side Conversions API uses — deduping the two. Resolved per site: by the publishable key on ?key= when it names a project, else by the request host, so hanzo.ai and hanzo.chat carry different tags under one org. WITHOUT a resolvable site it answers an empty set at 200 — a page never breaks on its tag config.
      * The site\'s browser tag set for the hosted tag — which pixels to inject, by publishable key
      */
-    async getProjectsTagsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TagConfig>> {
+    async getProjectTagsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TagConfig>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -814,7 +814,7 @@ export class ProjectsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/projects/tags`;
+        let urlPath = `/v1/project/tags`;
 
         const response = await this.request({
             path: urlPath,
@@ -830,8 +830,8 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Returns the client-side pixels the SITE has connected (GA4, Google Ads, LinkedIn, Meta, Pinterest, Reddit, TikTok, X) with their NON-SECRET ids, so the hosted tag injects them first-party and stamps each browser event with the same event_id the server-side Conversions API uses — deduping the two. Resolved per site: by the publishable key on ?key= when it names a project, else by the request host, so hanzo.ai and hanzo.chat carry different tags under one org. WITHOUT a resolvable site it answers an empty set at 200 — a page never breaks on its tag config.
      * The site\'s browser tag set for the hosted tag — which pixels to inject, by publishable key
      */
-    async getProjectsTags(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TagConfig> {
-        const response = await this.getProjectsTagsRaw(initOverrides);
+    async getProjectTags(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TagConfig> {
+        const response = await this.getProjectTagsRaw(initOverrides);
         return await response.value();
     }
 
@@ -839,18 +839,18 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Changes a project\'s settings, and only the settings you send.  Every field is optional and absent means \"leave it\": `name` may not be blanked, `framework` must stay a known build hint, and `cacheControl` is capped at 256 characters with no newlines (it becomes a response header). `visibility` flips public/private under the same rule as create — public is free, private needs a funded org. `upstream` and `license` are free-text credit for third-party work, and sending \"\" clears one. Changing anything reconciles the project\'s canonical git repo, so a visibility change reaches the source and not just the listing.  `hidden`/`hiddenReason` are platform MODERATION and are ignored unless the caller is a platform admin; they remove a project from the public catalogue without touching the publisher\'s own visibility choice, so un-hiding restores exactly what they asked for.  Scope: a validated principal is required (403 without one) and the project is resolved within that principal\'s org, so another tenant\'s slug is a 404.
      * Changes a project\'s settings, and only the settings you send.
      */
-    async patchProjectsBySlugRaw(requestParameters: ProjectsApiPatchProjectsBySlugRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsProject>> {
+    async patchProjectBySlugRaw(requestParameters: ProjectApiPatchProjectBySlugRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsProject>> {
         if (requestParameters['slug'] == null) {
             throw new runtime.RequiredError(
                 'slug',
-                'Required parameter "slug" was null or undefined when calling patchProjectsBySlug().'
+                'Required parameter "slug" was null or undefined when calling patchProjectBySlug().'
             );
         }
 
         if (requestParameters['projectsUpdate'] == null) {
             throw new runtime.RequiredError(
                 'projectsUpdate',
-                'Required parameter "projectsUpdate" was null or undefined when calling patchProjectsBySlug().'
+                'Required parameter "projectsUpdate" was null or undefined when calling patchProjectBySlug().'
             );
         }
 
@@ -869,7 +869,7 @@ export class ProjectsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/projects/{slug}`;
+        let urlPath = `/v1/project/{slug}`;
         urlPath = urlPath.replace(`{${"slug"}}`, encodeURIComponent(String(requestParameters['slug'])));
 
         const response = await this.request({
@@ -887,8 +887,8 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Changes a project\'s settings, and only the settings you send.  Every field is optional and absent means \"leave it\": `name` may not be blanked, `framework` must stay a known build hint, and `cacheControl` is capped at 256 characters with no newlines (it becomes a response header). `visibility` flips public/private under the same rule as create — public is free, private needs a funded org. `upstream` and `license` are free-text credit for third-party work, and sending \"\" clears one. Changing anything reconciles the project\'s canonical git repo, so a visibility change reaches the source and not just the listing.  `hidden`/`hiddenReason` are platform MODERATION and are ignored unless the caller is a platform admin; they remove a project from the public catalogue without touching the publisher\'s own visibility choice, so un-hiding restores exactly what they asked for.  Scope: a validated principal is required (403 without one) and the project is resolved within that principal\'s org, so another tenant\'s slug is a 404.
      * Changes a project\'s settings, and only the settings you send.
      */
-    async patchProjectsBySlug(requestParameters: ProjectsApiPatchProjectsBySlugRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsProject> {
-        const response = await this.patchProjectsBySlugRaw(requestParameters, initOverrides);
+    async patchProjectBySlug(requestParameters: ProjectApiPatchProjectBySlugRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsProject> {
+        const response = await this.patchProjectBySlugRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -896,11 +896,11 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Creates a project — the handle a site is deployed and served under — and answers 201 with it in `draft`.  `name` is required; `slug` is derived from the name when omitted and is the identifier that matters — it becomes the S3 key segment, the public host `<slug>.hanzo.app`, and the handle every later call addresses, so it must match `^[a-z0-9]([a-z0-9-]{0,38}[a-z0-9])?$` and may not be a reserved label such as `api` or `admin`. `framework` is a build hint from a closed set, defaulting to `static`; it never gates a deploy, it only tells CI how to build a linked repo.  Two defaults are worth knowing: the analytics beacon is ON unless `analytics` is explicitly false, and `visibility` is `public` unless asked otherwise. Publishing publicly is free; PRIVATE is the paid feature, and an unfunded org asking for it is refused rather than quietly published as public. Creation also provisions the project\'s data space and a canonical git repo, both best-effort — neither can fail the create.  Scope: a validated principal is required (403 without one) and the project is created in THAT principal\'s org. The slug is unique per org, so a slug already used in the caller\'s own org is a 409 while the same slug in another org is irrelevant.
      * Creates a project — the handle a site is deployed and served under — and answers 201 with it in `draft`.
      */
-    async postProjectsRaw(requestParameters: ProjectsApiPostProjectsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsProject>> {
+    async postProjectRaw(requestParameters: ProjectApiPostProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsProject>> {
         if (requestParameters['projectsCreate'] == null) {
             throw new runtime.RequiredError(
                 'projectsCreate',
-                'Required parameter "projectsCreate" was null or undefined when calling postProjects().'
+                'Required parameter "projectsCreate" was null or undefined when calling postProject().'
             );
         }
 
@@ -919,7 +919,7 @@ export class ProjectsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/projects`;
+        let urlPath = `/v1/project`;
 
         const response = await this.request({
             path: urlPath,
@@ -936,20 +936,20 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Creates a project — the handle a site is deployed and served under — and answers 201 with it in `draft`.  `name` is required; `slug` is derived from the name when omitted and is the identifier that matters — it becomes the S3 key segment, the public host `<slug>.hanzo.app`, and the handle every later call addresses, so it must match `^[a-z0-9]([a-z0-9-]{0,38}[a-z0-9])?$` and may not be a reserved label such as `api` or `admin`. `framework` is a build hint from a closed set, defaulting to `static`; it never gates a deploy, it only tells CI how to build a linked repo.  Two defaults are worth knowing: the analytics beacon is ON unless `analytics` is explicitly false, and `visibility` is `public` unless asked otherwise. Publishing publicly is free; PRIVATE is the paid feature, and an unfunded org asking for it is refused rather than quietly published as public. Creation also provisions the project\'s data space and a canonical git repo, both best-effort — neither can fail the create.  Scope: a validated principal is required (403 without one) and the project is created in THAT principal\'s org. The slug is unique per org, so a slug already used in the caller\'s own org is a 409 while the same slug in another org is irrelevant.
      * Creates a project — the handle a site is deployed and served under — and answers 201 with it in `draft`.
      */
-    async postProjects(requestParameters: ProjectsApiPostProjectsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsProject> {
-        const response = await this.postProjectsRaw(requestParameters, initOverrides);
+    async postProject(requestParameters: ProjectApiPostProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsProject> {
+        const response = await this.postProjectRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Takes a built site live at `https://<slug>.hanzo.app` in one call. The body is the site itself — a `zip` or `tar.gz` holding `index.html` at its root (or a single wrapper directory that does), sent raw or as a multipart file part. It is unpacked to the site\'s own storage prefix and served immediately, answering the finished deployment.  It is bounded by the edge body limit (16 MiB by default), and that bound is the whole reason the other path exists: an oversized POST is refused by the server BEFORE any handler runs and surfaces as an opaque `400 Error when parsing request` that reads like a malformed payload rather than a size cap. A site too large for one archive opens a deployment with `POST /v1/projects/{slug}/deployments` instead and writes its files straight to storage against the scoped grant that answers with — no body limit, and no bytes through this API at all.  Billing is fail-closed and fails FIRST: the hosting gate runs before anything is parsed or uploaded, so an unfunded org is 402 and an unreachable commerce is 503 with nothing written. The debit lands only on success — a failed upload is never billed and never flips the live site — and a redeploy answers the SAME URL, because slug and apex are stable.  Scope: a validated principal is required (403 without one) and the site is resolved within that principal\'s org, so another tenant\'s slug is a 404. Object storage must be configured (503); an archive that does not walk is a 400 and one over the size cap is a 413.
+     * Takes a built site live at `https://<slug>.hanzo.app` in one call. The body is the site itself — a `zip` or `tar.gz` holding `index.html` at its root (or a single wrapper directory that does), sent raw or as a multipart file part. It is unpacked to the site\'s own storage prefix and served immediately, answering the finished deployment.  It is bounded by the edge body limit (16 MiB by default), and that bound is the whole reason the other path exists: an oversized POST is refused by the server BEFORE any handler runs and surfaces as an opaque `400 Error when parsing request` that reads like a malformed payload rather than a size cap. A site too large for one archive opens a deployment with `POST /v1/project/{slug}/deployments` instead and writes its files straight to storage against the scoped grant that answers with — no body limit, and no bytes through this API at all.  Billing is fail-closed and fails FIRST: the hosting gate runs before anything is parsed or uploaded, so an unfunded org is 402 and an unreachable commerce is 503 with nothing written. The debit lands only on success — a failed upload is never billed and never flips the live site — and a redeploy answers the SAME URL, because slug and apex are stable.  Scope: a validated principal is required (403 without one) and the site is resolved within that principal\'s org, so another tenant\'s slug is a 404. Object storage must be configured (503); an archive that does not walk is a 400 and one over the size cap is a 413.
      * Upload a built site as one archive and serve it
      */
-    async postProjectsBySlugDeployRaw(requestParameters: ProjectsApiPostProjectsBySlugDeployRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsDeployment>> {
+    async postProjectBySlugDeployRaw(requestParameters: ProjectApiPostProjectBySlugDeployRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsDeployment>> {
         if (requestParameters['slug'] == null) {
             throw new runtime.RequiredError(
                 'slug',
-                'Required parameter "slug" was null or undefined when calling postProjectsBySlugDeploy().'
+                'Required parameter "slug" was null or undefined when calling postProjectBySlugDeploy().'
             );
         }
 
@@ -968,7 +968,7 @@ export class ProjectsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/projects/{slug}/deploy`;
+        let urlPath = `/v1/project/{slug}/deploy`;
         urlPath = urlPath.replace(`{${"slug"}}`, encodeURIComponent(String(requestParameters['slug'])));
 
         const response = await this.request({
@@ -983,11 +983,11 @@ export class ProjectsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Takes a built site live at `https://<slug>.hanzo.app` in one call. The body is the site itself — a `zip` or `tar.gz` holding `index.html` at its root (or a single wrapper directory that does), sent raw or as a multipart file part. It is unpacked to the site\'s own storage prefix and served immediately, answering the finished deployment.  It is bounded by the edge body limit (16 MiB by default), and that bound is the whole reason the other path exists: an oversized POST is refused by the server BEFORE any handler runs and surfaces as an opaque `400 Error when parsing request` that reads like a malformed payload rather than a size cap. A site too large for one archive opens a deployment with `POST /v1/projects/{slug}/deployments` instead and writes its files straight to storage against the scoped grant that answers with — no body limit, and no bytes through this API at all.  Billing is fail-closed and fails FIRST: the hosting gate runs before anything is parsed or uploaded, so an unfunded org is 402 and an unreachable commerce is 503 with nothing written. The debit lands only on success — a failed upload is never billed and never flips the live site — and a redeploy answers the SAME URL, because slug and apex are stable.  Scope: a validated principal is required (403 without one) and the site is resolved within that principal\'s org, so another tenant\'s slug is a 404. Object storage must be configured (503); an archive that does not walk is a 400 and one over the size cap is a 413.
+     * Takes a built site live at `https://<slug>.hanzo.app` in one call. The body is the site itself — a `zip` or `tar.gz` holding `index.html` at its root (or a single wrapper directory that does), sent raw or as a multipart file part. It is unpacked to the site\'s own storage prefix and served immediately, answering the finished deployment.  It is bounded by the edge body limit (16 MiB by default), and that bound is the whole reason the other path exists: an oversized POST is refused by the server BEFORE any handler runs and surfaces as an opaque `400 Error when parsing request` that reads like a malformed payload rather than a size cap. A site too large for one archive opens a deployment with `POST /v1/project/{slug}/deployments` instead and writes its files straight to storage against the scoped grant that answers with — no body limit, and no bytes through this API at all.  Billing is fail-closed and fails FIRST: the hosting gate runs before anything is parsed or uploaded, so an unfunded org is 402 and an unreachable commerce is 503 with nothing written. The debit lands only on success — a failed upload is never billed and never flips the live site — and a redeploy answers the SAME URL, because slug and apex are stable.  Scope: a validated principal is required (403 without one) and the site is resolved within that principal\'s org, so another tenant\'s slug is a 404. Object storage must be configured (503); an archive that does not walk is a 400 and one over the size cap is a 413.
      * Upload a built site as one archive and serve it
      */
-    async postProjectsBySlugDeploy(requestParameters: ProjectsApiPostProjectsBySlugDeployRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsDeployment> {
-        const response = await this.postProjectsBySlugDeployRaw(requestParameters, initOverrides);
+    async postProjectBySlugDeploy(requestParameters: ProjectApiPostProjectBySlugDeployRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsDeployment> {
+        const response = await this.postProjectBySlugDeployRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -995,18 +995,18 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Opens a deployment and hands back a short-lived, prefix-scoped grant to write its bytes straight to object storage. Answers 202.  This is the path for a site too large to send as one archive: a real export is hundreds of megabytes against a 16 MiB body limit, so the bytes deliberately do NOT pass through the API. The answer carries `bucket`, `prefix` and `upload` — a presigned POST policy that S3 itself confines to this site\'s prefix (starts-with `<org>/<slug>/`), expires in 30 minutes and bounds each object. So a build writes its own files and holds no standing bucket credential; there is nothing to rotate and nothing that leaks between tenants. Never guess the prefix — it is server-derived, and a guessed one lands where nothing is served.  The deployment is `queued` until POST .../deployments/{id}/complete flips it live (or error). That completion is also where DELETION happens: the grant authorizes writes only, so a build cannot remove a file, and cloud reconciles the prefix against the `keys` manifest the completion carries. A build that dies before completing leaves the deployment queued rather than a half-live site.  The grant is on the 202 and NOWHERE else — it is never stored and never replayed on a later read, so it cannot outlive the build it was minted for. A deployment whose grant could not be minted is still created and still completable; it simply carries no `upload`, and a caller with no other way to write should treat that as the failure it is.  Billing: the hosting gate runs BEFORE anything is created (402 unfunded, 503 commerce unreachable), and the debit lands on the completion that goes live — never on a queued or failed build.  Scope: a validated principal is required (403 without one) and the site is resolved within that principal\'s org, so another tenant\'s slug is a 404.
      * Opens a deployment and hands back a short-lived, prefix-scoped grant to write its bytes straight to object storage.
      */
-    async postProjectsBySlugDeploymentsRaw(requestParameters: ProjectsApiPostProjectsBySlugDeploymentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsDeployment>> {
+    async postProjectBySlugDeploymentsRaw(requestParameters: ProjectApiPostProjectBySlugDeploymentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsDeployment>> {
         if (requestParameters['slug'] == null) {
             throw new runtime.RequiredError(
                 'slug',
-                'Required parameter "slug" was null or undefined when calling postProjectsBySlugDeployments().'
+                'Required parameter "slug" was null or undefined when calling postProjectBySlugDeployments().'
             );
         }
 
         if (requestParameters['projectsDeployStart'] == null) {
             throw new runtime.RequiredError(
                 'projectsDeployStart',
-                'Required parameter "projectsDeployStart" was null or undefined when calling postProjectsBySlugDeployments().'
+                'Required parameter "projectsDeployStart" was null or undefined when calling postProjectBySlugDeployments().'
             );
         }
 
@@ -1025,7 +1025,7 @@ export class ProjectsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/projects/{slug}/deployments`;
+        let urlPath = `/v1/project/{slug}/deployments`;
         urlPath = urlPath.replace(`{${"slug"}}`, encodeURIComponent(String(requestParameters['slug'])));
 
         const response = await this.request({
@@ -1043,8 +1043,8 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Opens a deployment and hands back a short-lived, prefix-scoped grant to write its bytes straight to object storage. Answers 202.  This is the path for a site too large to send as one archive: a real export is hundreds of megabytes against a 16 MiB body limit, so the bytes deliberately do NOT pass through the API. The answer carries `bucket`, `prefix` and `upload` — a presigned POST policy that S3 itself confines to this site\'s prefix (starts-with `<org>/<slug>/`), expires in 30 minutes and bounds each object. So a build writes its own files and holds no standing bucket credential; there is nothing to rotate and nothing that leaks between tenants. Never guess the prefix — it is server-derived, and a guessed one lands where nothing is served.  The deployment is `queued` until POST .../deployments/{id}/complete flips it live (or error). That completion is also where DELETION happens: the grant authorizes writes only, so a build cannot remove a file, and cloud reconciles the prefix against the `keys` manifest the completion carries. A build that dies before completing leaves the deployment queued rather than a half-live site.  The grant is on the 202 and NOWHERE else — it is never stored and never replayed on a later read, so it cannot outlive the build it was minted for. A deployment whose grant could not be minted is still created and still completable; it simply carries no `upload`, and a caller with no other way to write should treat that as the failure it is.  Billing: the hosting gate runs BEFORE anything is created (402 unfunded, 503 commerce unreachable), and the debit lands on the completion that goes live — never on a queued or failed build.  Scope: a validated principal is required (403 without one) and the site is resolved within that principal\'s org, so another tenant\'s slug is a 404.
      * Opens a deployment and hands back a short-lived, prefix-scoped grant to write its bytes straight to object storage.
      */
-    async postProjectsBySlugDeployments(requestParameters: ProjectsApiPostProjectsBySlugDeploymentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsDeployment> {
-        const response = await this.postProjectsBySlugDeploymentsRaw(requestParameters, initOverrides);
+    async postProjectBySlugDeployments(requestParameters: ProjectApiPostProjectBySlugDeploymentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsDeployment> {
+        const response = await this.postProjectBySlugDeploymentsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1052,25 +1052,25 @@ export class ProjectsApi extends runtime.BaseAPI {
      * CompleteDeployment is the CI completion hook that flips a queued git deployment to live (or error) once CI has synced the built site to S3.  `status` must be `live` or `error`. On a LIVE completion the public host is claimed FIRST, so the deployment reports the URL it actually OWNS — a CI-supplied `liveUrl` is a hint that can refine that URL but can never assert a subdomain another tenant holds. `keys` is the manifest CI just uploaded, relative to the deployment prefix: cloud reconciles the prefix against it so a page deleted from the build actually stops serving. Omit `keys` and nothing is deleted — the prefix only grows. Reconciliation runs only on a live completion (pruning against a failed build\'s manifest would delete the site the last good build is still serving) and is best-effort, so a stale leftover never turns a successful deploy into a 500. A live completion is also the one billable moment on the git path; an error completion bills nothing.  Scope: a validated principal is required (403 without one). CI authenticates with an org-scoped token through the gateway, so the deployment is resolved within that principal\'s org and another tenant\'s slug or deployment id is a 404.
      * CompleteDeployment is the CI completion hook that flips a queued git deployment to live (or error) once CI has synced the built site to S3.
      */
-    async postProjectsBySlugDeploymentsByIdCompleteRaw(requestParameters: ProjectsApiPostProjectsBySlugDeploymentsByIdCompleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsDeployment>> {
+    async postProjectBySlugDeploymentsByIdCompleteRaw(requestParameters: ProjectApiPostProjectBySlugDeploymentsByIdCompleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsDeployment>> {
         if (requestParameters['slug'] == null) {
             throw new runtime.RequiredError(
                 'slug',
-                'Required parameter "slug" was null or undefined when calling postProjectsBySlugDeploymentsByIdComplete().'
+                'Required parameter "slug" was null or undefined when calling postProjectBySlugDeploymentsByIdComplete().'
             );
         }
 
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling postProjectsBySlugDeploymentsByIdComplete().'
+                'Required parameter "id" was null or undefined when calling postProjectBySlugDeploymentsByIdComplete().'
             );
         }
 
         if (requestParameters['projectsComplete'] == null) {
             throw new runtime.RequiredError(
                 'projectsComplete',
-                'Required parameter "projectsComplete" was null or undefined when calling postProjectsBySlugDeploymentsByIdComplete().'
+                'Required parameter "projectsComplete" was null or undefined when calling postProjectBySlugDeploymentsByIdComplete().'
             );
         }
 
@@ -1089,7 +1089,7 @@ export class ProjectsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/projects/{slug}/deployments/{id}/complete`;
+        let urlPath = `/v1/project/{slug}/deployments/{id}/complete`;
         urlPath = urlPath.replace(`{${"slug"}}`, encodeURIComponent(String(requestParameters['slug'])));
         urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
@@ -1108,8 +1108,8 @@ export class ProjectsApi extends runtime.BaseAPI {
      * CompleteDeployment is the CI completion hook that flips a queued git deployment to live (or error) once CI has synced the built site to S3.  `status` must be `live` or `error`. On a LIVE completion the public host is claimed FIRST, so the deployment reports the URL it actually OWNS — a CI-supplied `liveUrl` is a hint that can refine that URL but can never assert a subdomain another tenant holds. `keys` is the manifest CI just uploaded, relative to the deployment prefix: cloud reconciles the prefix against it so a page deleted from the build actually stops serving. Omit `keys` and nothing is deleted — the prefix only grows. Reconciliation runs only on a live completion (pruning against a failed build\'s manifest would delete the site the last good build is still serving) and is best-effort, so a stale leftover never turns a successful deploy into a 500. A live completion is also the one billable moment on the git path; an error completion bills nothing.  Scope: a validated principal is required (403 without one). CI authenticates with an org-scoped token through the gateway, so the deployment is resolved within that principal\'s org and another tenant\'s slug or deployment id is a 404.
      * CompleteDeployment is the CI completion hook that flips a queued git deployment to live (or error) once CI has synced the built site to S3.
      */
-    async postProjectsBySlugDeploymentsByIdComplete(requestParameters: ProjectsApiPostProjectsBySlugDeploymentsByIdCompleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsDeployment> {
-        const response = await this.postProjectsBySlugDeploymentsByIdCompleteRaw(requestParameters, initOverrides);
+    async postProjectBySlugDeploymentsByIdComplete(requestParameters: ProjectApiPostProjectBySlugDeploymentsByIdCompleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsDeployment> {
+        const response = await this.postProjectBySlugDeploymentsByIdCompleteRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1117,18 +1117,18 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Attaches one or more CUSTOM public hostnames to this org\'s site.  Binding a host you do not own would let you shadow it at the edge, so which outcome you get depends on whether ownership is already established: a SuperAdmin vouches (the operator manages the customer\'s DNS, so its bind IS the proof) and binds VERIFIED immediately; every other caller, INCLUDING an admin of the deployment\'s own brand org, has the host CLAIMED as pending and gets the DNS challenge back in `bound[].records`. A pending claim HOLDS the name so nobody else can take it, but it does not route until POST .../domains/{host}/verify proves control.  A hostname we operate is refused to a non-vouched caller (those are assigned by the platform, never claimed), a host another site already holds is a 409, and a name the platform holds is a 400 for EVERY caller — a vouch skips the ownership proof, never the host table\'s own invariant. Claims and binds are idempotent for the same (org, slug), and re-claiming returns the SAME token rather than invalidating a record the customer has already published. The edge cache-tag is flushed afterwards so a newly-verified host serves the current build immediately.  Scope: a validated principal is required (403 without one) and the site is resolved within that principal\'s org, so another tenant\'s slug is a 404.
      * Attaches one or more CUSTOM public hostnames to this org\'s site.
      */
-    async postProjectsBySlugDomainsRaw(requestParameters: ProjectsApiPostProjectsBySlugDomainsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsBoundDomains>> {
+    async postProjectBySlugDomainsRaw(requestParameters: ProjectApiPostProjectBySlugDomainsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsBoundDomains>> {
         if (requestParameters['slug'] == null) {
             throw new runtime.RequiredError(
                 'slug',
-                'Required parameter "slug" was null or undefined when calling postProjectsBySlugDomains().'
+                'Required parameter "slug" was null or undefined when calling postProjectBySlugDomains().'
             );
         }
 
         if (requestParameters['projectsDomainsBind'] == null) {
             throw new runtime.RequiredError(
                 'projectsDomainsBind',
-                'Required parameter "projectsDomainsBind" was null or undefined when calling postProjectsBySlugDomains().'
+                'Required parameter "projectsDomainsBind" was null or undefined when calling postProjectBySlugDomains().'
             );
         }
 
@@ -1147,7 +1147,7 @@ export class ProjectsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/projects/{slug}/domains`;
+        let urlPath = `/v1/project/{slug}/domains`;
         urlPath = urlPath.replace(`{${"slug"}}`, encodeURIComponent(String(requestParameters['slug'])));
 
         const response = await this.request({
@@ -1165,8 +1165,8 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Attaches one or more CUSTOM public hostnames to this org\'s site.  Binding a host you do not own would let you shadow it at the edge, so which outcome you get depends on whether ownership is already established: a SuperAdmin vouches (the operator manages the customer\'s DNS, so its bind IS the proof) and binds VERIFIED immediately; every other caller, INCLUDING an admin of the deployment\'s own brand org, has the host CLAIMED as pending and gets the DNS challenge back in `bound[].records`. A pending claim HOLDS the name so nobody else can take it, but it does not route until POST .../domains/{host}/verify proves control.  A hostname we operate is refused to a non-vouched caller (those are assigned by the platform, never claimed), a host another site already holds is a 409, and a name the platform holds is a 400 for EVERY caller — a vouch skips the ownership proof, never the host table\'s own invariant. Claims and binds are idempotent for the same (org, slug), and re-claiming returns the SAME token rather than invalidating a record the customer has already published. The edge cache-tag is flushed afterwards so a newly-verified host serves the current build immediately.  Scope: a validated principal is required (403 without one) and the site is resolved within that principal\'s org, so another tenant\'s slug is a 404.
      * Attaches one or more CUSTOM public hostnames to this org\'s site.
      */
-    async postProjectsBySlugDomains(requestParameters: ProjectsApiPostProjectsBySlugDomainsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsBoundDomains> {
-        const response = await this.postProjectsBySlugDomainsRaw(requestParameters, initOverrides);
+    async postProjectBySlugDomains(requestParameters: ProjectApiPostProjectBySlugDomainsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsBoundDomains> {
+        const response = await this.postProjectBySlugDomainsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1174,18 +1174,18 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Checks the DNS challenge for a pending custom hostname and, when it passes, promotes the host so it begins routing at the edge.  It answers 200 either way, with the host\'s honest current state: verified once the TXT record is found, still pending — with the records to publish and the resolver\'s own explanation in `detail` — when it is not. A not-yet is not an error: the check ran, DNS simply has not propagated, and the customer retries. An already-verified host is returned unchanged without re-resolving. On a successful promotion the edge cache-tag is flushed, since the host routes as of that moment.  Scope: a validated principal is required (403 without one). Both the site and the claim are resolved within that principal\'s org, so a host claimed by another tenant is \"not claimed by this site\".
      * Checks the DNS challenge for a pending custom hostname and, when it passes, promotes the host so it begins routing at the edge.
      */
-    async postProjectsBySlugDomainsByHostVerifyRaw(requestParameters: ProjectsApiPostProjectsBySlugDomainsByHostVerifyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsDomain>> {
+    async postProjectBySlugDomainsByHostVerifyRaw(requestParameters: ProjectApiPostProjectBySlugDomainsByHostVerifyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsDomain>> {
         if (requestParameters['slug'] == null) {
             throw new runtime.RequiredError(
                 'slug',
-                'Required parameter "slug" was null or undefined when calling postProjectsBySlugDomainsByHostVerify().'
+                'Required parameter "slug" was null or undefined when calling postProjectBySlugDomainsByHostVerify().'
             );
         }
 
         if (requestParameters['host'] == null) {
             throw new runtime.RequiredError(
                 'host',
-                'Required parameter "host" was null or undefined when calling postProjectsBySlugDomainsByHostVerify().'
+                'Required parameter "host" was null or undefined when calling postProjectBySlugDomainsByHostVerify().'
             );
         }
 
@@ -1202,7 +1202,7 @@ export class ProjectsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/projects/{slug}/domains/{host}/verify`;
+        let urlPath = `/v1/project/{slug}/domains/{host}/verify`;
         urlPath = urlPath.replace(`{${"slug"}}`, encodeURIComponent(String(requestParameters['slug'])));
         urlPath = urlPath.replace(`{${"host"}}`, encodeURIComponent(String(requestParameters['host'])));
 
@@ -1220,8 +1220,8 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Checks the DNS challenge for a pending custom hostname and, when it passes, promotes the host so it begins routing at the edge.  It answers 200 either way, with the host\'s honest current state: verified once the TXT record is found, still pending — with the records to publish and the resolver\'s own explanation in `detail` — when it is not. A not-yet is not an error: the check ran, DNS simply has not propagated, and the customer retries. An already-verified host is returned unchanged without re-resolving. On a successful promotion the edge cache-tag is flushed, since the host routes as of that moment.  Scope: a validated principal is required (403 without one). Both the site and the claim are resolved within that principal\'s org, so a host claimed by another tenant is \"not claimed by this site\".
      * Checks the DNS challenge for a pending custom hostname and, when it passes, promotes the host so it begins routing at the edge.
      */
-    async postProjectsBySlugDomainsByHostVerify(requestParameters: ProjectsApiPostProjectsBySlugDomainsByHostVerifyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsDomain> {
-        const response = await this.postProjectsBySlugDomainsByHostVerifyRaw(requestParameters, initOverrides);
+    async postProjectBySlugDomainsByHostVerify(requestParameters: ProjectApiPostProjectBySlugDomainsByHostVerifyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsDomain> {
+        const response = await this.postProjectBySlugDomainsByHostVerifyRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1229,18 +1229,18 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Promotes a build output into a new release AND goes live with it — create+activate in one call, which is the 99% path.  It is exactly the two halves in sequence with no extra semantics, so the staged flow and the one-shot flow can never drift apart: `source` is promoted under the same org-relative rule and the same guards CreateRelease applies, then the site\'s pointer is flipped to it, the public host is claimed and the edge is purged. Idempotent on unchanged bytes — same manifest, same release id, no copy — and billed once, after the release exists.  Scope: a validated principal is required (403 without one) and the site is resolved within that principal\'s org, so another tenant\'s slug is a 404.
      * Promotes a build output into a new release AND goes live with it — create+activate in one call, which is the 99% path.
      */
-    async postProjectsBySlugPublishRaw(requestParameters: ProjectsApiPostProjectsBySlugPublishRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsRelease>> {
+    async postProjectBySlugPublishRaw(requestParameters: ProjectApiPostProjectBySlugPublishRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsRelease>> {
         if (requestParameters['slug'] == null) {
             throw new runtime.RequiredError(
                 'slug',
-                'Required parameter "slug" was null or undefined when calling postProjectsBySlugPublish().'
+                'Required parameter "slug" was null or undefined when calling postProjectBySlugPublish().'
             );
         }
 
         if (requestParameters['projectsPublish'] == null) {
             throw new runtime.RequiredError(
                 'projectsPublish',
-                'Required parameter "projectsPublish" was null or undefined when calling postProjectsBySlugPublish().'
+                'Required parameter "projectsPublish" was null or undefined when calling postProjectBySlugPublish().'
             );
         }
 
@@ -1259,7 +1259,7 @@ export class ProjectsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/projects/{slug}/publish`;
+        let urlPath = `/v1/project/{slug}/publish`;
         urlPath = urlPath.replace(`{${"slug"}}`, encodeURIComponent(String(requestParameters['slug'])));
 
         const response = await this.request({
@@ -1277,8 +1277,8 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Promotes a build output into a new release AND goes live with it — create+activate in one call, which is the 99% path.  It is exactly the two halves in sequence with no extra semantics, so the staged flow and the one-shot flow can never drift apart: `source` is promoted under the same org-relative rule and the same guards CreateRelease applies, then the site\'s pointer is flipped to it, the public host is claimed and the edge is purged. Idempotent on unchanged bytes — same manifest, same release id, no copy — and billed once, after the release exists.  Scope: a validated principal is required (403 without one) and the site is resolved within that principal\'s org, so another tenant\'s slug is a 404.
      * Promotes a build output into a new release AND goes live with it — create+activate in one call, which is the 99% path.
      */
-    async postProjectsBySlugPublish(requestParameters: ProjectsApiPostProjectsBySlugPublishRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsRelease> {
-        const response = await this.postProjectsBySlugPublishRaw(requestParameters, initOverrides);
+    async postProjectBySlugPublish(requestParameters: ProjectApiPostProjectBySlugPublishRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsRelease> {
+        const response = await this.postProjectBySlugPublishRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1286,11 +1286,11 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Flushes the site\'s edge cache without redeploying anything.  It invalidates the edge cache-tag `site-<org>-<slug>` and stamps `lastPurgeAt` (unix seconds), and it NEVER writes or deletes the S3 origin — the live build keeps serving; only stale copies held at the edge drop, so the next request re-fetches the current artifact from origin. Idempotent, and an edge that is unconfigured or failing is not fatal: `lastPurgeAt` is still stamped and the answer is still the updated project.  Scope: a validated principal is required (403 without one) and the project is resolved within that principal\'s org, so another tenant\'s slug is a 404.
      * Flushes the site\'s edge cache without redeploying anything.
      */
-    async postProjectsBySlugPurgeRaw(requestParameters: ProjectsApiPostProjectsBySlugPurgeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsProject>> {
+    async postProjectBySlugPurgeRaw(requestParameters: ProjectApiPostProjectBySlugPurgeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsProject>> {
         if (requestParameters['slug'] == null) {
             throw new runtime.RequiredError(
                 'slug',
-                'Required parameter "slug" was null or undefined when calling postProjectsBySlugPurge().'
+                'Required parameter "slug" was null or undefined when calling postProjectBySlugPurge().'
             );
         }
 
@@ -1307,7 +1307,7 @@ export class ProjectsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/projects/{slug}/purge`;
+        let urlPath = `/v1/project/{slug}/purge`;
         urlPath = urlPath.replace(`{${"slug"}}`, encodeURIComponent(String(requestParameters['slug'])));
 
         const response = await this.request({
@@ -1324,8 +1324,8 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Flushes the site\'s edge cache without redeploying anything.  It invalidates the edge cache-tag `site-<org>-<slug>` and stamps `lastPurgeAt` (unix seconds), and it NEVER writes or deletes the S3 origin — the live build keeps serving; only stale copies held at the edge drop, so the next request re-fetches the current artifact from origin. Idempotent, and an edge that is unconfigured or failing is not fatal: `lastPurgeAt` is still stamped and the answer is still the updated project.  Scope: a validated principal is required (403 without one) and the project is resolved within that principal\'s org, so another tenant\'s slug is a 404.
      * Flushes the site\'s edge cache without redeploying anything.
      */
-    async postProjectsBySlugPurge(requestParameters: ProjectsApiPostProjectsBySlugPurgeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsProject> {
-        const response = await this.postProjectsBySlugPurgeRaw(requestParameters, initOverrides);
+    async postProjectBySlugPurge(requestParameters: ProjectApiPostProjectBySlugPurgeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsProject> {
+        const response = await this.postProjectBySlugPurgeRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1333,18 +1333,18 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Promotes a build output into a new immutable release WITHOUT serving it — the staged half of publishing, for when you want to check a release before it goes live. Answers 201.  `source` is a path RELATIVE to your org\'s own storage space: the org segment is prepended server-side from the validated principal and the bucket is never in the request at all, so a server-side copy can only ever reach bytes your org already owns. The prefix is listed, content-addressed (SHA-256 over the sorted manifest of key/size/etag), and copied into an immutable `<org>/.releases/<slug>/<id>/` prefix; the row is written LAST, so a partial copy is unreachable rather than merely unlikely. Re-publishing an unchanged source is idempotent BY CONSTRUCTION — same bytes, same id, no copy at all.  The source must contain index.html at its root and stay under the same file and byte caps an artifact deploy does (413 past them); a source that changes mid-copy is a 409 and the release is abandoned. Each publish also reclaims releases past the retention depth, so a site\'s release space stays bounded. This is the billable half — the hosting gate runs before any copy, and the debit lands once the release exists.  Scope: a validated principal is required (403 without one) and the site is resolved within that principal\'s org, so another tenant\'s slug is a 404.
      * Promotes a build output into a new immutable release WITHOUT serving it — the staged half of publishing, for when you want to check a release before it goes live.
      */
-    async postProjectsBySlugReleasesRaw(requestParameters: ProjectsApiPostProjectsBySlugReleasesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsRelease>> {
+    async postProjectBySlugReleasesRaw(requestParameters: ProjectApiPostProjectBySlugReleasesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsRelease>> {
         if (requestParameters['slug'] == null) {
             throw new runtime.RequiredError(
                 'slug',
-                'Required parameter "slug" was null or undefined when calling postProjectsBySlugReleases().'
+                'Required parameter "slug" was null or undefined when calling postProjectBySlugReleases().'
             );
         }
 
         if (requestParameters['projectsPublish'] == null) {
             throw new runtime.RequiredError(
                 'projectsPublish',
-                'Required parameter "projectsPublish" was null or undefined when calling postProjectsBySlugReleases().'
+                'Required parameter "projectsPublish" was null or undefined when calling postProjectBySlugReleases().'
             );
         }
 
@@ -1363,7 +1363,7 @@ export class ProjectsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/projects/{slug}/releases`;
+        let urlPath = `/v1/project/{slug}/releases`;
         urlPath = urlPath.replace(`{${"slug"}}`, encodeURIComponent(String(requestParameters['slug'])));
 
         const response = await this.request({
@@ -1381,8 +1381,8 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Promotes a build output into a new immutable release WITHOUT serving it — the staged half of publishing, for when you want to check a release before it goes live. Answers 201.  `source` is a path RELATIVE to your org\'s own storage space: the org segment is prepended server-side from the validated principal and the bucket is never in the request at all, so a server-side copy can only ever reach bytes your org already owns. The prefix is listed, content-addressed (SHA-256 over the sorted manifest of key/size/etag), and copied into an immutable `<org>/.releases/<slug>/<id>/` prefix; the row is written LAST, so a partial copy is unreachable rather than merely unlikely. Re-publishing an unchanged source is idempotent BY CONSTRUCTION — same bytes, same id, no copy at all.  The source must contain index.html at its root and stay under the same file and byte caps an artifact deploy does (413 past them); a source that changes mid-copy is a 409 and the release is abandoned. Each publish also reclaims releases past the retention depth, so a site\'s release space stays bounded. This is the billable half — the hosting gate runs before any copy, and the debit lands once the release exists.  Scope: a validated principal is required (403 without one) and the site is resolved within that principal\'s org, so another tenant\'s slug is a 404.
      * Promotes a build output into a new immutable release WITHOUT serving it — the staged half of publishing, for when you want to check a release before it goes live.
      */
-    async postProjectsBySlugReleases(requestParameters: ProjectsApiPostProjectsBySlugReleasesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsRelease> {
-        const response = await this.postProjectsBySlugReleasesRaw(requestParameters, initOverrides);
+    async postProjectBySlugReleases(requestParameters: ProjectApiPostProjectBySlugReleasesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsRelease> {
+        const response = await this.postProjectBySlugReleasesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1390,18 +1390,18 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Points the site at an existing release — the go-live, and equally the ROLLBACK.  Aim it at an older release and the site serves that one again: releases are immutable and retained to the retention depth, so nothing is rebuilt or re-copied and the flip is one atomic statement. Before the flip, two conditions run in the order that gives each its own honest answer — the ROW says whether this release exists for this tenant at all (404, with no signal about a foreign id), and only then do the BYTES say whether it can still serve (410 GONE when retention has reclaimed them; that rollback target is not coming back, so publish again). Going live also claims the public host and purges the edge, so the release is reachable and no cached predecessor is served. NOT billed: no new content is produced, only a pointer moved.  Scope: a validated principal is required (403 without one) and the site is resolved within that principal\'s org, so another tenant\'s slug is a 404.
      * Points the site at an existing release — the go-live, and equally the ROLLBACK.
      */
-    async postProjectsBySlugReleasesByReleaseActivateRaw(requestParameters: ProjectsApiPostProjectsBySlugReleasesByReleaseActivateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsRelease>> {
+    async postProjectBySlugReleasesByReleaseActivateRaw(requestParameters: ProjectApiPostProjectBySlugReleasesByReleaseActivateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsRelease>> {
         if (requestParameters['slug'] == null) {
             throw new runtime.RequiredError(
                 'slug',
-                'Required parameter "slug" was null or undefined when calling postProjectsBySlugReleasesByReleaseActivate().'
+                'Required parameter "slug" was null or undefined when calling postProjectBySlugReleasesByReleaseActivate().'
             );
         }
 
         if (requestParameters['release'] == null) {
             throw new runtime.RequiredError(
                 'release',
-                'Required parameter "release" was null or undefined when calling postProjectsBySlugReleasesByReleaseActivate().'
+                'Required parameter "release" was null or undefined when calling postProjectBySlugReleasesByReleaseActivate().'
             );
         }
 
@@ -1418,7 +1418,7 @@ export class ProjectsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/projects/{slug}/releases/{release}/activate`;
+        let urlPath = `/v1/project/{slug}/releases/{release}/activate`;
         urlPath = urlPath.replace(`{${"slug"}}`, encodeURIComponent(String(requestParameters['slug'])));
         urlPath = urlPath.replace(`{${"release"}}`, encodeURIComponent(String(requestParameters['release'])));
 
@@ -1436,20 +1436,20 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Points the site at an existing release — the go-live, and equally the ROLLBACK.  Aim it at an older release and the site serves that one again: releases are immutable and retained to the retention depth, so nothing is rebuilt or re-copied and the flip is one atomic statement. Before the flip, two conditions run in the order that gives each its own honest answer — the ROW says whether this release exists for this tenant at all (404, with no signal about a foreign id), and only then do the BYTES say whether it can still serve (410 GONE when retention has reclaimed them; that rollback target is not coming back, so publish again). Going live also claims the public host and purges the edge, so the release is reachable and no cached predecessor is served. NOT billed: no new content is produced, only a pointer moved.  Scope: a validated principal is required (403 without one) and the site is resolved within that principal\'s org, so another tenant\'s slug is a 404.
      * Points the site at an existing release — the go-live, and equally the ROLLBACK.
      */
-    async postProjectsBySlugReleasesByReleaseActivate(requestParameters: ProjectsApiPostProjectsBySlugReleasesByReleaseActivateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsRelease> {
-        const response = await this.postProjectsBySlugReleasesByReleaseActivateRaw(requestParameters, initOverrides);
+    async postProjectBySlugReleasesByReleaseActivate(requestParameters: ProjectApiPostProjectBySlugReleasesByReleaseActivateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsRelease> {
+        const response = await this.postProjectBySlugReleasesByReleaseActivateRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Creates a project seeded from a PUBLISHED EXAMPLE — either a starter-kit template from the ONE embedded gallery catalog, or any live project on the platform (an example a seeded creator published, or another org\'s app serving at <slug>.hanzo.app). Answers 201 with the new project.  `slug` names the PARENT to fork and is required. Templates resolve first, and the caller org\'s own private templates ahead of the public gallery, so a curated template slug keeps meaning the same thing even if someone later publishes a live project under it; `variant` picks that template\'s format/page/theme. If no template matches, the slug resolves to the UNIQUE live project that owns it across all orgs — the same resolution the site edge uses to serve <slug>.hanzo.app, so what you can browse is what you can fork.  `name` and `target` override the derived project name and slug; everything else is inherited from the parent. A live parent contributes its REPO, so the child builds from the same source — the parent\'s deployed bytes are never copied, because releases are per-tenant by design and the fork publishes its own. The parent it actually resolved is stamped on the child as `forkedFrom`, so attribution is a fact recorded at fork time rather than a claim reconstructed later.  It funnels through the SAME create path POST /v1/projects uses, so slug validation, org scoping, ID minting and the 409 on a slug the caller\'s own org already uses are identical.  Scope: a validated principal is required (403 without one) and the child is created in THAT principal\'s org.
+     * Creates a project seeded from a PUBLISHED EXAMPLE — either a starter-kit template from the ONE embedded gallery catalog, or any live project on the platform (an example a seeded creator published, or another org\'s app serving at <slug>.hanzo.app). Answers 201 with the new project.  `slug` names the PARENT to fork and is required. Templates resolve first, and the caller org\'s own private templates ahead of the public gallery, so a curated template slug keeps meaning the same thing even if someone later publishes a live project under it; `variant` picks that template\'s format/page/theme. If no template matches, the slug resolves to the UNIQUE live project that owns it across all orgs — the same resolution the site edge uses to serve <slug>.hanzo.app, so what you can browse is what you can fork.  `name` and `target` override the derived project name and slug; everything else is inherited from the parent. A live parent contributes its REPO, so the child builds from the same source — the parent\'s deployed bytes are never copied, because releases are per-tenant by design and the fork publishes its own. The parent it actually resolved is stamped on the child as `forkedFrom`, so attribution is a fact recorded at fork time rather than a claim reconstructed later.  It funnels through the SAME create path POST /v1/project uses, so slug validation, org scoping, ID minting and the 409 on a slug the caller\'s own org already uses are identical.  Scope: a validated principal is required (403 without one) and the child is created in THAT principal\'s org.
      * Creates a project seeded from a PUBLISHED EXAMPLE — either a starter-kit template from the ONE embedded gallery catalog, or any live project on the platform (an example a seeded creator published, or another org\'s app serving at <slug>.hanzo.app).
      */
-    async postProjectsForkRaw(requestParameters: ProjectsApiPostProjectsForkRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsProject>> {
+    async postProjectForkRaw(requestParameters: ProjectApiPostProjectForkRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsProject>> {
         if (requestParameters['projectsFork'] == null) {
             throw new runtime.RequiredError(
                 'projectsFork',
-                'Required parameter "projectsFork" was null or undefined when calling postProjectsFork().'
+                'Required parameter "projectsFork" was null or undefined when calling postProjectFork().'
             );
         }
 
@@ -1468,7 +1468,7 @@ export class ProjectsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/projects/fork`;
+        let urlPath = `/v1/project/fork`;
 
         const response = await this.request({
             path: urlPath,
@@ -1482,23 +1482,23 @@ export class ProjectsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Creates a project seeded from a PUBLISHED EXAMPLE — either a starter-kit template from the ONE embedded gallery catalog, or any live project on the platform (an example a seeded creator published, or another org\'s app serving at <slug>.hanzo.app). Answers 201 with the new project.  `slug` names the PARENT to fork and is required. Templates resolve first, and the caller org\'s own private templates ahead of the public gallery, so a curated template slug keeps meaning the same thing even if someone later publishes a live project under it; `variant` picks that template\'s format/page/theme. If no template matches, the slug resolves to the UNIQUE live project that owns it across all orgs — the same resolution the site edge uses to serve <slug>.hanzo.app, so what you can browse is what you can fork.  `name` and `target` override the derived project name and slug; everything else is inherited from the parent. A live parent contributes its REPO, so the child builds from the same source — the parent\'s deployed bytes are never copied, because releases are per-tenant by design and the fork publishes its own. The parent it actually resolved is stamped on the child as `forkedFrom`, so attribution is a fact recorded at fork time rather than a claim reconstructed later.  It funnels through the SAME create path POST /v1/projects uses, so slug validation, org scoping, ID minting and the 409 on a slug the caller\'s own org already uses are identical.  Scope: a validated principal is required (403 without one) and the child is created in THAT principal\'s org.
+     * Creates a project seeded from a PUBLISHED EXAMPLE — either a starter-kit template from the ONE embedded gallery catalog, or any live project on the platform (an example a seeded creator published, or another org\'s app serving at <slug>.hanzo.app). Answers 201 with the new project.  `slug` names the PARENT to fork and is required. Templates resolve first, and the caller org\'s own private templates ahead of the public gallery, so a curated template slug keeps meaning the same thing even if someone later publishes a live project under it; `variant` picks that template\'s format/page/theme. If no template matches, the slug resolves to the UNIQUE live project that owns it across all orgs — the same resolution the site edge uses to serve <slug>.hanzo.app, so what you can browse is what you can fork.  `name` and `target` override the derived project name and slug; everything else is inherited from the parent. A live parent contributes its REPO, so the child builds from the same source — the parent\'s deployed bytes are never copied, because releases are per-tenant by design and the fork publishes its own. The parent it actually resolved is stamped on the child as `forkedFrom`, so attribution is a fact recorded at fork time rather than a claim reconstructed later.  It funnels through the SAME create path POST /v1/project uses, so slug validation, org scoping, ID minting and the 409 on a slug the caller\'s own org already uses are identical.  Scope: a validated principal is required (403 without one) and the child is created in THAT principal\'s org.
      * Creates a project seeded from a PUBLISHED EXAMPLE — either a starter-kit template from the ONE embedded gallery catalog, or any live project on the platform (an example a seeded creator published, or another org\'s app serving at <slug>.hanzo.app).
      */
-    async postProjectsFork(requestParameters: ProjectsApiPostProjectsForkRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsProject> {
-        const response = await this.postProjectsForkRaw(requestParameters, initOverrides);
+    async postProjectFork(requestParameters: ProjectApiPostProjectForkRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsProject> {
+        const response = await this.postProjectForkRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Generates a self-contained, mobile-responsive static site from a natural-language brief and deploys it live in one call.  One inference call turns `brief` (capped at 8 KiB) into a file manifest, which then runs through the SAME validation, guards and viewport guarantee as a hand-supplied manifest: index.html required at the root, absolute and traversal paths rejected, per-file and total size capped, and a mobile viewport meta tag injected into every HTML document that lacks one. The generated site is fully inline — no CDNs, no remote fonts or images — so it is CSP-safe. `slug` and `name` are optional: the model\'s own title is preferred, and a slug is derived or minted when none is given.  It writes into the SAME org-scoped store as /v1/projects — it ensures a project (framework `static`) for the resolved slug and records a deployment — so this is a second entry point to one publish pipeline, not a second copy of project state. Ordering is the billing contract: the hosting gate runs BEFORE any inference or upload, so a denied gate generates and uploads NOTHING, and the debit lands once, only after the site is actually live. The tokens are billed to the same ledger the hosting fee was reserved against.  Answers 503 when object storage or inference is unconfigured, and 400 when the model\'s manifest cannot be parsed or fails the guards.  Scope: a validated principal is required (403 without one) and the site is published into THAT principal\'s org.
+     * Generates a self-contained, mobile-responsive static site from a natural-language brief and deploys it live in one call.  One inference call turns `brief` (capped at 8 KiB) into a file manifest, which then runs through the SAME validation, guards and viewport guarantee as a hand-supplied manifest: index.html required at the root, absolute and traversal paths rejected, per-file and total size capped, and a mobile viewport meta tag injected into every HTML document that lacks one. The generated site is fully inline — no CDNs, no remote fonts or images — so it is CSP-safe. `slug` and `name` are optional: the model\'s own title is preferred, and a slug is derived or minted when none is given.  It writes into the SAME org-scoped store as /v1/project — it ensures a project (framework `static`) for the resolved slug and records a deployment — so this is a second entry point to one publish pipeline, not a second copy of project state. Ordering is the billing contract: the hosting gate runs BEFORE any inference or upload, so a denied gate generates and uploads NOTHING, and the debit lands once, only after the site is actually live. The tokens are billed to the same ledger the hosting fee was reserved against.  Answers 503 when object storage or inference is unconfigured, and 400 when the model\'s manifest cannot be parsed or fails the guards.  Scope: a validated principal is required (403 without one) and the site is published into THAT principal\'s org.
      * Generates a self-contained, mobile-responsive static site from a natural-language brief and deploys it live in one call.
      */
-    async postProjectsSitesRaw(requestParameters: ProjectsApiPostProjectsSitesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsSiteDeploy>> {
+    async postProjectSitesRaw(requestParameters: ProjectApiPostProjectSitesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsSiteDeploy>> {
         if (requestParameters['projectsBuildSite'] == null) {
             throw new runtime.RequiredError(
                 'projectsBuildSite',
-                'Required parameter "projectsBuildSite" was null or undefined when calling postProjectsSites().'
+                'Required parameter "projectsBuildSite" was null or undefined when calling postProjectSites().'
             );
         }
 
@@ -1517,7 +1517,7 @@ export class ProjectsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/projects/sites`;
+        let urlPath = `/v1/project/sites`;
 
         const response = await this.request({
             path: urlPath,
@@ -1531,23 +1531,23 @@ export class ProjectsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Generates a self-contained, mobile-responsive static site from a natural-language brief and deploys it live in one call.  One inference call turns `brief` (capped at 8 KiB) into a file manifest, which then runs through the SAME validation, guards and viewport guarantee as a hand-supplied manifest: index.html required at the root, absolute and traversal paths rejected, per-file and total size capped, and a mobile viewport meta tag injected into every HTML document that lacks one. The generated site is fully inline — no CDNs, no remote fonts or images — so it is CSP-safe. `slug` and `name` are optional: the model\'s own title is preferred, and a slug is derived or minted when none is given.  It writes into the SAME org-scoped store as /v1/projects — it ensures a project (framework `static`) for the resolved slug and records a deployment — so this is a second entry point to one publish pipeline, not a second copy of project state. Ordering is the billing contract: the hosting gate runs BEFORE any inference or upload, so a denied gate generates and uploads NOTHING, and the debit lands once, only after the site is actually live. The tokens are billed to the same ledger the hosting fee was reserved against.  Answers 503 when object storage or inference is unconfigured, and 400 when the model\'s manifest cannot be parsed or fails the guards.  Scope: a validated principal is required (403 without one) and the site is published into THAT principal\'s org.
+     * Generates a self-contained, mobile-responsive static site from a natural-language brief and deploys it live in one call.  One inference call turns `brief` (capped at 8 KiB) into a file manifest, which then runs through the SAME validation, guards and viewport guarantee as a hand-supplied manifest: index.html required at the root, absolute and traversal paths rejected, per-file and total size capped, and a mobile viewport meta tag injected into every HTML document that lacks one. The generated site is fully inline — no CDNs, no remote fonts or images — so it is CSP-safe. `slug` and `name` are optional: the model\'s own title is preferred, and a slug is derived or minted when none is given.  It writes into the SAME org-scoped store as /v1/project — it ensures a project (framework `static`) for the resolved slug and records a deployment — so this is a second entry point to one publish pipeline, not a second copy of project state. Ordering is the billing contract: the hosting gate runs BEFORE any inference or upload, so a denied gate generates and uploads NOTHING, and the debit lands once, only after the site is actually live. The tokens are billed to the same ledger the hosting fee was reserved against.  Answers 503 when object storage or inference is unconfigured, and 400 when the model\'s manifest cannot be parsed or fails the guards.  Scope: a validated principal is required (403 without one) and the site is published into THAT principal\'s org.
      * Generates a self-contained, mobile-responsive static site from a natural-language brief and deploys it live in one call.
      */
-    async postProjectsSites(requestParameters: ProjectsApiPostProjectsSitesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsSiteDeploy> {
-        const response = await this.postProjectsSitesRaw(requestParameters, initOverrides);
+    async postProjectSites(requestParameters: ProjectApiPostProjectSitesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsSiteDeploy> {
+        const response = await this.postProjectSitesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Deploys a caller-supplied file manifest — the deploy_site capability an agent calls — and answers with where it went live.  `files` is a list of {path, content} pairs, the same shape the brief build emits, and it runs through the SAME guards: index.html required at the root, absolute and traversal paths rejected, per-file and total size capped, and a mobile viewport meta tag injected into every HTML document that lacks one — so a hand-built site is exactly as safe and as responsive as a generated one. `slug` and `name` are optional; a slug is derived from the name or minted.  It writes into the SAME org-scoped store as /v1/projects, ensuring a project (framework `static`) for the resolved slug and recording a deployment. The hosting gate runs before the upload and the debit lands once, after the site is live — a failed upload is never billed. Answers 503 when object storage is unconfigured.  Scope: a validated principal is required (403 without one) and the site is published into THAT principal\'s org.
+     * Deploys a caller-supplied file manifest — the deploy_site capability an agent calls — and answers with where it went live.  `files` is a list of {path, content} pairs, the same shape the brief build emits, and it runs through the SAME guards: index.html required at the root, absolute and traversal paths rejected, per-file and total size capped, and a mobile viewport meta tag injected into every HTML document that lacks one — so a hand-built site is exactly as safe and as responsive as a generated one. `slug` and `name` are optional; a slug is derived from the name or minted.  It writes into the SAME org-scoped store as /v1/project, ensuring a project (framework `static`) for the resolved slug and recording a deployment. The hosting gate runs before the upload and the debit lands once, after the site is live — a failed upload is never billed. Answers 503 when object storage is unconfigured.  Scope: a validated principal is required (403 without one) and the site is published into THAT principal\'s org.
      * Deploys a caller-supplied file manifest — the deploy_site capability an agent calls — and answers with where it went live.
      */
-    async postProjectsSitesDeployRaw(requestParameters: ProjectsApiPostProjectsSitesDeployRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsSiteDeploy>> {
+    async postProjectSitesDeployRaw(requestParameters: ProjectApiPostProjectSitesDeployRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsSiteDeploy>> {
         if (requestParameters['projectsDeploySite'] == null) {
             throw new runtime.RequiredError(
                 'projectsDeploySite',
-                'Required parameter "projectsDeploySite" was null or undefined when calling postProjectsSitesDeploy().'
+                'Required parameter "projectsDeploySite" was null or undefined when calling postProjectSitesDeploy().'
             );
         }
 
@@ -1566,7 +1566,7 @@ export class ProjectsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/projects/sites/deploy`;
+        let urlPath = `/v1/project/sites/deploy`;
 
         const response = await this.request({
             path: urlPath,
@@ -1580,11 +1580,11 @@ export class ProjectsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Deploys a caller-supplied file manifest — the deploy_site capability an agent calls — and answers with where it went live.  `files` is a list of {path, content} pairs, the same shape the brief build emits, and it runs through the SAME guards: index.html required at the root, absolute and traversal paths rejected, per-file and total size capped, and a mobile viewport meta tag injected into every HTML document that lacks one — so a hand-built site is exactly as safe and as responsive as a generated one. `slug` and `name` are optional; a slug is derived from the name or minted.  It writes into the SAME org-scoped store as /v1/projects, ensuring a project (framework `static`) for the resolved slug and recording a deployment. The hosting gate runs before the upload and the debit lands once, after the site is live — a failed upload is never billed. Answers 503 when object storage is unconfigured.  Scope: a validated principal is required (403 without one) and the site is published into THAT principal\'s org.
+     * Deploys a caller-supplied file manifest — the deploy_site capability an agent calls — and answers with where it went live.  `files` is a list of {path, content} pairs, the same shape the brief build emits, and it runs through the SAME guards: index.html required at the root, absolute and traversal paths rejected, per-file and total size capped, and a mobile viewport meta tag injected into every HTML document that lacks one — so a hand-built site is exactly as safe and as responsive as a generated one. `slug` and `name` are optional; a slug is derived from the name or minted.  It writes into the SAME org-scoped store as /v1/project, ensuring a project (framework `static`) for the resolved slug and recording a deployment. The hosting gate runs before the upload and the debit lands once, after the site is live — a failed upload is never billed. Answers 503 when object storage is unconfigured.  Scope: a validated principal is required (403 without one) and the site is published into THAT principal\'s org.
      * Deploys a caller-supplied file manifest — the deploy_site capability an agent calls — and answers with where it went live.
      */
-    async postProjectsSitesDeploy(requestParameters: ProjectsApiPostProjectsSitesDeployRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsSiteDeploy> {
-        const response = await this.postProjectsSitesDeployRaw(requestParameters, initOverrides);
+    async postProjectSitesDeploy(requestParameters: ProjectApiPostProjectSitesDeployRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsSiteDeploy> {
+        const response = await this.postProjectSitesDeployRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1592,11 +1592,11 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Bookmarks a project for the person calling, and answers whether it is starred afterwards.  The star is YOURS: it is keyed by you as well as by the project, so two people see two answers for the same one and starring it says nothing about anybody else\'s list. Starring a project you have already starred leaves it starred.
      * Bookmarks a project for the person calling, and answers whether it is starred afterwards.
      */
-    async putProjectsBySlugStarRaw(requestParameters: ProjectsApiPutProjectsBySlugStarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsStar>> {
+    async putProjectBySlugStarRaw(requestParameters: ProjectApiPutProjectBySlugStarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProjectsStar>> {
         if (requestParameters['slug'] == null) {
             throw new runtime.RequiredError(
                 'slug',
-                'Required parameter "slug" was null or undefined when calling putProjectsBySlugStar().'
+                'Required parameter "slug" was null or undefined when calling putProjectBySlugStar().'
             );
         }
 
@@ -1613,7 +1613,7 @@ export class ProjectsApi extends runtime.BaseAPI {
             }
         }
 
-        let urlPath = `/v1/projects/{slug}/star`;
+        let urlPath = `/v1/project/{slug}/star`;
         urlPath = urlPath.replace(`{${"slug"}}`, encodeURIComponent(String(requestParameters['slug'])));
 
         const response = await this.request({
@@ -1630,8 +1630,8 @@ export class ProjectsApi extends runtime.BaseAPI {
      * Bookmarks a project for the person calling, and answers whether it is starred afterwards.  The star is YOURS: it is keyed by you as well as by the project, so two people see two answers for the same one and starring it says nothing about anybody else\'s list. Starring a project you have already starred leaves it starred.
      * Bookmarks a project for the person calling, and answers whether it is starred afterwards.
      */
-    async putProjectsBySlugStar(requestParameters: ProjectsApiPutProjectsBySlugStarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsStar> {
-        const response = await this.putProjectsBySlugStarRaw(requestParameters, initOverrides);
+    async putProjectBySlugStar(requestParameters: ProjectApiPutProjectBySlugStarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProjectsStar> {
+        const response = await this.putProjectBySlugStarRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
