@@ -23,14 +23,18 @@ on:
         default: ''
 jobs:
   cicd:
-    uses: hanzoai/ci/.github/workflows/build.yml@v1
+    # hanzoai/ci v1 at 30af8df1, pinned by commit.
+    uses: hanzoai/ci/.github/workflows/build.yml@30af8df1e716ba4f676bf68d753cdc6cfe271f10
     # The reusable declares contents and packages write; the org default is read.
     permissions:
       contents: write
       packages: write
-      id-token: write
     with:
       spec-ref: ${{ github.event.inputs.spec-ref || '' }}
       spec-version: ${{ github.event.inputs.spec-version || '' }}
       spec-sha256: ${{ github.event.inputs.spec-sha256 || '' }}
-    secrets: inherit
+    # The three secrets the reusable reads, and no others.
+    secrets:
+      KMS_CLIENT_ID: ${{ secrets.KMS_CLIENT_ID }}
+      KMS_CLIENT_SECRET: ${{ secrets.KMS_CLIENT_SECRET }}
+      GH_PAT: ${{ secrets.GH_PAT }}
